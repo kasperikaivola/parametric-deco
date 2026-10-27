@@ -1,5 +1,16 @@
 # Parametric Deco
 
+## Updated decisions — 2026-10-27
+
+These decisions supersede conflicting earlier alternatives in this document.
+
+- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
+- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
+- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
+- Plywood grade and colouring are optional choices, not prerequisites for progress.
+- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+
 A parametric system for designing one intertwined plywood sculpture and generating corresponding projection geometry and visual data.
 
 The artwork is assembled from reusable modules, but should read as a continuous composition rather than several separate decorations. Physical parts and projection surfaces must derive from the same design and assembly records.
