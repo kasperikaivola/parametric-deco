@@ -1,0 +1,52 @@
+# Decision register
+
+Recorded 2026-10-27. Accepted requirements are distinguished from recommendations.
+
+## Accepted
+
+| ID | Decision |
+| --- | --- |
+| D01 | Overall dimensions are parametric; initial target is approximately 1 × 1 × 0.2 m. |
+| D02 | Use laser cutting and one nominal plywood thickness, initially 6 mm. |
+| D03 | Reuse and reconfiguration are core requirements. Additional connection slots/holes are acceptable. |
+| D04 | Detach a module before rearranging it, then reattach it to the backplate. |
+| D05 | Prefer slotted internal assembly; bolts are acceptable at the backplate interface. |
+| D06 | The finished sculpture should look like one intertwined artwork. |
+| D07 | White is not the default finish. Natural, coloured, and neon surfaces remain candidates. |
+| D08 | Support Resolume Arena and retain the possibility of our own renderer. |
+
+## Proposed, not yet validated
+
+| ID | Proposal | Evidence needed |
+| --- | --- | --- |
+| P01 | Two parallel profiled spines, transverse ribs, and braced root/end crosspieces | Stiffness, torsion, assembly access |
+| P02 | A closing rail blocks extraction and is retained by the backplate attachment | Actual geometry, complete restraint, removal sequence |
+| P03 | Standard root flange with locating features and clamping bolts | Mounting access and repeatability |
+| P04 | Multiple standardized slot stations and compatible rib families | Fit, collision, remaining section strength |
+| P05 | Python orchestration and application-independent assembly data | Small CAD/export comparison |
+| P06 | Config files, CLI generation, and a 3D preview before a full GUI | User workflow review |
+| P07 | Independent module removal for the initial intertwined arrangement | Swept extraction-path checks and physical trial |
+
+## Open decisions
+
+- CAD backend: OpenSCAD, CadQuery/build123d, or another justified option.
+- Exact cross-lap and closing-member geometry; fallback keys only if needed.
+- Interface dimensions, spine separation, slot pitch, and allowable orientations.
+- Backplate versus rails/frame; background projection preference.
+- Laser bed and stock sheet dimensions, requiring segmentation where necessary.
+- Plywood grade, measured thickness, finished fit, kerf, and actual coating.
+- Root bolt pattern, hardware, backing stiffness, wall type, and installation loads.
+- Initial curve/profile family, arm count, and arrangement.
+- Scene interchange format and exact Arena mapping integration.
+- Whether custom renderer output is a content atlas or a calibrated projector image.
+- Projector model, resolution, throw, placement, and calibration workflow.
+- Production runtime language/framework for a custom renderer.
+- Licensing of the project and any reused assets or libraries.
+
+## Options considered
+
+OpenSCAD + Arena is a practical starting route. Python CAD + a custom geometry-aware renderer feeding Arena is the proposed long-term direction, but no CAD backend or renderer implementation has been selected.
+
+Blender is useful for artistic exploration, UV work, and preview. Rhino/Grasshopper offers interactive parametric design. MadMapper and TouchDesigner remain researched alternatives for mapping/calibration, but do not replace the accepted Arena compatibility requirement.
+
+Earlier ideas using different plywood thicknesses for ribs and spines are superseded by D02. Earlier suggestions for white projection surfaces are superseded by D07. Individual keeper pins/clips are fallback concepts, not the preferred accepted assembly target.
