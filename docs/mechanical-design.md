@@ -1,5 +1,16 @@
 # Mechanical concept
 
+## Updated decisions — 2026-10-27
+
+These decisions supersede conflicting earlier alternatives in this document.
+
+- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
+- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
+- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
+- Plywood grade and colouring are optional choices, not prerequisites for progress.
+- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+
 This is a design proposal, not a fabrication drawing or validated load rating.
 
 ## Whole composition and modular construction
@@ -10,7 +21,7 @@ Apparent intertwining does not require mechanically trapped assemblies. Check bo
 
 ## Component hierarchy
 
-1. Backplate or backing frame: carries the modules and defines mounting stations.
+1. Polygonal plywood backplate: carries the modules and defines mounting stations.
 2. Root assembly: locates and clamps each module to the backing.
 3. Paired spines: establish profile and rib stations.
 4. Transverse ribs: form the visible contour and brace the spine pair.
@@ -18,7 +29,7 @@ Apparent intertwining does not require mechanically trapped assemblies. Check bo
 
 All plywood components use the same nominal 6 mm stock. Increase stiffness through section geometry, separation, bracing, or multiple pieces where appropriate; do not silently introduce a second stock thickness.
 
-A solid backplate supplies a background surface. Rails/frame may reduce weight and improve rear access. This choice is open.
+The plywood polygon backplate is selected. An open frame is no longer the baseline.
 
 ## Candidate joint system
 
@@ -45,7 +56,7 @@ If the closure cannot meet restraint/access requirements, compare removable plyw
 
 Proposed root: broad mounting flange, gussets, and spaced attachments to resist cantilever bending. Through-bolts, washers, and captive nuts or a metal nut plate support repeated assembly.
 
-Separate locating from clamping. A round locating feature plus a second elongated locating feature can establish repeatability without overconstraining two tight holes. A seating face establishes depth. Actual feature shape and manufacturing practicality remain open.
+Use grid-hole IDs and orientation marks for nominal location. Dedicated locating pins are not the baseline; accept ordinary bolt clearance and check projection alignment after reattachment. Add a robust locating shoulder only if testing warrants it.
 
 Alternative mounting stations or indexed root adapters allow rotations/repositioning with known transforms. Bolts should not locate the module through loose clearance holes alone.
 
@@ -76,3 +87,9 @@ Laser cutting does not need router dogbones. Account for taper, char, fragile ti
 Thin spray paint/lacquer is expected. Test finished joints. Mask mating surfaces or adjust fit if necessary. Do not require a separate coating-thickness parameter initially.
 
 Natural wood, coloured paint, and neon finishes are intentional options. Inspect both unprojected appearance and projection response. Do not assume fluorescent coatings behave identically under projector and UV lighting.
+
+## Mounting-grid details
+
+A half-horizontal-pitch offset on alternate rows is a proposed default. Assign stable row/column IDs, exclude holes near the polygon edge, and preserve material between holes. Root hole patterns must match grid vectors: a fixed bolt pattern cannot rotate arbitrarily on a staggered grid. Record permitted orientations.
+
+Keep rear nuts accessible through rear clearance or bench assembly. Captive nuts are optional. The root still needs to retain the closing member. Prototype backing stiffness and detachment handling before claiming the mechanism works.
