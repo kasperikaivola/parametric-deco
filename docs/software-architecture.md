@@ -1,5 +1,16 @@
 # Software architecture proposal
 
+## Updated decisions — 2026-10-27
+
+These decisions supersede conflicting earlier alternatives in this document.
+
+- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
+- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
+- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
+- Plywood grade and colouring are optional choices, not prerequisites for progress.
+- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+
 ## Principle
 
 The shared part and assembly model is authoritative. CAD files, cutting outlines, assembled meshes, visual coordinates, and mapping assets are derived outputs.
@@ -44,7 +55,7 @@ Evaluate a representative arm and root with each shortlisted backend.
 | Blender Geometry Nodes/Python | Artistic exploration, procedural forms, UV work, preview | Exact manufacturing constraints need deliberate implementation |
 | Rhino/Grasshopper | Interactive parametric form exploration and fabrication ecosystem | Proprietary dependency and deployment considerations |
 
-Python orchestration is proposed, not selected by the user. Prefer a small comparison producing clean cut contours and a correctly identified assembly over an abstract feature comparison.
+Python CAD is selected; the library is not yet selected. Prefer a small comparison producing clean cut contours and a correctly identified assembly over an abstract feature comparison.
 
 A drawing with hidden lines is not a manufacturing contour. Validate units, closed loops, holes, tessellation, and duplicate edges.
 
@@ -105,3 +116,9 @@ Calibration is separate from artwork coordinates. Rearrangement regenerates the 
 Automate geometric checks, inventory consistency, compatible interfaces, closed contours, and collision tests. Assembly-path checking is more demanding than static collision detection and may begin with documented/manual verification.
 
 Geometric validity does not establish structural safety, fit after finishing, or long-term wear. Those require physical evidence.
+
+## First ISF deliverable
+
+Generate one ISF fragment shader, a Wire wrapper, any required masks/coordinate textures, and a documented Arena mapping setup. Bare ISF loading directly in Arena is not assumed. Verify target Wire/Arena versions and authoring licence requirements. ISF defines content/effects; it does not carry the complete mechanical assembly or automatically calibrate a projector.
+
+Python supplies geometry metadata and resources; Wire hosts the shader and exposes controls; Arena mixes and maps the resulting content. Validate atlas layout, texture precision/filtering, ID encoding, and resource packaging in the first spike. Keep shader sources reusable for a future host, without promising identical host behaviour before testing.
