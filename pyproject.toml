@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parametric-deco"
+version = "0.1.0"
+description = "Immutable plywood CAD, fabrication and projection assets"
+requires-python = ">=3.11,<3.14"
+dependencies = ["build123d==0.13.0", "numpy==2.2.6", "shapely==2.1.2", "trimesh==4.9.0", "pillow==12.3.0", "mapbox-earcut==1.0.3"]
+
+[project.optional-dependencies]
+dev = ["pytest==8.4.2", "ruff==0.14.2"]
+
+[project.scripts]
+parametric-deco = "parametric_deco.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+parametric_deco = ["resources/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+

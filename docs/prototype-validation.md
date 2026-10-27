@@ -1,6 +1,6 @@
 # Prototype and validation plan
 
-No tests below have been executed. Numerical acceptance thresholds should be chosen for the actual material, hardware, and projector before treating a prototype as production-ready.
+Physical and proprietary-host tests below have not been executed. Automated software evidence is recorded in implementation/validation-status.md. Numerical acceptance thresholds should be chosen for the actual material, hardware, and projector before treating a prototype as production-ready.
 
 ## 1. Fit and finish coupon
 
