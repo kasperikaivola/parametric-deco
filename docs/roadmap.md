@@ -1,10 +1,21 @@
 # Roadmap
 
+## Updated decisions — 2026-10-27
+
+These decisions supersede conflicting earlier alternatives in this document.
+
+- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
+- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
+- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
+- Plywood grade and colouring are optional choices, not prerequisites for progress.
+- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+
 This is a staged design roadmap, not a completed implementation or a frozen engineering specification.
 
 ## Stage 0 — Document and resolve interfaces
 
-Capture accepted requirements, alternatives, and open decisions. Obtain laser bed size, material grade, initial mounting conditions, and projector constraints.
+Capture accepted requirements, alternatives, and open decisions. Obtain laser bed size, initial mounting conditions, and projector constraints; grade and colouring are optional.
 
 Exit: reviewable interface sketches and explicit assembly directions; confirmed definition of total depth.
 
@@ -16,7 +27,7 @@ Exit: tested fit and retention, access, handling during detachment, and repeated
 
 ## Stage 2 — Geometry/export spike
 
-Compare shortlisted CAD approaches on the same arm. Export clean laser contours, assembled geometry, IDs, and station metadata.
+Select between Python CAD libraries using a small export prototype of the same arm. Export clean laser contours, assembled geometry, IDs, and station metadata.
 
 Exit: selected backend with demonstrated units/contours/identity preservation. Keep experimental code identified as such.
 
@@ -28,7 +39,7 @@ Exit: fabricated module matches preview, assembles as documented, and can be rea
 
 ## Stage 4 — Arena integration
 
-Implement the simplest validated mapping-asset workflow. Test generated masks/coordinates and alignment patterns on the physical module.
+Implement an ISF shader and Wire wrapper as the first Arena integration, including geometry resources and packaging. Test generated masks/coordinates and alignment patterns on the physical module.
 
 Exit: useful visuals in Arena with a documented calibration process. Select the custom-renderer output contract before implementing that adapter.
 
