@@ -1,5 +1,16 @@
 # Decision register
 
+## Updated decisions — 2026-10-27
+
+These decisions supersede conflicting earlier alternatives in this document.
+
+- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
+- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
+- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
+- Plywood grade and colouring are optional choices, not prerequisites for progress.
+- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+
 Recorded 2026-10-27. Accepted requirements are distinguished from recommendations.
 
 ## Accepted
@@ -29,12 +40,12 @@ Recorded 2026-10-27. Accepted requirements are distinguished from recommendation
 
 ## Open decisions
 
-- CAD backend: OpenSCAD, CadQuery/build123d, or another justified option.
+- Python CAD library: CadQuery or build123d.
 - Exact cross-lap and closing-member geometry; fallback keys only if needed.
 - Interface dimensions, spine separation, slot pitch, and allowable orientations.
-- Backplate versus rails/frame; background projection preference.
+- Polygon side count, mounting-grid dimensions, root pattern, and any required backplate segmentation.
 - Laser bed and stock sheet dimensions, requiring segmentation where necessary.
-- Plywood grade, measured thickness, finished fit, kerf, and actual coating.
+- Measured thickness, fit clearance, and kerf for actual fabrication. Grade and coating remain optional.
 - Root bolt pattern, hardware, backing stiffness, wall type, and installation loads.
 - Initial curve/profile family, arm count, and arrangement.
 - Scene interchange format and exact Arena mapping integration.
@@ -45,7 +56,7 @@ Recorded 2026-10-27. Accepted requirements are distinguished from recommendation
 
 ## Options considered
 
-OpenSCAD + Arena is a practical starting route. Python CAD + a custom geometry-aware renderer feeding Arena is the proposed long-term direction, but no CAD backend or renderer implementation has been selected.
+Python CAD and initial ISF output through Wire/Arena are selected. A custom renderer remains optional. OpenSCAD is historical research, not the current backend candidate.
 
 Blender is useful for artistic exploration, UV work, and preview. Rhino/Grasshopper offers interactive parametric design. MadMapper and TouchDesigner remain researched alternatives for mapping/calibration, but do not replace the accepted Arena compatibility requirement.
 
