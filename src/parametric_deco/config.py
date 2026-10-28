@@ -70,6 +70,9 @@ class ModulePlacement:
     angle_deg: float = 0
     rib_order: tuple = (0, 1, 2, 3)
     station_indices: tuple = (0, 1, 2, 3)
+    spine_instance_ids: tuple[str, ...] = ()
+    closure_instance_id: str | None = None
+    rib_instance_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -214,17 +217,32 @@ def validate_config(c):
         seen.add(p.module_id)
         for key in ("x_mm", "y_mm", "angle_deg"):
             numeric("placements." + key, getattr(p, key), False)
+        chosen = p.rib_instance_ids or p.rib_order
         if (
-            len(p.rib_order) != len(p.station_indices)
-            or len(p.rib_order) < 3
-            or len(set(p.rib_order)) != len(p.rib_order)
+            len(chosen) != len(p.station_indices)
+            or len(chosen) < 3
+            or len(set(chosen)) != len(chosen)
             or len(set(p.station_indices)) != len(p.station_indices)
-            or any(
-                type(x) is not int or not 0 <= x < len(m.stations_mm)
-                for x in (*p.rib_order, *p.station_indices)
+            or any(type(x) is not int or not 0 <= x < len(m.stations_mm) for x in p.station_indices)
+            or (
+                not p.rib_instance_ids
+                and any(type(x) is not int or not 0 <= x < len(m.stations_mm) for x in p.rib_order)
             )
         ):
             bad("placements.rib_order", "need >=3 unique available ribs and stations")
+        if p.spine_instance_ids and (
+            len(p.spine_instance_ids) != 2 or len(set(p.spine_instance_ids)) != 2
+        ):
+            bad("placements.spine_instance_ids", "need two unique physical spine IDs")
+        for identifier in (
+            *p.spine_instance_ids,
+            *p.rib_instance_ids,
+            *((p.closure_instance_id,) if p.closure_instance_id is not None else ()),
+        ):
+            try:
+                safe_id(identifier)
+            except ValueError as e:
+                bad("placements.instance_ids", str(e))
     if not c.placements:
         bad("placements", "at least one module is required")
     return ValidationReport(tuple(issues))
@@ -258,7 +276,15 @@ def config_from_dict(data):
             kwargs["placements"] = tuple(
                 ModulePlacement(
                     **{
-                        k: tuple(v) if k in ("rib_order", "station_indices") else v
+                        k: tuple(v)
+                        if k
+                        in (
+                            "rib_order",
+                            "station_indices",
+                            "spine_instance_ids",
+                            "rib_instance_ids",
+                        )
+                        else v
                         for k, v in p.items()
                     }
                 )

@@ -17,6 +17,9 @@ def main():
             ["validate", "examples/single-module.json"],
             ["build", "examples/single-module.json", "--out", "build/single"],
             ["visuals", "build/single", "--out", "build/single-visuals"],
+            ["visuals", "build/single", "--out", "build/fronts", "--surfaces", "broad"],
+            ["visuals", "build/single", "--out", "build/edges", "--surfaces", "exterior"],
+            ["visuals", "build/single", "--out", "build/selected", "--surface", "m1-rib-0--front"],
             ["build", "examples/intertwined.json", "--out", "build/intertwined"],
             [
                 "reconfigure",

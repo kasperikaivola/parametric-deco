@@ -5,7 +5,7 @@ from parametric_deco.assembly import assemble
 from parametric_deco.model import Inventory
 
 
-def test_intertwined_and_reconfigured_reuse_same_inventory():
+def test_mechanical_layout_and_reconfigured_reuse_same_inventory():
     first = assemble(load_config(Path("examples/intertwined.json")))
     assert first.report.digital_valid, first.report.to_dict()
     assert len({i.module_id for i in first.assembly.instances if i.role == "rib"}) == 4

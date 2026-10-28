@@ -29,3 +29,9 @@ rigid-body disassembly because those require unavailable physical/environmental
 evidence. The executor keeps each NOT RUN rather than treating static tests as
 approval. Cost: a physical prototype or target host may reveal changes still
 needed before fabrication/installation/performance use.
+
+
+Later owner feedback on PR #1 is tracked in [pr-feedback.md](pr-feedback.md).
+Those findings were fixed without dispatching another review. In particular,
+the earlier integrated-artwork completion claim was corrected: Task 8 is
+INCOMPLETE; the existing composition is only a mechanical study.

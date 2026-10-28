@@ -2,7 +2,7 @@
 
 Implementation branch: implement-parametric-deco-v1.
 
-Final post-review verification (2026-10-28): **44 passed, 1 explicit host skip**
+Initial delivery verification (before owner PR feedback, 2026-10-28): **44 passed, 1 explicit host skip**
 on clean Python 3.11.17 in 108.10 seconds. Full documented CLI/localhost preview
 harness PASS, Ruff PASS, whitespace checks PASS, all 66 locked dependencies
 compatible. The single review and five fixes are in [final-review.md](final-review.md). The final commit and any
@@ -29,6 +29,15 @@ This document separates reproducible software evidence from unperformed tests.
 Software commands and final full-suite results are recorded in progress.md.
 Host/offscreen shader rendering is one explicit pytest skip, not a pass.
 
+## Owner-feedback verification
+
+**49 passed / 1 explicit host-rendering skip**, Python 3.12.14, 124.08 seconds.
+All CLI examples, explicit cross-module assignments and broad/exterior/selected
+atlas generation pass, along with Ruff/format/whitespace checks. See
+[PR feedback resolutions](pr-feedback.md). Hosted Python 3.11 CI is checked before
+merging. **Task 8 / integrated artwork remains INCOMPLETE**, independently of the
+mechanical and software test results.
+
 ## Reproduce
 
 Use the setup and commands in cli.md; CI runs tests, Ruff and generated-example
@@ -42,7 +51,7 @@ same assembly records, inspected and kept as compact representative evidence:
 - [Exploded](images/exploded.png)
 - [Joint section](images/joint-section.png)
 
-The corrected whorl coordinates are in examples/intertwined.json. The first
+The mechanical study coordinates are in examples/intertwined.json. The first
 layout's collision evidence is retained in progress/reconfiguration documentation;
 those collisions were corrected, not ignored. Curved profiles are faceted nominal
 contours and can be refined later without mutating existing inventory revisions.
@@ -52,3 +61,9 @@ cuts/ contains the root/closure and spine/rib SVGs, coupon and 100 mm scale mark
 Generated views/ contains closure contact sections and exploded instructions.
 No laser bed or physical measurements were supplied; nested sheets and physical
 approval therefore remain separate decisions.
+
+
+**Integrated artwork / Task 8: INCOMPLETE.** Existing images and module-count tests
+only demonstrate mechanical layout and reconfiguration. They do not establish
+continuous contours or apparent intertwining. Owner PR feedback corrections and
+updated software results are recorded in progress.md.

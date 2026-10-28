@@ -8,6 +8,7 @@ from shapely.geometry import Polygon, Point
 from .config import validate_config
 from .geometry.backplate import generate_backplate, match_root_pattern
 from .geometry.module import generate_module
+from .geometry.joints import rib_slot_centres
 from .model import Assembly, BuildResult, Connection, Inventory, PartInstance, digest
 
 
@@ -26,6 +27,11 @@ def assemble(config, inventory=None):
     if not report.digital_valid:
         raise ValueError("; ".join(i.message for i in report.issues))
     if inventory is None:
+        if any(
+            p.spine_instance_ids or p.closure_instance_id or p.rib_instance_ids
+            for p in config.placements
+        ):
+            raise ValueError("explicit physical assignments require an inventory")
         backing = generate_backplate(config).definitions[0]
         bundle = generate_module(config)
         definitions = (backing, *bundle.definitions)
@@ -62,6 +68,19 @@ def assemble(config, inventory=None):
             p.module_id: tuple(i for i in inventory.instances if i.module_id == p.module_id)
             for p in config.placements
         }
+    physical_pool = {i.instance_id: i for i in inventory.instances} if inventory else {}
+
+    def assigned(identifiers, role):
+        result = []
+        for identifier in identifiers:
+            if identifier not in physical_pool:
+                raise ValueError(f"{identifier}: missing physical inventory instance")
+            instance = physical_pool[identifier]
+            if instance.role != role:
+                raise ValueError(f"{identifier}: incompatible role; expected {role}")
+            result.append(instance)
+        return result
+
     lookup = {(d.definition_id, d.revision): d for d in definitions}
     placed = [backing_instance]
     connections, mount_refs, hardware, extraction = [], [], [], []
@@ -69,10 +88,27 @@ def assemble(config, inventory=None):
     base_z = backing_instance.transform[2][3] + backing.thickness_mm
     for p in config.placements:
         template = source.get(p.module_id, ())
-        ribs = {i.instance_id.rsplit("rib-", 1)[-1]: i for i in template if i.role == "rib"}
-        spines = [i for i in template if i.role == "spine"]
-        covers = [i for i in template if i.role == "closure"]
-        if len(spines) != 2 or len(covers) != 1 or any(str(r) not in ribs for r in p.rib_order):
+        source_ribs = sorted(
+            (i for i in template if i.role == "rib"),
+            key=lambda i: (i.definition_id, i.revision, i.instance_id),
+        )
+        spines = (
+            assigned(p.spine_instance_ids, "spine")
+            if p.spine_instance_ids
+            else [i for i in template if i.role == "spine"]
+        )
+        covers = (
+            assigned((p.closure_instance_id,), "closure")
+            if p.closure_instance_id
+            else [i for i in template if i.role == "closure"]
+        )
+        if p.rib_instance_ids:
+            ribs = assigned(p.rib_instance_ids, "rib")
+        else:
+            if any(index >= len(source_ribs) for index in p.rib_order):
+                raise ValueError(f"{p.module_id}: missing or insufficient rib inventory")
+            ribs = [source_ribs[index] for index in p.rib_order]
+        if len(spines) != 2 or len(covers) != 1:
             raise ValueError(f"{p.module_id}: missing or insufficient spine/rib/closure inventory")
         cover = covers[0]
         spine_def = lookup[spines[0].definition_id, spines[0].revision]
@@ -83,16 +119,18 @@ def assemble(config, inventory=None):
         if any(s >= len(stations) for s in p.station_indices):
             raise ValueError(f"{p.module_id}: unavailable station in manufactured spine")
         cover_z = spine_def.polygon.bounds[3] - cover_def.thickness_mm
-        old_base = np.array(cover.transform)
-        old_base[:3, 3] -= old_base[:3, 2] * cover_z
-        inverse = np.linalg.inv(old_base)
         new_base = placement_matrix(p, base_z)
+        centres = rib_slot_centres(lookup[ribs[0].definition_id, ribs[0].revision])
         local_instances = []
-        for inst in (*spines, cover):
-            local = inverse @ np.array(inst.transform)
-            local_instances.append((inst, local, inst.station_id))
-        for rib_index, station_index in zip(p.rib_order, p.station_indices):
-            inst = ribs[str(rib_index)]
+        # The interface defines local axes; old module ownership and reference poses do not.
+        for inst, y in zip(spines, centres):
+            t = lookup[inst.definition_id, inst.revision].thickness_mm
+            local = ((1, 0, 0, 0), (0, 0, -1, y + t / 2), (0, 1, 0, 0), (0, 0, 0, 1))
+            local_instances.append((inst, np.array(local), None))
+        local_instances.append(
+            (cover, np.array(((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, cover_z), (0, 0, 0, 1))), None)
+        )
+        for inst, station_index in zip(ribs, p.station_indices):
             definition = lookup[inst.definition_id, inst.revision]
             station = stations[station_index]
             if (
@@ -100,10 +138,15 @@ def assemble(config, inventory=None):
                 or definition.interfaces[0].family != station.family
                 or abs(definition.interfaces[0].slot_width_mm - station.slot_width_mm) > 1e-6
                 or abs(definition.interfaces[0].datum_mm - station.datum_mm) > 1e-6
+                or not np.allclose(rib_slot_centres(definition), centres, atol=1e-6, rtol=0)
             ):
-                raise ValueError(f"{inst.instance_id}: mismatched interface family/fit/datum")
-            # Saved unassigned stock may retain a pose from an older module layout.
-            # The perpendicular-pair family defines this canonical local orientation.
+                raise ValueError(
+                    f"{inst.instance_id}: mismatched interface family/fit/datum/spacing"
+                )
+            if abs(definition.polygon.bounds[3] - cover_z) > 1e-6:
+                raise ValueError(
+                    f"{inst.instance_id}: incompatible interface closure contact height"
+                )
             local = np.array(
                 (
                     (0, 0, 1, station.x_mm - definition.thickness_mm / 2),

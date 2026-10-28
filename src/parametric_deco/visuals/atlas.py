@@ -11,7 +11,49 @@ from ..model import AtlasResult
 from ..validation import instance_bounds
 
 
-def generate_atlas(assembly, width, height):
+def _pack_faces(records, width, height, gutter):
+    sizes = []
+    for index, (_, _, surface) in enumerate(records):
+        a, b, c, d = surface.polygon.bounds
+        sizes.append((index, c - a, d - b))
+    # Shelf order is deterministic. Uniform pixels/mm preserves physical aspect and
+    # gives a larger surface proportionately more pixels than a small edge segment.
+    sizes.sort(key=lambda row: (-row[2], -row[1], row[0]))
+
+    def place(scale):
+        result = {}
+        x, y, row_height = 0, 0, 0
+        for index, du, dv in sizes:
+            tw, th = max(4, math.ceil(du * scale)), max(4, math.ceil(dv * scale))
+            w, h = tw + 2 * gutter, th + 2 * gutter
+            if w > width or h > height:
+                return None
+            if x + w > width:
+                x = 0
+                y += row_height
+                row_height = 0
+            if y + h > height:
+                return None
+            result[index] = (x + gutter, y + gutter, tw, th)
+            x += w
+            row_height = max(row_height, h)
+        return result
+
+    best = place(0.0)
+    if best is None:
+        raise ValueError(f"atlas too small for {len(records)} selected faces with gutters")
+    low, high = 0.0, max(width, height) / min(min(u, v) for _, u, v in sizes)
+    for _ in range(40):
+        mid = (low + high) / 2
+        candidate = place(mid)
+        if candidate is None:
+            high = mid
+        else:
+            best, low = candidate, mid
+    return best, low
+
+
+def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=None):
     if (
         type(width) is not int
         or type(height) is not int
@@ -19,20 +61,33 @@ def generate_atlas(assembly, width, height):
         or max(width, height) > 8192
     ):
         raise ValueError("atlas dimensions must be integers in 16..8192")
-    records = []
+    if surfaces not in ("broad", "exterior", "all"):
+        raise ValueError("surfaces must be broad, exterior or all")
+    available = []
     for inst in sorted(assembly.instances, key=lambda i: i.instance_id):
-        definition = assembly.definition_for(inst)
-        for surface in definition.surfaces:
-            records.append((inst, definition, surface))
+        for surface in assembly.definition_for(inst).surfaces:
+            available.append((inst, assembly.definition_for(inst), surface))
+    keys = {inst.instance_id + "--" + face.surface_id for inst, _, face in available}
+    selected = set(surface_ids) if surface_ids is not None else None
+    if selected is not None and not selected <= keys:
+        raise ValueError("unknown surface IDs: " + ", ".join(sorted(selected - keys)))
+    records = []
+    for inst, definition, face in available:
+        include = (
+            inst.instance_id + "--" + face.surface_id in selected
+            if selected is not None
+            else (
+                face.surface_id == "front"
+                or surfaces == "all"
+                or (surfaces == "exterior" and face.surface_id.startswith("edge-0-"))
+            )
+        )
+        if include:
+            records.append((inst, definition, face))
     if not records:
-        raise ValueError("atlas has no explicit projecting surfaces")
-    columns = math.ceil(math.sqrt(len(records) * width / height))
-    rows = math.ceil(len(records) / columns)
-    cell_w, cell_h = width // columns, height // rows
+        raise ValueError("atlas has no selected projecting surfaces")
     gutter = 2
-    tw, th = cell_w - 2 * gutter, cell_h - 2 * gutter
-    if min(tw, th) < 4:
-        raise ValueError(f"atlas too small for {len(records)} faces and 2 pixel gutters")
+    packed, density = _pack_faces(records, width, height, gutter)
     arrays = {
         name: np.zeros((height, width, 4), dtype=np.uint8)
         for name in ("localData", "worldData", "idData", "edgeData")
@@ -55,8 +110,7 @@ def generate_atlas(assembly, width, height):
     tiles, mapping = [], {}
     calibration = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     for index, (inst, definition, surface) in enumerate(records):
-        x = (index % columns) * cell_w + gutter
-        y = (index // columns) * cell_h + gutter
+        x, y, tw, th = packed[index]
         polygon = surface.polygon
         min_u, min_v, max_u, max_v = polygon.bounds
         du, dv = max_u - min_u, max_v - min_v
@@ -117,6 +171,8 @@ def generate_atlas(assembly, width, height):
             "local_bounds": [min_u, min_v, max_u, max_v],
             "face": asdict(surface),
             "local_quantization_mm": [du / 255, dv / 255],
+            "texel_size_mm": [du / tw, dv / th],
+            "physical_area_mm2": polygon.area,
             "phase_interval": [start, end],
         }
         tiles.append(tile)
@@ -129,6 +185,12 @@ def generate_atlas(assembly, width, height):
         "geometric_mapping_owner": "Arena only",
         "dimensions": [width, height],
         "gutter_pixels": gutter,
+        "packing": {"policy": "physical_bbox_uniform_texel_density", "pixels_per_mm": density},
+        "surface_selection": {
+            "mode": "explicit" if selected is not None else surfaces,
+            "available_count": len(available),
+            "selected_count": len(records),
+        },
         "png_origin": "top-left",
         "shader_uv_origin": "bottom-left",
         "orientation": "PNG top row corresponds to local +V; verify host upload with calibration",
@@ -156,7 +218,7 @@ def generate_atlas(assembly, width, height):
         },
         "paths": sorted(assembly.effect_paths, key=lambda p: p[1]),
         "tiles": tiles,
-        "excluded_surfaces": "back faces and backing; projector occlusion not computed",
+        "excluded_surfaces": "unselected faces, back faces and backing; projector occlusion not computed",
         "host_validation": "not_run",
     }
     return AtlasResult(manifest, textures, mapping)

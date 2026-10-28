@@ -1,6 +1,6 @@
 # Surface atlas contract
 
-Each explicit front/edge/hole-wall face has its own tile with two-pixel
+Each selected face has its own tile with two-pixel
 black gutters, identity, local face basis/contour and mapping in atlas.json.
 Backing and reverse faces are excluded. Projector visibility/occlusion is
 not solved: map only faces which can actually receive the light.
@@ -27,8 +27,14 @@ An 8-bit 1,000 mm world span has 3.922 mm steps and up to 1.961 mm rounding
 error. This does not support submillimetre world edges. Use local per-face
 coordinates/edge distance for fine patterns; local steps and actual world
 steps are quantified in atlas.json. Tile raster resolution imposes another
-limit independent of encoding. A tile too small for a face should be enlarged
-or given a separate atlas before production; v1 uses equal rectangular cells.
+limit independent of encoding. Faces are selected before packing. Broad sheet faces are the default; outer
+perimeter edges are opt-in with --surfaces exterior and hole walls with --surfaces
+all. Repeated --surface INSTANCE--FACE selects only named faces. The allocator
+preserves face aspect ratios and uses a common physical pixels/mm scale, with
+four-pixel minimum dimensions and deterministic shelf placement. Each tile records
+physical area and texel_size_mm, so users can judge actual surface resolution.
+Allocation uses physical size, not an unavailable projector model. The full
+surface list remains in assembly.json; selection does not discard geometry.
 
 edge-pulse.fs exposes speed (including negative/zero), phase, color and width.
 A floor on width avoids division/smoothstep degeneracy at zero. calibration.fs

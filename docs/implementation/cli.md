@@ -31,3 +31,17 @@ notes. Obsolete generated files are removed only when the previous manifest
 identifies them and their hashes still match. A modified obsolete file blocks
 the rebuild so it can be moved or preserved explicitly. Unsafe manifest paths
 and symlink redirects are rejected before changing outputs.
+
+
+Atlas controls (selection happens before packing):
+
+```sh
+parametric-deco visuals build/single --out build/fronts --surfaces broad
+parametric-deco visuals build/single --out build/edges --surfaces exterior
+parametric-deco visuals build/single --out build/selected --surface m1-rib-0--front
+```
+
+The broad-face default omits edge and hole-wall tiles. `--surfaces all` includes
+all explicit faces when needed. Tile texel sizes and selected/available counts
+are recorded in atlas.json. Existing inventory configuration supports explicit
+physical-ID assignments; see reconfiguration.md and examples/reconfigured.json.

@@ -59,6 +59,34 @@ def validate_assembly(assembly):
                         (a.instance_id, b.instance_id),
                     )
                 )
+    # Candidate family requires immediate +Z restraint by a real closure, including
+    # loaded assemblies whose inventory compatibility checks may have been bypassed.
+    for rib in (i for i in assembly.instances if i.role == "rib" and i.instance_id in definitions):
+        covers = [
+            i
+            for i in assembly.instances
+            if i.role == "closure" and i.module_id == rib.module_id and i.instance_id in definitions
+        ]
+        transform = np.array(rib.transform)
+        transform[2, 3] += 1.0
+        if (
+            len(covers) != 1
+            or overlap_volume(
+                definitions[rib.instance_id],
+                transform,
+                definitions[covers[0].instance_id],
+                covers[0].transform,
+            )
+            <= 1e-5
+        ):
+            issues.append(
+                Issue(
+                    "error",
+                    "closure_retention",
+                    "rib +1 mm withdrawal is not blocked by its manufactured closure",
+                    (rib.instance_id,),
+                )
+            )
     # Roots need a known connection endpoint, station and family, even for loaded assemblies.
     by_id = {i.instance_id: i for i in assembly.instances}
     for connection in assembly.connections:

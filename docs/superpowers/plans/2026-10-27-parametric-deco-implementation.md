@@ -211,6 +211,10 @@ Choose a surface atlas as the initial content space; Arena performs final mappin
 
 ## Task 8 — Integrated intertwined example
 
+**Implementation status after owner PR feedback: INCOMPLETE.** The current
+four-module ring is a mechanical test fixture; it does not meet this task's
+integrated-composition exit criterion. Software regression success is separate.
+
 **Files:** examples/intertwined.json, tests/test_integration.py, docs/implementation/reconfiguration.md.
 
 - [ ] Arrange repeated compatible modules to suggest one intertwined radial sculpture, within the default envelope. Coordinate contours/rib rhythm and visual paths across module boundaries.

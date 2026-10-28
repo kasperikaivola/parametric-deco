@@ -1,17 +1,18 @@
 # Two arrangements of one inventory
 
-intertwined.json places four compatible modules around one clockwise
-square-whorl composition. The near corner transitions and coordinated rib
-width progression form a single ring; the backing is not four separate
-mounting plaques. This first candidate uses planar paired spines and an
-alternating rib rhythm and coordinated sinusoidal upper rails, not arbitrary 3D twist joints. It is deliberately a
-shallow sculptural study; final visual suitability needs the owner's
-judgement and a physical/projection trial.
+**Task 8 / full intertwined-composition milestone: INCOMPLETE.**
+
+intertwined.json is the legacy filename for a four-module mechanical study around
+an empty centre. It does not demonstrate the agreed integrated composition,
+continuous contours or apparent interweaving. Passing collision, inventory and
+module-count tests does not establish visual success. A future composition must
+coordinate boundaries or apparent crossings and then verify removal access.
+The existing images are retained as inspection evidence, not completed-art claims.
 
 All four modules use the same spine and closure revisions. Reusable rib
 profiles are shared across modules and repeated via identified instances.
-reconfigured.json permutes the four rib profiles among the same manufactured
-stations. It preserves every instance ID and definition fingerprint while
+reconfigured.json assigns physical instance IDs explicitly, permutes rib profiles
+among manufactured stations, and exchanges rib-0 between m1 and m2. It preserves every instance ID and definition fingerprint while
 changing transforms, visual phase attribution and atlas mapping. It makes
 no new cuts or silently resized spines. examples/inventory.json is a compact
 saved inventory of the first arrangement; prefer regenerating it with the
@@ -33,3 +34,23 @@ Partial arrangements retain all unassigned instances in inventory.json. Their
 last placement transforms are reference poses, not a claim that they remain
 installed. The perpendicular rib interface supplies a canonical placement basis,
 so unused ribs can be restored even after the module is moved or rotated.
+
+## Explicit physical assignments
+
+Each placement accepts `spine_instance_ids` (two IDs), `closure_instance_id` and
+`rib_instance_ids` (one per station_indices entry). These refer to physical IDs
+in inventory.json, independently of earlier module_id values or ID spelling.
+Any ID such as stock-17 is valid; rib-N is not a required naming convention.
+The order of rib_instance_ids matches station_indices. Explicit rib assignments
+take precedence over rib_order; no part may be assigned twice. Assigning parts
+requires reconfigure/Inventory, not generate-new mode.
+
+The example uses these fields. For legacy configurations with no assignments,
+parts are selected from the reference module by role and deterministic definition
+order, with rib_order indexing that pool. This compatibility convenience is not
+needed for explicit assignments and never parses physical ID suffixes. New module
+names require complete explicit assignments. Local poses are reconstructed from
+manufactured paired slots and closure geometry, not the previous world poses or
+current generator thickness/spacing. A short rib is rejected if it cannot contact
+the manufactured closure plane; loaded assemblies also check +1 mm withdrawal
+against the actual closure solid. These are geometric checks, not load approval.

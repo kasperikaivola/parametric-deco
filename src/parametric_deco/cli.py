@@ -30,6 +30,13 @@ def main(argv=None):
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--width", type=int, default=2048)
     p.add_argument("--height", type=int, default=2048)
+    p.add_argument("--surfaces", choices=("broad", "exterior", "all"), default="broad")
+    p.add_argument(
+        "--surface",
+        action="append",
+        dest="surface_ids",
+        help="explicit INSTANCE--SURFACE tile ID; repeat to select faces before packing",
+    )
     p.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     try:
@@ -54,7 +61,13 @@ def main(argv=None):
             assembly = Assembly.from_dict(
                 json.loads((args.directory / "assembly.json").read_text())
             )
-            atlas = generate_atlas(assembly, args.width, args.height)
+            atlas = generate_atlas(
+                assembly,
+                args.width,
+                args.height,
+                surfaces=args.surfaces,
+                surface_ids=args.surface_ids,
+            )
             result = export_isf_resources(atlas, args.out, force=args.force)
             print(json.dumps({"files": len(result.paths), "out": str(args.out)}))
             return 0

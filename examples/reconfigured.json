@@ -70,6 +70,17 @@
         1,
         2,
         3
+      ],
+      "spine_instance_ids": [
+        "m1-spine-0",
+        "m1-spine-1"
+      ],
+      "closure_instance_id": "m1-closure",
+      "rib_instance_ids": [
+        "m1-rib-3",
+        "m2-rib-0",
+        "m1-rib-1",
+        "m1-rib-2"
       ]
     },
     {
@@ -88,6 +99,17 @@
         1,
         2,
         3
+      ],
+      "spine_instance_ids": [
+        "m2-spine-0",
+        "m2-spine-1"
+      ],
+      "closure_instance_id": "m2-closure",
+      "rib_instance_ids": [
+        "m2-rib-3",
+        "m1-rib-0",
+        "m2-rib-1",
+        "m2-rib-2"
       ]
     },
     {
@@ -106,6 +128,17 @@
         1,
         2,
         3
+      ],
+      "spine_instance_ids": [
+        "m3-spine-0",
+        "m3-spine-1"
+      ],
+      "closure_instance_id": "m3-closure",
+      "rib_instance_ids": [
+        "m3-rib-3",
+        "m3-rib-0",
+        "m3-rib-1",
+        "m3-rib-2"
       ]
     },
     {
@@ -124,6 +157,17 @@
         1,
         2,
         3
+      ],
+      "spine_instance_ids": [
+        "m4-spine-0",
+        "m4-spine-1"
+      ],
+      "closure_instance_id": "m4-closure",
+      "rib_instance_ids": [
+        "m4-rib-3",
+        "m4-rib-0",
+        "m4-rib-1",
+        "m4-rib-2"
       ]
     }
   ],

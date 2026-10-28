@@ -34,12 +34,18 @@ front/side/section/exploded PNGs, validation report, and numbered assembly/remov
 instructions. An optional cutting bed enables conservative shelf placement;
 oversized parts fail rather than shrink. Unknown bed size gives individual cuts.
 
-The intertwined example is a coordinated four-module whorl on one octagonal
-staggered-grid backplate. Reconfiguration changes the rib arrangement using the
-same manufactured definitions and identified physical instances. Natural/coloured
-or neon finish remain optional. Global effect paths cross mechanical boundaries.
+The current four-module example is a **mechanical layout study**, not the
+completed integrated artwork. Its legacy filename is examples/intertwined.json;
+the full intertwined-composition milestone (Task 8 / roadmap Stage 5) remains
+**INCOMPLETE**. A ring of separate modules does not establish continuous contours
+or apparent crossings. The images below are inspection evidence for that study.
 
-![Generated assembly study](docs/implementation/images/exploded.png)
+Reconfiguration uses immutable manufactured definitions and explicit physical
+instance assignments; the example exchanges compatible ribs between modules.
+Default atlases select broad faces before packing and allocate pixels according
+to physical size. Optional exterior/all-face or explicit selections are available.
+
+![Mechanical study — integrated artwork incomplete](docs/implementation/images/exploded.png)
 
 ## Validation boundary
 
