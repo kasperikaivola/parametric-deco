@@ -31,6 +31,26 @@ def main():
             ],
             ["visuals", "build/reconfigured", "--out", "build/reconfigured-visuals"],
         ]
+        commands.extend(
+            [
+                ["build", "examples/radial-weave.json", "--out", "build/radial-weave"],
+                [
+                    "reconfigure",
+                    "examples/radial-weave-reconfigured.json",
+                    "--inventory",
+                    "build/radial-weave/inventory.json",
+                    "--out",
+                    "build/radial-weave-reconfigured",
+                ],
+                ["visuals", "build/radial-weave", "--out", "build/radial-weave-visuals"],
+                [
+                    "visuals",
+                    "build/radial-weave-reconfigured",
+                    "--out",
+                    "build/radial-weave-reconfigured-visuals",
+                ],
+            ]
+        )
         for args in commands:
             print("RUN: parametric-deco " + " ".join(args), flush=True)
             result = subprocess.run(
