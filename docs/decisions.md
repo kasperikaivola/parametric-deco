@@ -1,5 +1,24 @@
 # Decision register
 
+## Implemented prototype — 2026-10-27
+
+This section supersedes open software alternatives below; historical proposals
+remain as design rationale. build123d 0.13.0 is the selected Python CAD backend;
+GLB is the scene interchange format. The plywood backing uses a regular polygon
+and staggered grid. A full-length slotted upper closure with two long root bolts
+is the candidate retention mechanism; a lower flange with unretained tongues
+was rejected because it would not prevent lifting off. Root bolt envelopes and
+rear access allowances are explicit, but fastener/anchor/load selection remains
+unvalidated. Detached handling requires a support tray and manual compression.
+
+CLI, immutable inventory/reconfiguration, SVG/GLB/JSON, offline preview and per-face
+ISF/PNG resources are implemented. See [validation status](implementation/validation-status.md)
+for software evidence and NOT RUN physical/host checks. ISF is hosted/packaged in
+Wire; no bare-Arena loading, fabricated patch schema or automatic screen-preset
+export is claimed. Grade/finish are optional. Older CAD/location alternatives
+and generalized custom-renderer plans below are not current implementation work.
+
+
 ## Updated decisions — 2026-10-27
 
 These decisions supersede conflicting earlier alternatives in this document.

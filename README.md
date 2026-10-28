@@ -1,36 +1,76 @@
 # Parametric Deco
 
-## Updated decisions — 2026-10-27
+A Python CAD prototype for one reconfigurable plywood sculpture, with immutable
+part inventory, laser contours, identified assembly geometry and face-atlas ISF
+resources for Resolume Wire/Arena.
 
-These decisions supersede conflicting earlier alternatives in this document.
+The default envelope is 1,000 × 1,000 × 200 mm including backing, rear clearance
+and hardware. Nominal plywood is 6 mm. Grade/finish are optional; white paint is
+not required. Dimensions do not scale stock thickness, holes or slot clearance.
 
-- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
-- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
-- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
-- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
-- Plywood grade and colouring are optional choices, not prerequisites for progress.
-- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
+## Run
 
-A parametric system for designing one intertwined plywood sculpture and generating corresponding projection geometry and visual data.
+Python 3.11–3.13 is supported; validation used Python 3.12.14 and a clean Python 3.11.17 environment.
 
-The artwork is assembled from reusable modules, but should read as a continuous composition rather than several separate decorations. Physical parts and projection surfaces must derive from the same design and assembly records.
+```sh
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.lock
+python -m pip install --no-deps -e .
+parametric-deco validate examples/single-module.json
+parametric-deco build examples/intertwined.json --out build/intertwined
+parametric-deco preview build/intertwined
+parametric-deco visuals build/intertwined --out build/visuals
+parametric-deco reconfigure examples/reconfigured.json --inventory build/intertwined/inventory.json --out build/reconfigured
+python -m pytest -q -rs
+python -m ruff check .
+```
 
-## Current status
+On Windows, activate with `.venv\Scripts\activate`. See [all CLI examples](docs/implementation/cli.md).
 
-Design and research stage, documented from the discussion on 2026-10-27. No fabrication-ready joint, structural capacity, CAD implementation, or working Arena exporter is claimed.
+Outputs: individual nominal SVGs and quantity manifest, fit coupon, scale check,
+assembly/inventory JSON, named GLB (metres), offline orbit/identify/explode viewer,
+front/side/section/exploded PNGs, validation report, and numbered assembly/removal
+instructions. An optional cutting bed enables conservative shelf placement;
+oversized parts fail rather than shrink. Unknown bed size gives individual cuts.
 
-Initial preset: approximately **1,000 × 1,000 × 200 mm**, independently adjustable. Laser-cut plywood with one nominal thickness parameter, initially **6 mm**. Natural wood, coloured finishes, and neon finishes are options; white is not the intended default.
+The current four-module example is a **mechanical layout study**, not the
+completed integrated artwork. Its legacy filename is examples/intertwined.json;
+the full intertwined-composition milestone (Task 8 / roadmap Stage 5) remains
+**INCOMPLETE**. A ring of separate modules does not establish continuous contours
+or apparent crossings. The images below are inspection evidence for that study.
 
-Modules are removed from the backplate to rearrange their parts, then reattached. The target is slotted internal construction with no individual rib fasteners, secured by a closing member retained through the backplate attachment. This mechanism requires prototyping.
+Reconfiguration uses immutable manufactured definitions and explicit physical
+instance assignments; the example exchanges compatible ribs between modules.
+Default atlases select broad faces before packing and allocate pixels according
+to physical size. Optional exterior/all-face or explicit selections are available.
+
+![Mechanical study — integrated artwork incomplete](docs/implementation/images/exploded.png)
+
+## Validation boundary
+
+This is a **software prototype and physical-test candidate**, not a load-rated
+installation. A real full-length top closure blocks sampled rib withdrawals and
+is clamped to the backing by two long root bolts per module. Detached modules
+require a support tray and hand compression. Read the [joint sequence](docs/implementation/joint-mechanism.md)
+before cutting or handling anything.
+
+Physical fit, wear, stiffness, root hardware selection, wall anchorage and
+projection trials are **NOT RUN**. Wire/Arena are unavailable here: actual shader
+compilation, patch packaging, resource relocation and mapping are **NOT RUN**.
+The repository supplies ISF/PNG resources and [manual host setup](docs/implementation/arena.md),
+not an invented Wire patch or Arena preset. Geometric mapping belongs in Arena
+and is applied once. [Validation evidence and outstanding checks](docs/implementation/validation-status.md).
 
 ## Documentation
 
-- [Requirements](docs/requirements.md): confirmed scope, parameters, and reuse behaviour.
-- [Decisions](docs/decisions.md): accepted choices, proposals, and unresolved questions.
-- [Mechanical design](docs/mechanical-design.md): interfaces, assembly concept, and fabrication.
-- [Software architecture](docs/software-architecture.md): shared model, CAD options, Arena, and custom rendering.
-- [Prototype validation](docs/prototype-validation.md): tests before production.
-- [Roadmap](docs/roadmap.md): staged development and exit criteria.
-- [Research sources](docs/research-sources.md): primary references and limitations.
+- [Requirements](docs/requirements.md), [decisions](docs/decisions.md), [mechanical concept](docs/mechanical-design.md).
+- [Architecture](docs/software-architecture.md), [prototype tests](docs/prototype-validation.md), [roadmap](docs/roadmap.md).
+- [Implementation plan](docs/superpowers/plans/2026-10-27-parametric-deco-implementation.md) and [execution ledger](docs/implementation/progress.md).
+- [CAD backend](docs/implementation/backend.md), [backplate](docs/implementation/backplate.md), [fabrication](docs/implementation/fabrication.md).
+- [Reconfiguration](docs/implementation/reconfiguration.md), [visual data](docs/implementation/visual-data.md), [host feedback](integrations/resolume/host-feedback.md), [physical feedback](docs/implementation/physical-feedback.md).
 
-Start with one complete arm and its backing connection. Validate the joint and projection workflow before multiplying it into a full sculpture.
+AGENTS.md requires one whole-implementation review at the end, without task-by-task
+review rounds. No standalone VJ engine, structural solver, automatic calibration
+or generalized nesting optimizer is included. The owner has not selected a
+project-wide licence; runtime dependencies retain their upstream licences.

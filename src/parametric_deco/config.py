@@ -1,0 +1,304 @@
+"""Strict JSON configuration. Manufacturing dimensions never scale with envelope."""
+
+from dataclasses import asdict, dataclass, fields
+import json
+import math
+from pathlib import Path
+
+from .model import Issue, ValidationReport, canonical, safe_id
+
+
+@dataclass(frozen=True)
+class Envelope:
+    width_mm: float = 1000
+    height_mm: float = 1000
+    depth_mm: float = 200
+
+
+@dataclass(frozen=True)
+class Material:
+    nominal_mm: float = 6
+    measured_mm: float = 6
+    measurement_status: str = "assumed_unmeasured"
+    clearance_mm: float = 0.2
+    grade: str | None = None
+    finish: str | None = None
+
+
+@dataclass(frozen=True)
+class Grid:
+    pitch_x_mm: float = 50
+    pitch_y_mm: float = 50
+    offset_mm: float = 25
+    origin_x_mm: float = 0
+    origin_y_mm: float = 0
+    hole_diameter_mm: float = 6.5
+    edge_margin_mm: float = 15
+
+
+@dataclass(frozen=True)
+class Backplate:
+    sides: int = 8
+    rotation_deg: float = 22.5
+
+
+@dataclass(frozen=True)
+class ModuleRecipe:
+    length_mm: float = 300
+    spine_separation_mm: float = 60
+    spine_height_mm: float = 80
+    joint_datum_mm: float = 45
+    rib_top_mm: float = 116
+    rib_bottom_mm: float = 10
+    stations_mm: tuple = (70, 130, 190, 250)
+    rib_widths_mm: tuple = (130, 160, 190, 160)
+
+
+@dataclass(frozen=True)
+class Mounting:
+    rear_clearance_mm: float = 10
+    hardware_outward_mm: float = 12
+    washer_radius_mm: float = 9
+    root_half_span_mm: float = 50
+
+
+@dataclass(frozen=True)
+class ModulePlacement:
+    module_id: str = "m1"
+    x_mm: float = 25
+    y_mm: float = 0
+    angle_deg: float = 0
+    rib_order: tuple = (0, 1, 2, 3)
+    station_indices: tuple = (0, 1, 2, 3)
+    spine_instance_ids: tuple[str, ...] = ()
+    closure_instance_id: str | None = None
+    rib_instance_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class CuttingBed:
+    width_mm: float
+    height_mm: float
+    spacing_mm: float = 5
+
+
+@dataclass(frozen=True)
+class DesignConfig:
+    schema_version: int = 1
+    units: str = "mm"
+    envelope: Envelope = Envelope()
+    material: Material = Material()
+    grid: Grid = Grid()
+    backplate: Backplate = Backplate()
+    module: ModuleRecipe = ModuleRecipe()
+    mounting: Mounting = Mounting()
+    placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
+    cutting_bed: CuttingBed | None = None
+
+    def to_dict(self):
+        return asdict(self)
+
+
+def validate_config(c):
+    issues = []
+
+    def bad(field, message):
+        issues.append(Issue("error", "config", f"{field}: {message}"))
+
+    def numeric(path, value, positive=True):
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or (positive and value <= 0)
+        ):
+            bad(path, "must be finite" + (" and positive" if positive else ""))
+            return False
+        return True
+
+    if c.schema_version != 1:
+        bad("schema_version", "must be 1")
+    if c.units != "mm":
+        bad("units", "must be mm")
+    for name in ("envelope", "material", "grid", "backplate", "module", "mounting", "cutting_bed"):
+        obj = getattr(c, name)
+        if obj is None:
+            continue
+        for f in fields(obj):
+            v = getattr(obj, f.name)
+            path = f"{name}.{f.name}"
+            if f.name in ("grade", "finish", "measurement_status"):
+                continue
+            if isinstance(v, tuple):
+                for i, item in enumerate(v):
+                    numeric(f"{path}[{i}]", item)
+            else:
+                signed = f.name in (
+                    "origin_x_mm",
+                    "origin_y_mm",
+                    "offset_mm",
+                    "rotation_deg",
+                    "clearance_mm",
+                    "rear_clearance_mm",
+                    "hardware_outward_mm",
+                    "edge_margin_mm",
+                    "spacing_mm",
+                )
+                if (
+                    numeric(path, v, not signed)
+                    and signed
+                    and f.name not in ("origin_x_mm", "origin_y_mm", "offset_mm", "rotation_deg")
+                    and v < 0
+                ):
+                    bad(path, "must be nonnegative")
+    if issues:
+        return ValidationReport(tuple(issues))
+    if not isinstance(c.backplate.sides, int) or c.backplate.sides < 3:
+        bad("backplate.sides", "must be an integer >= 3")
+    if c.material.measurement_status not in ("assumed_unmeasured", "measured"):
+        bad("material.measurement_status", "must be assumed_unmeasured or measured")
+    t = c.material.measured_mm
+    m = c.module
+    if abs(c.material.nominal_mm - t) > 1:
+        bad("material.measured_mm", "more than 1 mm from nominal; verify stock")
+    g = c.grid
+    if c.mounting.washer_radius_mm <= g.hole_diameter_mm / 2 + 1e-6:
+        bad("mounting.washer_radius_mm", "washer needs positive bearing outside the mounting hole")
+    nearest = min(
+        g.pitch_x_mm,
+        g.pitch_y_mm,
+        math.hypot(g.pitch_y_mm, min(g.offset_mm % g.pitch_x_mm, (-g.offset_mm) % g.pitch_x_mm)),
+    )
+    if g.hole_diameter_mm + 2 * g.edge_margin_mm > nearest:
+        bad("grid.hole_diameter_mm", "insufficient web between neighbouring hole disks")
+    if g.edge_margin_mm < c.mounting.washer_radius_mm - g.hole_diameter_mm / 2:
+        bad("grid.edge_margin_mm", "washer would cross backing edge")
+    total = (
+        c.mounting.rear_clearance_mm
+        + c.material.measured_mm * 2
+        + m.rib_top_mm
+        + c.mounting.hardware_outward_mm
+    )
+    if c.envelope.depth_mm < total:
+        bad("envelope.depth_mm", f"requires at least {total:g} including hardware")
+    if not (0 < m.rib_bottom_mm < m.joint_datum_mm < m.spine_height_mm < m.rib_top_mm):
+        bad("module.joint_datum_mm", "require bottom < datum < spine height < rib top")
+    if m.spine_separation_mm < 4 * (t + c.material.clearance_mm):
+        bad("module.spine_separation_mm", "insufficient paired-slot ligament")
+    if (
+        len(m.stations_mm) < 3
+        or tuple(sorted(set(m.stations_mm))) != tuple(m.stations_mm)
+        or any(x < 55 or x > m.length_mm - 15 for x in m.stations_mm)
+        or any(
+            b - a < t + c.material.clearance_mm + 10
+            for a, b in zip(m.stations_mm, m.stations_mm[1:])
+        )
+    ):
+        bad("module.length_mm", "stations need root/end margins, unique ascending order and webs")
+    if (
+        len(m.rib_widths_mm) != len(m.stations_mm)
+        or min(m.rib_widths_mm, default=0) < m.spine_separation_mm + 30
+    ):
+        bad(
+            "module.rib_widths_mm", "one compatible profile per station; preserve outside ligaments"
+        )
+    if not 40 <= c.mounting.root_half_span_mm <= 55:
+        bad("mounting.root_half_span_mm", "candidate root wings support half-span 40..55 mm")
+    if c.mounting.washer_radius_mm >= 15:
+        bad("mounting.washer_radius_mm", "root wing/tool corridor requires radius <15 mm")
+    seen = set()
+    for p in c.placements:
+        try:
+            safe_id(p.module_id)
+        except ValueError as e:
+            bad("placements.module_id", str(e))
+        if p.module_id in seen:
+            bad("placements.module_id", "duplicate module ID")
+        seen.add(p.module_id)
+        for key in ("x_mm", "y_mm", "angle_deg"):
+            numeric("placements." + key, getattr(p, key), False)
+        chosen = p.rib_instance_ids or p.rib_order
+        if (
+            len(chosen) != len(p.station_indices)
+            or len(chosen) < 3
+            or len(set(chosen)) != len(chosen)
+            or len(set(p.station_indices)) != len(p.station_indices)
+            or any(type(x) is not int or not 0 <= x < len(m.stations_mm) for x in p.station_indices)
+            or (
+                not p.rib_instance_ids
+                and any(type(x) is not int or not 0 <= x < len(m.stations_mm) for x in p.rib_order)
+            )
+        ):
+            bad("placements.rib_order", "need >=3 unique available ribs and stations")
+        if p.spine_instance_ids and (
+            len(p.spine_instance_ids) != 2 or len(set(p.spine_instance_ids)) != 2
+        ):
+            bad("placements.spine_instance_ids", "need two unique physical spine IDs")
+        for identifier in (
+            *p.spine_instance_ids,
+            *p.rib_instance_ids,
+            *((p.closure_instance_id,) if p.closure_instance_id is not None else ()),
+        ):
+            try:
+                safe_id(identifier)
+            except ValueError as e:
+                bad("placements.instance_ids", str(e))
+    if not c.placements:
+        bad("placements", "at least one module is required")
+    return ValidationReport(tuple(issues))
+
+
+def config_from_dict(data):
+    if not isinstance(data, dict):
+        raise ValueError("config must be a JSON object")
+    unknown = set(data) - {f.name for f in fields(DesignConfig)}
+    if unknown:
+        raise ValueError(f"unknown config fields: {sorted(unknown)}")
+    kwargs = dict(data)
+    classes = {
+        "envelope": Envelope,
+        "material": Material,
+        "grid": Grid,
+        "backplate": Backplate,
+        "module": ModuleRecipe,
+        "mounting": Mounting,
+        "cutting_bed": CuttingBed,
+    }
+    try:
+        for key, cls in classes.items():
+            if key in kwargs and kwargs[key] is not None:
+                values = dict(kwargs[key])
+                for f in fields(cls):
+                    if isinstance(f.default, tuple) and f.name in values:
+                        values[f.name] = tuple(values[f.name])
+                kwargs[key] = cls(**values)
+        if "placements" in kwargs:
+            kwargs["placements"] = tuple(
+                ModulePlacement(
+                    **{
+                        k: tuple(v)
+                        if k
+                        in (
+                            "rib_order",
+                            "station_indices",
+                            "spine_instance_ids",
+                            "rib_instance_ids",
+                        )
+                        else v
+                        for k, v in p.items()
+                    }
+                )
+                for p in kwargs["placements"]
+            )
+        c = DesignConfig(**kwargs)
+        report = validate_config(c)
+    except (TypeError, KeyError) as e:
+        raise ValueError(f"invalid config: {e}") from e
+    if not report.digital_valid:
+        raise ValueError("; ".join(i.message for i in report.issues))
+    canonical(c.to_dict())
+    return c
+
+
+def load_config(path: Path):
+    return config_from_dict(json.loads(Path(path).read_text()))

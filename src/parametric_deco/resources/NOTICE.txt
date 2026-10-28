@@ -1,0 +1,4 @@
+The canvas preview is original project code with no bundled third-party JavaScript,
+fonts or CDN assets. Python runtime packages retain their own upstream licences;
+see requirements.lock and installed distribution metadata. No project-wide licence
+is selected by this implementation on behalf of the owner.
