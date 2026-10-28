@@ -64,3 +64,34 @@ def test_root_washer_requires_positive_bearing_around_hole(diameter, radius):
     report = validate_config(c)
     assert not report.digital_valid
     assert any("washer" in i.message and "bearing" in i.message for i in report.issues)
+
+
+@pytest.mark.parametrize(
+    "permutation",
+    [
+        tuple(float(i) for i in range(9)),
+        (False, 1, 2, 3, 4, 5, 6, 7, 8),
+        (0, True, 2, 3, 4, 5, 6, 7, 8),
+        (0, 1, "2", 3, 4, 5, 6, 7, 8),
+    ],
+)
+def test_radial_permutation_rejects_noninteger_indices_before_assembly(tmp_path, permutation):
+    from parametric_deco.config import DesignConfig, RadialWeave, load_config, validate_config
+
+    config = DesignConfig(composition=RadialWeave(rib_permutation=permutation))
+    assert not validate_config(config).digital_valid
+    path = tmp_path / "radial.json"
+    path.write_text(json.dumps(config.to_dict()))
+    with pytest.raises(ValueError, match="composition.rib_permutation"):
+        load_config(path)
+
+
+@pytest.mark.parametrize("permutation", [(0, 1, 2, 3, 4, 5, 6, 7, 8), (0, 1, 3, 4, 5, 6, 2, 7, 8)])
+def test_radial_permutation_accepts_integer_indices(tmp_path, permutation):
+    from parametric_deco.config import DesignConfig, RadialWeave, load_config, validate_config
+
+    config = DesignConfig(composition=RadialWeave(rib_permutation=permutation))
+    assert validate_config(config).digital_valid
+    path = tmp_path / "radial.json"
+    path.write_text(json.dumps(config.to_dict()))
+    assert load_config(path).composition.rib_permutation == permutation

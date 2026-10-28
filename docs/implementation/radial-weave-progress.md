@@ -66,3 +66,11 @@ Delivery approved explicitly by the user: publish implement-radial-weave to
 kasperikaivola/parametric-deco and create a draft PR. Publication uses the
 connected GitHub app because the terminal has no GitHub credentials.
 The earlier authorization block is resolved. Master is not merged.
+
+PR #2 owner feedback: fixed the previously deferred permutation-index validation.
+An explicit exact-int check precedes sorting/equality, rejecting floats, booleans
+and mixed string/integer indices at config validation/loading. Valid integer
+identity and central-rib permutations remain accepted. Four invalid-input cases
+failed before the fix; all six new regression cases pass after it.
+Focused config tests: 20 passed. Ruff and whitespace checks pass. Full suite and
+GitHub CI are the merge gates; no additional review round is being dispatched.

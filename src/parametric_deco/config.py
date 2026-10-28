@@ -148,10 +148,14 @@ def validate_config(c):
             bad("composition.opening_radius_mm", "must clear manufactured inner fins and root pads")
         if (
             len(w.rib_permutation) != 9
+            or any(type(index) is not int for index in w.rib_permutation)
             or sorted(w.rib_permutation) != list(range(9))
             or any(w.rib_permutation[k] != k for k in (0, 1, 7, 8))
         ):
-            bad("composition.rib_permutation", "permute compatible central stations 2..6 only")
+            bad(
+                "composition.rib_permutation",
+                "use integer indices; permute compatible central stations 2..6 only",
+            )
     for name in ("envelope", "material", "grid", "backplate", "module", "mounting", "cutting_bed"):
         obj = getattr(c, name)
         if obj is None:
