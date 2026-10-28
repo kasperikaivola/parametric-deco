@@ -35,7 +35,7 @@ def render_views(assembly, out_dir):
     font = ImageFont.load_default(size=22)
     modules = sorted({i.module_id for i in assembly.instances if i.role != "backplate"})
     section_module = modules[0] if modules else None
-    for view in ("front", "side", "exploded", "joint-section"):
+    for view in ("front", "oblique", "side", "exploded", "joint-section"):
         pieces = []
         for i in assembly.instances:
             if view == "joint-section" and i.module_id != section_module:
@@ -82,6 +82,14 @@ def render_views(assembly, out_dir):
 
             spine = next((p for p in pieces if p[0].role == "spine"), pieces[0])
             cut_y = float(np.mean(spine[3][:, 1]))
+            if assembly.composition:
+                rib = next(p for p in pieces if p[0].role == "rib" and p[0].station_id == "s4")
+                pose = np.asarray(rib[0].transform)
+                cut_y = float(
+                    (pose @ np.array((0, 0, assembly.definition_for(rib[0]).thickness_mm / 2, 1)))[
+                        1
+                    ]
+                )
             for instance, mesh, projected, vertices in pieces:
                 world_mesh = trimesh.Trimesh(vertices=vertices, faces=mesh.faces, process=False)
                 segments = trimesh.intersections.mesh_plane(world_mesh, [0, 1, 0], [0, cut_y, 0])
@@ -109,7 +117,11 @@ def render_views(assembly, out_dir):
         if view == "joint-section":
             draw.text(
                 (36, 810),
-                "Actual XZ mesh section through one spine: common slot datum and closure contact",
+                (
+                    "Actual XZ mesh section through central radial rib: spine notches and capture tongue"
+                    if assembly.composition
+                    else "Actual XZ mesh section through one spine: common slot datum and closure contact"
+                ),
                 fill="#edbd74",
             )
         image.save(out / f"{view}.png")

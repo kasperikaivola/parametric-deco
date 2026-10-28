@@ -30,22 +30,23 @@ On Windows, activate with `.venv\Scripts\activate`. See [all CLI examples](docs/
 
 Outputs: individual nominal SVGs and quantity manifest, fit coupon, scale check,
 assembly/inventory JSON, named GLB (metres), offline orbit/identify/explode viewer,
-front/side/section/exploded PNGs, validation report, and numbered assembly/removal
+front/oblique/side/section/exploded PNGs, validation report, and numbered assembly/removal
 instructions. An optional cutting bed enables conservative shelf placement;
 oversized parts fail rather than shrink. Unknown bed size gives individual cuts.
 
-The current four-module example is a **mechanical layout study**, not the
-completed integrated artwork. Its legacy filename is examples/intertwined.json;
-the full intertwined-composition milestone (Task 8 / roadmap Stage 5) remains
-**INCOMPLETE**. A ring of separate modules does not establish continuous contours
-or apparent crossings. The images below are inspection evidence for that study.
+The new [radial weave](docs/implementation/radial-weave.md) is the digital artwork
+candidate: two curved paths, a 360 mm central opening, twelve removable modules
+and six alternating over/under crossings. Build `examples/radial-weave.json`;
+use `examples/radial-weave-reconfigured.json` with its saved inventory for the
+second arrangement. The earlier `examples/intertwined.json` remains a mechanical
+study. Physical and host validation gates remain open.
 
 Reconfiguration uses immutable manufactured definitions and explicit physical
 instance assignments; the example exchanges compatible ribs between modules.
 Default atlases select broad faces before packing and allocate pixels according
 to physical size. Optional exterior/all-face or explicit selections are available.
 
-![Mechanical study — integrated artwork incomplete](docs/implementation/images/exploded.png)
+![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
 ## Validation boundary
 

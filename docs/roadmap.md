@@ -64,8 +64,11 @@ Exit: useful visuals in Arena with a documented calibration process. Select the 
 
 ## Stage 5 — Full intertwined sculpture
 
-**INCOMPLETE:** the current four-module fixture is only a mechanical study. It
-has neither demonstrated continuous contours nor apparent cross-module weaving.
+**Digital candidate implemented:** the separate radial-weave family provides two
+curved interwoven paths, a pronounced opening, six alternating crossings and
+immutable reconfiguration. See [evidence and reproduction](implementation/radial-weave.md).
+The older four-module fixture remains a mechanical study. Physical stiffness,
+fit, handling and host projection gates remain **INCOMPLETE / NOT RUN**.
 
 Generate an approximately 1,000 × 1,000 × 200 mm composition from reusable modules. Coordinate curves and visual groups globally. Verify extraction paths and backing stiffness.
 

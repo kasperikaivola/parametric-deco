@@ -6,6 +6,7 @@ import numpy as np
 import trimesh
 from build123d import Face, Location, Wire, export_step, extrude
 from shapely.geometry import Polygon
+from shapely import affinity
 
 
 def extrude_polygon(polygon: Polygon, thickness_mm: float):
@@ -36,6 +37,25 @@ def mesh_for(definition):
 
 
 def overlap_volume(a, ta, b, tb):
+    ta, tb = np.asarray(ta), np.asarray(tb)
+    # Parallel XY plates are exact prisms. Compute the same intersection without
+    # asking the solid kernel to repeatedly intersect hundreds of cut edges.
+    if all(np.allclose(t[2, :3], (0, 0, 1), atol=1e-12) for t in (ta, tb)):
+        height = min(ta[2, 3] + a.thickness_mm, tb[2, 3] + b.thickness_mm) - max(ta[2, 3], tb[2, 3])
+        if height <= 0:
+            return 0.0
+        polygons = [
+            affinity.affine_transform(
+                p.polygon, [t[0, 0], t[0, 1], t[1, 0], t[1, 1], t[0, 3], t[1, 3]]
+            )
+            for p, t in ((a, ta), (b, tb))
+        ]
+        return polygons[0].intersection(polygons[1]).area * height
+    return _kernel_overlap(a, tuple(map(tuple, ta)), b, tuple(map(tuple, tb)))
+
+
+@lru_cache(maxsize=32768)
+def _kernel_overlap(a, ta, b, tb):
     common = placed_solid(a, ta) & placed_solid(b, tb)
     return sum(s.volume for s in common.solids()) if common else 0.0
 

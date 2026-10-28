@@ -157,7 +157,11 @@ def _export_into(build, out):
         )
     (out / "assembly-instructions.md").write_text(
         resources.files("parametric_deco.resources")
-        .joinpath("assembly-instructions.md")
+        .joinpath(
+            "radial-assembly-instructions.md"
+            if build.assembly.composition
+            else "assembly-instructions.md"
+        )
         .read_text()
     )
     versions = {
@@ -181,6 +185,7 @@ def _export_into(build, out):
             }
             for d, n in part_counts
         ],
+        "composition": build.assembly.composition,
         "warnings": build.warnings,
         "validation": build.report.to_dict(),
         "provenance": build.provenance,

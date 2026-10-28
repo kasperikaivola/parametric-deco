@@ -235,6 +235,7 @@ class Assembly:
     envelope_mm: tuple = (1000.0, 1000.0, 200.0)
     hardware_bounds: tuple = ()
     extraction_paths: tuple = ()
+    composition: dict | None = None
 
     def definition_for(self, instance):
         for d in self.definitions:
@@ -263,6 +264,7 @@ class Assembly:
             tuple(data["envelope_mm"]),
             tuple(data["hardware_bounds"]),
             tuple(data["extraction_paths"]),
+            data.get("composition"),
         )
 
 
@@ -270,6 +272,7 @@ class Assembly:
 class Inventory:
     definitions: tuple[PartDefinition, ...]
     instances: tuple[PartInstance, ...]
+    layout: dict | None = None
 
     def to_dict(self):
         return {
@@ -277,6 +280,7 @@ class Inventory:
             "units": "mm",
             "definitions": [d.to_dict() for d in self.definitions],
             "instances": [asdict(i) for i in self.instances],
+            **({"layout": self.layout} if self.layout is not None else {}),
         }
 
     @classmethod
@@ -286,6 +290,7 @@ class Inventory:
         result = cls(
             tuple(PartDefinition.from_dict(d) for d in data["definitions"]),
             tuple(PartInstance(**i) for i in data["instances"]),
+            data.get("layout"),
         )
         ids = [i.instance_id for i in result.instances]
         if len(ids) != len(set(ids)):

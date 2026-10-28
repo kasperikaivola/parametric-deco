@@ -83,6 +83,17 @@ class CuttingBed:
 
 
 @dataclass(frozen=True)
+class RadialWeave:
+    radius_mm: float = 300
+    amplitude_mm: float = 65
+    opening_radius_mm: float = 180
+    lobes: int = 3
+    ribs_per_module: int = 9
+    rotation_deg: float = 0
+    rib_permutation: tuple = (0, 1, 2, 3, 4, 5, 6, 7, 8)
+
+
+@dataclass(frozen=True)
 class DesignConfig:
     schema_version: int = 1
     units: str = "mm"
@@ -94,6 +105,7 @@ class DesignConfig:
     mounting: Mounting = Mounting()
     placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
     cutting_bed: CuttingBed | None = None
+    composition: RadialWeave | None = None
 
     def to_dict(self):
         return asdict(self)
@@ -120,6 +132,26 @@ def validate_config(c):
         bad("schema_version", "must be 1")
     if c.units != "mm":
         bad("units", "must be mm")
+    if c.composition is not None:
+        w = c.composition
+        for key in ("radius_mm", "amplitude_mm", "opening_radius_mm", "rotation_deg"):
+            numeric("composition." + key, getattr(w, key), key != "rotation_deg")
+        if issues:
+            return ValidationReport(tuple(issues))
+        if w.lobes != 3 or type(w.lobes) is not int:
+            bad("composition.lobes", "this candidate family requires 3 lobes / 6 crossings")
+        if w.ribs_per_module != 9 or type(w.ribs_per_module) is not int:
+            bad("composition.ribs_per_module", "this candidate family requires 9 ribs per module")
+        if not 40 <= w.amplitude_mm <= 80 or not 250 <= w.radius_mm <= 340:
+            bad("composition.radius_mm", "candidate range is radius 250..340, amplitude 40..80 mm")
+        if w.opening_radius_mm > w.radius_mm - w.amplitude_mm - 52:
+            bad("composition.opening_radius_mm", "must clear manufactured inner fins and root pads")
+        if (
+            len(w.rib_permutation) != 9
+            or sorted(w.rib_permutation) != list(range(9))
+            or any(w.rib_permutation[k] != k for k in (0, 1, 7, 8))
+        ):
+            bad("composition.rib_permutation", "permute compatible central stations 2..6 only")
     for name in ("envelope", "material", "grid", "backplate", "module", "mounting", "cutting_bed"):
         obj = getattr(c, name)
         if obj is None:
@@ -176,7 +208,7 @@ def validate_config(c):
     total = (
         c.mounting.rear_clearance_mm
         + c.material.measured_mm * 2
-        + m.rib_top_mm
+        + (152 if c.composition else m.rib_top_mm)
         + c.mounting.hardware_outward_mm
     )
     if c.envelope.depth_mm < total:
@@ -263,6 +295,7 @@ def config_from_dict(data):
         "module": ModuleRecipe,
         "mounting": Mounting,
         "cutting_bed": CuttingBed,
+        "composition": RadialWeave,
     }
     try:
         for key, cls in classes.items():

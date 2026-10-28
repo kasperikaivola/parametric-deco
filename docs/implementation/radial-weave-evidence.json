@@ -1,0 +1,809 @@
+{
+  "composition": {
+    "crossings": [
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a0",
+        "position_mm": [
+          300.0,
+          0.0
+        ],
+        "theta_deg": 0,
+        "under_module": "b0"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b1",
+        "position_mm": [
+          150.00000000000003,
+          259.8076211353316
+        ],
+        "theta_deg": 60,
+        "under_module": "a1"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a2",
+        "position_mm": [
+          -149.99999999999994,
+          259.8076211353316
+        ],
+        "theta_deg": 120,
+        "under_module": "b2"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b3",
+        "position_mm": [
+          -300.0,
+          3.6739403974420595e-14
+        ],
+        "theta_deg": 180,
+        "under_module": "a3"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a4",
+        "position_mm": [
+          -150.00000000000014,
+          -259.8076211353315
+        ],
+        "theta_deg": 240,
+        "under_module": "b4"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b5",
+        "position_mm": [
+          150.00000000000003,
+          -259.8076211353316
+        ],
+        "theta_deg": 300,
+        "under_module": "a5"
+      }
+    ],
+    "design": {
+      "amplitude_mm": 65,
+      "lobes": 3,
+      "opening_radius_mm": 180,
+      "radius_mm": 300,
+      "rib_permutation": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "ribs_per_module": 9,
+      "rotation_deg": 0
+    },
+    "family": "radial-weave-v1",
+    "minimum_crossing_clearance_mm": 38.099999999999994,
+    "modules": [
+      {
+        "closure_id": "a0-rail",
+        "level": "high",
+        "module_id": "a0",
+        "rib_ids": [
+          "a0-fin-0",
+          "a0-fin-1",
+          "a0-fin-2",
+          "a0-fin-3",
+          "a0-fin-4",
+          "a0-fin-5",
+          "a0-fin-6",
+          "a0-fin-7",
+          "a0-fin-8"
+        ],
+        "spine_ids": [
+          "a0-spine-0",
+          "a0-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a1-rail",
+        "level": "low",
+        "module_id": "a1",
+        "rib_ids": [
+          "a1-fin-0",
+          "a1-fin-1",
+          "a1-fin-2",
+          "a1-fin-3",
+          "a1-fin-4",
+          "a1-fin-5",
+          "a1-fin-6",
+          "a1-fin-7",
+          "a1-fin-8"
+        ],
+        "spine_ids": [
+          "a1-spine-0",
+          "a1-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a2-rail",
+        "level": "high",
+        "module_id": "a2",
+        "rib_ids": [
+          "a2-fin-0",
+          "a2-fin-1",
+          "a2-fin-2",
+          "a2-fin-3",
+          "a2-fin-4",
+          "a2-fin-5",
+          "a2-fin-6",
+          "a2-fin-7",
+          "a2-fin-8"
+        ],
+        "spine_ids": [
+          "a2-spine-0",
+          "a2-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a3-rail",
+        "level": "low",
+        "module_id": "a3",
+        "rib_ids": [
+          "a3-fin-0",
+          "a3-fin-1",
+          "a3-fin-2",
+          "a3-fin-3",
+          "a3-fin-4",
+          "a3-fin-5",
+          "a3-fin-6",
+          "a3-fin-7",
+          "a3-fin-8"
+        ],
+        "spine_ids": [
+          "a3-spine-0",
+          "a3-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a4-rail",
+        "level": "high",
+        "module_id": "a4",
+        "rib_ids": [
+          "a4-fin-0",
+          "a4-fin-1",
+          "a4-fin-2",
+          "a4-fin-3",
+          "a4-fin-4",
+          "a4-fin-5",
+          "a4-fin-6",
+          "a4-fin-7",
+          "a4-fin-8"
+        ],
+        "spine_ids": [
+          "a4-spine-0",
+          "a4-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a5-rail",
+        "level": "low",
+        "module_id": "a5",
+        "rib_ids": [
+          "a5-fin-0",
+          "a5-fin-1",
+          "a5-fin-2",
+          "a5-fin-3",
+          "a5-fin-4",
+          "a5-fin-5",
+          "a5-fin-6",
+          "a5-fin-7",
+          "a5-fin-8"
+        ],
+        "spine_ids": [
+          "a5-spine-0",
+          "a5-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b0-rail",
+        "level": "low",
+        "module_id": "b0",
+        "rib_ids": [
+          "b0-fin-0",
+          "b0-fin-1",
+          "b0-fin-2",
+          "b0-fin-3",
+          "b0-fin-4",
+          "b0-fin-5",
+          "b0-fin-6",
+          "b0-fin-7",
+          "b0-fin-8"
+        ],
+        "spine_ids": [
+          "b0-spine-0",
+          "b0-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b1-rail",
+        "level": "high",
+        "module_id": "b1",
+        "rib_ids": [
+          "b1-fin-0",
+          "b1-fin-1",
+          "b1-fin-2",
+          "b1-fin-3",
+          "b1-fin-4",
+          "b1-fin-5",
+          "b1-fin-6",
+          "b1-fin-7",
+          "b1-fin-8"
+        ],
+        "spine_ids": [
+          "b1-spine-0",
+          "b1-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b2-rail",
+        "level": "low",
+        "module_id": "b2",
+        "rib_ids": [
+          "b2-fin-0",
+          "b2-fin-1",
+          "b2-fin-2",
+          "b2-fin-3",
+          "b2-fin-4",
+          "b2-fin-5",
+          "b2-fin-6",
+          "b2-fin-7",
+          "b2-fin-8"
+        ],
+        "spine_ids": [
+          "b2-spine-0",
+          "b2-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b3-rail",
+        "level": "high",
+        "module_id": "b3",
+        "rib_ids": [
+          "b3-fin-0",
+          "b3-fin-1",
+          "b3-fin-2",
+          "b3-fin-3",
+          "b3-fin-4",
+          "b3-fin-5",
+          "b3-fin-6",
+          "b3-fin-7",
+          "b3-fin-8"
+        ],
+        "spine_ids": [
+          "b3-spine-0",
+          "b3-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b4-rail",
+        "level": "low",
+        "module_id": "b4",
+        "rib_ids": [
+          "b4-fin-0",
+          "b4-fin-1",
+          "b4-fin-2",
+          "b4-fin-3",
+          "b4-fin-4",
+          "b4-fin-5",
+          "b4-fin-6",
+          "b4-fin-7",
+          "b4-fin-8"
+        ],
+        "spine_ids": [
+          "b4-spine-0",
+          "b4-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b5-rail",
+        "level": "high",
+        "module_id": "b5",
+        "rib_ids": [
+          "b5-fin-0",
+          "b5-fin-1",
+          "b5-fin-2",
+          "b5-fin-3",
+          "b5-fin-4",
+          "b5-fin-5",
+          "b5-fin-6",
+          "b5-fin-7",
+          "b5-fin-8"
+        ],
+        "spine_ids": [
+          "b5-spine-0",
+          "b5-spine-1"
+        ]
+      }
+    ],
+    "motion_scope": "sampled straight +Z module extraction; radial bench rib paths",
+    "opening_clearance_mm": -2.842170943040401e-14,
+    "removal_order": [
+      "a0",
+      "a2",
+      "a4",
+      "b1",
+      "b3",
+      "b5",
+      "a1",
+      "a3",
+      "a5",
+      "b0",
+      "b2",
+      "b4"
+    ],
+    "rotation_deg": 0,
+    "sampled_extraction_dependencies": {
+      "a1": [
+        "b1"
+      ],
+      "a3": [
+        "b3"
+      ],
+      "a5": [
+        "b5"
+      ],
+      "b0": [
+        "a0"
+      ],
+      "b2": [
+        "a2"
+      ],
+      "b4": [
+        "a4"
+      ]
+    }
+  },
+  "part_count": 145,
+  "definition_count": 35,
+  "wood_bounds_mm": [
+    [
+      -499.99999999999994,
+      -499.99999999999994,
+      10.0
+    ],
+    [
+      499.99999999999994,
+      499.99999999999994,
+      174.0
+    ]
+  ],
+  "hardware_max_z_mm": 186.0,
+  "validation": {
+    "digital_valid": true,
+    "host_validation": "not_run",
+    "issues": [
+      {
+        "code": "extraction_dependency",
+        "message": "a1: remove b1 first (sampled +Z path)",
+        "part_ids": [
+          "a1",
+          "b1"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "extraction_dependency",
+        "message": "a3: remove b3 first (sampled +Z path)",
+        "part_ids": [
+          "a3",
+          "b3"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "extraction_dependency",
+        "message": "a5: remove b5 first (sampled +Z path)",
+        "part_ids": [
+          "a5",
+          "b5"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "extraction_dependency",
+        "message": "b0: remove a0 first (sampled +Z path)",
+        "part_ids": [
+          "b0",
+          "a0"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "extraction_dependency",
+        "message": "b2: remove a2 first (sampled +Z path)",
+        "part_ids": [
+          "b2",
+          "a2"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "extraction_dependency",
+        "message": "b4: remove a4 first (sampled +Z path)",
+        "part_ids": [
+          "b4",
+          "a4"
+        ],
+        "severity": "warning"
+      }
+    ],
+    "motion_validation": "sampled_translations_only",
+    "physical_validation": "not_run",
+    "schema_version": 1
+  },
+  "reconfigured_composition": {
+    "crossings": [
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a0",
+        "position_mm": [
+          -300.0,
+          3.6739403974420595e-14
+        ],
+        "theta_deg": 180,
+        "under_module": "b0"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b1",
+        "position_mm": [
+          -150.00000000000014,
+          -259.8076211353315
+        ],
+        "theta_deg": 240,
+        "under_module": "a1"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a2",
+        "position_mm": [
+          150.00000000000003,
+          -259.8076211353316
+        ],
+        "theta_deg": 300,
+        "under_module": "b2"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b3",
+        "position_mm": [
+          300.0,
+          0.0
+        ],
+        "theta_deg": 0,
+        "under_module": "a3"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "a4",
+        "position_mm": [
+          150.00000000000003,
+          259.8076211353316
+        ],
+        "theta_deg": 60,
+        "under_module": "b4"
+      },
+      {
+        "clearance_mm": 38.099999999999994,
+        "over_module": "b5",
+        "position_mm": [
+          -149.99999999999994,
+          259.8076211353316
+        ],
+        "theta_deg": 120,
+        "under_module": "a5"
+      }
+    ],
+    "design": {
+      "amplitude_mm": 65,
+      "lobes": 3,
+      "opening_radius_mm": 180,
+      "radius_mm": 300,
+      "rib_permutation": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "ribs_per_module": 9,
+      "rotation_deg": 0
+    },
+    "family": "radial-weave-v1",
+    "minimum_crossing_clearance_mm": 38.099999999999994,
+    "modules": [
+      {
+        "closure_id": "a0-rail",
+        "level": "high",
+        "module_id": "a0",
+        "rib_ids": [
+          "a0-fin-0",
+          "a0-fin-1",
+          "a0-fin-2",
+          "a0-fin-3",
+          "a0-fin-4",
+          "a0-fin-5",
+          "a0-fin-6",
+          "a0-fin-7",
+          "a0-fin-8"
+        ],
+        "spine_ids": [
+          "a0-spine-0",
+          "a0-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a1-rail",
+        "level": "low",
+        "module_id": "a1",
+        "rib_ids": [
+          "a1-fin-0",
+          "a1-fin-1",
+          "a1-fin-2",
+          "a1-fin-3",
+          "a1-fin-4",
+          "a1-fin-5",
+          "a1-fin-6",
+          "a1-fin-7",
+          "a1-fin-8"
+        ],
+        "spine_ids": [
+          "a1-spine-0",
+          "a1-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a2-rail",
+        "level": "high",
+        "module_id": "a2",
+        "rib_ids": [
+          "a2-fin-0",
+          "a2-fin-1",
+          "a2-fin-2",
+          "a2-fin-3",
+          "a2-fin-4",
+          "a2-fin-5",
+          "a2-fin-6",
+          "a2-fin-7",
+          "a2-fin-8"
+        ],
+        "spine_ids": [
+          "a2-spine-0",
+          "a2-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a3-rail",
+        "level": "low",
+        "module_id": "a3",
+        "rib_ids": [
+          "a3-fin-0",
+          "a3-fin-1",
+          "a3-fin-2",
+          "a3-fin-3",
+          "a3-fin-4",
+          "a3-fin-5",
+          "a3-fin-6",
+          "a3-fin-7",
+          "a3-fin-8"
+        ],
+        "spine_ids": [
+          "a3-spine-0",
+          "a3-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a4-rail",
+        "level": "high",
+        "module_id": "a4",
+        "rib_ids": [
+          "a4-fin-0",
+          "a4-fin-1",
+          "a4-fin-2",
+          "a4-fin-3",
+          "a4-fin-4",
+          "a4-fin-5",
+          "a4-fin-6",
+          "a4-fin-7",
+          "a4-fin-8"
+        ],
+        "spine_ids": [
+          "a4-spine-0",
+          "a4-spine-1"
+        ]
+      },
+      {
+        "closure_id": "a5-rail",
+        "level": "low",
+        "module_id": "a5",
+        "rib_ids": [
+          "a5-fin-0",
+          "a5-fin-1",
+          "a5-fin-2",
+          "a5-fin-3",
+          "a5-fin-4",
+          "a5-fin-5",
+          "a5-fin-6",
+          "a5-fin-7",
+          "a5-fin-8"
+        ],
+        "spine_ids": [
+          "a5-spine-0",
+          "a5-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b0-rail",
+        "level": "low",
+        "module_id": "b0",
+        "rib_ids": [
+          "b0-fin-0",
+          "b0-fin-1",
+          "b0-fin-2",
+          "b0-fin-3",
+          "b0-fin-4",
+          "b0-fin-5",
+          "b0-fin-6",
+          "b0-fin-7",
+          "b0-fin-8"
+        ],
+        "spine_ids": [
+          "b0-spine-0",
+          "b0-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b1-rail",
+        "level": "high",
+        "module_id": "b1",
+        "rib_ids": [
+          "b1-fin-0",
+          "b1-fin-1",
+          "b1-fin-2",
+          "b1-fin-3",
+          "b1-fin-4",
+          "b1-fin-5",
+          "b1-fin-6",
+          "b1-fin-7",
+          "b1-fin-8"
+        ],
+        "spine_ids": [
+          "b1-spine-0",
+          "b1-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b2-rail",
+        "level": "low",
+        "module_id": "b2",
+        "rib_ids": [
+          "b2-fin-0",
+          "b2-fin-1",
+          "b2-fin-2",
+          "b2-fin-3",
+          "b2-fin-4",
+          "b2-fin-5",
+          "b2-fin-6",
+          "b2-fin-7",
+          "b2-fin-8"
+        ],
+        "spine_ids": [
+          "b2-spine-0",
+          "b2-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b3-rail",
+        "level": "high",
+        "module_id": "b3",
+        "rib_ids": [
+          "b3-fin-0",
+          "b3-fin-1",
+          "b3-fin-2",
+          "b3-fin-3",
+          "b3-fin-4",
+          "b3-fin-5",
+          "b3-fin-6",
+          "b3-fin-7",
+          "b3-fin-8"
+        ],
+        "spine_ids": [
+          "b3-spine-0",
+          "b3-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b4-rail",
+        "level": "low",
+        "module_id": "b4",
+        "rib_ids": [
+          "b4-fin-0",
+          "b4-fin-1",
+          "b4-fin-2",
+          "b4-fin-3",
+          "b4-fin-4",
+          "b4-fin-5",
+          "b4-fin-6",
+          "b4-fin-7",
+          "b4-fin-8"
+        ],
+        "spine_ids": [
+          "b4-spine-0",
+          "b4-spine-1"
+        ]
+      },
+      {
+        "closure_id": "b5-rail",
+        "level": "high",
+        "module_id": "b5",
+        "rib_ids": [
+          "b5-fin-0",
+          "b5-fin-1",
+          "b5-fin-2",
+          "b5-fin-3",
+          "b5-fin-4",
+          "b5-fin-5",
+          "b5-fin-6",
+          "b5-fin-7",
+          "b5-fin-8"
+        ],
+        "spine_ids": [
+          "b5-spine-0",
+          "b5-spine-1"
+        ]
+      }
+    ],
+    "motion_scope": "sampled straight +Z module extraction; radial bench rib paths",
+    "opening_clearance_mm": -2.842170943040401e-14,
+    "removal_order": [
+      "a0",
+      "a2",
+      "a4",
+      "b1",
+      "b3",
+      "b5",
+      "a1",
+      "a3",
+      "a5",
+      "b0",
+      "b2",
+      "b4"
+    ],
+    "rotation_deg": 180,
+    "sampled_extraction_dependencies": {
+      "a1": [
+        "b1"
+      ],
+      "a3": [
+        "b3"
+      ],
+      "a5": [
+        "b5"
+      ],
+      "b0": [
+        "a0"
+      ],
+      "b2": [
+        "a2"
+      ],
+      "b4": [
+        "a4"
+      ]
+    }
+  },
+  "physical_ids_and_fingerprints_preserved": true
+}

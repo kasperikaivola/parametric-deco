@@ -23,6 +23,10 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
+    if config.composition is not None:
+        from .weave_assembly import assemble_weave
+
+        return assemble_weave(config, inventory)
     report = validate_config(config)
     if not report.digital_valid:
         raise ValueError("; ".join(i.message for i in report.issues))

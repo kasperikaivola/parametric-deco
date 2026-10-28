@@ -67,3 +67,16 @@ approval therefore remain separate decisions.
 only demonstrate mechanical layout and reconfiguration. They do not establish
 continuous contours or apparent intertwining. Owner PR feedback corrections and
 updated software results are recorded in progress.md.
+
+## Radial weave update — 2026-10-28
+
+The historical Task 8 INCOMPLETE statements above describe the old fixture.
+The separate radial-weave digital artwork candidate now supplies the coordinated
+curves, 360 mm opening and six alternating crossings. See
+[reproduction and limits](radial-weave.md), [saved evidence](radial-weave-evidence.json)
+and [execution ledger](radial-weave-progress.md). Both arrangements preserve all
+145 physical instances and manufactured fingerprints. Hardware depth is 186 mm.
+Initial full verification: 55 passed, 1 explicit host skip on Python 3.12.14;
+Ruff and JS syntax pass. Final review and subsequent fixes are recorded in the ledger.
+This completes the digital composition candidate, not physical Stage 5 stiffness,
+fit, mounting/handling or host runtime checks; those remain NOT RUN.

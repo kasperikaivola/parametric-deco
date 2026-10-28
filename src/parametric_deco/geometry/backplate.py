@@ -23,7 +23,11 @@ def backplate_polygon(config):
         config.envelope.width_mm / (max(xs) - min(xs)),
         config.envelope.height_mm / (max(ys) - min(ys)),
     )
-    return Polygon([((x - cx) * scale, (y - cy) * scale) for x, y in points])
+    polygon = Polygon([((x - cx) * scale, (y - cy) * scale) for x, y in points])
+    if config.composition is not None:
+        radius = config.composition.opening_radius_mm / math.cos(math.pi / 384)
+        polygon = polygon.difference(Point(0, 0).buffer(radius, quad_segs=96))
+    return polygon
 
 
 @lru_cache(maxsize=16)
