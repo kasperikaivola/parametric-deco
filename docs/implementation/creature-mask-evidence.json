@@ -1,0 +1,242 @@
+{
+  "creature-mask": {
+    "family": "creature-mask-v1",
+    "physical_instances": 133,
+    "manufactured_definitions": 31,
+    "wood_bounds_mm": [
+      [
+        -454.6403128765003,
+        -381.2570136464238,
+        10.0
+      ],
+      [
+        454.6403128765003,
+        418.61416378262584,
+        178.0
+      ]
+    ],
+    "hardware_max_z_mm": 190,
+    "composition": {
+      "eye_aperture_area_mm2": 6563.417769820601,
+      "family": "creature-mask-v1",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "posture": "rest",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right",
+        "jaw-left",
+        "jaw-right"
+      ],
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ],
+        "jaw-left": [
+          "head"
+        ],
+        "jaw-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-left-armour-3--front",
+      "crown-left-armour-4--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "crown-right-armour-3--front",
+      "crown-right-armour-4--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front",
+      "head-armour-4--front",
+      "head-armour-5--front",
+      "jaw-left-armour-0--front",
+      "jaw-left-armour-1--front",
+      "jaw-left-armour-2--front",
+      "jaw-left-armour-3--front",
+      "jaw-right-armour-0--front",
+      "jaw-right-armour-1--front",
+      "jaw-right-armour-2--front",
+      "jaw-right-armour-3--front"
+    ],
+    "visibility_scope": "sampled broad-face targets; ray intersection with all actual planar extrusions; no runtime calibration",
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  },
+  "creature-mask-raised": {
+    "family": "creature-mask-v1",
+    "physical_instances": 133,
+    "manufactured_definitions": 31,
+    "wood_bounds_mm": [
+      [
+        -479.6403128765003,
+        -381.2570136464238,
+        10.0
+      ],
+      [
+        479.6403128765003,
+        468.61416378262584,
+        178.0
+      ]
+    ],
+    "hardware_max_z_mm": 190,
+    "composition": {
+      "eye_aperture_area_mm2": 6563.417769820601,
+      "family": "creature-mask-v1",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "posture": "raised_crown",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right",
+        "jaw-left",
+        "jaw-right"
+      ],
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ],
+        "jaw-left": [
+          "head"
+        ],
+        "jaw-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-left-armour-3--front",
+      "crown-left-armour-4--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "crown-right-armour-3--front",
+      "crown-right-armour-4--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front",
+      "head-armour-4--front",
+      "head-armour-5--front",
+      "jaw-left-armour-0--front",
+      "jaw-left-armour-1--front",
+      "jaw-left-armour-2--front",
+      "jaw-left-armour-3--front",
+      "jaw-right-armour-0--front",
+      "jaw-right-armour-1--front",
+      "jaw-right-armour-2--front",
+      "jaw-right-armour-3--front"
+    ],
+    "visibility_scope": "sampled broad-face targets; ray intersection with all actual planar extrusions; no runtime calibration",
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  }
+}

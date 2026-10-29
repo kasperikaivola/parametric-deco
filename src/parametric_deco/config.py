@@ -94,6 +94,13 @@ class RadialWeave:
 
 
 @dataclass(frozen=True)
+class CreatureMask:
+    scale: float = 1.0
+    curl: float = 1.0
+    posture: str = "rest"
+
+
+@dataclass(frozen=True)
 class DesignConfig:
     schema_version: int = 1
     units: str = "mm"
@@ -106,6 +113,7 @@ class DesignConfig:
     placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
     cutting_bed: CuttingBed | None = None
     composition: RadialWeave | None = None
+    creature: CreatureMask | None = None
 
     def to_dict(self):
         return asdict(self)
@@ -132,6 +140,25 @@ def validate_config(c):
         bad("schema_version", "must be 1")
     if c.units != "mm":
         bad("units", "must be mm")
+    if c.creature is not None:
+        creature = c.creature
+        if c.composition is not None:
+            bad("creature", "select only one composition family")
+        for field in ("scale", "curl"):
+            numeric("creature." + field, getattr(creature, field))
+        if issues:
+            return ValidationReport(tuple(issues))
+        if not 0.9 <= creature.scale <= 1 or not 0.8 <= creature.curl <= 1.2:
+            bad("creature", "candidate scale .9..1 and curl .8..1.2 required")
+        if creature.posture not in ("rest", "raised_crown"):
+            bad("creature.posture", "use rest or raised_crown")
+        required = (
+            c.mounting.rear_clearance_mm
+            + 28 * c.material.measured_mm
+            + c.mounting.hardware_outward_mm
+        )
+        if c.envelope.depth_mm < required:
+            bad("envelope.depth_mm", f"creature requires {required:g} mm including hardware")
     if c.composition is not None:
         w = c.composition
         for key in ("radius_mm", "amplitude_mm", "opening_radius_mm", "rotation_deg"):
@@ -300,6 +327,7 @@ def config_from_dict(data):
         "mounting": Mounting,
         "cutting_bed": CuttingBed,
         "composition": RadialWeave,
+        "creature": CreatureMask,
     }
     try:
         for key, cls in classes.items():

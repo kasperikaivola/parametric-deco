@@ -51,6 +51,33 @@ def main():
                 ],
             ]
         )
+        commands.extend(
+            [
+                ["build", "examples/creature-mask.json", "--out", "build/creature-mask"],
+                [
+                    "reconfigure",
+                    "examples/creature-mask-raised.json",
+                    "--inventory",
+                    "build/creature-mask/inventory.json",
+                    "--out",
+                    "build/creature-mask-raised",
+                ],
+                [
+                    "visuals",
+                    "build/creature-mask",
+                    "--out",
+                    "build/creature-mask-visuals",
+                    "--visible-only",
+                ],
+                [
+                    "visuals",
+                    "build/creature-mask-raised",
+                    "--out",
+                    "build/creature-mask-raised-visuals",
+                    "--visible-only",
+                ],
+            ]
+        )
         for args in commands:
             print("RUN: parametric-deco " + " ".join(args), flush=True)
             result = subprocess.run(

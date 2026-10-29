@@ -29,12 +29,19 @@ def render_views(assembly, out_dir):
         "rib": (218, 172, 112),
         "spine": (161, 111, 62),
         "closure": (189, 144, 88),
+        "armour": (201, 157, 102),
+        "cap": (201, 157, 102),
+        "register": (151, 108, 64),
+        "spacer": (163, 116, 70),
         "part": (200, 150, 95),
         "backplate": (64, 55, 45),
     }
     font = ImageFont.load_default(size=22)
     modules = sorted({i.module_id for i in assembly.instances if i.role != "backplate"})
-    section_module = modules[0] if modules else None
+    creature = bool(
+        assembly.composition and assembly.composition.get("family") == "creature-mask-v1"
+    )
+    section_module = "head" if creature else modules[0] if modules else None
     for view in ("front", "oblique", "side", "exploded", "joint-section"):
         pieces = []
         for i in assembly.instances:
@@ -47,7 +54,15 @@ def render_views(assembly, out_dir):
             vertices = mesh.vertices @ t[:3, :3].T + t[:3, 3]
             if view == "exploded":
                 vertices = vertices + np.array(
-                    (0, 0, 160 if i.role == "closure" else 70 if i.role == "rib" else 0)
+                    (
+                        0,
+                        0,
+                        160
+                        if i.role in ("closure", "cap")
+                        else 70
+                        if i.role in ("rib", "armour")
+                        else 0,
+                    )
                 )
             projected = project_vertices(vertices, view)
             pieces.append((i, mesh, projected, vertices))
@@ -76,13 +91,31 @@ def render_views(assembly, out_dir):
                     np.linalg.norm(normal) or 1
                 )
                 color = tuple(int(c * shade) for c in colors.get(instance.role, colors["part"]))
-                triangles.append((projected[face, 2].mean(), xy, color))
+                triangles.append((projected[face, 2].mean(), xy, color, False))
+            if creature and view == "front":
+                part = assembly.definition_for(instance)
+                pose = np.array(instance.transform)
+                if abs(pose[2, 2] - 1) < 1e-9:
+                    for ring in (part.outer, *part.holes):
+                        world = np.array([(*p, part.thickness_mm, 1) for p in ring]) @ pose.T
+                        projected_ring = project_vertices(world[:, :3], view)
+                        pixels = (projected_ring[:, :2] - center) * scale * np.array(
+                            (1, -1)
+                        ) + np.array((550, 465))
+                        for j in range(len(ring)):
+                            segment = pixels[[j, (j + 1) % len(ring)]]
+                            triangles.append(
+                                (projected_ring[j, 2] + 1e-6, segment, (91, 65, 39), True)
+                            )
         if view == "joint-section":
             import trimesh
 
             spine = next((p for p in pieces if p[0].role == "spine"), pieces[0])
             cut_y = float(np.mean(spine[3][:, 1]))
-            if assembly.composition:
+            if creature:
+                web = next(p for p in pieces if p[0].role == "register")
+                cut_y = web[0].transform[1][3] - assembly.definition_for(web[0]).thickness_mm / 2
+            elif assembly.composition:
                 rib = next(p for p in pieces if p[0].role == "rib" and p[0].station_id == "s4")
                 pose = np.asarray(rib[0].transform)
                 cut_y = float(
@@ -100,8 +133,11 @@ def render_views(assembly, out_dir):
                     )
                     draw.line([tuple(p) for p in xy], fill=color, width=3)
         else:
-            for _, xy, color in sorted(triangles, key=lambda item: item[0]):
-                draw.polygon([tuple(p) for p in xy], fill=color)
+            for _, xy, color, edge in sorted(triangles, key=lambda item: item[0]):
+                if edge:
+                    draw.line([tuple(p) for p in xy], fill=color, width=1)
+                else:
+                    draw.polygon([tuple(p) for p in xy], fill=color)
         draw.text((36, 26), "PARAMETRIC DECO / " + view.upper(), font=font, fill="#ece1cd")
         draw.text(
             (36, 60),
@@ -118,7 +154,9 @@ def render_views(assembly, out_dir):
             draw.text(
                 (36, 810),
                 (
-                    "Actual XZ mesh section through central radial rib: spine notches and capture tongue"
+                    "XZ section through head roots: plate/spacer compression and captured alignment webs"
+                    if creature
+                    else "Actual XZ mesh section through central radial rib: spine notches and capture tongue"
                     if assembly.composition
                     else "Actual XZ mesh section through one spine: common slot datum and closure contact"
                 ),

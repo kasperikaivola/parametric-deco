@@ -48,6 +48,22 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
+## Creature mask example
+
+The new [creature mask](docs/implementation/creature-mask.md) develops a bilateral
+alien carapace with recessed eyes, a raised brow/rostrum, two swelling crown sweeps
+and two smaller hooked mandibles. It uses layered planar armour, slotted alignment
+webs and two root clamps per module. Detached stacks need a tray and compression.
+The radial weave remains supported independently.
+
+```sh
+parametric-deco build examples/creature-mask.json --out build/creature-mask
+parametric-deco reconfigure examples/creature-mask-raised.json --inventory build/creature-mask/inventory.json --out build/creature-mask-raised
+parametric-deco visuals build/creature-mask --out build/creature-mask-visuals --visible-only
+```
+
+![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png)
+
 ## Validation boundary
 
 This is a **software prototype and physical-test candidate**, not a load-rated

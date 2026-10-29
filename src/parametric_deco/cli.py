@@ -37,6 +37,11 @@ def main(argv=None):
         dest="surface_ids",
         help="explicit INSTANCE--SURFACE tile ID; repeat to select faces before packing",
     )
+    p.add_argument(
+        "--visible-only",
+        action="store_true",
+        help="select sampled visible creature broad faces from frontal projector at (0,0,2000) mm",
+    )
     p.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     try:
@@ -61,12 +66,19 @@ def main(argv=None):
             assembly = Assembly.from_dict(
                 json.loads((args.directory / "assembly.json").read_text())
             )
+            selected = args.surface_ids
+            if args.visible_only:
+                if selected:
+                    raise ValueError("choose --visible-only or explicit --surface")
+                from .visuals.visibility import projection_visibility
+
+                selected = projection_visibility(assembly)["recommended_surface_ids"]
             atlas = generate_atlas(
                 assembly,
                 args.width,
                 args.height,
                 surfaces=args.surfaces,
-                surface_ids=args.surface_ids,
+                surface_ids=selected,
             )
             result = export_isf_resources(atlas, args.out, force=args.force)
             print(json.dumps({"files": len(result.paths), "out": str(args.out)}))
