@@ -1,0 +1,1003 @@
+{
+  "organism-low": {
+    "requested_envelope_mm": [
+      1000,
+      1000,
+      200
+    ],
+    "bounds_mm": [
+      [
+        -498.0,
+        -498.00000000000006,
+        10.0
+      ],
+      [
+        498.0,
+        498.00000000000006,
+        177.8
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 189.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864417,
+    "construction": {
+      "assembly_operations_estimate": 42,
+      "bolts": 12,
+      "nuts": 12,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 19,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 24
+    },
+    "roles": {
+      "armour": 6,
+      "register": 12,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-2",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "52b6d80152dcd82c40f93dbff639a4b7be5d33f6d3468524e050e3026f7c4aea",
+      "584c03d12d5dc1a8283cb777ae26b6a5a88ffba2cc8169974fa80f99aa768e30",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "8a733831701630dbb80d3f4ce2ef7199f27fae64c1717de372cc32067bda9cd4",
+      "976b8686ec742fb5ad84fdc7b1ff013b1696b866e77b426730f3ebc867119a6e",
+      "b04ceb0c97badefa50654b0e26cd0d07a90248a2a3123a5db2e67621a9b8b462",
+      "d03add809ed1bb6142962eb5e1397c24b6b7dfceb86e858e9d2e2f5b3236da24",
+      "eb9f0ed0b421d055c5dff025e64ef9e296893d7fcf8ed88eb43cb442d30d65d1",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864417
+  },
+  "organism-medium": {
+    "requested_envelope_mm": [
+      1000,
+      1000,
+      200
+    ],
+    "bounds_mm": [
+      [
+        -498.0,
+        -498.00000000000006,
+        10.0
+      ],
+      [
+        498.0,
+        498.00000000000006,
+        177.8
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 189.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864412,
+    "construction": {
+      "assembly_operations_estimate": 84,
+      "bolts": 24,
+      "nuts": 24,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 37,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 48
+    },
+    "roles": {
+      "armour": 12,
+      "register": 24,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-2",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-0: remove primary-0, primary-1, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-0",
+            "primary-0",
+            "primary-1",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-1: remove primary-0, primary-1, primary-2 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-1",
+            "primary-0",
+            "primary-1",
+            "primary-2"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-2: remove primary-1, primary-2, primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-2",
+            "primary-1",
+            "primary-2",
+            "primary-3"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-3: remove primary-2, primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-3",
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-4: remove primary-3, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-4",
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-5: remove primary-0, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-5",
+            "primary-0",
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front",
+      "secondary-1-0-plate--front",
+      "secondary-1-1-plate--front",
+      "secondary-1-2-plate--front",
+      "secondary-1-3-plate--front",
+      "secondary-1-4-plate--front",
+      "secondary-1-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
+      "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "0e4f2ba16486e9935eb7a4c04445815932c515584629a9f99e75a8e65d8eb56c",
+      "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
+      "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
+      "1a438cab1320885ccf7168126a07c0108b50496dfd61dfaf1e212d7cb0ace2e6",
+      "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
+      "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
+      "297977a95a50849ccdbae5289a2b3d9f72c96e9de6ff066d1014f96838167b70",
+      "33fc764cf7f68bee706540fd1b49f0927ef26a855295bfded487b3babb2a84ca",
+      "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
+      "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
+      "4ce464eaae7fa2de36f0dcfd11ffcdcfc60ad743d7a180a6c22e795bb0c05095",
+      "4d31a4281b439435e0ca36d9f1b503db509c7d66837e7dbee9960b01bcd87adf",
+      "54e8540b91c026e2adeeb26c857bd855a16bd04b4c6c432871fc401bc5d1c113",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "63e98d9a8046f92835f9289569ab2e9d93b791334f5d17ddb90153484e052e40",
+      "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
+      "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
+      "6f41fc338fe83ca5e3b5910665dbaec63618c762755c8cd89cda3091e94c206e",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "845e15f2255f3ed0cfa61e8a74d3aa43150448f2469b6cc1488b0331fda165e2",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "88b5cc18b99315949d1e4c3ffe2b32be21c069a023dcb037552d5c97a3c2fd18",
+      "b08441c7d5fc8cd321ac73ce8fdeb86f9a4366193c31aa9e817ab1a0d77ae035",
+      "c384d259664610b351055ae7f3ee40110cd74c6a9229bc5004ec1e0dccc96c7f",
+      "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0",
+      "secondary-1-5",
+      "secondary-1-4",
+      "secondary-1-3",
+      "secondary-1-2",
+      "secondary-1-1",
+      "secondary-1-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864412
+  },
+  "organism-high": {
+    "requested_envelope_mm": [
+      1000,
+      1000,
+      200
+    ],
+    "bounds_mm": [
+      [
+        -498.0,
+        -498.00000000000006,
+        10.0
+      ],
+      [
+        498.0,
+        498.00000000000006,
+        177.8
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 189.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864412,
+    "construction": {
+      "assembly_operations_estimate": 84,
+      "bolts": 24,
+      "nuts": 24,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 37,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 48
+    },
+    "roles": {
+      "armour": 12,
+      "register": 24,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-2",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-0: remove primary-0, primary-1, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-0",
+            "primary-0",
+            "primary-1",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-1: remove primary-0, primary-1, primary-2 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-1",
+            "primary-0",
+            "primary-1",
+            "primary-2"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-2: remove primary-1, primary-2, primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-2",
+            "primary-1",
+            "primary-2",
+            "primary-3"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-3: remove primary-2, primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-3",
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-4: remove primary-3, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-4",
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-5: remove primary-0, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-5",
+            "primary-0",
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front",
+      "secondary-1-0-plate--front",
+      "secondary-1-1-plate--front",
+      "secondary-1-2-plate--front",
+      "secondary-1-3-plate--front",
+      "secondary-1-4-plate--front",
+      "secondary-1-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "03dea41a54a45abf008019f497cdd81963c117f7db9e56bea831659a15ec4215",
+      "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
+      "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "18e5f5887a94c83af53ceef8f3476a9ffa719c8b5f1de7059db0b7864ccb1da0",
+      "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
+      "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
+      "1a438cab1320885ccf7168126a07c0108b50496dfd61dfaf1e212d7cb0ace2e6",
+      "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
+      "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
+      "297977a95a50849ccdbae5289a2b3d9f72c96e9de6ff066d1014f96838167b70",
+      "346e70a00da4d57582e74f4e452e2b71bf3d75b03b499daaa7f1c873db40960b",
+      "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
+      "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
+      "4ce464eaae7fa2de36f0dcfd11ffcdcfc60ad743d7a180a6c22e795bb0c05095",
+      "4d31a4281b439435e0ca36d9f1b503db509c7d66837e7dbee9960b01bcd87adf",
+      "54e8540b91c026e2adeeb26c857bd855a16bd04b4c6c432871fc401bc5d1c113",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
+      "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "84a830513a381c1cd660577eebf698dba189034d3f8f515f2ef096cd8ca1b0ec",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "88b5cc18b99315949d1e4c3ffe2b32be21c069a023dcb037552d5c97a3c2fd18",
+      "a7ac82f11e74aef15116c205edb0d2b45f5c277b3fbc40a8b172129917a0dcec",
+      "b08441c7d5fc8cd321ac73ce8fdeb86f9a4366193c31aa9e817ab1a0d77ae035",
+      "c8cb16e774a7e043835173c766810388aba34166c6213f8523498fa6f4f514ba",
+      "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0",
+      "secondary-1-5",
+      "secondary-1-4",
+      "secondary-1-3",
+      "secondary-1-2",
+      "secondary-1-1",
+      "secondary-1-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864412
+  },
+  "organism-bilateral": {
+    "requested_envelope_mm": [
+      1000,
+      1000,
+      200
+    ],
+    "bounds_mm": [
+      [
+        -498.00000000000006,
+        -498.0,
+        10.0
+      ],
+      [
+        498.0,
+        498.0,
+        177.8
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 189.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864416,
+    "construction": {
+      "assembly_operations_estimate": 42,
+      "bolts": 12,
+      "nuts": 12,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 19,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 24
+    },
+    "roles": {
+      "armour": 6,
+      "register": 12,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-2 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-2"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-3"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
+      "3999ac0badcd2d2ce841dce0158ee5bd54a76d869204cc0f1eea565d4180ea74",
+      "4ad439405e0d5760b4746b456193c4d0a044d40d9ce97f7e182779674e11e705",
+      "4e6e97b82f2413c72a6014acecba9be8ee95e2545729d6c4ce106e64b80a5f5a",
+      "552372631c8a78a0965332d52062995f7579dd7dd369a84b4ad75def0caa9e92",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
+      "786c43db469b17e627697753dbe32fd61c68757535506f5cdc972d4157dc564f",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
+      "8032b0c9f73c2bd14a6325d380e7fba1942fc0fbac3a6330330d1c5024515699",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
+      "b052d686cef6701dc6ba7c9c13063b7795e200a462344ec6e5a1557c48d93c7e",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864416
+  },
+  "organism-small": {
+    "requested_envelope_mm": [
+      800,
+      800,
+      140
+    ],
+    "bounds_mm": [
+      [
+        -398.0,
+        -398.0,
+        10.0
+      ],
+      [
+        398.0,
+        398.00000000000006,
+        120.80000000000001
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 132.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864435,
+    "construction": {
+      "assembly_operations_estimate": 42,
+      "bolts": 12,
+      "nuts": 12,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 19,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 24
+    },
+    "roles": {
+      "armour": 6,
+      "register": 12,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-2",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "3a641d26c543541d451bb7cc1eef8c6cf82829d25e82b29806e1bd6cd2625929",
+      "40f21a4bff5e462edbdc5be4ae77c7333123cd4009cb21684a8243dd69598733",
+      "49e4d0c1955fa54d8035e49eec006c84c1a3ea29d12600a63052149f46d0f901",
+      "613cea806f47a8f0f242c6dec7e06a7aadcca2d5dc7a4ab5bf882d471558afc9",
+      "613cea806f47a8f0f242c6dec7e06a7aadcca2d5dc7a4ab5bf882d471558afc9",
+      "67cb8fc2838708d416f44616edeefebf387808b8423acf66b63b66b347457a46",
+      "67cb8fc2838708d416f44616edeefebf387808b8423acf66b63b66b347457a46",
+      "717640479c1e6368982187a69b4ba60128a4283c91bbb77c392bdb8506ef194d",
+      "717640479c1e6368982187a69b4ba60128a4283c91bbb77c392bdb8506ef194d",
+      "7304458f9631edba932f333fd129f7a3b6ccc57b93b80c55fe8e77eb3fdb722a",
+      "7304458f9631edba932f333fd129f7a3b6ccc57b93b80c55fe8e77eb3fdb722a",
+      "a0e54f890a75eb661f48bb5fc4303809158f8ef785751c30a926cc70a2904c26",
+      "a0e54f890a75eb661f48bb5fc4303809158f8ef785751c30a926cc70a2904c26",
+      "a1309df54f261882b73fca72e2e9ec69f9c82e99ca1dc095046155adbf70c349",
+      "a1309df54f261882b73fca72e2e9ec69f9c82e99ca1dc095046155adbf70c349",
+      "a73f0143f4f6a2411ee68aa8ae8355dfce6ae7f3991f8fb4bd43b45a99ac2d3f",
+      "a8891988a2a9ba5dd22a43b66bb6a74022e45000428cfe88297a77e74e9dcbdd",
+      "d42441c72f40fb694c2654b2602d5bd19d6b0a90440867ad925b4b944ad7a268",
+      "d916bcd309048d5aff2b4c468aa9016e43e68caf77cf5365960557bda5a4c329"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864435
+  },
+  "organism-large": {
+    "requested_envelope_mm": [
+      1400,
+      1400,
+      240
+    ],
+    "bounds_mm": [
+      [
+        -698.0,
+        -698.0000000000001,
+        10.0
+      ],
+      [
+        697.9999999999999,
+        698.0,
+        215.8
+      ]
+    ],
+    "actual_total_depth_including_hardware_mm": 227.8,
+    "minimum_plate_cut_ligament_mm": 8.013195771864428,
+    "construction": {
+      "assembly_operations_estimate": 42,
+      "bolts": 12,
+      "nuts": 12,
+      "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
+      "plywood_parts": 19,
+      "retainers": 0,
+      "spacers": 0,
+      "washers": 24
+    },
+    "roles": {
+      "armour": 6,
+      "register": 12,
+      "backplate": 1
+    },
+    "validation": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-2",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-3",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3",
+            "primary-4"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-3",
+            "primary-4",
+            "primary-5"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ]
+        }
+      ],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "recommended_surface_ids": [
+      "primary-0-plate--front",
+      "primary-1-plate--front",
+      "primary-2-plate--front",
+      "primary-3-plate--front",
+      "primary-4-plate--front",
+      "primary-5-plate--front"
+    ],
+    "inventory_fingerprints": [
+      "4d075e6fca0f56c7cd384b726a5d9198954b8cb9656bd6cc0603e9eba4c15e44",
+      "4d075e6fca0f56c7cd384b726a5d9198954b8cb9656bd6cc0603e9eba4c15e44",
+      "5a7ea88bec766f4aaeb113ed0b5d353d10bac1af6897f304ee363810428a52d3",
+      "7b7a9a05e1cab189460e4429e271be7f912a0d51034bbdc89de0d5c151ddb7ac",
+      "8326f79b57a199866a00761fb4b61e9dbe2afd860d8c672303a17c732145a65b",
+      "8f58fe01652c578ff21c98f26dfa4bef4f69695e84bf399248a16f76502c1977",
+      "8f58fe01652c578ff21c98f26dfa4bef4f69695e84bf399248a16f76502c1977",
+      "97c9e0cb7264c6e7de52b6556bde30c5240ec9922a52e10cee5033bea0889acd",
+      "97c9e0cb7264c6e7de52b6556bde30c5240ec9922a52e10cee5033bea0889acd",
+      "a1cfd783ef9638c3c4d16ae934ef2d4ccf34d48d421530d6d50bded467d04eeb",
+      "a1cfd783ef9638c3c4d16ae934ef2d4ccf34d48d421530d6d50bded467d04eeb",
+      "b5836c495b04d5e6420e3db13a93272d28861729f7933265caa5f32531617856",
+      "bf2bb4c76ea9fd6a5ab76c73369e8f68c78a09646d4306a9735bb331caaf2e9b",
+      "d0c357d430a6ddbec6aebdfc5e3c268e54c49fdc56f6f55b45dc05e1f601e198",
+      "f3c2ce1de80c7aa2a4017f46631ae08a03065833cb838185a3f94d7479eea710",
+      "f3c2ce1de80c7aa2a4017f46631ae08a03065833cb838185a3f94d7479eea710",
+      "f69d7d21db72ed583390862397fa8aaaf30687ed29d221656303d95965d17ff2",
+      "f69d7d21db72ed583390862397fa8aaaf30687ed29d221656303d95965d17ff2",
+      "fee69bb3d421ef44293e69f048ff0542af13c3023730bf984dab520ecfbe78a2"
+    ],
+    "inventory_replay": "identical",
+    "removal_order": [
+      "primary-5",
+      "primary-4",
+      "primary-3",
+      "primary-2",
+      "primary-1",
+      "primary-0"
+    ],
+    "minimum_backing_cut_ligament_mm": 8.013195771864428
+  }
+}

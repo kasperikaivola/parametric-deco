@@ -48,7 +48,26 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
-## Parametric alien organism
+## Flow organism family
+
+The current [flow organism generator](docs/implementation/flow-organism.md) replaces
+this PR's mask direction with overlapping branching lobes, ambiguous focal chambers
+and actual relief. Composition, complexity, requested millimetre sizes and style are
+separate controls. The low production study has 19 plywood pieces, without spacer
+rings or individual retaining clips; medium/high have 37. Digital examples cover
+800, 1000 and 1400 mm widths, three complexities and two different focal layouts.
+Physical and Wire/Arena validation remain NOT RUN.
+
+```sh
+parametric-deco build examples/organism-low.json --out build/organism-low
+parametric-deco preview build/organism-low
+python scripts/organism_examples.py
+```
+
+![Actual low flow organism CAD](docs/implementation/images/flow-organism/organism-low/three-quarter.png)
+
+## Legacy parametric alien studies
+
 
 The [alien family](docs/implementation/creature-mask.md) generates different decos
 from numeric controls. The default has **four total limbs**, sweeping sideways

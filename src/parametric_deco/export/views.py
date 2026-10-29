@@ -55,9 +55,10 @@ def render_views(assembly, out_dir):
     creature = bool(
         assembly.composition and assembly.composition.get("family") == "creature-organism-v3"
     )
+    flow = bool(assembly.composition and assembly.composition.get("family") == "flow-organism-v1")
     section_module = "head" if creature else modules[0] if modules else None
     views = ("front", "oblique", "side", "exploded", "joint-section")
-    if creature:
+    if creature or flow:
         views += ("three-quarter",)
     for view in views:
         pieces = []
@@ -109,7 +110,7 @@ def render_views(assembly, out_dir):
                 )
                 color = tuple(int(c * shade) for c in colors.get(instance.role, colors["part"]))
                 triangles.append((projected[face, 2].mean(), xy, color, False))
-            if creature and view == "front":
+            if (creature or flow) and view == "front":
                 part = assembly.definition_for(instance)
                 pose = np.array(instance.transform)
                 if abs(pose[2, 2] - 1) < 1e-9:
@@ -129,7 +130,7 @@ def render_views(assembly, out_dir):
 
             spine = next((p for p in pieces if p[0].role == "spine"), pieces[0])
             cut_y = float(np.mean(spine[3][:, 1]))
-            if creature:
+            if creature or flow:
                 web = next(p for p in pieces if p[0].role == "register")
                 cut_y = web[0].transform[1][3] - assembly.definition_for(web[0]).thickness_mm / 2
             elif assembly.composition:
@@ -173,6 +174,8 @@ def render_views(assembly, out_dir):
                 (
                     "XZ section through head roots: plate/spacer compression and captured alignment webs"
                     if creature
+                    else "Actual XZ section through trestle-supported lobe"
+                    if flow
                     else "Actual XZ mesh section through central radial rib: spine notches and capture tongue"
                     if assembly.composition
                     else "Actual XZ mesh section through one spine: common slot datum and closure contact"

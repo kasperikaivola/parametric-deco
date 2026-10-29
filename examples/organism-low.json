@@ -1,0 +1,8 @@
+{
+  "organism": {},
+  "envelope": {
+    "width_mm": 1000,
+    "height_mm": 1000,
+    "depth_mm": 200
+  }
+}

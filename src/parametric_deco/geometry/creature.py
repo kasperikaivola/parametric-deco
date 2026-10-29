@@ -18,6 +18,8 @@ from .backplate import generate_backplate, match_root_pattern
 
 def request_signature(c):
     values = c.to_dict()
+    # Preserve the field set of already manufactured v3 inventories.
+    values.pop("organism", None)
     values["creature"].pop("posture")
     values.pop("cutting_bed")
     return digest(values)
@@ -129,6 +131,8 @@ def generate_creature(c):
                         ]
                     ]
                     slot = Polygon(corners)
+                    if any(slot.distance(other) < 7 - 1e-7 for other in blade_slots):
+                        raise ValueError(f"{name} rib {k}: neighboring rib slots need 7 mm margin")
                     blade_slots.append(slot)
                     if not shape.buffer(-7).covers(slot):
                         raise ValueError(f"{name} rib {k}: insufficient cap slot bearing")

@@ -1,4 +1,7 @@
-# Parametric alien organism — family v3
+# Legacy parametric alien organism — family v3
+
+Superseded artistically by the [flow organism family](flow-organism.md). Preserved
+for regression, comparison and unchanged-inventory rest/raised studies.
 
 This family generates different plywood decos from JSON parameters. It is no
 longer a fixed six-cavity mask with two preset horn sweeps. The default has four
@@ -28,7 +31,7 @@ All controls below affect manufactured contours, part counts or actual rib heigh
 | `limb_width` |1.0|0.9–1.1| Swelling shell/rail widths and rib widths |
 | `rib_height_mm` |65|45–80 mm| Peak transverse-rib height, modulated along the limb |
 | `asymmetry` |0.08|0–0.15| Controlled side differences in reach/width;0 mirrors the paths |
-| `scale` |1.0|0.9–1.0| Overall XY profile scale; roots/stock/joinery retain physical sizes |
+| `scale` |1.0|0.9–1.0| XY profile AND transverse rib-height scale; roots/stock/joinery retain physical sizes |
 | `curl` |1.0|0.8–1.2| Terminal fold position |
 | `posture` |`rest`|`rest`, `raised_crown`| Placement of an unchanged manufactured inventory |
 
