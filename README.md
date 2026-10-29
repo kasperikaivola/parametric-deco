@@ -48,10 +48,10 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
-## Flow organism family
+## Laminar organism family (v2)
 
 The current [flow organism generator](docs/implementation/flow-organism.md) replaces
-this PR's mask direction with overlapping branching lobes, ambiguous focal chambers
+this PR's repeated curl/loop study with divergent laminae, varied focal chambers
 and actual relief. Composition, complexity, requested millimetre sizes and style are
 separate controls. The low production study has 19 plywood pieces, without spacer
 rings or individual retaining clips; medium/high have 37. Digital examples cover

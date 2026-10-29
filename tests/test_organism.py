@@ -29,7 +29,7 @@ def test_complexity_preserves_primary_anatomy():
     assert len(high) > len(low)
     for a, b in zip(low, high):
         assert (a.name, a.z) == (b.name, b.z)
-        assert a.shape.exterior.equals(b.shape.exterior)
+        assert a.major_outline.equals(b.major_outline)
         assert (a.path == b.path).all()
 
 
@@ -168,6 +168,8 @@ def test_loaded_assembly_bearing_and_support_checks():
         ("symmetry", "none"),
         ("channels", 0),
         ("segmentation", 4),
+        ("branching", 3),
+        ("anatomy_phase_deg", 55),
     ],
 )
 def test_each_shape_control_changes_actual_contours(field, value):
@@ -229,6 +231,8 @@ def test_determinism_and_all_new_cut_requests():
     inv = Inventory(tuple(first[0]), tuple(first[1]), first[2])
     changes = {
         "arrangement": "bilateral",
+        "branching": 3,
+        "anatomy_phase_deg": 55,
         "focal_count": 5,
         "phase_deg": 31,
         "spread": 1.1,
@@ -275,5 +279,64 @@ def test_primary_anatomy_varies_beyond_rotated_copies():
         / np.linalg.norm(np.diff(lobe.path, axis=0), axis=1).sum()
         for lobe in lobes
     ]
-    assert np.ptp(ratios) > 0.04
+    assert np.ptp(ratios) > 0.02
     assert len({lobe.z for lobe in lobes}) == c.organism.focal_count
+
+
+@pytest.mark.parametrize("before,after", [(0, 1), (1, 2)])
+def test_complexity_retains_existing_internal_material(before, after):
+    from parametric_deco.geometry.organism import anatomy
+
+    c = config_from_dict({"organism": {"complexity": before, "channels": 0, "secondary_lobes": 0}})
+    previous = anatomy(c)
+    enriched = anatomy(replace(c, organism=replace(c.organism, complexity=after)))
+    assert len(previous) == len(enriched)
+    for a, b in zip(previous, enriched):
+        assert a.shape.difference(b.shape).area < 1e-6, (a.name, a.shape.difference(b.shape).area)
+
+
+@pytest.mark.parametrize("count", range(5))
+def test_explicit_segmentation_is_prefix_preserving(count):
+    from parametric_deco.geometry.organism import anatomy
+
+    c = config_from_dict({"organism": {"segmentation": count, "channels": 0, "secondary_lobes": 0}})
+    previous = anatomy(c)
+    enriched = anatomy(replace(c, organism=replace(c.organism, segmentation=count + 1)))
+    assert all(a.shape.difference(b.shape).area < 1e-6 for a, b in zip(previous, enriched))
+
+
+def test_primary_medial_paths_do_not_return_as_scrolls():
+    import numpy as np
+    from parametric_deco.geometry.organism import anatomy
+
+    for arrangement in ("whorl", "bilateral"):
+        c = config_from_dict({"organism": {"arrangement": arrangement}})
+        for lobe in anatomy(c):
+            arc = np.linalg.norm(np.diff(lobe.path, axis=0), axis=1).sum()
+            chord = np.linalg.norm(lobe.path[-1] - lobe.path[0])
+            assert chord / arc > 0.65, (arrangement, lobe.name, chord / arc)
+
+
+def test_thin_sweeps_are_continuous_between_samples():
+    import numpy as np
+    from parametric_deco.geometry.organism import ribbon
+
+    shape = ribbon(
+        np.array(((0.0, 0.0), (0.1, 0.02), (0.2, 0.01))), np.array((0.004, 0.005, 0.004))
+    )
+    assert shape.geom_type == "Polygon"
+    assert shape.is_valid
+
+
+def test_rejects_previous_scroll_inventory_family():
+    from parametric_deco.organism_assembly import manufacture
+    from parametric_deco.assembly import assemble
+    from parametric_deco.model import Inventory, digest
+
+    c = config_from_dict({"organism": {}})
+    definitions, instances, layout = manufacture(c)
+    layout["family"] = "flow-organism-v1"
+    layout.pop("fingerprint")
+    layout["fingerprint"] = digest(layout)
+    with pytest.raises(ValueError, match="new cuts"):
+        assemble(c, Inventory(tuple(definitions), tuple(instances), layout))

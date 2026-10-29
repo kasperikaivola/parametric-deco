@@ -24,7 +24,7 @@ from .model import (
 )
 from .validation import validate_assembly, instance_bounds, xy_footprint
 
-FAMILY = "flow-organism-v1"
+FAMILY = "laminar-organism-v2"
 
 
 def signature(c):
@@ -159,7 +159,8 @@ def manufacture(c):
         used.append(corridor)
         center = np.array(pose)[:2, 3]
         # Thin but continuous backing frame follows the anatomical material.
-        rail = LineString(lobe.path[10:-10]).buffer(14, quad_segs=8)
+        rail_path = lobe.path if lobe.backing_path is None else lobe.backing_path
+        rail = LineString(rail_path[10:-10]).buffer(14, quad_segs=8)
         backing_regions.append(rail)
         from shapely.ops import nearest_points
 
@@ -360,7 +361,9 @@ def assemble_organism(c, inventory=None):
         inventory = Inventory.from_dict(inventory.to_dict())
         layout = json.loads(json.dumps(inventory.layout))
         if not layout or layout.get("family") != FAMILY:
-            raise ValueError("flow-organism-v1 inventory required; new cuts needed")
+            raise ValueError(
+                "laminar-organism-v2 inventory required; earlier scroll geometry requires new cuts"
+            )
         saved = layout.pop("fingerprint", None)
         if digest(layout) != saved:
             raise ValueError("stale inventory layout fingerprint")

@@ -1,50 +1,65 @@
-# Flow organism generator
+# Laminar organism generator — v2
 
-This revision supersedes the mask family's artistic direction. `organism-low.json`
-is the production **starting study**, not fabrication approval. It uses six separate
-branching laminae around a rotating focal field, with curved internal divisions,
-rounded appendages and unequal relief levels. There is no central mask plate.
-The negative spaces support several possible eye/face readings without adding pupils,
-a nose, a mouth or a helmet dome. The shape exists in the plywood, without paint,
-engraving or projected animation.
+This revision addresses [the review of e7f2343](https://github.com/kasperikaivola/parametric-deco/pull/3#issuecomment-6510722024).
+The previous shared inner-curl/outer-returning-loop primitive has been removed.
+`organism-low.json` is the production starting study, not fabrication approval.
 
-The vocabulary is deliberately bounded: flowing branched ribbons and nested lobes,
-with whorled or staggered bilateral fields. It is not a topology solver. The
-whorled example retains a repeated ornamental rhythm; artistic success is a visual
-judgment, independent of the validation report. This is a smaller and more open
-sculpture than the festival reference, not a reproduction of its complexity.
+The shared primitives now form **open curved spindles, divergent daughter laminae,
+eccentric lens cavities and clefts**. A region can have a closed chamber, a chamber
+opening into a branch cleft, or a different number of divergent blades. These are
+field-driven relationships, rather than per-example coordinate sets. Primary medial
+paths continue along their lobe instead of turning back into a scroll.
 
-## Geometry and controls
+Low complexity already includes regional branching differences, closed and open
+negative spaces, asymmetric focal proportions and overlapping relief. Medium adds
+separate forked recess walls. High retains these and adds daughter anatomy to those
+walls. Side-open inner walls leave visible recesses around substantial mounting nodes
+instead of filling the focal cavities with solid plates or isolated pupil-like windows. No pupils, face
+features, painted anatomy or engraved detail are required.
 
-`geometry/organism.py` provides one variable-width rounded sweep primitive. Smooth
-paths, swelling, taper, angularity modulation and curved branching divisions form
-the anatomy. A field places and orients these primitives; it does not select from
-a cavity coordinate palette or a separate hard-coded layout for each example.
-`organism_assembly.py` finds substantial mounting patches in the actual material,
-creates slotted plywood trestles and backing, and validates the resulting assembly.
+This remains a bounded family of planar plywood anatomy. Its flowing blade/lamina
+rhythm can also suggest botanical forms; whether the combined result has the
+intended mystic/alien presence is a visual judgment. The comparisons below show the
+actual combined CAD, including the backing and supports, rather than certifying
+artistic success from a path-diversity or contour-validity test.
 
-Composition and style shape the central regions as well as appendages. Curvature
-changes the full cross-path coordinates and connecting curves, not one endpoint.
-Width/height fit the primary anatomical field before fixed-size joinery is added.
-Relief depth determines the actual heights of trestles and overlapping plates.
-The curve field varies complete primary proportions and inter-region flow, rather
-than rotating one identical hook. Primary modules occupy distinct relief levels;
-secondary saddles take shorter path sections. Complexity adds exposed inner lobes,
-integral curved divisions and longitudinal
-channels; major primary exteriors, primary paths and their relief relationships
-remain unchanged. Channels accumulate in fixed path intervals; increasing their
-count does not exchange an existing opening for one elsewhere.
+## Geometry, retention and controls
+
+`geometry/organism.py` supplies curved medial axes, continuously connected variable-
+width sweeps, swelling/tapered spindles, cavities and daughter branches. Curvature
+shapes the interior span of an axis. Both the low/medium/high series and the alternate
+layout use the same primitives and field rules. `organism_assembly.py` retains the
+existing slotted trestles, fixed physical joinery, bolt mounts and CAD validation.
+
+Size fitting uses the **complexity-independent primary body outline**. Additional
+septa lie within that outline; existing primary paths, body outlines and relief
+relationships stay fixed. Subdividing an open cavity can change its local cut boundary,
+but does not redistribute or remove an earlier division. Division positions use the
+nested sequence **0.24, 0.74, 0.49, 0.365, 0.615**. Each count takes a prefix. Default
+low/medium/high use 1/2/3 divisions. Optional grooves also accumulate at fixed stations.
+
+The regression tests compare actual polygon differences with channels and secondary
+lobes disabled: low→medium, medium→high, and every explicit segmentation increment
+0→1 through 4→5. Existing internal material must remain, within numerical tolerance.
+This replaces the previous test coverage that checked only outer boundaries/paths.
+Optional new grooves intentionally remove their own material and are tested separately.
+
+The sweep connects its samples with material strips; a thin sweep cannot degrade into
+disconnected disks. Exact repeated Boolean vertices are removed in the new family
+without a tolerance or contour smoothing. Legacy inventory canonicalization is unchanged.
 
 | Group | JSON field | Default / range | Actual geometry effect |
 | --- | --- | --- | --- |
 | Composition | `organism.arrangement` | `whorl`, `bilateral` | Orbiting focal field or staggered paired rows |
 | Composition | `focal_count` | 6 / integers 4–8 | Number of primary focal/appendage modules |
-| Composition | `phase_deg` | 17 / −180–180 | Field orientation and its controlled variations |
+| Composition | `branching` | 2 / integers 1–3 | Maximum daughter branches per region; the field varies actual counts |
+| Composition | `anatomy_phase_deg` | 0 / −180–180 | Shifts regional open/closed cavity and branch relationships |
+| Composition | `phase_deg` | 17 / −180–180 | Whorl orientation and relative phase of regional anatomy |
 | Composition | `spread` | 1 / 0.85–1.15 | Relative focal spacing before fitting the silhouette |
 | Composition | `symmetry` | `rotational`, `bilateral`, `none` | Repeated orientation, reflected local paths, or individually tilted forms |
 | Complexity | `complexity` | 0 / integers 0–2 | Coordinated secondary lobes, segmentation and channels |
 | Override | `secondary_lobes` | null / integers 0–1 | Null follows complexity; 1 adds an inner lobe per primary region |
-| Override | `segmentation` | null / integers 0–5 | Integral curved divisions in each appendage, 2/3/4 by complexity |
+| Override | `segmentation` | null / integers 0–5 | Integral curved divisions in each appendage, 1/2/3 by complexity |
 | Override | `channels` | null / integers 0–3 | Longitudinal cut channels, 1/2/3 by complexity |
 | Size | `envelope.width_mm`, `height_mm` | 1000 / 800–1400 | Generated composition size, with a 2 mm XY boundary allowance |
 | Size | `envelope.depth_mm` | 200 / 120–240 | Actual relief and support heights; retains rear/hardware allowance |
@@ -85,8 +100,15 @@ from equal image widths.
 | Same low design, 800×800×140 | ![](images/flow-organism/organism-small/front.png) | ![](images/flow-organism/organism-small/three-quarter.png) | ![](images/flow-organism/organism-small/side.png) |
 | Same low design, 1400×1400×240 | ![](images/flow-organism/organism-large/front.png) | ![](images/flow-organism/organism-large/three-quarter.png) | ![](images/flow-organism/organism-large/side.png) |
 
-The medium/high distinction adds visible local detail without buying another set
-of small plates and supports. This keeps artistic detail separate from assembly
+| Comparable actual oblique CAD | View |
+| --- | --- |
+| Low | ![](images/flow-organism/organism-low/oblique.png) |
+| Medium | ![](images/flow-organism/organism-medium/oblique.png) |
+| High | ![](images/flow-organism/organism-high/oblique.png) |
+| Alternate bilateral | ![](images/flow-organism/organism-bilateral/oblique.png) |
+
+The medium/high distinction adds daughter branches to pierced inner recess walls,
+as well as retained internal divisions, without buying another set of supports. This keeps artistic detail separate from assembly
 piece count. The same six focal modules are used in the bilateral composition;
 this is a layout/orientation change, not just a limb-count variant.
 
@@ -103,7 +125,7 @@ tongue. Two through-bolts clamp the plate onto the trestles and backing. Root bo
 are initially 6.5 mm, washers use 9 mm clearance radii. Actual hardware must be
 selected and tested; these dimensions are clearance/fit candidates, not a load rating.
 
-The backing follows substantial inner rails and root pads, connected by 28 mm
+The backing follows the material banks beside the cavities and substantial root pads, connected by 28 mm
 wide bridges plus a fixed 4 mm allowance per edge (36 mm nominal rails) where needed. It is not a full front silhouette plate. No loose
 plywood spacer rings, fin keys or positive retaining clips are needed.
 
@@ -135,12 +157,14 @@ thicknesses, washer/nut allowance and engagement; hardware security is NOT RUN.
 
 ## Identity, exports and verification
 
-New family `flow-organism-v1` has a new part namespace and fingerprints. Changing
+New family `laminar-organism-v2` requires new cuts compared with the previous
+`flow-organism-v1` scroll study. Stable semantic part names do not make different
+revisions interchangeable; fingerprints identify manufactured contours. Changing
 composition, complexity, size, style, stock, clearance or mounting is a **new design
 requiring new cuts**, even when semantic IDs look similar. Saved-inventory replay
 never calls the generator, preserves manufactured definitions and physical IDs,
 and rejects missing/extra parts, changed revisions and incompatible requests.
-This first flow family supports replay of its manufactured arrangement; it does
+This laminar family supports replay of its manufactured arrangement; it does
 not claim arbitrary module rearrangement. The legacy rest/raised and radial
 rearrangements remain available and continue to use immutable inventory.
 
@@ -172,7 +196,8 @@ Open the preview URL printed by the CLI to rotate, identify, hide and explode th
 actual assembly. Static triangle sorting can show overlap-edge artifacts; use the
 identified GLB in an independent viewer as another inspection path.
 
-See [execution and final whole-change review](flow-organism-review.md).
+See [review corrections and verification](laminar-organism-corrections.md).
+The earlier [flow review record](flow-organism-review.md) is historical.
 Physical strength, stock fit, bolt locking/security, handling, anchors, actual tools
 and assembly/removal access are **NOT RUN**. Actual browser rendering, projector
 calibration, Wire/Arena compilation and live behaviour are **NOT RUN**. Passing
@@ -182,3 +207,14 @@ success. Start with a complete trestle/plate/backing prototype before full cuts.
 The regenerated coarse [front](images/organism-study/whorl/front.png) and
 [oblique](images/organism-study/whorl/oblique.png) studies omit joinery and backing.
 They show the anatomical proposal, not manufacturing-ready contours.
+
+## Preserved rejected scroll study
+
+The previous v1 [low front](images/flow-organism-v1-legacy/low-front.png),
+[high three-quarter](images/flow-organism-v1-legacy/high-three-quarter.png) and
+[bilateral front](images/flow-organism-v1-legacy/bilateral-front.png) are retained
+for comparison, not presented as the current design. Their complete cuts/generator
+remain at [e7f2343](https://github.com/kasperikaivola/parametric-deco/tree/e7f2343105e2da93aa11d130b68129cafbd815be).
+A v1 inventory is rejected by the new generator with a new-cuts explanation; it is
+never silently regenerated or treated as v2 parts. Legacy creature/radial examples
+and their unchanged-inventory rearrangements remain supported separately.

@@ -1,4 +1,7 @@
-# Flow organism execution and one final whole-change review
+# Historical v1 execution and one final whole-change review
+
+This record describes e7f2343. The later [PR comment corrections](laminar-organism-corrections.md)
+supersede its anatomy and division-retention claims.
 
 Repository branch: `creature-mask-example`, PR #3. Starting head:
 `78c6c33e5a4f71db6bed90e2fd645cf58cbad0da`. Keep PR open; do not merge.

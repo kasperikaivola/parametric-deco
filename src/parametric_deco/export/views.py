@@ -55,7 +55,10 @@ def render_views(assembly, out_dir):
     creature = bool(
         assembly.composition and assembly.composition.get("family") == "creature-organism-v3"
     )
-    flow = bool(assembly.composition and assembly.composition.get("family") == "flow-organism-v1")
+    flow = bool(
+        assembly.composition
+        and assembly.composition.get("family") in ("flow-organism-v1", "laminar-organism-v2")
+    )
     section_module = "head" if creature else modules[0] if modules else None
     views = ("front", "oblique", "side", "exploded", "joint-section")
     if creature or flow:

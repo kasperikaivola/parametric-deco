@@ -113,6 +113,8 @@ class CreatureMask:
 class Organism:
     arrangement: str = "whorl"
     focal_count: int = 6
+    branching: int = 2
+    anatomy_phase_deg: float = 0.0
     phase_deg: float = 17.0
     spread: float = 1.0
     symmetry: str = "rotational"
@@ -172,7 +174,7 @@ def validate_config(c):
         o = c.organism
         if c.creature is not None or c.composition is not None:
             bad("organism", "select only one composition family")
-        for key, lo, hi in (("focal_count", 4, 8), ("complexity", 0, 2)):
+        for key, lo, hi in (("focal_count", 4, 8), ("branching", 1, 3), ("complexity", 0, 2)):
             v = getattr(o, key)
             if type(v) is not int or not lo <= v <= hi:
                 bad("organism." + key, f"integer {lo}..{hi} required")
@@ -182,6 +184,7 @@ def validate_config(c):
                 bad("organism." + key, f"null or integer 0..{hi} required")
         for key, lo, hi in (
             ("phase_deg", -180, 180),
+            ("anatomy_phase_deg", -180, 180),
             ("spread", 0.85, 1.15),
             ("curvature", 0.7, 1.3),
             ("taper", 0.7, 1.3),

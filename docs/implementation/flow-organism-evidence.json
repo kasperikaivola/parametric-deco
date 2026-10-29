@@ -7,18 +7,19 @@
     ],
     "bounds_mm": [
       [
-        -498.0,
         -498.00000000000006,
+        -498.0,
         10.0
       ],
       [
-        498.0,
-        498.00000000000006,
+        498.0000000000001,
+        497.99999999999994,
         177.8
       ]
     ],
     "actual_total_depth_including_hardware_mm": 189.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864417,
+    "minimum_plate_cut_ligament_mm": 8.0131957718644,
+    "minimum_backing_cut_ligament_mm": 8.0131957718644,
     "construction": {
       "assembly_operations_estimate": 42,
       "bolts": 12,
@@ -41,44 +42,30 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-0",
             "primary-1",
-            "primary-2",
-            "primary-4",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-1",
             "primary-2",
-            "primary-3",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-3"
           ]
         },
         {
@@ -106,8 +93,10 @@
     "inventory_fingerprints": [
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
-      "52b6d80152dcd82c40f93dbff639a4b7be5d33f6d3468524e050e3026f7c4aea",
-      "584c03d12d5dc1a8283cb777ae26b6a5a88ffba2cc8169974fa80f99aa768e30",
+      "0eb8c0d1d560cd25f5039dd328b2b927cd9dcf9e390fcb3dfb309dd43d1b4890",
+      "40bd0dd0f26f88a3e6ef65f85b7737c5d030ae330c6e72f665d1586744f6cf7b",
+      "513af5bb64902fa22e82ffb7dafd4f2cf6da078882af4815887f1121cd6d3f50",
+      "587ca725ff1bfcebdc50fdaf39b1a57b646b28052304ad1d6d62187de70d6130",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
@@ -116,11 +105,9 @@
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
-      "8a733831701630dbb80d3f4ce2ef7199f27fae64c1717de372cc32067bda9cd4",
-      "976b8686ec742fb5ad84fdc7b1ff013b1696b866e77b426730f3ebc867119a6e",
-      "b04ceb0c97badefa50654b0e26cd0d07a90248a2a3123a5db2e67621a9b8b462",
-      "d03add809ed1bb6142962eb5e1397c24b6b7dfceb86e858e9d2e2f5b3236da24",
-      "eb9f0ed0b421d055c5dff025e64ef9e296893d7fcf8ed88eb43cb442d30d65d1",
+      "96662b09867398fe853e46537cb3996db2137c319dc3763d8d617b1666d455bd",
+      "c9867c96e16ab243ae16f5ad42ca779de6f06ac9a53819c95471dedba2b5445e",
+      "f3140a3a7f37ae5e8f8da9db99db9ec0638dde9fdc34526b907ce8778359edcc",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
     ],
@@ -132,8 +119,7 @@
       "primary-2",
       "primary-1",
       "primary-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864417
+    ]
   },
   "organism-medium": {
     "requested_envelope_mm": [
@@ -143,18 +129,19 @@
     ],
     "bounds_mm": [
       [
-        -498.0,
         -498.00000000000006,
+        -498.0,
         10.0
       ],
       [
-        498.0,
-        498.00000000000006,
+        498.0000000000001,
+        497.99999999999994,
         177.8
       ]
     ],
     "actual_total_depth_including_hardware_mm": 189.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864412,
+    "minimum_plate_cut_ligament_mm": 8.0131957718644,
+    "minimum_backing_cut_ligament_mm": 8.0131957718644,
     "construction": {
       "assembly_operations_estimate": 84,
       "bolts": 24,
@@ -177,44 +164,30 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-0",
             "primary-1",
-            "primary-2",
-            "primary-4",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-1",
             "primary-2",
-            "primary-3",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-3"
           ]
         },
         {
@@ -229,32 +202,42 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-0: remove primary-0, primary-1, primary-5 first (sampled +Z path)",
+          "message": "secondary-1-0: remove primary-0, primary-1, primary-5, secondary-1-5 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-0",
             "primary-0",
             "primary-1",
-            "primary-5"
+            "primary-5",
+            "secondary-1-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-1: remove primary-0, primary-1, primary-2 first (sampled +Z path)",
+          "message": "secondary-1-1: remove primary-0, primary-1 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-1",
             "primary-0",
-            "primary-1",
-            "primary-2"
+            "primary-1"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-2: remove primary-1, primary-2, primary-3 first (sampled +Z path)",
+          "message": "secondary-1-2: remove primary-2, primary-3, secondary-1-3 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-2",
-            "primary-1",
+            "primary-2",
+            "primary-3",
+            "secondary-1-3"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-3: remove primary-2, primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-3",
             "primary-2",
             "primary-3"
           ]
@@ -262,10 +245,9 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-3: remove primary-2, primary-3, primary-4 first (sampled +Z path)",
+          "message": "secondary-1-4: remove primary-3, primary-4 first (sampled +Z path)",
           "part_ids": [
-            "secondary-1-3",
-            "primary-2",
+            "secondary-1-4",
             "primary-3",
             "primary-4"
           ]
@@ -273,22 +255,10 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-4: remove primary-3, primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "secondary-1-4",
-            "primary-3",
-            "primary-4",
-            "primary-5"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "secondary-1-5: remove primary-0, primary-4, primary-5 first (sampled +Z path)",
+          "message": "secondary-1-5: remove primary-0, primary-5 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-5",
             "primary-0",
-            "primary-4",
             "primary-5"
           ]
         }
@@ -312,41 +282,41 @@
       "secondary-1-5-plate--front"
     ],
     "inventory_fingerprints": [
+      "026970a97add6f0ce79797c1b340d89b0bbe05cdf430e1a4294c4b6f00736d95",
       "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
       "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
-      "0e4f2ba16486e9935eb7a4c04445815932c515584629a9f99e75a8e65d8eb56c",
+      "10bb59718648d41bae200b4d9ba59236cae9af94afd1c32faba5f9d996467a92",
       "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
       "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
-      "1a438cab1320885ccf7168126a07c0108b50496dfd61dfaf1e212d7cb0ace2e6",
       "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
       "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
-      "297977a95a50849ccdbae5289a2b3d9f72c96e9de6ff066d1014f96838167b70",
-      "33fc764cf7f68bee706540fd1b49f0927ef26a855295bfded487b3babb2a84ca",
+      "359f25a1fee763e18028a817ce12641e13d126b63b1760f5a2cad300347006b9",
+      "416b00458004269c5e734e13ed7e4e4dce0a908964611f51d86cb7671508a901",
+      "4220efd529dab3e1045a606f657dde1048a3d36e5999dd508ca4c4dbea7ba382",
       "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
       "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
-      "4ce464eaae7fa2de36f0dcfd11ffcdcfc60ad743d7a180a6c22e795bb0c05095",
-      "4d31a4281b439435e0ca36d9f1b503db509c7d66837e7dbee9960b01bcd87adf",
-      "54e8540b91c026e2adeeb26c857bd855a16bd04b4c6c432871fc401bc5d1c113",
+      "4f349599d3cf2ab5a63164c5c93d01c240ad29c3a1e409091ec2d199a3886d6f",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
-      "63e98d9a8046f92835f9289569ab2e9d93b791334f5d17ddb90153484e052e40",
       "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
       "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
-      "6f41fc338fe83ca5e3b5910665dbaec63618c762755c8cd89cda3091e94c206e",
+      "6e6196555e86cb27086683ec4de47bb8475b6e8055c1977610f60dfb152929c5",
+      "7abdc7144a80c838325777fd4f3d92570ad14cd2182c27e37790b8d28eb8e2f6",
+      "7acc919c5fe49f275199fd2bf8bedfcbf2f47695c18d4274445e6cda3fc42c84",
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
-      "845e15f2255f3ed0cfa61e8a74d3aa43150448f2469b6cc1488b0331fda165e2",
+      "85cfe754461baa66359db1bcb92994f0ede65177d32b4972005ec0d44abcc4e8",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
-      "88b5cc18b99315949d1e4c3ffe2b32be21c069a023dcb037552d5c97a3c2fd18",
-      "b08441c7d5fc8cd321ac73ce8fdeb86f9a4366193c31aa9e817ab1a0d77ae035",
-      "c384d259664610b351055ae7f3ee40110cd74c6a9229bc5004ec1e0dccc96c7f",
+      "98922df7f22de780635ffc0dcda3c58fe100ddd559a46abaff2a51892adab5f3",
+      "a773d7a52fad3267ed0fd0322ebd354525ad05d50e3583a987efde38ffb8d602",
       "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
       "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "e04bb12a01da46a2cfe2addad17932239d4b80ccfccd9ff3238b6d6cea9c97c6",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
     ],
@@ -364,8 +334,7 @@
       "secondary-1-2",
       "secondary-1-1",
       "secondary-1-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864412
+    ]
   },
   "organism-high": {
     "requested_envelope_mm": [
@@ -375,18 +344,19 @@
     ],
     "bounds_mm": [
       [
-        -498.0,
         -498.00000000000006,
+        -498.0,
         10.0
       ],
       [
-        498.0,
-        498.00000000000006,
+        498.0000000000001,
+        497.99999999999994,
         177.8
       ]
     ],
     "actual_total_depth_including_hardware_mm": 189.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864412,
+    "minimum_plate_cut_ligament_mm": 8.0131957718644,
+    "minimum_backing_cut_ligament_mm": 8.0131957718644,
     "construction": {
       "assembly_operations_estimate": 84,
       "bolts": 24,
@@ -409,44 +379,30 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-0",
             "primary-1",
-            "primary-2",
-            "primary-4",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-1",
             "primary-2",
-            "primary-3",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-3"
           ]
         },
         {
@@ -461,32 +417,43 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-0: remove primary-0, primary-1, primary-5 first (sampled +Z path)",
+          "message": "secondary-1-0: remove primary-0, primary-1, primary-5, secondary-1-5 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-0",
             "primary-0",
             "primary-1",
-            "primary-5"
+            "primary-5",
+            "secondary-1-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-1: remove primary-0, primary-1, primary-2 first (sampled +Z path)",
+          "message": "secondary-1-1: remove primary-0, primary-1 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-1",
             "primary-0",
-            "primary-1",
-            "primary-2"
+            "primary-1"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-2: remove primary-1, primary-2, primary-3 first (sampled +Z path)",
+          "message": "secondary-1-2: remove primary-1, primary-2, primary-3, secondary-1-3 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-2",
             "primary-1",
+            "primary-2",
+            "primary-3",
+            "secondary-1-3"
+          ]
+        },
+        {
+          "severity": "warning",
+          "code": "extraction_dependency",
+          "message": "secondary-1-3: remove primary-2, primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "secondary-1-3",
             "primary-2",
             "primary-3"
           ]
@@ -494,23 +461,11 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "secondary-1-3: remove primary-2, primary-3, primary-4 first (sampled +Z path)",
-          "part_ids": [
-            "secondary-1-3",
-            "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "secondary-1-4: remove primary-3, primary-4, primary-5 first (sampled +Z path)",
+          "message": "secondary-1-4: remove primary-3, primary-4 first (sampled +Z path)",
           "part_ids": [
             "secondary-1-4",
             "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-4"
           ]
         },
         {
@@ -544,24 +499,19 @@
       "secondary-1-5-plate--front"
     ],
     "inventory_fingerprints": [
-      "03dea41a54a45abf008019f497cdd81963c117f7db9e56bea831659a15ec4215",
       "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
       "08d7b598c487fd62fba352fded38d3f1f07cc2090ce596d2fd0ff53f4f96153b",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
-      "18e5f5887a94c83af53ceef8f3476a9ffa719c8b5f1de7059db0b7864ccb1da0",
+      "12ca3c06e6ae7371e8442bc3057b99cc3a56d4b2a97b71bb9a38ff8d8ada077c",
       "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
       "1a0dc0f6f7eb84535b555c14f45edc06c0f4e1788d10be3dfb02b8be16386200",
-      "1a438cab1320885ccf7168126a07c0108b50496dfd61dfaf1e212d7cb0ace2e6",
       "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
       "21d7f3c3707ade613fc048fbb5c87225943c83cf107c364461c9e1cdf7f31bdc",
-      "297977a95a50849ccdbae5289a2b3d9f72c96e9de6ff066d1014f96838167b70",
-      "346e70a00da4d57582e74f4e452e2b71bf3d75b03b499daaa7f1c873db40960b",
       "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
       "4afef0568e9c546d25d9bc3d929d76acf952377d330d5ec5096ab58813d29c0f",
-      "4ce464eaae7fa2de36f0dcfd11ffcdcfc60ad743d7a180a6c22e795bb0c05095",
-      "4d31a4281b439435e0ca36d9f1b503db509c7d66837e7dbee9960b01bcd87adf",
-      "54e8540b91c026e2adeeb26c857bd855a16bd04b4c6c432871fc401bc5d1c113",
+      "4c68f39cd793c84aa90d6cb4e95b63c778c412a2265d4ab95489f667a31612d4",
+      "5a93e4a3680c06b5757122161801c916414cf9550c7cc4a6a1f6731251ba7f66",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "666276b2b5b6f17ddf7e22055a778ed433e9f6c79f9f32eb23e7bac042c32742",
@@ -570,15 +520,20 @@
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
-      "84a830513a381c1cd660577eebf698dba189034d3f8f515f2ef096cd8ca1b0ec",
+      "7daa8b90bee31ec93c0acdb6dbaf0f13b9766dd0e5d2b663a14aeee3a689cc12",
+      "7ff734dd3d991c4f8589de18329739b84fc50971d2886498a3a3844e9dd65ae0",
+      "813b27f92a936ccc9281d60a58fb23317c89bc5ef46c58e112ac37312b2aa364",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
-      "88b5cc18b99315949d1e4c3ffe2b32be21c069a023dcb037552d5c97a3c2fd18",
-      "a7ac82f11e74aef15116c205edb0d2b45f5c277b3fbc40a8b172129917a0dcec",
-      "b08441c7d5fc8cd321ac73ce8fdeb86f9a4366193c31aa9e817ab1a0d77ae035",
-      "c8cb16e774a7e043835173c766810388aba34166c6213f8523498fa6f4f514ba",
+      "92125d480cc9ad992b6c29ade4e3f831ac0522a3af6ffef3e46b0d06e87de7d8",
+      "93c2e0bf33a1bdfbb29fd00a1eb92dcaf6410acc077b27dd9f263020f1ee0def",
+      "99e6f1c2e4ba5f2be00971e229ed382dcb19ab8cb3f509a8341ab75af9c07b91",
+      "9ab818284b9948427267d479372eb914e29655fc83823f4439a3458504d2d5f4",
       "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
       "cbe2df0d183f5884be0823cba751f951ae1acdf7d17b646f3811336b8487051c",
+      "d6bf26e9deb4982cc2a32b61c1aeefb3505d7c39a3ec40db654a8c8e8e168828",
+      "ef86bfc54f6921a0bf36061a390c2cea2060e5ec8b37535585cf7b5da0d22158",
+      "f3a01fa101737889f213bdf0396bf3501eacffdab54352d5fc5c6dfba6b7eeee",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
     ],
@@ -596,8 +551,7 @@
       "secondary-1-2",
       "secondary-1-1",
       "secondary-1-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864412
+    ]
   },
   "organism-bilateral": {
     "requested_envelope_mm": [
@@ -607,7 +561,7 @@
     ],
     "bounds_mm": [
       [
-        -498.00000000000006,
+        -498.0,
         -498.0,
         10.0
       ],
@@ -618,7 +572,8 @@
       ]
     ],
     "actual_total_depth_including_hardware_mm": 189.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864416,
+    "minimum_plate_cut_ligament_mm": 8.013195771864401,
+    "minimum_backing_cut_ligament_mm": 8.013195771864401,
     "construction": {
       "assembly_operations_estimate": 42,
       "bolts": 12,
@@ -650,28 +605,10 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-3 first (sampled +Z path)",
-          "part_ids": [
-            "primary-1",
-            "primary-3"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
           "message": "primary-2: remove primary-4 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
             "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-5"
           ]
         },
         {
@@ -699,23 +636,23 @@
     "inventory_fingerprints": [
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
       "0e08ef07406ecdcb7dc62265a3c34af8ff3d21239aae24349e2df1e9d77b3f03",
-      "3999ac0badcd2d2ce841dce0158ee5bd54a76d869204cc0f1eea565d4180ea74",
-      "4ad439405e0d5760b4746b456193c4d0a044d40d9ce97f7e182779674e11e705",
-      "4e6e97b82f2413c72a6014acecba9be8ee95e2545729d6c4ce106e64b80a5f5a",
-      "552372631c8a78a0965332d52062995f7579dd7dd369a84b4ad75def0caa9e92",
+      "19e73efeacec5edff9341e1e55e3e6aec52f3b5a0b301dc9b29a005cd0156f27",
+      "4628352aa413692a01268c4b34d6361c41fa428305652e311b7eaba7b9d2594c",
+      "4d3a794f0ba8a6a45879569f636c3290fc3e23d4a4a988d565396fb3484a167a",
+      "551c35f4199a66d6df91262b218d52dd8ce7a10c48de2862a127ecab3ec04003",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
       "5bb5d85615f568ab86a9d4c7f5845689165a5f7a84aaa56ceb1b54ab18438402",
-      "786c43db469b17e627697753dbe32fd61c68757535506f5cdc972d4157dc564f",
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
       "7b4bf3bf666a7588765989bde2b0bbbd612efeca7f29fdc432e071d564484d64",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
       "7d8748d4da12a1adc85d2685d632afecef048dffe37b27d457aa332b46a10541",
-      "8032b0c9f73c2bd14a6325d380e7fba1942fc0fbac3a6330330d1c5024515699",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
       "8667085cb2d920d68e211a7b1413e80f66d9320ad7885db0ad1a4306392acc67",
-      "b052d686cef6701dc6ba7c9c13063b7795e200a462344ec6e5a1557c48d93c7e",
+      "e6ba721e98b4c57bf067478cd8e684422306b71ea1e45480f06e196245c95d2b",
+      "eba3c3aeb5b8d9051b21de7d93838ef1c36ca1c9e646df5f6597058c0861978a",
       "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
-      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4"
+      "f3a09ce43414c9d836c86846f7dd11916f36805896fec3e56dd1b8a05737b2e4",
+      "f96adde40f88fa6564925ee6e45b207ff26877808ee1530260d8f5989d72726d"
     ],
     "inventory_replay": "identical",
     "removal_order": [
@@ -725,8 +662,7 @@
       "primary-2",
       "primary-1",
       "primary-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864416
+    ]
   },
   "organism-small": {
     "requested_envelope_mm": [
@@ -742,12 +678,13 @@
       ],
       [
         398.0,
-        398.00000000000006,
+        398.0,
         120.80000000000001
       ]
     ],
     "actual_total_depth_including_hardware_mm": 132.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864435,
+    "minimum_plate_cut_ligament_mm": 8.013195771864423,
+    "minimum_backing_cut_ligament_mm": 8.013195771864423,
     "construction": {
       "assembly_operations_estimate": 42,
       "bolts": 12,
@@ -770,44 +707,30 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-0",
             "primary-1",
-            "primary-2",
-            "primary-4",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-1",
             "primary-2",
-            "primary-3",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-3"
           ]
         },
         {
@@ -833,25 +756,25 @@
       "primary-5-plate--front"
     ],
     "inventory_fingerprints": [
-      "3a641d26c543541d451bb7cc1eef8c6cf82829d25e82b29806e1bd6cd2625929",
-      "40f21a4bff5e462edbdc5be4ae77c7333123cd4009cb21684a8243dd69598733",
-      "49e4d0c1955fa54d8035e49eec006c84c1a3ea29d12600a63052149f46d0f901",
+      "09d52bb2ed9d30d60bbf1c87de74b2865977b18329be226d02cc485cfc626adf",
+      "1e1acb82dee3281262079790497c1a575ca1b41d51774ddf5febdbdfb907f44c",
+      "2e30098a428ad302ab6ede0c3d211a416e6c03f4a1061a78be2c73b90026bbd4",
       "613cea806f47a8f0f242c6dec7e06a7aadcca2d5dc7a4ab5bf882d471558afc9",
       "613cea806f47a8f0f242c6dec7e06a7aadcca2d5dc7a4ab5bf882d471558afc9",
       "67cb8fc2838708d416f44616edeefebf387808b8423acf66b63b66b347457a46",
       "67cb8fc2838708d416f44616edeefebf387808b8423acf66b63b66b347457a46",
+      "6a26b72feee9c21a2fa8ed9b530718c3d15fb701101cdc76ba00aaf9149012b6",
       "717640479c1e6368982187a69b4ba60128a4283c91bbb77c392bdb8506ef194d",
       "717640479c1e6368982187a69b4ba60128a4283c91bbb77c392bdb8506ef194d",
       "7304458f9631edba932f333fd129f7a3b6ccc57b93b80c55fe8e77eb3fdb722a",
       "7304458f9631edba932f333fd129f7a3b6ccc57b93b80c55fe8e77eb3fdb722a",
+      "841911149dc78e1c58e424b811e8cc44100ed6023806a55fb29c3a362e671aa8",
+      "9c332d390f0f28c8cde320d9d0b79415ddd9c1a452157eb223410dca85703a54",
       "a0e54f890a75eb661f48bb5fc4303809158f8ef785751c30a926cc70a2904c26",
       "a0e54f890a75eb661f48bb5fc4303809158f8ef785751c30a926cc70a2904c26",
       "a1309df54f261882b73fca72e2e9ec69f9c82e99ca1dc095046155adbf70c349",
       "a1309df54f261882b73fca72e2e9ec69f9c82e99ca1dc095046155adbf70c349",
-      "a73f0143f4f6a2411ee68aa8ae8355dfce6ae7f3991f8fb4bd43b45a99ac2d3f",
-      "a8891988a2a9ba5dd22a43b66bb6a74022e45000428cfe88297a77e74e9dcbdd",
-      "d42441c72f40fb694c2654b2602d5bd19d6b0a90440867ad925b4b944ad7a268",
-      "d916bcd309048d5aff2b4c468aa9016e43e68caf77cf5365960557bda5a4c329"
+      "c8a615d1c4265cf175523adabdc46f77df94c855a61cb260c07a5c3e8b0cc550"
     ],
     "inventory_replay": "identical",
     "removal_order": [
@@ -861,8 +784,7 @@
       "primary-2",
       "primary-1",
       "primary-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864435
+    ]
   },
   "organism-large": {
     "requested_envelope_mm": [
@@ -872,18 +794,19 @@
     ],
     "bounds_mm": [
       [
-        -698.0,
         -698.0000000000001,
+        -697.9999999999999,
         10.0
       ],
       [
+        698.0000000000001,
         697.9999999999999,
-        698.0,
         215.8
       ]
     ],
     "actual_total_depth_including_hardware_mm": 227.8,
-    "minimum_plate_cut_ligament_mm": 8.013195771864428,
+    "minimum_plate_cut_ligament_mm": 8.013195771864417,
+    "minimum_backing_cut_ligament_mm": 8.013195771864417,
     "construction": {
       "assembly_operations_estimate": 42,
       "bolts": 12,
@@ -906,44 +829,30 @@
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-0: remove primary-1, primary-2, primary-4, primary-5 first (sampled +Z path)",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-0",
             "primary-1",
-            "primary-2",
-            "primary-4",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-1: remove primary-2, primary-3, primary-5 first (sampled +Z path)",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
           "part_ids": [
             "primary-1",
             "primary-2",
-            "primary-3",
             "primary-5"
           ]
         },
         {
           "severity": "warning",
           "code": "extraction_dependency",
-          "message": "primary-2: remove primary-3, primary-4 first (sampled +Z path)",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
           "part_ids": [
             "primary-2",
-            "primary-3",
-            "primary-4"
-          ]
-        },
-        {
-          "severity": "warning",
-          "code": "extraction_dependency",
-          "message": "primary-3: remove primary-4, primary-5 first (sampled +Z path)",
-          "part_ids": [
-            "primary-3",
-            "primary-4",
-            "primary-5"
+            "primary-3"
           ]
         },
         {
@@ -969,25 +878,25 @@
       "primary-5-plate--front"
     ],
     "inventory_fingerprints": [
+      "08dafb2a51bf195360542465d7d4d6d372ad633aeeac3d1a4fb4384e8cf8a57b",
+      "3b09712e919c54b6082159e36b4e54225bbf8d2f9357c38ad1fd5a2d2558a11b",
       "4d075e6fca0f56c7cd384b726a5d9198954b8cb9656bd6cc0603e9eba4c15e44",
       "4d075e6fca0f56c7cd384b726a5d9198954b8cb9656bd6cc0603e9eba4c15e44",
-      "5a7ea88bec766f4aaeb113ed0b5d353d10bac1af6897f304ee363810428a52d3",
-      "7b7a9a05e1cab189460e4429e271be7f912a0d51034bbdc89de0d5c151ddb7ac",
-      "8326f79b57a199866a00761fb4b61e9dbe2afd860d8c672303a17c732145a65b",
+      "6b64e7d7bbc077f36aa182333a61da35758a91e4b3a7ffd354c9cb2da932586d",
       "8f58fe01652c578ff21c98f26dfa4bef4f69695e84bf399248a16f76502c1977",
       "8f58fe01652c578ff21c98f26dfa4bef4f69695e84bf399248a16f76502c1977",
+      "9585b333cb5215224d4e0cbe25d3d681196cf96d8839924f390795e0727ea932",
       "97c9e0cb7264c6e7de52b6556bde30c5240ec9922a52e10cee5033bea0889acd",
       "97c9e0cb7264c6e7de52b6556bde30c5240ec9922a52e10cee5033bea0889acd",
       "a1cfd783ef9638c3c4d16ae934ef2d4ccf34d48d421530d6d50bded467d04eeb",
       "a1cfd783ef9638c3c4d16ae934ef2d4ccf34d48d421530d6d50bded467d04eeb",
-      "b5836c495b04d5e6420e3db13a93272d28861729f7933265caa5f32531617856",
-      "bf2bb4c76ea9fd6a5ab76c73369e8f68c78a09646d4306a9735bb331caaf2e9b",
-      "d0c357d430a6ddbec6aebdfc5e3c268e54c49fdc56f6f55b45dc05e1f601e198",
+      "ab46268392cfb68494133c482f7ed98d3f33085a6ba68bb35d42fe2b351cf3c1",
+      "b8aab1e9e6417a698e15e3bf941d1fe85df2e743583f3d2715e4d4f99b162a94",
+      "cc1e9be86c9cbabec047b827cebb30ab89d6d245fcc09555c7ddd599611e3612",
       "f3c2ce1de80c7aa2a4017f46631ae08a03065833cb838185a3f94d7479eea710",
       "f3c2ce1de80c7aa2a4017f46631ae08a03065833cb838185a3f94d7479eea710",
       "f69d7d21db72ed583390862397fa8aaaf30687ed29d221656303d95965d17ff2",
-      "f69d7d21db72ed583390862397fa8aaaf30687ed29d221656303d95965d17ff2",
-      "fee69bb3d421ef44293e69f048ff0542af13c3023730bf984dab520ecfbe78a2"
+      "f69d7d21db72ed583390862397fa8aaaf30687ed29d221656303d95965d17ff2"
     ],
     "inventory_replay": "identical",
     "removal_order": [
@@ -997,7 +906,6 @@
       "primary-2",
       "primary-1",
       "primary-0"
-    ],
-    "minimum_backing_cut_ligament_mm": 8.013195771864428
+    ]
   }
 }
