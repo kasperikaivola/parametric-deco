@@ -1,5 +1,6 @@
 # Creature mask — single final whole-branch review
 
+> Historical v1 record. Superseded by the [ambiguous organism revision](../superpowers/specs/2026-10-29-ambiguous-organism-design.md) and its new verification/review; previous counts and judgments do not certify v2.
 Reviewed base `430102f3a1b20c209ff7251a5adcd671baaaed56` through head
 `e0db52dedeec3655a30d141b64d042fc521dfced`, on 2026-10-29.
 This is the one final review required by AGENTS.md. Source, index and HEAD were

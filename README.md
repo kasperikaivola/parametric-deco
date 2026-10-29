@@ -48,13 +48,19 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
-## Creature mask example
+## Ambiguous organism example
 
-The new [creature mask](docs/implementation/creature-mask.md) develops a bilateral
-alien carapace with recessed eyes, a raised brow/rostrum, two swelling crown sweeps
-and two smaller hooked mandibles. It uses layered planar armour, slotted alignment
-webs and two root clamps per module. Detached stacks need a tray and compression.
-The radial weave remains supported independently.
+The [organism example](docs/implementation/creature-mask.md) combines six unequal,
+hooked recesses around an irregular central opening with a scalloped shell and
+four sweeping appendages. There is no solid nose ridge or helmet dome. Open channels
+and 24 shaped transverse ribs supply internal anatomy, alongside selective broad
+projection surfaces. The planar ribs use cap slots, headed keys and required
+retaining clips; five coherent modules bolt to the backing. Detached stacks need
+a support tray and compression. The radial weave remains a separate example.
+
+This revision requires **new cuts**: inventory family `creature-organism-v2` rejects
+the earlier literal mask's inventory. The `creature-mask` example filenames remain
+stable. Rest/raised poses within v2 reuse the same manufactured parts.
 
 ```sh
 parametric-deco build examples/creature-mask.json --out build/creature-mask
@@ -64,13 +70,13 @@ parametric-deco visuals build/creature-mask --out build/creature-mask-visuals --
 
 ### Inspect the 3D structure
 
-These images come from the actual CAD. The oblique view shows the stacked armour
-and stand-off from the backing; the exploded view separates the plates and caps
+These images come from the actual CAD. The three-quarter view shows transverse ribs
+and stand-off from the backing; the exploded view separates lower plates from cap/rib subassemblies
 for inspection (the offsets are illustrative, not assembly motion).
 
-| Front silhouette | Oblique: depth and layers |
+| Front silhouette | Three-quarter: depth and anatomy |
 | --- | --- |
-| ![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png) | ![Creature mask CAD oblique](docs/implementation/images/creature-mask/creature-mask-oblique.png) |
+| ![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png) | ![Organism actual CAD three-quarter](docs/implementation/images/creature-mask/creature-mask-three-quarter.png) |
 
 | Side: plate spacing | Exploded: internal structure |
 | --- | --- |

@@ -3,9 +3,9 @@
 from dataclasses import replace
 import json
 import numpy as np
-from shapely.geometry import Point
+from shapely.geometry import Point, Polygon, MultiPoint
 from shapely import affinity
-from .cad import overlap_volume
+from .cad import overlap_volume, mesh_for
 from .config import validate_config
 from .geometry.creature import generate_creature, request_signature
 from .geometry.backplate import match_root_pattern
@@ -25,11 +25,75 @@ from .validation import validate_assembly, xy_footprint, instance_bounds
 def verify_creature(a):
     issues = []
     by_id = {i.instance_id: i for i in a.instances}
-    if not a.composition or a.composition.get("family") != "creature-mask-v1":
+    if not a.composition or a.composition.get("family") != "creature-organism-v2":
         return ValidationReport((Issue("error", "family", "creature metadata required"),))
     for m in a.composition["modules"]:
         try:
             cap = by_id[m["cap_id"]]
+            for joint in m.get("blade_joints", []):
+                blade, key = by_id[joint["blade_id"]], by_id[joint["retainer_id"]]
+                for moving, dz, label in (
+                    (blade, -1, "shoulder"),
+                    (key, 2 * a.definition_for(key).thickness_mm + 1, "key"),
+                ):
+                    pose = np.array(moving.transform)
+                    pose[2, 3] += dz
+                    if (
+                        overlap_volume(
+                            a.definition_for(moving), pose, a.definition_for(cap), cap.transform
+                        )
+                        <= 1e-5
+                    ):
+                        issues.append(
+                            Issue(
+                                "error",
+                                "blade_capture",
+                                f"{moving.instance_id}: missing {label} bearing",
+                            )
+                        )
+                relative = np.linalg.inv(np.array(blade.transform)) @ np.array(key.transform)
+                kp, bp = a.definition_for(key), a.definition_for(blade)
+                points = (
+                    np.array([(*p, z, 1) for p in kp.outer for z in (0, kp.thickness_mm)])
+                    @ relative.T
+                )
+                import trimesh
+
+                mesh = mesh_for(kp)
+                vertices = mesh.vertices @ relative[:3, :3].T + relative[:3, 3]
+                segments = trimesh.intersections.mesh_plane(
+                    trimesh.Trimesh(vertices=vertices, faces=mesh.faces, process=False),
+                    (0, 0, 1),
+                    (0, 0, bp.thickness_mm / 2),
+                )
+                section = (
+                    MultiPoint(segments[:, :, :2].reshape(-1, 2)).convex_hull
+                    if len(segments)
+                    else Polygon()
+                )
+                if (
+                    section.is_empty
+                    or not any(Polygon(hole).buffer(1e-7).covers(section) for hole in bp.holes)
+                    or points[:, 2].min() >= 0
+                    or points[:, 2].max() <= bp.thickness_mm
+                ):
+                    issues.append(
+                        Issue(
+                            "error",
+                            "blade_key_engagement",
+                            f"{key.instance_id}: key does not cross its tab window",
+                        )
+                    )
+                if (
+                    overlap_volume(
+                        a.definition_for(blade),
+                        blade.transform,
+                        a.definition_for(key),
+                        key.transform,
+                    )
+                    > 1e-5
+                ):
+                    issues.append(Issue("error", "blade_key", "retaining key does not fit"))
             for kid in m["key_ids"]:
                 key = by_id[kid]
                 part = a.definition_for(key)
@@ -101,8 +165,10 @@ def assemble_creature(c, inventory=None):
         inventory = Inventory.from_dict(inventory.to_dict())
         definitions = inventory.definitions
         layout = json.loads(json.dumps(inventory.layout))
-        if not isinstance(layout, dict) or layout.get("family") != "creature-mask-v1":
-            raise ValueError("inventory requires creature family")
+        if not isinstance(layout, dict) or layout.get("family") != "creature-organism-v2":
+            raise ValueError(
+                "inventory requires organism v2 family; previous mask requires new cuts"
+            )
         saved = layout.pop("fingerprint", None)
         if digest(layout) != saved:
             raise ValueError("stale inventory layout fingerprint")
@@ -136,7 +202,7 @@ def assemble_creature(c, inventory=None):
         pose[:2, 3] += (dx, dy)
         instances.append(replace(i, transform=pose))
     metadata = {
-        "family": "creature-mask-v1",
+        "family": "creature-organism-v2",
         "posture": c.creature.posture,
         "modules": json.loads(json.dumps(layout["modules"])),
         "removal_order": layout["removal_order"],
@@ -144,6 +210,12 @@ def assemble_creature(c, inventory=None):
         "hole_radius_mm": c.grid.hole_diameter_mm / 2,
         "hardware_outward_mm": c.mounting.hardware_outward_mm,
         "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+    }
+    metadata["retainer_clip_requirement"] = {
+        "quantity": sum(len(m.get("blade_joints", [])) for m in metadata["modules"]),
+        "key_hole_diameter_mm": 2.5,
+        "envelope_only": True,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN",
     }
     connections = []
     mounts = []
@@ -173,6 +245,33 @@ def assemble_creature(c, inventory=None):
         for j, kid in enumerate(m["key_ids"]):
             for pid in m["plate_ids"][:-1]:
                 connections.append(Connection(kid, pid, "creature-register-v1", f"key-{j}"))
+        for joint in m.get("blade_joints", []):
+            # Clip through key local (0,10), outward-axis envelope below cap.
+            normal = np.array(joint["normal"])
+            tangent = np.array((normal[1], -normal[0]))
+            point = np.array(joint["center"]) + (dx, dy) + 10 * tangent
+            zcap, stock = m["cap_z_mm"], c.material.measured_mm
+            hardware.append(
+                (
+                    joint["retainer_id"] + "-clip",
+                    point[0] - 2,
+                    point[1] - 2,
+                    zcap - 2.5 * stock,
+                    point[0] + 2,
+                    point[1] + 2,
+                    zcap - 0.5 * stock,
+                )
+            )
+            connections.append(
+                Connection(
+                    joint["blade_id"], m["cap_id"], "creature-blade-seat-v2", joint["slot_id"]
+                )
+            )
+            connections.append(
+                Connection(
+                    joint["retainer_id"], joint["blade_id"], "creature-blade-key-v2", "retainer"
+                )
+            )
         for i in instances:
             if i.module_id == m["module_id"] and i.role == "spacer":
                 connections.append(
@@ -211,11 +310,11 @@ def assemble_creature(c, inventory=None):
         removed.add(name)
     metadata["sampled_extraction_dependencies"] = dependencies
     # Common clear eye aperture through every depth layer, including roots/backing.
-    from .geometry.creature_profiles import eye_voids
+    from .geometry.creature_profiles import eye_voids, central_void
 
     eyes = [
         affinity.scale(p, xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0))
-        for p in eye_voids(0.75)
+        for p in (*eye_voids(0.75), central_void())
     ]
     for eye in eyes:
         for i in instances:
@@ -223,7 +322,8 @@ def assemble_creature(c, inventory=None):
                 issues.append(
                     Issue("error", "eye_channel", f"{i.instance_id}: eye channel obstruction")
                 )
-    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes)
+    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes[:6])
+    metadata["cavity_areas_mm2"] = [p.area for p in eyes[:6]]
     a = replace(a, composition=metadata)
     report = replace(report, issues=tuple(issues))
     return BuildResult(

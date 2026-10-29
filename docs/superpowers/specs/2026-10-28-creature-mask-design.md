@@ -1,5 +1,6 @@
 # Creature mask — chosen design
 
+> Superseded by [2026-10-29 ambiguous organism](2026-10-29-ambiguous-organism-design.md), following user feedback that the paired eyes and helmet were too literal.
 User requests an ambiguous living/biomechanical plywood wall relief inspired by
 the supplied festival photograph: anatomical hierarchy, real cavities and sweeping
 appendages, without a literal skull/cartoon face. Existing radial examples remain.

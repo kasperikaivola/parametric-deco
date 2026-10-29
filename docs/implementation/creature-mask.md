@@ -1,72 +1,121 @@
-# Creature mask — digital sculpture candidate
+# Ambiguous organism — digital sculpture candidate (v2)
 
-This example translates the reference's anatomical principles into a much simpler
-alien carapace: two dominant swelling crown sweeps, two subordinate hooked mandibles,
-oblique eye cavities, a raised brow/rostrum and two restrained cheek recesses.
-No photograph, engraving, random detail, eyeballs, teeth or projection texture is
-used to manufacture the presence. The radial weave remains a separate example.
+The current revision replaces the literal paired-eye helmet following the user's
+visual feedback. Six unequal hooked recesses loosely surround a smaller irregular
+opening. There is no solid nose ridge, matching pair of sockets, mouth or helmet
+dome. Scalloped shell lobes, cut channels, overlapping layers and four appendages
+support competing readings of a creature. It remains a restrained plywood design,
+not a copy of the festival installation. No photograph, engraving, random noise,
+projection texture or concept painting supplies the physical detail.
 
-## Visual decisions and critical evaluation
+## Actual form and critical evaluation
 
-The radial study distributed constant-width rails and similar fins around a large
-circle; it lacked a head and a hierarchy. The new composition is bilateral and
-centres on the face. Crown widths swell then taper continuously along curved paths;
-lamellae narrow through depth and finish with rounded ends at least22 mm wide in
-the default crown/mandible profiles. Layering repeats within each organic contour,
-not uniformly around a ring. Broad limb roots disappear beneath the head in the
-primary front view. The head's raised central plate breaks up the broad face mass.
+The old radial study repeated similar fins around a large circle. The first mask
+revision went too far in the other direction: its two obvious eyes, central ridge
+and broad parallel terraces suppressed internal anatomy. This revision keeps the
+coherent silhouette but changes the centre and construction of the appendages.
 
-The coarse study below preceded detailed slots, spacers and mounting. Inspection
-removed an overly pictorial mouth and accidental root 'pupils' behind the eyes.
-Actual overlapping root contours now clear the common eye channels. The final CAD
-views show those real cavities and a stronger focal structure. This is a deliberately
-restrained mask, not a miniature copy of the festival installation. The front view
-is the primary artistic criterion; the low oblique reveals the shallow layered
-construction and long cantilevers. Artistic acceptance still belongs to the user.
+The central shell has six differently shaped/unequal recesses, an
+irregular central aperture, channels entering between its outer lobes, and two curved internal channels. Layer
+openings enlarge toward the front, exposing stepped cavity walls. The head has no
+single dome. Bilateral organisation remains a scaffold, with unequal cavities and
+local rib orientation preventing exact mirrored repetition of every detail.
 
-![Coarse study: not a fabrication drawing](images/creature-study/front-contours.png)
-![Final untextured CAD front](images/creature-mask/creature-mask-front.png)
-![Actual CAD oblique](images/creature-mask/creature-mask-oblique.png)
+Two dominant crown sweeps and two lower hooks have longitudinal through channels
+with intentional bearing bridges. Twenty-four transverse ribs (seven per crown,
+five per hook) rise from those bridges. Their width and height grow then diminish
+along the curved path; the upper contour leans across each rib. Station placement
+uses path distance to avoid crowding keys where the curve tightens. The curled
+ends retain broad, rounded plywood contours rather than needle tips.
 
-## Construction, parameters and reuse
+![Coarse profile/depth study, explicitly without joinery](images/creature-study/front-contours.png)
+![Coarse oblique study, without joinery](images/creature-study/oblique.png)
+![Actual final CAD front](images/creature-mask/creature-mask-front.png)
+![Actual final CAD three-quarter](images/creature-mask/creature-mask-three-quarter.png)
 
-Five modules use planar plywood armour, two vertical slotted alignment webs,
-cut-plywood spacer rings and two root bolts each. All wood has one measured
-thickness (6 mm default); no hidden solid spacers are omitted. The head is raised
-above the crown roots and covers their mechanical boundaries. Slots register plates
-in XY; spacers form continuous compression columns; a solid cap obstructs outward
-web withdrawal. Root bolts clamp the stack to the backing. This is a different
-candidate joint family from the radial mechanism, not inherited validation.
+The front is no longer defined by a nose and two sockets. The centre can still be
+read as a face or multi-eyed mask: ambiguity is a visual goal, not a proven metric.
+Broad central bridge regions and some repeated layer edges remain visible. The
+ribs have much more presence obliquely than in the straight front, where their
+6 mm edges are naturally thin. The form is still simpler than the reference;
+artistic acceptance depends on inspecting both views, not the test count.
 
-The head-shaped backing has actual eye apertures, a simple staggered hole grid,
-and broad hidden shoulders for both mounting postures. Each plate is one valid,
-connected planar contour. All profiles, slots, holes and spacer quantities are in
-the cut manifest; optional bed layouts fail rather than shrink oversized parts.
-Default hardware depth is190 mm within the1000×1000×200 mm envelope.
+The new three-quarter view is closer to the wall-mounted frontal viewpoint than
+the old low oblique. The latter is retained for depth inspection. The lightweight
+inspection/viewer pipeline sorts triangles, so overlapping edges can show painter
+artifacts; these are not fabricated contour details. Use the identified GLB in a
+3D viewer for independent inspection. No new rendering engine was added.
 
-`creature.scale` (.9..1) changes XY contours; `creature.curl` (.8..1.2) adjusts the
-crown-end sweep. Neither scales thickness, holes or clearance. These changes require
-new cuts. Envelope and measured-stock settings retain their shared meanings; an
-undersized envelope or unavailable grid mount fails validation/build. The family
-uses the supplied compatible mounting grid, not arbitrary mounting locations.
+## Construction and accessible assembly
 
-`raised_crown` moves the complete crown modules by(−25,+50) and(+25,+50) mm to
-other real grid holes. All133 physical IDs and all manufactured fingerprints are
-preserved; no parts are regenerated in inventory mode. This is a constrained
-second posture, not arbitrary reassembly. It exposes more shoulder channels and
-root cutouts and is less seamless than the primary resting artwork.
+Five coherent modules use laser-cut planar plywood armour, two vertical alignment
+webs, plywood spacer-ring compression columns and two root bolts each. All wood
+uses one measured thickness, initially 6 mm. The central shell covers limb roots.
+Backing has actual cavity openings and staggered mounting holes. Each cut contour
+is a connected valid polygon; nominal cuts, holes, slots, counts and IDs export.
+The default inventory contains 189 plywood instances (56 definitions).
+Default total hardware depth remains 190 mm within the 1000×1000×200 mm envelope.
 
-Unique armour contours do not interchange between levels, sides or modules.
-Only identical definitions/revisions, such as spacer rings, genuinely interchange.
-Saved authoritative templates and manufacturing/layout fingerprints reject altered
-requests, stale revisions, missing/extra physical parts or corrupted station poses.
-The request comparison is deliberately conservative about other manufacturing settings.
+Each transverse rib has a 28 mm foot through a closed cap slot. Its shoulders bear
+on the cap. A headed plywood key passes through a 10 mm by stock-thickness window
+in the foot. The cap is four stock thicknesses above the preceding plate, leaving
+three thicknesses clear for tabs, keys and clip proxies. Root spacer quantities
+increase accordingly. The key's 18 mm head stops it passing through the window;
+a 2.5 mm hole at the far end requires a positive split-pin/clip stop. Friction
+alone is not accepted as a wall-mounted retention method.
 
-![Raised posture, same manufactured inventory](images/creature-mask/creature-mask-raised-front.png)
-![Actual head-root/key section](images/creature-mask/creature-mask-joint-section.png)
-![Exploded identification view](images/creature-mask/creature-mask-exploded.png)
+**Twenty-four clips must be selected and prototyped.** The CAD contains clearance
+boxes for them, not detailed or approved commercial hardware. Nominal length is
+2×stock thickness, below the cap. Actual clip shape, installation, wear/security
+and tool clearance are NOT RUN. Real hardware must fit the available gap and stop
+reverse key withdrawal; redesign is necessary if a suitable clip cannot do so.
 
-## Reproduce and project
+Build cap/rib/key subassemblies upside down on a supported bench before placing
+them on the lower stacks. This keeps retaining parts accessible. For service,
+remove the complete module, support its lower stack, and lift off the cap/rib
+subassembly; invert that subassembly in a cradle to reach the keys/clips. Do not
+try to service them blindly through installed shell layers. Exported family
+instructions specify the actual IDs, levels and sequence.
+
+![Actual local rib/key/cap mesh section](images/creature-mask/creature-mask-rib-joint.png)
+![Side construction view](images/creature-mask/creature-mask-side.png)
+![Exploded identification, not a validated assembly motion](images/creature-mask/creature-mask-exploded.png)
+
+The solid cap captures the two root alignment webs. Root bolts clamp the complete
+stack and continuous spacer columns to the backing. Detached modules are NOT
+self-locking: use a tray/cradle and maintained compression; do not lift by fins or
+curl tips. Remove the central shell first, then follow the documented module order.
+The older head-root section passes through an alignment web, offset from bolt axes;
+it is not a bolt/washer/backing bearing drawing.
+
+## Parameters and honest reuse
+
+Example filenames remain `creature-mask.json` and `creature-mask-raised.json`.
+Their current inventory family is **creature-organism-v2**. The earlier v1 helmet
+needs **new cuts** for this revision; old inventories are rejected before placement.
+Changed armour/web/rib definitions carry new IDs/revisions. Do not infer reuse
+from an unchanged semantic module or instance name.
+
+`creature.scale` (.9..1) and `creature.curl` (.8..1.2) change physical contours and
+require new cuts. Stock thickness, holes, slot clearance and root drilling do not
+scale. Small-envelope or incompatible mounting requests fail rather than shrink.
+
+Within v2, `raised_crown` moves entire crown modules by (−25,+50) and (+25,+50) mm
+to compatible grid holes, including every rib/key and clip proxy. Both postures
+use the same physical IDs, revisions and manufacturing fingerprints; inventory
+mode does not regenerate parts. Crown aperture reliefs clear the cavity channels
+in both allowed poses. The raised posture still exposes more root backing and
+is a reuse demonstration; the resting posture is the primary artwork.
+
+Unique plates and ribs do not interchange between stations, sides or modules.
+Only identical definitions/revisions (retaining keys, spacer rings and compatible
+web groups) interchange. Saved templates and manufacturing/layout fingerprints
+reject stale revisions, modified definitions, missing/extra physical inventory and
+changed manufacturing requests. No claim of arbitrary fin rearrangement is made.
+
+![Raised posture using the same manufactured inventory](images/creature-mask/creature-mask-raised-three-quarter.png)
+
+## Build, orbit and projection
 
 ```sh
 python -m parametric_deco.cli build examples/creature-mask.json --out build/creature-mask
@@ -76,41 +125,35 @@ python -m parametric_deco.cli visuals build/creature-mask-raised --out build/cre
 python -m parametric_deco.cli preview build/creature-mask
 ```
 
-Exports retain the shared nominal SVG, GLB/metres, assembly/inventory IDs, local/world
-atlases and ISF sources. No new renderer or invented Wire/Arena preset is included.
-The broad-face recommendation selects24 visible armour faces rather than the many
-spacer/web/edge surfaces. `projection-visibility.json` samples broad faces from
-projector(0,0,2000) mm. Each ray is clipped against the complete extrusion slab and
-actual polygon/hole contours of every part, including slots and edges. The finite
-sample fraction estimates occlusion; it is not a continuous illumination guarantee.
-The tests include both complete occlusion and illumination through a real aperture.
+After installing the project as described in README, run the commands from the
+repository root. Open http://127.0.0.1:8765/preview/ to rotate, zoom, identify parts,
+hide the backing or separate layers. Explode moves each cap together with its ribs,
+retainers and clip proxies, exposing the lower stack. It is an illustration, not
+an assembly trajectory. GLB export uses metres, identified meshes and actual parts.
 
-The broader visible forehead, cheek and limb terraces are useful mapping regions;
-recess floors and thin edge bands can self-shadow. Existing local/world coordinate
-shaders are starting resources for pulses and cavity activity, not an anatomical
-arc-length shader. Confirm reachability and calibrate on the physical sculpture.
-A future custom renderer can consume the same surface/instance records.
+Shared nominal SVG, inventory/assembly JSON, surface IDs, atlases and ISF/Wire
+resources remain usable. Visibility samples broad shell faces from (0,0,2000) mm;
+rays intersect actual extruded polygons, holes and edges. Finite samples estimate
+occlusion; they do not certify illumination or calibrated shadows. Thin blade
+edges are not broad frontal projection targets. Broader shell bridges and exposed
+terraces remain available for pulses around cavities and along appendages. There
+is no new engine, invented Wire patch or Arena preset. Recalibrate after movement.
 
-## What is checked and what remains untested
+## Verification boundary
 
-Automated checks cover connected contours, eye channels, finite/ranged config,
-measured thickness, static solid interference, slots/web registration, actual cap
-obstruction, washer bearing, conservative root hardware corridors, grid mounts,
-acyclic sampled whole-module removal, inventory identity and export regressions.
-The section passes through a head alignment web and adjacent compression columns.
-Front CAD edges are actual contour boundaries; the pictures contain no concept
-painting. Exploded offsets identify parts and are not a validated assembly motion.
+Tests cover connected profiles, unequal cavities/central opening, static solids,
+root washer bearing/hardware corridors, register slots/cap capture, rib shoulders,
+actual retaining-key window engagement (including a misplaced-key rejection),
+cap slot bearing margins, root grids, sampled module extraction, configuration
+corners/measured stock, inventory identity/version rejection, exports and atlas IDs.
+Removal checks sample every 12 mm through 240 mm; they are not continuous proofs.
 
-Remove the head first, then crown/jaw modules in the exported order. Maintain
-compression and use a support tray when root bolts are released: the stack is NOT
-self-locking off the backing. The generic coupon tests stock slot width only;
-prototype actual18 mm web windows and root columns. Detailed family instructions
-are exported with both builds. The +Z extraction checks sample every12 mm through
-240 mm; they do not certify continuous motion, manual access or every sequence.
-
-Physical fit/finish, long cantilever stiffness, root-column stability under load,
-fastener and wall-anchor selection, wear and detached handling remain **NOT RUN**.
+Physical fit/finish/wear, rib and cantilever stiffness, column stability, root
+preload/fasteners/wall anchors, clip selection/security, tray/cradle handling,
+actual tool/finger access and continuous assembly/removal paths remain **NOT RUN**.
 Actual browser rendering, Wire/Arena compilation, projector calibration and real
-illumination remain **NOT RUN**. A successful digital model is not physical approval.
-See [machine-readable evidence](creature-mask-evidence.json) and
-[execution/review record](creature-mask-progress.md).
+illumination remain **NOT RUN**. Digital success is not fabrication approval.
+Run `python scripts/creature_evidence.py` after both builds/atlases to regenerate
+the evidence and copy their CAD images into the documentation.
+See [generated evidence](creature-mask-evidence.json), [revision record](organism-revision-progress.md)
+[single final review](organism-revision-review.md) and [historical v1 record](creature-mask-progress.md).

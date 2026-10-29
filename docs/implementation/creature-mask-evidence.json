@@ -1,8 +1,17 @@
 {
   "creature-mask": {
-    "family": "creature-mask-v1",
-    "physical_instances": 133,
-    "manufactured_definitions": 31,
+    "family": "creature-organism-v2",
+    "physical_instances": 189,
+    "manufactured_definitions": 56,
+    "roles": {
+      "backplate": 1,
+      "armour": 19,
+      "cap": 5,
+      "spacer": 106,
+      "register": 10,
+      "blade": 24,
+      "retainer": 24
+    },
     "wood_bounds_mm": [
       [
         -454.6403128765003,
@@ -17,8 +26,16 @@
     ],
     "hardware_max_z_mm": 190,
     "composition": {
-      "eye_aperture_area_mm2": 6563.417769820601,
-      "family": "creature-mask-v1",
+      "cavity_areas_mm2": [
+        1495.3693494895203,
+        1149.2083743322764,
+        2064.4834014519065,
+        2085.387186746984,
+        1568.6572039568862,
+        1283.1824137369788
+      ],
+      "eye_aperture_area_mm2": 9646.287929714552,
+      "family": "creature-organism-v2",
       "hardware_outward_mm": 12,
       "hole_radius_mm": 3.25,
       "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
@@ -30,6 +47,12 @@
         "jaw-left",
         "jaw-right"
       ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 24,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
       "sampled_extraction_dependencies": {
         "crown-left": [
           "head"
@@ -72,7 +95,32 @@
       "jaw-right-armour-2--front",
       "jaw-right-armour-3--front"
     ],
-    "visibility_scope": "sampled broad-face targets; ray intersection with all actual planar extrusions; no runtime calibration",
+    "visibility_fractions": {
+      "head-armour-0--front": 0.05976095617529881,
+      "head-armour-1--front": 0.05042016806722689,
+      "head-armour-2--front": 0.058823529411764705,
+      "head-armour-3--front": 0.05314009661835749,
+      "head-armour-4--front": 0.05555555555555555,
+      "head-armour-5--front": 1.0,
+      "crown-left-armour-0--front": 0.05319148936170213,
+      "crown-left-armour-1--front": 0.038461538461538464,
+      "crown-left-armour-2--front": 0.04597701149425287,
+      "crown-left-armour-3--front": 0.06626506024096386,
+      "crown-left-armour-4--front": 0.7039473684210527,
+      "crown-right-armour-0--front": 0.05291005291005291,
+      "crown-right-armour-1--front": 0.03867403314917127,
+      "crown-right-armour-2--front": 0.04597701149425287,
+      "crown-right-armour-3--front": 0.06626506024096386,
+      "crown-right-armour-4--front": 0.7039473684210527,
+      "jaw-left-armour-0--front": 0.07222222222222222,
+      "jaw-left-armour-1--front": 0.06857142857142857,
+      "jaw-left-armour-2--front": 0.08982035928143713,
+      "jaw-left-armour-3--front": 0.7115384615384616,
+      "jaw-right-armour-0--front": 0.07103825136612021,
+      "jaw-right-armour-1--front": 0.062146892655367235,
+      "jaw-right-armour-2--front": 0.09467455621301775,
+      "jaw-right-armour-3--front": 0.7025316455696202
+    },
     "validation": {
       "digital_valid": true,
       "host_validation": "not_run",
@@ -120,9 +168,18 @@
     }
   },
   "creature-mask-raised": {
-    "family": "creature-mask-v1",
-    "physical_instances": 133,
-    "manufactured_definitions": 31,
+    "family": "creature-organism-v2",
+    "physical_instances": 189,
+    "manufactured_definitions": 56,
+    "roles": {
+      "backplate": 1,
+      "armour": 19,
+      "cap": 5,
+      "spacer": 106,
+      "register": 10,
+      "blade": 24,
+      "retainer": 24
+    },
     "wood_bounds_mm": [
       [
         -479.6403128765003,
@@ -137,8 +194,16 @@
     ],
     "hardware_max_z_mm": 190,
     "composition": {
-      "eye_aperture_area_mm2": 6563.417769820601,
-      "family": "creature-mask-v1",
+      "cavity_areas_mm2": [
+        1495.3693494895203,
+        1149.2083743322764,
+        2064.4834014519065,
+        2085.387186746984,
+        1568.6572039568862,
+        1283.1824137369788
+      ],
+      "eye_aperture_area_mm2": 9646.287929714552,
+      "family": "creature-organism-v2",
       "hardware_outward_mm": 12,
       "hole_radius_mm": 3.25,
       "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
@@ -150,6 +215,12 @@
         "jaw-left",
         "jaw-right"
       ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 24,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
       "sampled_extraction_dependencies": {
         "crown-left": [
           "head"
@@ -192,7 +263,32 @@
       "jaw-right-armour-2--front",
       "jaw-right-armour-3--front"
     ],
-    "visibility_scope": "sampled broad-face targets; ray intersection with all actual planar extrusions; no runtime calibration",
+    "visibility_fractions": {
+      "head-armour-0--front": 0.05976095617529881,
+      "head-armour-1--front": 0.05042016806722689,
+      "head-armour-2--front": 0.058823529411764705,
+      "head-armour-3--front": 0.05314009661835749,
+      "head-armour-4--front": 0.05555555555555555,
+      "head-armour-5--front": 1.0,
+      "crown-left-armour-0--front": 0.07446808510638298,
+      "crown-left-armour-1--front": 0.054945054945054944,
+      "crown-left-armour-2--front": 0.05747126436781609,
+      "crown-left-armour-3--front": 0.06626506024096386,
+      "crown-left-armour-4--front": 0.75,
+      "crown-right-armour-0--front": 0.06878306878306878,
+      "crown-right-armour-1--front": 0.055248618784530384,
+      "crown-right-armour-2--front": 0.05747126436781609,
+      "crown-right-armour-3--front": 0.060240963855421686,
+      "crown-right-armour-4--front": 0.75,
+      "jaw-left-armour-0--front": 0.07222222222222222,
+      "jaw-left-armour-1--front": 0.06857142857142857,
+      "jaw-left-armour-2--front": 0.08982035928143713,
+      "jaw-left-armour-3--front": 0.7115384615384616,
+      "jaw-right-armour-0--front": 0.07103825136612021,
+      "jaw-right-armour-1--front": 0.062146892655367235,
+      "jaw-right-armour-2--front": 0.09467455621301775,
+      "jaw-right-armour-3--front": 0.7025316455696202
+    },
     "validation": {
       "digital_valid": true,
       "host_validation": "not_run",
@@ -238,5 +334,10 @@
       "physical_validation": "not_run",
       "schema_version": 1
     }
+  },
+  "reuse": {
+    "identical_physical_assignments": true,
+    "identical_manufactured_geometry": true,
+    "previous_v1_inventory_compatible": false
   }
 }

@@ -1,8 +1,15 @@
 """Coarse contour/depth study: real planar profiles, no fabricated joinery claims."""
 
 from pathlib import Path
+import numpy as np
+from shapely.geometry import MultiPoint
 from PIL import Image, ImageDraw, ImageFont
-from parametric_deco.geometry.creature_profiles import profiles, backing_outline
+from parametric_deco.geometry.creature_profiles import (
+    profiles,
+    backing_outline,
+    rib_stations,
+    organic,
+)
 from parametric_deco.model import Assembly, PartDefinition, PartInstance
 from parametric_deco.export.views import render_views
 
@@ -29,6 +36,37 @@ for name, layers in {"backplate": [backing_outline()], **profiles()}.items():
             )
         )
         shapes.append((z, p, name, j))
+for name in ("crown-left", "crown-right", "jaw-left", "jaw-right"):
+    cap_z = 94 if name.startswith("crown") else 76
+    for j, (center, normal, width, height) in enumerate(rib_stations(name)):
+        poly = organic(
+            [
+                (-width / 2, 6),
+                (-width * 0.42, height * 0.6),
+                (-width * 0.12, height),
+                (width * 0.2, height * 0.8),
+                (width / 2, 6),
+            ]
+        )
+        d = PartDefinition.from_polygon(f"{name}-rib-{j}", poly, 6, kind="armour")
+        # Columns: transverse direction, outward Z, right-handed thickness direction.
+        nx, ny = normal
+        tangent = (ny, -nx)
+        pose = (
+            (nx, 0, tangent[0], center[0] - 3 * tangent[0]),
+            (ny, 0, tangent[1], center[1] - 3 * tangent[1]),
+            (0, 1, 0, cap_z),
+            (0, 0, 0, 1),
+        )
+        defs.append(d)
+        instances.append(
+            PartInstance(d.definition_id, d.definition_id, d.revision, pose, name, "armour")
+        )
+        xy_world = (
+            np.array([(*point, depth, 1) for point in d.outer for depth in (0, 6)])
+            @ np.array(pose).T
+        )
+        shapes.append((cap_z + height, MultiPoint(xy_world[:, :2]).convex_hull, name, 0))
 a = Assembly(tuple(defs), tuple(instances))
 render_views(a, out)
 # Explicit CAD-edge study for front readability; geometry is unchanged.
