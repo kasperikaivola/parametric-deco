@@ -1,5 +1,6 @@
 # Final whole-change review — ambiguous organism revision
 
+> Historical v2 record. Current configurable v3 geometry and checks are described in [parametric alien progress](parametric-alien-progress.md).
 Single independent review of `5e187cb..ddf24f7`, after implementation, read-only.
 The reviewer inspected actual front, three-quarter, oblique, rib-joint and raised
 CAD views, source, tests and generated evidence. No task-level reviews were run.

@@ -16,7 +16,7 @@ from parametric_deco.validation import instance_bounds
 
 records = {}
 inventories = []
-for name in ("creature-mask", "creature-mask-raised"):
+for name in ("creature-mask", "creature-mask-raised", "creature-alien-two", "creature-alien-six"):
     directory = Path("build") / name
 
     def read(filename):
@@ -24,9 +24,10 @@ for name in ("creature-mask", "creature-mask-raised"):
 
     assembly = Assembly.from_dict(read("assembly.json"))
     inventory = Inventory.from_dict(read("inventory.json"))
-    assert assembly.composition["family"] == "creature-organism-v2"
+    assert assembly.composition["family"] == "creature-organism-v3"
     assert read("validation.json")["digital_valid"]
-    inventories.append(inventory)
+    if name in ("creature-mask", "creature-mask-raised"):
+        inventories.append(inventory)
     bounds = np.array(
         [instance_bounds(assembly.definition_for(i), i.transform) for i in assembly.instances]
     )
@@ -52,6 +53,8 @@ for name in ("creature-mask", "creature-mask-raised"):
         "validation": read("validation.json"),
     }
     for image in (directory / "views").glob("*.png"):
+        if name.startswith("creature-alien") and image.stem not in ("front", "three-quarter"):
+            continue
         shutil.copy2(
             image, Path("docs/implementation/images/creature-mask") / (name + "-" + image.name)
         )
@@ -69,7 +72,7 @@ assert sorted(d.fingerprint for d in first.definitions) == sorted(
 records["reuse"] = {
     "identical_physical_assignments": True,
     "identical_manufactured_geometry": True,
-    "previous_v1_inventory_compatible": False,
+    "previous_v1_v2_inventory_compatible": False,
 }
 Path("docs/implementation/creature-mask-evidence.json").write_text(
     json.dumps(records, indent=2) + "\n"

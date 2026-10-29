@@ -79,8 +79,17 @@
   "cutting_bed": null,
   "composition": null,
   "creature": {
-    "scale": 1.0,
-    "curl": 1.0,
+    "limb_count": 4,
+    "cavity_count": 6,
+    "ribs_per_limb": 6,
+    "shell_layers": 6,
+    "limb_layers": 4,
+    "limb_reach": 1,
+    "limb_width": 1,
+    "rib_height_mm": 65,
+    "asymmetry": 0.08,
+    "scale": 1,
+    "curl": 1,
     "posture": "raised_crown"
   }
 }

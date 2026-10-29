@@ -25,7 +25,7 @@ from .validation import validate_assembly, xy_footprint, instance_bounds
 def verify_creature(a):
     issues = []
     by_id = {i.instance_id: i for i in a.instances}
-    if not a.composition or a.composition.get("family") != "creature-organism-v2":
+    if not a.composition or a.composition.get("family") != "creature-organism-v3":
         return ValidationReport((Issue("error", "family", "creature metadata required"),))
     for m in a.composition["modules"]:
         try:
@@ -165,9 +165,9 @@ def assemble_creature(c, inventory=None):
         inventory = Inventory.from_dict(inventory.to_dict())
         definitions = inventory.definitions
         layout = json.loads(json.dumps(inventory.layout))
-        if not isinstance(layout, dict) or layout.get("family") != "creature-organism-v2":
+        if not isinstance(layout, dict) or layout.get("family") != "creature-organism-v3":
             raise ValueError(
-                "inventory requires organism v2 family; previous mask requires new cuts"
+                "inventory requires organism v3 family; v1/v2 inventory; previous mask requires new cuts"
             )
         saved = layout.pop("fingerprint", None)
         if digest(layout) != saved:
@@ -202,8 +202,11 @@ def assemble_creature(c, inventory=None):
         pose[:2, 3] += (dx, dy)
         instances.append(replace(i, transform=pose))
     metadata = {
-        "family": "creature-organism-v2",
+        "family": "creature-organism-v3",
         "posture": c.creature.posture,
+        "limb_count": c.creature.limb_count,
+        "cavity_count": c.creature.cavity_count,
+        "ribs_per_limb": c.creature.ribs_per_limb,
         "modules": json.loads(json.dumps(layout["modules"])),
         "removal_order": layout["removal_order"],
         "washer_radius_mm": c.mounting.washer_radius_mm,
@@ -310,11 +313,13 @@ def assemble_creature(c, inventory=None):
         removed.add(name)
     metadata["sampled_extraction_dependencies"] = dependencies
     # Common clear eye aperture through every depth layer, including roots/backing.
-    from .geometry.creature_profiles import eye_voids, central_void
+    from .geometry.creature_profiles import cavity_voids, central_void
 
     eyes = [
-        affinity.scale(p, xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0))
-        for p in (*eye_voids(0.75), central_void())
+        *cavity_voids(c.creature, 0.75),
+        affinity.scale(
+            central_void(), xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0)
+        ),
     ]
     for eye in eyes:
         for i in instances:
@@ -322,8 +327,8 @@ def assemble_creature(c, inventory=None):
                 issues.append(
                     Issue("error", "eye_channel", f"{i.instance_id}: eye channel obstruction")
                 )
-    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes[:6])
-    metadata["cavity_areas_mm2"] = [p.area for p in eyes[:6]]
+    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes[: c.creature.cavity_count])
+    metadata["clear_aperture_probe_areas_mm2"] = [p.area for p in eyes[: c.creature.cavity_count]]
     a = replace(a, composition=metadata)
     report = replace(report, issues=tuple(issues))
     return BuildResult(

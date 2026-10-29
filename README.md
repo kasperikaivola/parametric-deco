@@ -48,25 +48,34 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
-## Ambiguous organism example
+## Parametric alien organism
 
-The [organism example](docs/implementation/creature-mask.md) combines six unequal,
-hooked recesses around an irregular central opening with a scalloped shell and
-four sweeping appendages. There is no solid nose ridge or helmet dome. Open channels
-and 24 shaped transverse ribs supply internal anatomy, alongside selective broad
-projection surfaces. The planar ribs use cap slots, headed keys and required
-retaining clips; five coherent modules bolt to the backing. Detached stacks need
-a support tray and compression. The radial weave remains a separate example.
+The [alien family](docs/implementation/creature-mask.md) generates different decos
+from numeric controls. The default has **four total limbs**, sweeping sideways
+and folding down, plus six unequal cavities. Set `creature.limb_count` (2–6),
+`cavity_count` (3–8), `ribs_per_limb` (3–7), `shell_layers`, `limb_layers`,
+`limb_reach`, `limb_width`, `rib_height_mm`, `asymmetry`, `scale` and `curl` in JSON.
+See the [parameter table and limits](docs/implementation/creature-mask.md#parameters).
+These controls change actual laser-cut parts, modules and connections.
 
-This revision requires **new cuts**: inventory family `creature-organism-v2` rejects
-the earlier literal mask's inventory. The `creature-mask` example filenames remain
-stable. Rest/raised poses within v2 reuse the same manufactured parts.
+Three supplied examples demonstrate **different cuts**, not inventory reuse:
+`creature-alien-two.json`, `creature-mask.json` (four limbs) and
+`creature-alien-six.json`. Family `creature-organism-v3` rejects earlier inventories.
+Within an unchanged recipe, rest/raised poses reuse all manufactured parts.
+The radial weave remains supported independently. Real clips, fits and strength
+still need prototyping; detached stacks require tray support and compression.
 
 ```sh
 parametric-deco build examples/creature-mask.json --out build/creature-mask
 parametric-deco reconfigure examples/creature-mask-raised.json --inventory build/creature-mask/inventory.json --out build/creature-mask-raised
 parametric-deco visuals build/creature-mask --out build/creature-mask-visuals --visible-only
+parametric-deco build examples/creature-alien-two.json --out build/creature-alien-two
+parametric-deco build examples/creature-alien-six.json --out build/creature-alien-six
 ```
+
+| Two-limb variation | Six-limb variation |
+| --- | --- |
+| ![Actual two-limb CAD](docs/implementation/images/creature-mask/creature-alien-two-three-quarter.png) | ![Actual six-limb CAD](docs/implementation/images/creature-mask/creature-alien-six-three-quarter.png) |
 
 ### Inspect the 3D structure
 

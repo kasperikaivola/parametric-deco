@@ -1,5 +1,6 @@
 # Organism revision ledger — 2026-10-29
 
+> Historical v2 record. Current configurable v3 geometry and checks are described in [parametric alien progress](parametric-alien-progress.md).
 Scope: user requested revision of existing PR #3 after finding the first mask too
 literal, helmet-like and sparse. The approved direction is six unequal recesses,
 no nose/helmet, scalloped shells, internal channels and transverse anatomical ribs.

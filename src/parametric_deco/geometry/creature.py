@@ -5,7 +5,14 @@ import numpy as np
 from shapely.geometry import Point, MultiPoint, box, Polygon
 from shapely.ops import unary_union
 from ..model import PartDefinition, PartInstance, GeometryBundle, InterfaceStation, digest
-from .creature_profiles import ROOTS, profiles, eye_voids, central_void, rib_stations, smooth
+from .creature_profiles import (
+    module_roots,
+    profiles,
+    cavity_voids,
+    central_void,
+    rib_stations,
+    smooth,
+)
 from .backplate import generate_backplate, match_root_pattern
 
 
@@ -61,8 +68,8 @@ def generate_creature(c):
         kind="retainer",
     )
     definitions.append(retainer)
-    for name, layers in profiles(c.creature.scale, c.creature.curl).items():
-        roots = ROOTS[name]
+    for name, layers in profiles(settings=c.creature).items():
+        roots = module_roots(c.creature)[name]
         match_root_pattern(c, roots)
         keys = key_positions(roots)
         levels = (
@@ -87,8 +94,10 @@ def generate_creature(c):
             from shapely import affinity
 
             voids = [
-                affinity.scale(p, xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0))
-                for p in (*eye_voids(1.06), central_void())
+                *cavity_voids(c.creature, 1.06),
+                affinity.scale(
+                    central_void(), xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0)
+                ),
             ]
             if name.startswith("crown"):
                 dx = -25 if "left" in name else 25
@@ -105,7 +114,7 @@ def generate_creature(c):
             blade_parts = []
             if name != "head" and j == len(layers) - 1:
                 for k, (center, normal, width, height) in enumerate(
-                    rib_stations(name, c.creature.scale, c.creature.curl)
+                    rib_stations(name, settings=c.creature)
                 ):
                     nx, ny = normal
                     tangent = np.array((ny, -nx))
@@ -185,9 +194,7 @@ def generate_creature(c):
                         float(center[1]),
                         "creature-blade-seat-v2",
                     )
-                    for k, (center, *_rest) in enumerate(
-                        rib_stations(name, c.creature.scale, c.creature.curl)
-                    )
+                    for k, (center, *_rest) in enumerate(rib_stations(name, settings=c.creature))
                 )
                 if name != "head"
                 else ()
@@ -235,11 +242,11 @@ def generate_creature(c):
             }
         )
     layout = {
-        "family": "creature-organism-v2",
+        "family": "creature-organism-v3",
         "manufacturing_request": request_signature(c),
         "modules": modules,
         "templates": [asdict(i) for i in instances],
-        "removal_order": ["head", "crown-left", "crown-right", "jaw-left", "jaw-right"],
+        "removal_order": [m["module_id"] for m in modules],
     }
     layout["fingerprint"] = digest(layout)
     return GeometryBundle(tuple(definitions), tuple(instances)), layout

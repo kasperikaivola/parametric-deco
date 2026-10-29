@@ -54,7 +54,7 @@ def test_creature_assembly_checks_real_parts_and_root_hardware():
     assert verify_creature(result.assembly).digital_valid
     assert len(result.assembly.mounting_grid) == 10
     assert len(result.assembly.composition["modules"]) == 5
-    assert result.assembly.composition["family"] == "creature-organism-v2"
+    assert result.assembly.composition["family"] == "creature-organism-v3"
     assert len(result.assembly.composition["removal_order"]) == 5
     assert result.assembly.composition["eye_aperture_area_mm2"] > 3000
     assert {d.thickness_mm for d in result.assembly.definitions} == {6}
@@ -192,8 +192,8 @@ def test_organism_transverse_ribs_have_real_slots_keys_and_bearing():
     a = result.assembly
     blades = [i for i in a.instances if i.role == "blade"]
     assert len(blades) == 24
-    assert a.composition["family"] == "creature-organism-v2"
-    assert len(a.composition["cavity_areas_mm2"]) == 6
+    assert a.composition["family"] == "creature-organism-v3"
+    assert len(a.composition["clear_aperture_probe_areas_mm2"]) == 6
     by_id = {i.instance_id: i for i in a.instances}
     for m in a.composition["modules"]:
         cap = by_id[m["cap_id"]]

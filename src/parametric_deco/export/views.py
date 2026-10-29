@@ -53,7 +53,7 @@ def render_views(assembly, out_dir):
     font = ImageFont.load_default(size=22)
     modules = sorted({i.module_id for i in assembly.instances if i.role != "backplate"})
     creature = bool(
-        assembly.composition and assembly.composition.get("family") == "creature-organism-v2"
+        assembly.composition and assembly.composition.get("family") == "creature-organism-v3"
     )
     section_module = "head" if creature else modules[0] if modules else None
     views = ("front", "oblique", "side", "exploded", "joint-section")

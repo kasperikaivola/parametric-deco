@@ -95,6 +95,15 @@ class RadialWeave:
 
 @dataclass(frozen=True)
 class CreatureMask:
+    limb_count: int = 4
+    cavity_count: int = 6
+    ribs_per_limb: int = 6
+    shell_layers: int = 6
+    limb_layers: int = 4
+    limb_reach: float = 1.0
+    limb_width: float = 1.0
+    rib_height_mm: float = 65.0
+    asymmetry: float = 0.08
     scale: float = 1.0
     curl: float = 1.0
     posture: str = "rest"
@@ -144,8 +153,29 @@ def validate_config(c):
         creature = c.creature
         if c.composition is not None:
             bad("creature", "select only one composition family")
-        for field in ("scale", "curl"):
-            numeric("creature." + field, getattr(creature, field))
+        count_ranges = {
+            "limb_count": (2, 6),
+            "cavity_count": (3, 8),
+            "ribs_per_limb": (3, 7),
+            "shell_layers": (3, 6),
+            "limb_layers": (3, 5),
+        }
+        for field, (lo, hi) in count_ranges.items():
+            value = getattr(creature, field)
+            if type(value) is not int or not lo <= value <= hi:
+                bad("creature." + field, f"integer {lo}..{hi} required")
+        shape_ranges = {
+            "scale": (0.9, 1),
+            "curl": (0.8, 1.2),
+            "limb_reach": (0.85, 1.05),
+            "limb_width": (0.9, 1.1),
+            "rib_height_mm": (45, 80),
+            "asymmetry": (0, 0.15),
+        }
+        for field, (lo, hi) in shape_ranges.items():
+            value = getattr(creature, field)
+            if numeric("creature." + field, value, False) and not lo <= value <= hi:
+                bad("creature." + field, f"range {lo}..{hi} required")
         if issues:
             return ValidationReport(tuple(issues))
         if not 0.9 <= creature.scale <= 1 or not 0.8 <= creature.curl <= 1.2:
@@ -154,7 +184,7 @@ def validate_config(c):
             bad("creature.posture", "use rest or raised_crown")
         required = (
             c.mounting.rear_clearance_mm
-            + 28 * c.material.measured_mm
+            + (18 + 2 * (creature.shell_layers - 1)) * c.material.measured_mm
             + c.mounting.hardware_outward_mm
         )
         if c.envelope.depth_mm < required:

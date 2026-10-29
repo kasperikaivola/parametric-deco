@@ -1,10 +1,10 @@
-# Ambiguous organism — candidate assembly, family v2
+# Ambiguous organism — candidate assembly, family v3
 
 Physical fit, strength, cantilever stiffness, hardware, finishing and handling:
 NOT RUN. Prototype one complete rib/tab/key/clip joint and one root stack first.
 The generic fit coupon checks stock slot width only, not these whole joints.
 
-All wood uses one measured thickness t (6 mm initially). Five modules use armour
+All wood uses one measured thickness t (6 mm initially). The central shell and configured limb modules use armour
 plates, two alignment webs, cut-plywood root spacer rings and two root bolts each.
 Levels in assembly.json are multiples of t above the backing front. Root spacers
 fill every unoccupied level, making continuous compression columns to the cap.
@@ -14,14 +14,16 @@ fastener, washer or torque specifications.
 
 ## Transverse ribs and retaining keys
 
-There are 24 unique shaped transverse ribs: seven on each crown and five on each
-lower hook. Each has a 28 mm wide foot through a closed cap slot (clearance added
+The number of shaped transverse ribs is limb_count × ribs_per_limb. Read the
+actual blade_joints and IDs in assembly.json; no fixed pair or fin count is added.
+Each rib has a 28 mm wide foot through a closed cap slot (clearance added
 only to the slot). Its shoulders bear on the cap front. An individual horizontal
 plywood key passes through the foot's 10 mm by t window. Key width is 10 mm; a
 wider 18 mm head stops passage through the window. The far end has a 2.5 mm hole
 for a REQUIRED positive split-pin/clip stop. Do not rely on key friction alone.
 
-Select and prototype 24 suitable clips/pins. Their supplied bounding envelopes
+Select and prototype one suitable positive clip/pin for EVERY retaining key.
+The exact quantity is composition.retainer_clip_requirement.quantity. Their supplied bounding envelopes
 are clearance proxies, NOT selected or fully modelled fasteners. Clip length,
 head/tail shape, installation, security and tool access are NOT RUN. Nominal
 proxy length is 2t with the clip positioned below the cap; confirm the real clip
@@ -62,9 +64,9 @@ identification aids. No physical load, wear or handling tests have been performe
 
 ## Inventory and projection
 
-Family creature-organism-v2 requires NEW CUTS compared with creature-mask-v1.
+Family creature-organism-v3 requires NEW CUTS compared with all v1/v2 inventories.
 Do not reuse the old inventory merely because filenames or module IDs match.
-Within v2, rest and raised_crown use the SAME manufactured inventory: move each
+Within v3, rest and raised_crown use the SAME manufactured inventory: move each
 complete crown by its prescribed grid offset. All ribs, keys and clips move with
 that module. Unique plates and ribs do not interchange across stations or sides.
 Only identical definitions/revisions, including retaining keys/spacer rings and

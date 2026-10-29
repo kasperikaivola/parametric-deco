@@ -78,6 +78,19 @@ def main():
                 ],
             ]
         )
+        for name in ("creature-alien-two", "creature-alien-six"):
+            commands.extend(
+                [
+                    ["build", "examples/" + name + ".json", "--out", "build/" + name],
+                    [
+                        "visuals",
+                        "build/" + name,
+                        "--out",
+                        "build/" + name + "-visuals",
+                        "--visible-only",
+                    ],
+                ]
+            )
         for args in commands:
             print("RUN: parametric-deco " + " ".join(args), flush=True)
             result = subprocess.run(

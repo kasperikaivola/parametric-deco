@@ -1,11 +1,14 @@
 """Coarse contour/depth study: real planar profiles, no fabricated joinery claims."""
 
 from pathlib import Path
+import sys
+from parametric_deco.config import load_config
 import numpy as np
 from shapely.geometry import MultiPoint
 from PIL import Image, ImageDraw, ImageFont
 from parametric_deco.geometry.creature_profiles import (
     profiles,
+    module_roots,
     backing_outline,
     rib_stations,
     organic,
@@ -13,12 +16,18 @@ from parametric_deco.geometry.creature_profiles import (
 from parametric_deco.model import Assembly, PartDefinition, PartInstance
 from parametric_deco.export.views import render_views
 
-out = Path("docs/implementation/images/creature-study")
+settings = load_config(
+    Path(sys.argv[1] if len(sys.argv) > 1 else "examples/creature-mask.json")
+).creature
+out = Path(sys.argv[2] if len(sys.argv) > 2 else "docs/implementation/images/creature-study")
 out.mkdir(parents=True, exist_ok=True)
 defs = []
 instances = []
 shapes = []
-for name, layers in {"backplate": [backing_outline()], **profiles()}.items():
+for name, layers in {
+    "backplate": [backing_outline(settings=settings)],
+    **profiles(settings=settings),
+}.items():
     for j, p in enumerate(layers):
         z = 10 if name == "backplate" else 100 + 12 * j if name == "head" else 16 + 18 * j
         d = PartDefinition.from_polygon(
@@ -36,9 +45,9 @@ for name, layers in {"backplate": [backing_outline()], **profiles()}.items():
             )
         )
         shapes.append((z, p, name, j))
-for name in ("crown-left", "crown-right", "jaw-left", "jaw-right"):
-    cap_z = 94 if name.startswith("crown") else 76
-    for j, (center, normal, width, height) in enumerate(rib_stations(name)):
+for name in list(module_roots(settings))[1:]:
+    cap_z = 16 + (3 * (settings.limb_layers - 1) + 1) * 6
+    for j, (center, normal, width, height) in enumerate(rib_stations(name, settings=settings)):
         poly = organic(
             [
                 (-width / 2, 6),
