@@ -62,7 +62,35 @@ parametric-deco reconfigure examples/creature-mask-raised.json --inventory build
 parametric-deco visuals build/creature-mask --out build/creature-mask-visuals --visible-only
 ```
 
-![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png)
+### Inspect the 3D structure
+
+These images come from the actual CAD. The oblique view shows the stacked armour
+and stand-off from the backing; the exploded view separates the plates and caps
+for inspection (the offsets are illustrative, not assembly motion).
+
+| Front silhouette | Oblique: depth and layers |
+| --- | --- |
+| ![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png) | ![Creature mask CAD oblique](docs/implementation/images/creature-mask/creature-mask-oblique.png) |
+
+| Side: plate spacing | Exploded: internal structure |
+| --- | --- |
+| ![Creature mask CAD side](docs/implementation/images/creature-mask/creature-mask-side.png) | ![Creature mask CAD exploded](docs/implementation/images/creature-mask/creature-mask-exploded.png) |
+
+For a **live rotatable view**, build the example using the command above, then run:
+
+```sh
+parametric-deco preview build/creature-mask
+```
+
+Open **http://127.0.0.1:8765/preview/** in your browser. Drag to rotate, scroll to
+zoom, and click a part to identify it. Use **Explode** to separate the layers,
+uncheck **Backplate** to inspect the webs and spacers, or expand **Part visibility**
+to hide individual parts. **Front**, **Side** and **Perspective** reset the angle.
+Stop the local server with Ctrl+C. The viewer is bundled with each build and needs
+no external JavaScript service; GitHub's README itself cannot run it.
+
+You can also open the generated `build/creature-mask/assembly.glb` in a GLB-capable
+3D viewer. Hardware in the browser preview is a simplified clearance envelope.
 
 ## Validation boundary
 
