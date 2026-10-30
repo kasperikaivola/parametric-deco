@@ -4,6 +4,21 @@ import numpy as np
 from parametric_deco.export.views import project_vertices
 
 
+def test_crossing_triangles_use_pixel_depth_regardless_of_draw_order():
+    from parametric_deco.export.views import rasterize_triangles
+
+    xy = np.array([[2., 2.], [30., 2.], [2., 30.]])
+    red = (xy, np.array([0., 28., 0.]), (255, 0, 0))
+    green = (xy, np.array([14., 14., 14.]), (0, 255, 0))
+    # Each triangle is in front in part of their shared screen footprint.
+    forward = rasterize_triangles((32, 32), (red, green))
+    reverse = rasterize_triangles((32, 32), (green, red))
+    assert np.array_equal(forward, reverse)
+    assert tuple(forward[5, 5]) == (0, 255, 0)
+    assert tuple(forward[5, 23]) == (255, 0, 0)
+    assert tuple(forward[31, 31]) == (18, 21, 27)
+
+
 def test_shared_camera_axes_preserve_depth_and_front_orientation():
     vertices = np.array([[0., 0, 0], [100, 0, 0], [0, 100, 0], [0, 0, 100]])
     assert np.array_equal(project_vertices(vertices, 'front'), vertices)

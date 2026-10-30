@@ -1,0 +1,295 @@
+{
+  "laminar": {
+    "assembly_sha256": "85b5e7792142ca6185c7b81a327b8604da3000e2433830a55ad555f48f2f8f80",
+    "config_hash": "e7c476fb70a3fea05cb498624dbb3ca71c38aaf7b9ec297e1a67058f5c2c26b9",
+    "example": "examples/organism-low.json",
+    "export_directory": "build/gallery/organism-low",
+    "images_sha256": {
+      "front": "66b31cef35078f4108ffc27a34587e5180ccabe9acf7e4c89b70a8f0c222b3c7",
+      "three-quarter": "61e0f97277e8a72b54ab78ab16c6f19ebaae76570e8530e5225700157e63990a"
+    },
+    "instances": 19,
+    "non_board_bounds_mm": [
+      [
+        -498.00000000000006,
+        -498.0,
+        10.0
+      ],
+      [
+        498.0000000000001,
+        497.99999999999994,
+        177.8
+      ]
+    ],
+    "non_board_center_mm": [
+      2.842170943040401e-14,
+      -2.842170943040401e-14,
+      93.9
+    ],
+    "non_board_cut_fingerprints_hash": "790f8fc325bcd558215b10675e977835efb67dbb8e408acf24cdac37cda1af08",
+    "placement_offset_mm": null,
+    "rotation_deg": null,
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "primary-0: remove primary-1, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-0",
+            "primary-1",
+            "primary-5"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "primary-1: remove primary-2, primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-1",
+            "primary-2",
+            "primary-5"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "primary-2: remove primary-3 first (sampled +Z path)",
+          "part_ids": [
+            "primary-2",
+            "primary-3"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "primary-4: remove primary-5 first (sampled +Z path)",
+          "part_ids": [
+            "primary-4",
+            "primary-5"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    },
+    "vertical_board_margins_mm": {
+      "bottom": 1.9999999999999432,
+      "top": 2.0
+    },
+    "view_assembly_sha256": {
+      "front": "85b5e7792142ca6185c7b81a327b8604da3000e2433830a55ad555f48f2f8f80",
+      "three-quarter": "85b5e7792142ca6185c7b81a327b8604da3000e2433830a55ad555f48f2f8f80"
+    }
+  },
+  "layered-creature": {
+    "assembly_sha256": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36",
+    "config_hash": "725960dab14d0ddf2a2ca6b850aa9785933f2b9510f8741387f8aefc701b92ee",
+    "example": "examples/creature-alien-six.json",
+    "export_directory": "build/gallery/creature-alien-six",
+    "images_sha256": {
+      "front": "4460df43030dda27a1eec9e5cce1f922bad6550d191a1bfd0dfa73b2e425b6fc",
+      "three-quarter": "19bbd72c2ce739446a5f86015338d3a4cf3d749fb16514d9080c2a6daf862643"
+    },
+    "instances": 204,
+    "non_board_bounds_mm": [
+      [
+        -427.9464894625936,
+        -353.3342873551417,
+        16.0
+      ],
+      [
+        438.90234592742155,
+        350.8101851851852,
+        166.0
+      ]
+    ],
+    "non_board_center_mm": [
+      5.477928232413973,
+      -1.2620510849782534,
+      91.0
+    ],
+    "non_board_cut_fingerprints_hash": "3f02eb1b05b2e81edbacf1f128e33e7fd670576f608293f6441c7f26a2e19498",
+    "placement_offset_mm": [
+      0,
+      100
+    ],
+    "rotation_deg": null,
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "feeler-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "feeler-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "feeler-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "feeler-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    },
+    "vertical_board_margins_mm": {
+      "bottom": 146.66571264485822,
+      "top": 149.18981481481472
+    },
+    "view_assembly_sha256": {
+      "front": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36",
+      "three-quarter": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36"
+    }
+  },
+  "radial-weave": {
+    "assembly_sha256": "ca6561b6f9adb6e44034f78330344328716486c58cb3c1e52a20b56b9fb83237",
+    "config_hash": "62c7bc277ac0e1314e2ba4839ff158776886932c8eca8e37b024302260872e7a",
+    "example": "examples/radial-weave.json",
+    "export_directory": "build/gallery/radial-weave",
+    "images_sha256": {
+      "front": "a802645029892d8aa2b0a290082bd567d384ceb947e501d3a77e0cb120ee64a1",
+      "three-quarter": "88a1659c7a0dea9e4fec737f85f12838ad382d8be501e79a519eaa19b7d6528d"
+    },
+    "instances": 145,
+    "non_board_bounds_mm": [
+      [
+        -397.52914793550826,
+        -376.20823458589814,
+        16.0
+      ],
+      [
+        397.52914793550826,
+        376.20823458589814,
+        174.0
+      ]
+    ],
+    "non_board_center_mm": [
+      0.0,
+      0.0,
+      95.0
+    ],
+    "non_board_cut_fingerprints_hash": "8e2867b4737108662f716903c9f5a57d606908d9d5d09a742441b195a6f336ce",
+    "placement_offset_mm": null,
+    "rotation_deg": 90,
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "a1: remove b1 first (sampled +Z path)",
+          "part_ids": [
+            "a1",
+            "b1"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "a3: remove b3 first (sampled +Z path)",
+          "part_ids": [
+            "a3",
+            "b3"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "a5: remove b5 first (sampled +Z path)",
+          "part_ids": [
+            "a5",
+            "b5"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "b0: remove a0 first (sampled +Z path)",
+          "part_ids": [
+            "b0",
+            "a0"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "b2: remove a2 first (sampled +Z path)",
+          "part_ids": [
+            "b2",
+            "a2"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "b4: remove a4 first (sampled +Z path)",
+          "part_ids": [
+            "b4",
+            "a4"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    },
+    "vertical_board_margins_mm": {
+      "bottom": 123.7917654141018,
+      "top": 123.7917654141018
+    },
+    "view_assembly_sha256": {
+      "front": "ca6561b6f9adb6e44034f78330344328716486c58cb3c1e52a20b56b9fb83237",
+      "three-quarter": "ca6561b6f9adb6e44034f78330344328716486c58cb3c1e52a20b56b9fb83237"
+    }
+  }
+}

@@ -28,3 +28,8 @@ Actual CAD imagery is in the [design guide](../design.md). Existing generated
 [laminar](flow-organism-evidence.json), [creature](creature-mask-evidence.json) and
 [radial](radial-weave-evidence.json) evidence describes the generated geometry at its recorded revision, not
 physical/host approval. Rebuild outputs to inspect a current request.
+
+The [current gallery evidence](gallery-evidence.json) records shared front/three-quarter
+assembly provenance for the centered creature and 90° radial example. The older
+radial family evidence records its original 0°/180° configurations; it is a
+historical snapshot, not the current gallery's 90°/270° configurations.

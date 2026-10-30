@@ -89,7 +89,7 @@ class RadialWeave:
     opening_radius_mm: float = 180
     lobes: int = 3
     ribs_per_module: int = 9
-    rotation_deg: float = 0
+    rotation_deg: float = 90
     rib_permutation: tuple = (0, 1, 2, 3, 4, 5, 6, 7, 8)
 
 

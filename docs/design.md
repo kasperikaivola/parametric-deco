@@ -146,7 +146,7 @@ layered relief, not presented as the simplest build.
 | `opening_radius_mm` | 180 / positive, ≤ radius − amplitude − 52 | Backing aperture clearing manufactured inner fins/root pads |
 | `lobes` | 3 only | Fixed six-crossing topology; other counts fail |
 | `ribs_per_module` | 9 only | Fixed stations/joint topology; other counts fail |
-| `rotation_deg` | 0 / finite | Arrangement rotation; compatible roots must still match saved grid holes |
+| `rotation_deg` | 90 / finite | New cuts choose roots at this orientation; saved arrangements require compatible grid holes |
 | `rib_permutation` | [0,1,2,3,4,5,6,7,8] | Integer permutation of central stations 2–6 only; 0,1,7,8 stay fixed |
 
 Twelve curved modules contain 108 fins, 24 spines and twelve capture rails. Default
@@ -215,7 +215,7 @@ These are actual manufactured CAD surfaces generated from three labeled example
 configs using current cuts. Each style has exactly the same front and three-quarter cameras. The
 front view looks straight down −Z onto the XY board plane (+Z toward the viewer): no perspective or foreshortening, and changing relief Z cannot move XY pixels. The front camera was already straight-on; the formerly narrow laminar framework made its plane hard to read. All styles now have visibly present manufactured polygon boards. The shared orthographic renderer uses yaw −0.48 radians and pitch 0.30 radians for
 three-quarter, the same plywood palette, light, background and 1100 × 900 canvas.
-Each artwork is centered and fits a 980 × 710 mm-relative pixel region: comparable
+Each complete assembly is framed within a 980 × 710 mm-relative pixel region: comparable
 framing, not a claim of equal physical scale. Hardware is omitted in these PNGs;
 the orbit viewer shows labeled conservative hardware envelopes.
 
@@ -224,9 +224,27 @@ the orbit viewer shows labeled conservative hardware envelopes.
 | Front | ![](implementation/images/gallery/laminar/front.png) | ![](implementation/images/gallery/layered-creature/front.png) | ![](implementation/images/gallery/radial-weave/front.png) |
 | Three-quarter | ![](implementation/images/gallery/laminar/three-quarter.png) | ![](implementation/images/gallery/layered-creature/three-quarter.png) | ![](implementation/images/gallery/radial-weave/three-quarter.png) |
 
+The creature's rest anatomy is translated to the nearest equivalent pair of
+staggered grid rows: the six-limb example moves +100 mm in Y, leaving its actual
+wood-bound center at −1.262 mm (2.524 mm difference between top/bottom margins).
+Its board through-channels, mounts, hardware and aperture checks follow that same
+placement. Non-board cut profiles stay reusable; saved inventories retain their
+recorded placement. Radial defaults to 90° so its former right-side lobe lies
+vertically. New radial cuts select real root pairs on the grid at that angle;
+a quarter turn of existing drilled parts is not generally possible on a staggered
+grid. The reconfigured example turns the 90° arrangement to 270° with the same cuts.
+
+Both gallery views and the exported GLB are generated from the same saved
+`assembly.json`. [Current gallery evidence](implementation/gallery-evidence.json)
+records the shared assembly hash, image hashes, actual wood bounds and validation.
+Angled views use per-pixel surface depth for correct occlusion; the true front
+camera remains unchanged.
+
 Reproduce these six images from the repository root after installation:
-`python scripts/design_gallery.py`. It validates and renders only these three
-representatives, without generating six laminar example export bundles.
+`python scripts/design_gallery.py`. It validates these three representatives, saves assembly/inventory/config/validation
+and GLB/scene exports under `build/gallery/<example>`, then renders the saved
+assembly and writes gallery evidence. The older family-specific evidence files
+remain snapshots of their recorded configurations.
 
 For manufacturing inspection, each build exports front, side, oblique,
 three-quarter, exploded and joint-section views. The offline viewer supports

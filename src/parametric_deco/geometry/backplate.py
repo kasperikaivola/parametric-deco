@@ -30,13 +30,15 @@ def backplate_polygon(config):
     elif config.style == "layered-creature":
         from shapely import affinity
         from shapely.ops import unary_union
-        from .creature_profiles import cavity_voids, central_void
+        from .creature_profiles import cavity_voids, central_void, placement_offset
 
         # These are real through channels, also cut in the armour above the board.
         voids = [*cavity_voids(config.parameters, 1.06),
                  affinity.scale(central_void(), xfact=config.parameters.scale,
                                 yfact=config.parameters.scale, origin=(0, 0))]
-        polygon = polygon.difference(unary_union(voids))
+        dx, dy = placement_offset(config)
+        polygon = polygon.difference(unary_union([
+            affinity.translate(v, xoff=dx, yoff=dy) for v in voids]))
     return polygon
 
 
@@ -66,7 +68,40 @@ def mounting_holes(config):
     return tuple(result)
 
 
-def match_root_pattern(config, positions, tolerance_mm=1e-6):
+def match_root_pattern(config, positions, tolerance_mm=1e-6, *, backing=None):
+    if backing is not None:
+        # Saved cuts are authoritative. Regenerating a board from current layout
+        # defaults can invent obstructions or holes absent from manufactured stock.
+        g = config.grid
+        polygon = backing.polygon
+        bores = [Polygon(ring) for ring in backing.holes]
+        bores = [hole for hole in bores
+                 if abs(hole.bounds[2] - hole.bounds[0] - g.hole_diameter_mm) < tolerance_mm
+                 and abs(hole.bounds[3] - hole.bounds[1] - g.hole_diameter_mm) < tolerance_mm]
+        matched = []
+        for x, y in positions:
+            row = round((y - g.origin_y_mm) / g.pitch_y_mm)
+            shift = g.origin_x_mm + (row % 2) * g.offset_mm
+            col = round((x - shift) / g.pitch_x_mm)
+            h = MountPoint(row, col, shift + col * g.pitch_x_mm,
+                           g.origin_y_mm + row * g.pitch_y_mm, g.hole_diameter_mm)
+            point = Point(x, y)
+            expected_bore = point.buffer(g.hole_diameter_mm / 2, quad_segs=8)
+            bore = next((hole for hole in bores if hole.hausdorff_distance(expected_bore)
+                         <= tolerance_mm), None)
+            required_radius = max(g.edge_margin_mm + g.hole_diameter_mm / 2,
+                                  config.mounting.washer_radius_mm)
+            if (math.hypot(h.x_mm - x, h.y_mm - y) > tolerance_mm
+                    or bore is None
+                    or not bore.buffer(tolerance_mm).covers(
+                        point.buffer(g.hole_diameter_mm / 2 - 0.05, quad_segs=16))
+                    or not polygon.union(bore).buffer(tolerance_mm).covers(
+                        point.buffer(required_radius, quad_segs=24))):
+                raise ValueError(f"root mount ({x:g}, {y:g}) has no saved grid bore/washer margin")
+            matched.append(h)
+        if len({h.point_id for h in matched}) != len(matched):
+            raise ValueError("root mount pattern assigns a hole twice")
+        return tuple(matched)
     holes = mounting_holes(config)
     polygon = backplate_polygon(config)
     matched = []
