@@ -38,11 +38,11 @@ The order of rib_instance_ids matches station_indices. Explicit rib assignments
 take precedence over rib_order; no part may be assigned twice. Assigning parts
 requires reconfigure/Inventory, not generate-new mode.
 
-The example uses these fields. For legacy configurations with no assignments,
+The example uses these fields. For configurations without explicit assignments,
 parts are selected from the reference module by role and deterministic definition
-order, with rib_order indexing that pool. This compatibility convenience is not
-needed for explicit assignments and never parses physical ID suffixes. New module
-names require complete explicit assignments. Local poses are reconstructed from
+order, with rib_order indexing that pool. Role-based selection never parses
+physical ID suffixes. New module names require complete explicit assignments.
+Local poses are reconstructed from
 manufactured paired slots and closure geometry, not the previous world poses or
 current generator thickness/spacing. A short rib is rejected if it cannot contact
 the manufactured closure plane; loaded assemblies also check +1 mm withdrawal

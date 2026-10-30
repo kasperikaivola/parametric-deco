@@ -191,8 +191,9 @@ placements/physical assignments to rearrange manufactured parts.
 
 Public generation schema is now **2**; schema-1 requests and old top-level
 `organism`, `creature`, `composition`, `module` and `placements` fail with a rewrite
-instruction. To rewrite a request, select laminar/creature/radial respectively and
-move that object's fields into `parameters`; for rib study move `module` into
+instruction. To rewrite a request, select `laminar`, `layered-creature`, or
+`radial-weave` respectively, then move that object's fields into `parameters`;
+for rib study move `module` into
 `parameters.recipe` and `placements` into `parameters.placements`. Then validate
 as a new request. No automatic historical generation migration is promised.
 
