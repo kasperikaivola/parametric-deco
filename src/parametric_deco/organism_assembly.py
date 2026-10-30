@@ -5,11 +5,12 @@ import json
 import math
 import numpy as np
 from shapely import affinity
-from shapely.geometry import Point, Polygon, box, LineString
+from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
 from .config import validate_config
 from .cad import overlap_volume
 from .geometry.organism import anatomy
+from .geometry.backplate import backplate_polygon
 from .model import (
     Assembly,
     BuildResult,
@@ -31,6 +32,8 @@ def signature(c):
     return digest(
         {
             "family": FAMILY,
+            "backing_design": "common-polygon-v1",
+            "backplate": asdict(c.backplate),
             "organism": asdict(c.parameters),
             "size": asdict(c.envelope),
             "stock_mm": c.material.measured_mm,
@@ -145,7 +148,7 @@ def manufacture(c):
     fit = c.material.clearance_mm
     base = c.mounting.rear_clearance_mm + t
     definitions, instances, modules, used = [], [], [], []
-    backing_regions, backing_cuts = [], []
+    backing_cuts = []
 
     def add(name, shape, pose, module, role, interfaces=()):
         part = PartDefinition.from_polygon("flow-" + name, shape, t, interfaces, kind=role)
@@ -158,16 +161,6 @@ def manufacture(c):
         pose, slots, holes, feet, bearings, corridor = support_layout(lobe, lobes, c, used)
         used.append(corridor)
         center = np.array(pose)[:2, 3]
-        # Thin but continuous backing frame follows the anatomical material.
-        rail_path = lobe.path if lobe.backing_path is None else lobe.backing_path
-        rail = LineString(rail_path[10:-10]).buffer(14, quad_segs=8)
-        backing_regions.append(rail)
-        from shapely.ops import nearest_points
-
-        nearest = nearest_points(Point(center), rail)[1]
-        backing_regions.append(LineString([Point(center), nearest]).buffer(14, quad_segs=8))
-        backing_regions.extend(b.buffer(10) for b in bearings)
-        backing_regions.extend(f.buffer(12) for f in feet)
         backing_cuts.extend([*slots, *holes])
         cap = lobe.shape.difference(unary_union([*slots, *holes]))
         neck_check(lobe.shape, 10)
@@ -220,20 +213,9 @@ def manufacture(c):
                 "minimum_cut_ligament_mm": ligament,
             }
         )
-    # A narrow flowing framework, joined at nearest points, avoids a central slab.
-    backing = unary_union(backing_regions)
-    while backing.geom_type != "Polygon":
-        from shapely.ops import nearest_points
-
-        pieces = list(backing.geoms)
-        a, b = min(
-            ((a, b) for i, a in enumerate(pieces) for b in pieces[i + 1 :]),
-            key=lambda pair: pair[0].distance(pair[1]),
-        )
-        p, q = nearest_points(a, b)
-        backing = backing.union(LineString([p, q]).buffer(14, quad_segs=8))
-    # Add a fixed 4 mm structural allowance to both rail edges, independent of size.
-    backing = backing.buffer(4, quad_segs=8)
+    # A manufactured common polygon board with the actual trestle seats and bores.
+    # No decorative overlay or extra lattice holes near the closed support slots.
+    backing = backplate_polygon(c)
     guard_slots(
         backing,
         [Polygon(m["slot_polygons"][j]) for m in modules for j in (0, 1)],

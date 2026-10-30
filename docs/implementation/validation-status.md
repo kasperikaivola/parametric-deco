@@ -26,5 +26,5 @@ suite results belong to the tested commit/CI run rather than a historical ledger
 
 Actual CAD imagery is in the [design guide](../design.md). Existing generated
 [laminar](flow-organism-evidence.json), [creature](creature-mask-evidence.json) and
-[radial](radial-weave-evidence.json) evidence describes unchanged geometry, not
-new physical/host approval. Rebuild outputs to inspect a current request.
+[radial](radial-weave-evidence.json) evidence describes the generated geometry at its recorded revision, not
+physical/host approval. Rebuild outputs to inspect a current request.

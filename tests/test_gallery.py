@@ -24,3 +24,46 @@ def test_radial_gets_shared_three_quarter_view(tmp_path):
     assembly = assemble(config_from_dict({'style':'radial-weave'})).assembly
     render_views(assembly, tmp_path, views=('front', 'three-quarter'))
     assert {p.name for p in tmp_path.iterdir()} == {'front.png', 'three-quarter.png'}
+
+
+def test_front_raster_has_unskewed_board_and_foreground_independent_of_z(tmp_path):
+    from dataclasses import replace
+    from PIL import Image
+    from shapely.geometry import box
+    from parametric_deco.export.views import render_views
+    from parametric_deco.model import Assembly, IDENTITY, PartDefinition, PartInstance
+
+    board = PartDefinition.from_polygon('board', box(-100, -50, 100, 50), 6,
+                                        kind='backplate')
+    cap = PartDefinition.from_polygon('cap', box(20, 0, 40, 20), 6, kind='armour')
+
+    def raised(z):
+        pose = np.array(IDENTITY)
+        pose[2, 3] = z
+        return PartInstance('cap', cap.definition_id, cap.revision,
+                            tuple(map(tuple, pose)), 'module', 'armour')
+
+    # Intentionally put the board last: front-face order must follow +Z depth.
+    a = Assembly((board, cap), (raised(30), PartInstance(
+        'board', board.definition_id, board.revision, IDENTITY, 'backing', 'backplate')))
+    render_views(a, tmp_path / 'near', views=('front', 'three-quarter'))
+    render_views(replace(a, instances=(raised(130), a.instances[1])), tmp_path / 'far',
+                 views=('front', 'three-quarter'))
+    front = np.array(Image.open(tmp_path / 'near/front.png'))
+    assert np.array_equal(front, np.array(Image.open(tmp_path / 'far/front.png')))
+    assert not np.array_equal(np.array(Image.open(tmp_path / 'near/three-quarter.png')),
+                              np.array(Image.open(tmp_path / 'far/three-quarter.png')))
+    # 200 x 100 board fills 980 x 490 pixels, with straight parallel screen edges.
+    background = (18, 21, 27)
+    for x in (100, 550, 1000):
+        assert tuple(front[218, x]) == background
+        assert tuple(front[225, x]) != background
+        assert tuple(front[705, x]) != background
+        assert tuple(front[712, x]) == background
+    for y in (250, 465, 680):
+        assert tuple(front[y, 58]) == background
+        assert tuple(front[y, 65]) != background
+        assert tuple(front[y, 1035]) != background
+        assert tuple(front[y, 1042]) == background
+    # Cap center at world (30,10) remains at (697,416) and occludes the board.
+    assert front[416, 697, 0] > front[416, 600, 0] * 2

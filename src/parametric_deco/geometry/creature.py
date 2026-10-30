@@ -17,8 +17,8 @@ from .backplate import generate_backplate, match_root_pattern
 
 
 def request_signature(c):
-    # Keep the exact v3 manufacturing identity across the public schema change.
-    # This is an identity adapter, never a migration of saved part geometry.
+    # Preserve the existing public-schema adapter, but explicitly distinguish the
+    # new common polygon board from previously manufactured anatomical backings.
     from ..config import ModuleRecipe, ModulePlacement
 
     values = c.to_dict()
@@ -30,6 +30,7 @@ def request_signature(c):
     values["module"] = asdict(ModuleRecipe())
     values["placements"] = [asdict(ModulePlacement())]
     values.pop("cutting_bed")
+    values["backing_design"] = "common-polygon-v1"
     return digest(values)
 
 

@@ -33,7 +33,7 @@ visible while you tune a design. Install with `python -m pip install -e ".[gui]"
 then run `parametric-deco gui` (or `parametric-deco-gui`).
 
 Same two orthographic cameras, materials and fit-to-frame policy for all three
-representatives; actual generated CAD, with hardware omitted in these images.
+representatives; actual generated CAD with manufactured polygon backplates. Front is straight onto the XY board plane from +Z; three-quarter shows the relief. Hardware is omitted in these images.
 
 | View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` |
 | --- | --- | --- | --- |
@@ -44,7 +44,7 @@ Build exports SVG cuts, quantities, fit coupon, scale check, immutable inventory
 identified GLB/JSON, offline viewer, inspection images, assembly instructions and
 validation report. `reconfigure CONFIG --inventory SAVED --out DIRECTORY` reuses
 manufactured cuts at supported placements. Changing geometry requires new cuts;
-old saved parts are never resized. The default laminar style supports identical
+old saved parts are never resized. Earlier laminar framework and creature anatomical-board inventories require new cuts for the common polygon board revision. The default laminar style supports identical
 inventory replay; creature posture, radial and rib-study arrangements offer
 bounded reuse. See the guide before choosing cuts.
 

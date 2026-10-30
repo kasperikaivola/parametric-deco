@@ -257,14 +257,14 @@ def test_determinism_and_all_new_cut_requests():
         assemble(replace(c, material=replace(c.material, measured_mm=5.8)), inv)
 
 
-def test_preexisting_creature_v3_manufacturing_signature_is_preserved():
+def test_previous_anatomical_creature_request_requires_new_polygon_board_cuts():
     from pathlib import Path
     from parametric_deco.config import load_config
     from parametric_deco.geometry.creature import request_signature
 
     c = load_config(Path("examples/creature-alien-two.json"))
     assert (
-        request_signature(c) == "2b11c951b049aef3a6d13459b0bf0250860fbbfeca05361c1f9a93e80c77ebf1"
+        request_signature(c) != "2b11c951b049aef3a6d13459b0bf0250860fbbfeca05361c1f9a93e80c77ebf1"
     )
 
 

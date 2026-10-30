@@ -10,6 +10,11 @@ from ..cad import mesh_for
 
 
 def project_vertices(vertices, view):
+    """Orthographic coordinates; front is XY, viewed from +Z toward the board.
+
+    The third coordinate is painter depth: larger values render in front. In a
+    true front view, changing Z alone must never move a point on the image.
+    """
     if view == "front":
         return vertices[:, [0, 1, 2]]
     if view == "three-quarter":
@@ -158,7 +163,8 @@ def render_views(assembly, out_dir, views=None):
                     draw.line([tuple(p) for p in xy], fill=color, width=1)
                 else:
                     draw.polygon([tuple(p) for p in xy], fill=color)
-        draw.text((36, 26), "PARAMETRIC DECO / " + view.upper(), font=font, fill="#ece1cd")
+        label = "FRONT (XY / +Z TOWARD VIEWER)" if view == "front" else view.upper()
+        draw.text((36, 26), "PARAMETRIC DECO / " + label, font=font, fill="#ece1cd")
         draw.text(
             (36, 60),
             "Identified nominal geometry · physical/host checks NOT RUN",

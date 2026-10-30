@@ -68,7 +68,7 @@ once by laser software. Grade and finish are optional; no white paint is require
 | `envelope` | Laminar fits XY (2 mm boundary allowance) and generates actual relief for depth; XY 800–1400, aspect ratio 0.7–1.4, depth 120–240. For the other styles this is a containment budget, not a scale command: creature geometry uses its explicit scale/reach controls; radial uses millimetre radii; rib study uses recipe dimensions. Too small fails. |
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
 | `grid` | Pitch X/Y 50, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Staggered grid locates radial, creature and rib-study roots; laminar derives roots from anatomy and uses the bore diameter, not grid pitch. |
-| `backplate` | Regular polygon sides 8 and rotation 22.5° for radial and rib study. Creature and laminar derive their own outlines; these polygon fields do not shape them. |
+| `backplate` | Common envelope-fitted regular polygon for every style; sides 8 and rotation 22.5° by default. Laminar cuts its trestle seats/bores; creature retains through-eye/central channels and lattice; radial retains its central aperture. |
 | `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 50 (40–55) controls rib-study wings. Other styles derive root spacing. Hardware proxies are clearance envelopes. |
 | `cutting_bed` | Optional width/height and spacing (default 5). Conservative rectangular shelf placement; oversized parts fail rather than shrink. Null gives individual cuts. |
 
@@ -101,7 +101,7 @@ lobes; explicit overrides replace those defaults. Subdivision accumulates materi
 without changing the primary paths/layout; channels intentionally remove material.
 Low uses 19 plywood pieces; medium/high 37. Complexity describes anatomical detail,
 not assembly effort. Whorl/bilateral and anatomy phase give different focal layouts.
-Each plate sits on two slotted trestles and two root bolts. No spacer rings or
+Each plate sits on two slotted trestles and two root bolts above a manufactured polygon board. No spacer rings or
 individual rib retaining clips are required. Detached modules need a cradle.
 
 ## Layered-creature parameters
@@ -188,7 +188,7 @@ Changing style requires new cuts. For laminar, changing anatomy, complexity, siz
 stock or mounting requires new cuts; saved inventory supports identical replay.
 Creature permits `posture` changes on unchanged cuts; all manufacturing controls
 must match. Radial permits compatible rotation/fin permutation; radius, amplitude,
-stock/backing/mounting changes require new cuts. Rib study places actual saved
+stock/backing/mounting changes require new cuts. The common polygon boards replace laminar framework and creature anatomical boards, so inventories manufactured before this board revision require new cuts; no saved part is converted or resized. Backplate sides and rotation participate in the manufacturing request for both styles. Rib study places actual saved
 interfaces and profiles: its current recipe does not resize inventory, so use
 placements/physical assignments to rearrange manufactured parts.
 
@@ -200,18 +200,20 @@ for rib study move `module` into
 `parameters.recipe` and `placements` into `parameters.placements`. Then validate
 as a new request. No automatic historical generation migration is promised.
 
-Inventory schema and geometry identity remain unchanged: laminar-organism-v2,
-creature-organism-v3, radial-weave-v1 and existing rib definitions. The creature
-adapter preserves its previous manufacturing hash field set. New-schema replay
-uses saved cuts; it never regenerates stock or rewrites an old contour. Earlier
-rejected families still fail; semantic names are not geometry compatibility.
+Inventory serialization and family names remain laminar-organism-v2,
+creature-organism-v3, radial-weave-v1 and existing rib definitions. The common
+polygon board revision changes laminar/creature board fingerprints and adds an
+explicit board-design marker to their manufacturing requests. Their earlier
+board inventories require new cuts. Radial and rib-study cuts are unchanged.
+Replay uses saved cuts; it never regenerates stock or rewrites an old contour.
+Semantic family names alone are not geometry compatibility.
 `examples/inventory.json` is a manufactured fixture and is retained unchanged.
 
 ## Actual CAD gallery
 
 These are actual manufactured CAD surfaces generated from three labeled example
-configs. Each style has exactly the same front and three-quarter cameras. The
-shared orthographic renderer uses yaw −0.48 radians and pitch 0.30 radians for
+configs using current cuts. Each style has exactly the same front and three-quarter cameras. The
+front view looks straight down −Z onto the XY board plane (+Z toward the viewer): no perspective or foreshortening, and changing relief Z cannot move XY pixels. The front camera was already straight-on; the formerly narrow laminar framework made its plane hard to read. All styles now have visibly present manufactured polygon boards. The shared orthographic renderer uses yaw −0.48 radians and pitch 0.30 radians for
 three-quarter, the same plywood palette, light, background and 1100 × 900 canvas.
 Each artwork is centered and fits a 980 × 710 mm-relative pixel region: comparable
 framing, not a claim of equal physical scale. Hardware is omitted in these PNGs;
