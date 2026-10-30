@@ -51,6 +51,9 @@ Current geometry algorithms remain distinct adapters because they produce useful
 different topologies and joinery. This change does not claim new topology or
 certify artistic success from a numeric complexity score.
 
+For automatic CAD regeneration while editing all shared and style-specific controls,
+use the optional [Python desktop editor](implementation/desktop.md).
+
 ## Shared settings and dimensions
 
 All lengths use millimetres. Envelope defaults to 1000 × 1000 × 200 including
@@ -206,17 +209,22 @@ rejected families still fail; semantic names are not geometry compatibility.
 
 ## Actual CAD gallery
 
-These views are rendered from supported generated contours, not illustrative
-artwork. They remain accurate because this cleanup leaves geometry algorithms
-unchanged. Hardware in previews is simplified; image framing fits each artwork.
+These are actual manufactured CAD surfaces generated from three labeled example
+configs. Each style has exactly the same front and three-quarter cameras. The
+shared orthographic renderer uses yaw −0.48 radians and pitch 0.30 radians for
+three-quarter, the same plywood palette, light, background and 1100 × 900 canvas.
+Each artwork is centered and fits a 980 × 710 mm-relative pixel region: comparable
+framing, not a claim of equal physical scale. Hardware is omitted in these PNGs;
+the orbit viewer shows labeled conservative hardware envelopes.
 
-| Laminar low | Laminar bilateral | Laminar high |
-| --- | --- | --- |
-| ![](implementation/images/flow-organism/organism-low/three-quarter.png) | ![](implementation/images/flow-organism/organism-bilateral/three-quarter.png) | ![](implementation/images/flow-organism/organism-high/three-quarter.png) |
+| View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` |
+| --- | --- | --- | --- |
+| Front | ![](implementation/images/gallery/laminar/front.png) | ![](implementation/images/gallery/layered-creature/front.png) | ![](implementation/images/gallery/radial-weave/front.png) |
+| Three-quarter | ![](implementation/images/gallery/laminar/three-quarter.png) | ![](implementation/images/gallery/layered-creature/three-quarter.png) | ![](implementation/images/gallery/radial-weave/three-quarter.png) |
 
-| Creature two limbs | Creature six limbs | Radial weave |
-| --- | --- | --- |
-| ![](implementation/images/creature-mask/creature-alien-two-three-quarter.png) | ![](implementation/images/creature-mask/creature-alien-six-three-quarter.png) | ![](implementation/images/radial-weave-oblique.png) |
+Reproduce these six images from the repository root after installation:
+`python scripts/design_gallery.py`. It validates and renders only these three
+representatives, without generating six laminar example export bundles.
 
 For manufacturing inspection, each build exports front, side, oblique,
 three-quarter, exploded and joint-section views. The offline viewer supports

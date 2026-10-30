@@ -27,9 +27,18 @@ Edit `style`, its `parameters`, and shared manufacturing settings in JSON. The
 [design guide](docs/design.md) covers every parameter, limits, curated examples,
 actual CAD gallery, schema-v2 rewrite instructions and inventory reuse.
 
-| Laminar (default) | Layered creature | Radial weave |
-| --- | --- | --- |
-| ![](docs/implementation/images/flow-organism/organism-low/three-quarter.png) | ![](docs/implementation/images/creature-mask/creature-alien-six-three-quarter.png) | ![](docs/implementation/images/radial-weave-oblique.png) |
+The optional [desktop editor](docs/implementation/desktop.md) exposes every
+parameter, regenerates validated CAD automatically, and keeps an orbitable preview
+visible while you tune a design. Install with `python -m pip install -e ".[gui]"`,
+then run `parametric-deco gui` (or `parametric-deco-gui`).
+
+Same two orthographic cameras, materials and fit-to-frame policy for all three
+representatives; actual generated CAD, with hardware omitted in these images.
+
+| View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` |
+| --- | --- | --- | --- |
+| Front | ![](docs/implementation/images/gallery/laminar/front.png) | ![](docs/implementation/images/gallery/layered-creature/front.png) | ![](docs/implementation/images/gallery/radial-weave/front.png) |
+| Three-quarter | ![](docs/implementation/images/gallery/laminar/three-quarter.png) | ![](docs/implementation/images/gallery/layered-creature/three-quarter.png) | ![](docs/implementation/images/gallery/radial-weave/three-quarter.png) |
 
 Build exports SVG cuts, quantities, fit coupon, scale check, immutable inventory,
 identified GLB/JSON, offline viewer, inspection images, assembly instructions and

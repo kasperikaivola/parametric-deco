@@ -33,7 +33,7 @@ def project_vertices(vertices, view):
     )
 
 
-def render_views(assembly, out_dir):
+def render_views(assembly, out_dir, views=None):
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     cached = {(d.definition_id, d.revision): mesh_for(d) for d in assembly.definitions}
@@ -60,9 +60,8 @@ def render_views(assembly, out_dir):
         and assembly.composition.get("family") in ("flow-organism-v1", "laminar-organism-v2")
     )
     section_module = "head" if creature else modules[0] if modules else None
-    views = ("front", "oblique", "side", "exploded", "joint-section")
-    if creature or flow:
-        views += ("three-quarter",)
+    if views is None:
+        views = ("front", "three-quarter", "oblique", "side", "exploded", "joint-section")
     for view in views:
         pieces = []
         for i in assembly.instances:
@@ -113,7 +112,7 @@ def render_views(assembly, out_dir):
                 )
                 color = tuple(int(c * shade) for c in colors.get(instance.role, colors["part"]))
                 triangles.append((projected[face, 2].mean(), xy, color, False))
-            if (creature or flow) and view == "front":
+            if view == "front":
                 part = assembly.definition_for(instance)
                 pose = np.array(instance.transform)
                 if abs(pose[2, 2] - 1) < 1e-9:
@@ -187,7 +186,7 @@ def render_views(assembly, out_dir):
             )
         image.save(out / f"{view}.png")
 
-    if creature:
+    if creature and "joint-section" in views:
         render_blade_section(assembly, cached, out)
 
 
