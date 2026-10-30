@@ -48,6 +48,84 @@ to physical size. Optional exterior/all-face or explicit selections are availabl
 
 ![Radial weave CAD oblique view](docs/implementation/images/radial-weave-oblique.png)
 
+## Laminar organism family (v2)
+
+The current [flow organism generator](docs/implementation/flow-organism.md) replaces
+this PR's repeated curl/loop study with divergent laminae, varied focal chambers
+and actual relief. Composition, complexity, requested millimetre sizes and style are
+separate controls. The low production study has 19 plywood pieces, without spacer
+rings or individual retaining clips; medium/high have 37. Digital examples cover
+800, 1000 and 1400 mm widths, three complexities and two different focal layouts.
+Physical and Wire/Arena validation remain NOT RUN.
+
+```sh
+parametric-deco build examples/organism-low.json --out build/organism-low
+parametric-deco preview build/organism-low
+python scripts/organism_examples.py
+```
+
+![Actual low flow organism CAD](docs/implementation/images/flow-organism/organism-low/three-quarter.png)
+
+## Legacy parametric alien studies
+
+
+The [alien family](docs/implementation/creature-mask.md) generates different decos
+from numeric controls. The default has **four total limbs**, sweeping sideways
+and folding down, plus six unequal cavities. Set `creature.limb_count` (2–6),
+`cavity_count` (3–8), `ribs_per_limb` (3–7), `shell_layers`, `limb_layers`,
+`limb_reach`, `limb_width`, `rib_height_mm`, `asymmetry`, `scale` and `curl` in JSON.
+See the [parameter table and limits](docs/implementation/creature-mask.md#parameters).
+These controls change actual laser-cut parts, modules and connections.
+
+Three supplied examples demonstrate **different cuts**, not inventory reuse:
+`creature-alien-two.json`, `creature-mask.json` (four limbs) and
+`creature-alien-six.json`. Family `creature-organism-v3` rejects earlier inventories.
+Within an unchanged recipe, rest/raised poses reuse all manufactured parts.
+The radial weave remains supported independently. Real clips, fits and strength
+still need prototyping; detached stacks require tray support and compression.
+
+```sh
+parametric-deco build examples/creature-mask.json --out build/creature-mask
+parametric-deco reconfigure examples/creature-mask-raised.json --inventory build/creature-mask/inventory.json --out build/creature-mask-raised
+parametric-deco visuals build/creature-mask --out build/creature-mask-visuals --visible-only
+parametric-deco build examples/creature-alien-two.json --out build/creature-alien-two
+parametric-deco build examples/creature-alien-six.json --out build/creature-alien-six
+```
+
+| Two-limb variation | Six-limb variation |
+| --- | --- |
+| ![Actual two-limb CAD](docs/implementation/images/creature-mask/creature-alien-two-three-quarter.png) | ![Actual six-limb CAD](docs/implementation/images/creature-mask/creature-alien-six-three-quarter.png) |
+
+### Inspect the 3D structure
+
+These images come from the actual CAD. The three-quarter view shows transverse ribs
+and stand-off from the backing; the exploded view separates lower plates from cap/rib subassemblies
+for inspection (the offsets are illustrative, not assembly motion).
+
+| Front silhouette | Three-quarter: depth and anatomy |
+| --- | --- |
+| ![Creature mask CAD front](docs/implementation/images/creature-mask/creature-mask-front.png) | ![Organism actual CAD three-quarter](docs/implementation/images/creature-mask/creature-mask-three-quarter.png) |
+
+| Side: plate spacing | Exploded: internal structure |
+| --- | --- |
+| ![Creature mask CAD side](docs/implementation/images/creature-mask/creature-mask-side.png) | ![Creature mask CAD exploded](docs/implementation/images/creature-mask/creature-mask-exploded.png) |
+
+For a **live rotatable view**, build the example using the command above, then run:
+
+```sh
+parametric-deco preview build/creature-mask
+```
+
+Open **http://127.0.0.1:8765/preview/** in your browser. Drag to rotate, scroll to
+zoom, and click a part to identify it. Use **Explode** to separate the layers,
+uncheck **Backplate** to inspect the webs and spacers, or expand **Part visibility**
+to hide individual parts. **Front**, **Side** and **Perspective** reset the angle.
+Stop the local server with Ctrl+C. The viewer is bundled with each build and needs
+no external JavaScript service; GitHub's README itself cannot run it.
+
+You can also open the generated `build/creature-mask/assembly.glb` in a GLB-capable
+3D viewer. Hardware in the browser preview is a simplified clearance envelope.
+
 ## Validation boundary
 
 This is a **software prototype and physical-test candidate**, not a load-rated

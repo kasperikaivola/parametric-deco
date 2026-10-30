@@ -23,6 +23,14 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
+    if config.organism is not None:
+        from .organism_assembly import assemble_organism
+
+        return assemble_organism(config, inventory)
+    if config.creature is not None:
+        from .creature_assembly import assemble_creature
+
+        return assemble_creature(config, inventory)
     if config.composition is not None:
         from .weave_assembly import assemble_weave
 

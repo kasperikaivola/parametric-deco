@@ -1,0 +1,665 @@
+{
+  "creature-mask": {
+    "family": "creature-organism-v3",
+    "physical_instances": 179,
+    "manufactured_definitions": 54,
+    "roles": {
+      "backplate": 1,
+      "armour": 17,
+      "cap": 5,
+      "spacer": 98,
+      "register": 10,
+      "blade": 24,
+      "retainer": 24
+    },
+    "wood_bounds_mm": [
+      [
+        -449.6339117561866,
+        -405.1487085988496,
+        10.0
+      ],
+      [
+        465.8648007967589,
+        262.8083905064321,
+        178.0
+      ]
+    ],
+    "hardware_max_z_mm": 190,
+    "composition": {
+      "cavity_count": 6,
+      "clear_aperture_probe_areas_mm2": [
+        1495.3693494895203,
+        1149.2083743322764,
+        2064.4834014519065,
+        2085.387186746984,
+        1568.6572039568862,
+        1283.1824137369788
+      ],
+      "eye_aperture_area_mm2": 9646.287929714552,
+      "family": "creature-organism-v3",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "limb_count": 4,
+      "posture": "rest",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right",
+        "jaw-left",
+        "jaw-right"
+      ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 24,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
+      "ribs_per_limb": 6,
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ],
+        "jaw-left": [
+          "head"
+        ],
+        "jaw-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-left-armour-3--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "crown-right-armour-3--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front",
+      "head-armour-4--front",
+      "head-armour-5--front",
+      "jaw-left-armour-0--front",
+      "jaw-left-armour-1--front",
+      "jaw-left-armour-2--front",
+      "jaw-left-armour-3--front",
+      "jaw-right-armour-0--front",
+      "jaw-right-armour-1--front",
+      "jaw-right-armour-2--front",
+      "jaw-right-armour-3--front"
+    ],
+    "visibility_fractions": {
+      "head-armour-0--front": 0.05976095617529881,
+      "head-armour-1--front": 0.05042016806722689,
+      "head-armour-2--front": 0.058823529411764705,
+      "head-armour-3--front": 0.05314009661835749,
+      "head-armour-4--front": 0.05555555555555555,
+      "head-armour-5--front": 1.0,
+      "crown-left-armour-0--front": 0.039647577092511016,
+      "crown-left-armour-1--front": 0.041474654377880185,
+      "crown-left-armour-2--front": 0.014634146341463415,
+      "crown-left-armour-3--front": 0.7070707070707071,
+      "crown-right-armour-0--front": 0.03211009174311927,
+      "crown-right-armour-1--front": 0.03398058252427184,
+      "crown-right-armour-2--front": 0.05472636815920398,
+      "crown-right-armour-3--front": 0.7015706806282722,
+      "jaw-left-armour-0--front": 0.06951871657754011,
+      "jaw-left-armour-1--front": 0.0670391061452514,
+      "jaw-left-armour-2--front": 0.06432748538011696,
+      "jaw-left-armour-3--front": 0.6878980891719745,
+      "jaw-right-armour-0--front": 0.06111111111111111,
+      "jaw-right-armour-1--front": 0.05847953216374269,
+      "jaw-right-armour-2--front": 0.06134969325153374,
+      "jaw-right-armour-3--front": 0.7058823529411765
+    },
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  },
+  "creature-mask-raised": {
+    "family": "creature-organism-v3",
+    "physical_instances": 179,
+    "manufactured_definitions": 54,
+    "roles": {
+      "backplate": 1,
+      "armour": 17,
+      "cap": 5,
+      "spacer": 98,
+      "register": 10,
+      "blade": 24,
+      "retainer": 24
+    },
+    "wood_bounds_mm": [
+      [
+        -474.6339117561866,
+        -405.1487085988496,
+        10.0
+      ],
+      [
+        490.8648007967589,
+        262.8083905064321,
+        178.0
+      ]
+    ],
+    "hardware_max_z_mm": 190,
+    "composition": {
+      "cavity_count": 6,
+      "clear_aperture_probe_areas_mm2": [
+        1495.3693494895203,
+        1149.2083743322764,
+        2064.4834014519065,
+        2085.387186746984,
+        1568.6572039568862,
+        1283.1824137369788
+      ],
+      "eye_aperture_area_mm2": 9646.287929714552,
+      "family": "creature-organism-v3",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "limb_count": 4,
+      "posture": "raised_crown",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right",
+        "jaw-left",
+        "jaw-right"
+      ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 24,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
+      "ribs_per_limb": 6,
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ],
+        "jaw-left": [
+          "head"
+        ],
+        "jaw-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-left-armour-3--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "crown-right-armour-3--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front",
+      "head-armour-4--front",
+      "head-armour-5--front",
+      "jaw-left-armour-0--front",
+      "jaw-left-armour-1--front",
+      "jaw-left-armour-2--front",
+      "jaw-left-armour-3--front",
+      "jaw-right-armour-0--front",
+      "jaw-right-armour-1--front",
+      "jaw-right-armour-2--front",
+      "jaw-right-armour-3--front"
+    ],
+    "visibility_fractions": {
+      "head-armour-0--front": 0.05976095617529881,
+      "head-armour-1--front": 0.05042016806722689,
+      "head-armour-2--front": 0.058823529411764705,
+      "head-armour-3--front": 0.05314009661835749,
+      "head-armour-4--front": 0.05555555555555555,
+      "head-armour-5--front": 1.0,
+      "crown-left-armour-0--front": 0.03524229074889868,
+      "crown-left-armour-1--front": 0.05069124423963134,
+      "crown-left-armour-2--front": 0.03414634146341464,
+      "crown-left-armour-3--front": 0.7828282828282829,
+      "crown-right-armour-0--front": 0.03669724770642202,
+      "crown-right-armour-1--front": 0.02912621359223301,
+      "crown-right-armour-2--front": 0.05970149253731343,
+      "crown-right-armour-3--front": 0.7696335078534031,
+      "jaw-left-armour-0--front": 0.06951871657754011,
+      "jaw-left-armour-1--front": 0.0670391061452514,
+      "jaw-left-armour-2--front": 0.06432748538011696,
+      "jaw-left-armour-3--front": 0.6878980891719745,
+      "jaw-right-armour-0--front": 0.06111111111111111,
+      "jaw-right-armour-1--front": 0.05847953216374269,
+      "jaw-right-armour-2--front": 0.06134969325153374,
+      "jaw-right-armour-3--front": 0.7058823529411765
+    },
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  },
+  "creature-alien-two": {
+    "family": "creature-organism-v3",
+    "physical_instances": 91,
+    "manufactured_definitions": 24,
+    "roles": {
+      "backplate": 1,
+      "armour": 7,
+      "cap": 3,
+      "spacer": 58,
+      "register": 6,
+      "blade": 8,
+      "retainer": 8
+    },
+    "wood_bounds_mm": [
+      [
+        -437.87721033212813,
+        -248.9991086870717,
+        10.0
+      ],
+      [
+        453.2965594342618,
+        262.8083905064321,
+        154.0
+      ]
+    ],
+    "hardware_max_z_mm": 166,
+    "composition": {
+      "cavity_count": 4,
+      "clear_aperture_probe_areas_mm2": [
+        1495.3693494895203,
+        2064.4834014519065,
+        2085.387186746984,
+        1283.1824137369788
+      ],
+      "eye_aperture_area_mm2": 6928.42235142539,
+      "family": "creature-organism-v3",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "limb_count": 2,
+      "posture": "rest",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right"
+      ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 8,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
+      "ribs_per_limb": 4,
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front"
+    ],
+    "visibility_fractions": {
+      "head-armour-0--front": 0.04580152671755725,
+      "head-armour-1--front": 0.044,
+      "head-armour-2--front": 0.04680851063829787,
+      "head-armour-3--front": 1.0,
+      "crown-left-armour-0--front": 0.0365296803652968,
+      "crown-left-armour-1--front": 0.03755868544600939,
+      "crown-left-armour-2--front": 0.7286432160804021,
+      "crown-right-armour-0--front": 0.041474654377880185,
+      "crown-right-armour-1--front": 0.03349282296650718,
+      "crown-right-armour-2--front": 0.715
+    },
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  },
+  "creature-alien-six": {
+    "family": "creature-organism-v3",
+    "physical_instances": 204,
+    "manufactured_definitions": 57,
+    "roles": {
+      "backplate": 1,
+      "armour": 22,
+      "cap": 7,
+      "spacer": 124,
+      "register": 14,
+      "blade": 18,
+      "retainer": 18
+    },
+    "wood_bounds_mm": [
+      [
+        -427.9464894625936,
+        -453.3342873551417,
+        10.0
+      ],
+      [
+        438.90234592742155,
+        262.8083905064321,
+        166.0
+      ]
+    ],
+    "hardware_max_z_mm": 178,
+    "composition": {
+      "cavity_count": 8,
+      "clear_aperture_probe_areas_mm2": [
+        1495.3693494895203,
+        1149.2083743322764,
+        2064.4834014519065,
+        2085.387186746984,
+        1568.6572039568862,
+        1283.1824137369788,
+        516.6985496238426,
+        451.2144865813077
+      ],
+      "eye_aperture_area_mm2": 10614.200965919703,
+      "family": "creature-organism-v3",
+      "hardware_outward_mm": 12,
+      "hole_radius_mm": 3.25,
+      "interchangeability": "complete crown modules move by prescribed grid offset; unique armour plates do not interchange",
+      "limb_count": 6,
+      "posture": "rest",
+      "removal_order": [
+        "head",
+        "crown-left",
+        "crown-right",
+        "jaw-left",
+        "jaw-right",
+        "feeler-left",
+        "feeler-right"
+      ],
+      "retainer_clip_requirement": {
+        "envelope_only": true,
+        "key_hole_diameter_mm": 2.5,
+        "quantity": 18,
+        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+      },
+      "ribs_per_limb": 3,
+      "sampled_extraction_dependencies": {
+        "crown-left": [
+          "head"
+        ],
+        "crown-right": [
+          "head"
+        ],
+        "feeler-left": [
+          "head"
+        ],
+        "feeler-right": [
+          "head"
+        ],
+        "jaw-left": [
+          "head"
+        ],
+        "jaw-right": [
+          "head"
+        ]
+      },
+      "washer_radius_mm": 9
+    },
+    "recommended_projecting_surfaces": [
+      "crown-left-armour-0--front",
+      "crown-left-armour-1--front",
+      "crown-left-armour-2--front",
+      "crown-left-armour-3--front",
+      "crown-right-armour-0--front",
+      "crown-right-armour-1--front",
+      "crown-right-armour-2--front",
+      "crown-right-armour-3--front",
+      "feeler-left-armour-0--front",
+      "feeler-left-armour-1--front",
+      "feeler-left-armour-2--front",
+      "feeler-left-armour-3--front",
+      "feeler-right-armour-0--front",
+      "feeler-right-armour-1--front",
+      "feeler-right-armour-2--front",
+      "feeler-right-armour-3--front",
+      "head-armour-0--front",
+      "head-armour-1--front",
+      "head-armour-2--front",
+      "head-armour-3--front",
+      "head-armour-4--front",
+      "jaw-left-armour-0--front",
+      "jaw-left-armour-1--front",
+      "jaw-left-armour-2--front",
+      "jaw-left-armour-3--front",
+      "jaw-right-armour-0--front",
+      "jaw-right-armour-1--front",
+      "jaw-right-armour-2--front",
+      "jaw-right-armour-3--front"
+    ],
+    "visibility_fractions": {
+      "head-armour-0--front": 0.06882591093117409,
+      "head-armour-1--front": 0.05172413793103448,
+      "head-armour-2--front": 0.06046511627906977,
+      "head-armour-3--front": 0.05472636815920398,
+      "head-armour-4--front": 1.0,
+      "crown-left-armour-0--front": 0.03225806451612903,
+      "crown-left-armour-1--front": 0.04285714285714286,
+      "crown-left-armour-2--front": 0.04477611940298507,
+      "crown-left-armour-3--front": 0.7379679144385026,
+      "crown-right-armour-0--front": 0.045871559633027525,
+      "crown-right-armour-1--front": 0.03365384615384615,
+      "crown-right-armour-2--front": 0.04040404040404041,
+      "crown-right-armour-3--front": 0.7405405405405405,
+      "jaw-left-armour-0--front": 0.06077348066298342,
+      "jaw-left-armour-1--front": 0.07017543859649122,
+      "jaw-left-armour-2--front": 0.049689440993788817,
+      "jaw-left-armour-3--front": 0.7483443708609272,
+      "jaw-right-armour-0--front": 0.06077348066298342,
+      "jaw-right-armour-1--front": 0.05952380952380952,
+      "jaw-right-armour-2--front": 0.06875,
+      "jaw-right-armour-3--front": 0.7516339869281046,
+      "feeler-left-armour-0--front": 0.036734693877551024,
+      "feeler-left-armour-1--front": 0.04602510460251046,
+      "feeler-left-armour-2--front": 0.06837606837606838,
+      "feeler-left-armour-3--front": 0.8288288288288288,
+      "feeler-right-armour-0--front": 0.03734439834024896,
+      "feeler-right-armour-1--front": 0.03879310344827586,
+      "feeler-right-armour-2--front": 0.06818181818181818,
+      "feeler-right-armour-3--front": 0.8333333333333334
+    },
+    "validation": {
+      "digital_valid": true,
+      "host_validation": "not_run",
+      "issues": [
+        {
+          "code": "extraction_dependency",
+          "message": "crown-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "crown-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "crown-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "jaw-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "jaw-right",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "feeler-left: remove head first (sampled +Z path)",
+          "part_ids": [
+            "feeler-left",
+            "head"
+          ],
+          "severity": "warning"
+        },
+        {
+          "code": "extraction_dependency",
+          "message": "feeler-right: remove head first (sampled +Z path)",
+          "part_ids": [
+            "feeler-right",
+            "head"
+          ],
+          "severity": "warning"
+        }
+      ],
+      "motion_validation": "sampled_translations_only",
+      "physical_validation": "not_run",
+      "schema_version": 1
+    }
+  },
+  "reuse": {
+    "identical_physical_assignments": true,
+    "identical_manufactured_geometry": true,
+    "previous_v1_v2_inventory_compatible": false
+  }
+}

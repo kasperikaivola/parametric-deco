@@ -10,7 +10,7 @@
   const meshCache = new Map();
   for (const [id, mesh] of Object.entries(scene.meshes)) meshCache.set(id, mesh);
   const transform = (m,v) => [0,1,2].map(r=>m[r][0]*v[0]+m[r][1]*v[1]+m[r][2]*v[2]+m[r][3]);
-  const colors = {spine:[201,149,89],rib:[224,176,113],closure:[184,128,73],backplate:[89,69,48],hardware:[104,120,140]};
+  const colors = {spine:[201,149,89],rib:[224,176,113],closure:[184,128,73],armour:[201,157,102],cap:[201,157,102],blade:[219,176,113],register:[151,108,64],retainer:[151,108,64],backplate:[89,69,48],hardware:[104,120,140]};
   for (const inst of scene.instances) {
     const label=document.createElement('label'), check=document.createElement('input');
     check.type='checkbox'; check.checked=true;
@@ -49,16 +49,17 @@
     for (const inst of scene.instances) {
       if (hidden.has(inst.id)||inst.role==='backplate'&&!$('backing').checked) continue;
       let shift=[0,0,0];
-      if(inst.role==='rib') shift=[0,0,explode];
-      if(inst.role==='closure') shift=[0,0,explode*2];
+      if(['rib','armour'].includes(inst.role)) shift=[0,0,explode];
+      if(['closure','cap','blade','retainer'].includes(inst.role)) shift=[0,0,explode*2];
       if(inst.role==='spine') shift=[0,Math.sign(inst.vertices[0][1]-center[1])*explode*.25,0];
       addMesh(inst.vertices.map(v=>v.map((n,k)=>n+shift[k])),meshCache.get(inst.mesh).triangles,inst,inst.role);
     }
     if($('hardware').checked) for (const [index,b] of scene.hardware_bounds.entries()) {
       const lo=b.slice(1,4),hi=b.slice(4,7),verts=[];
+      if(b[0].endsWith('-clip')) {lo[2]+=explode*2;hi[2]+=explode*2;}
       for(let i=0;i<8;i++) verts.push([i&1?hi[0]:lo[0],i&2?hi[1]:lo[1],i&4?hi[2]:lo[2]]);
       addMesh(verts,[[0,1,3],[0,3,2],[4,6,7],[4,7,5],[0,4,5],[0,5,1],[2,3,7],[2,7,6],[0,2,6],[0,6,4],[1,5,7],[1,7,3]],
-              {id:'hardware-envelope-'+index,mesh:'illustrative conservative root fastener envelope'},'hardware');
+              {id:'hardware-envelope-'+index,mesh:'illustrative conservative hardware envelope'},'hardware');
     }
     triangles.sort((a,b)=>a.depth-b.depth);
     for(const t of triangles) {

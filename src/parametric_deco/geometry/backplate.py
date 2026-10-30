@@ -10,6 +10,10 @@ from ..model import GeometryBundle, MountPoint, PartDefinition
 
 
 def backplate_polygon(config):
+    if config.creature is not None:
+        from .creature_profiles import backing_outline
+
+        return backing_outline(settings=config.creature)
     n = config.backplate.sides
     theta = math.radians(config.backplate.rotation_deg)
     points = [

@@ -120,7 +120,11 @@ def validate_assembly(assembly):
         if connection.a not in by_id or connection.b not in by_id:
             issues.append(Issue("error", "connection", "unknown connection endpoint"))
             continue
-        if connection.family not in ("upper-closure-v1", "radial-capture-v1"):
+        if connection.family not in (
+            "upper-closure-v1",
+            "radial-capture-v1",
+            "creature-root-clamp-v1",
+        ):
             station_ids = {s.station_id for s in definitions[connection.b].interfaces}
             if connection.station_id not in station_ids:
                 issues.append(Issue("error", "station", "unavailable station", (connection.a,)))

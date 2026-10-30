@@ -158,12 +158,20 @@ def _export_into(build, out):
     (out / "assembly-instructions.md").write_text(
         resources.files("parametric_deco.resources")
         .joinpath(
-            "radial-assembly-instructions.md"
+            "organism-assembly-instructions.md"
+            if config.organism
+            else "creature-assembly-instructions.md"
+            if config.creature
+            else "radial-assembly-instructions.md"
             if build.assembly.composition
             else "assembly-instructions.md"
         )
         .read_text()
     )
+    if config.creature or config.organism:
+        from ..visuals.visibility import projection_visibility
+
+        write_json(out / "projection-visibility.json", projection_visibility(build.assembly))
     versions = {
         n: metadata.version(n)
         for n in ("parametric-deco", "build123d", "numpy", "shapely", "trimesh", "pillow")

@@ -94,6 +94,42 @@ class RadialWeave:
 
 
 @dataclass(frozen=True)
+class CreatureMask:
+    limb_count: int = 4
+    cavity_count: int = 6
+    ribs_per_limb: int = 6
+    shell_layers: int = 6
+    limb_layers: int = 4
+    limb_reach: float = 1.0
+    limb_width: float = 1.0
+    rib_height_mm: float = 65.0
+    asymmetry: float = 0.08
+    scale: float = 1.0
+    curl: float = 1.0
+    posture: str = "rest"
+
+
+@dataclass(frozen=True)
+class Organism:
+    arrangement: str = "whorl"
+    focal_count: int = 6
+    branching: int = 2
+    anatomy_phase_deg: float = 0.0
+    phase_deg: float = 17.0
+    spread: float = 1.0
+    symmetry: str = "rotational"
+    complexity: int = 0
+    secondary_lobes: int | None = None
+    channels: int | None = None
+    segmentation: int | None = None
+    curvature: float = 1.0
+    taper: float = 1.0
+    swelling: float = 1.0
+    angularity: float = 0.0
+    asymmetry: float = 0.12
+
+
+@dataclass(frozen=True)
 class DesignConfig:
     schema_version: int = 1
     units: str = "mm"
@@ -106,6 +142,8 @@ class DesignConfig:
     placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
     cutting_bed: CuttingBed | None = None
     composition: RadialWeave | None = None
+    creature: CreatureMask | None = None
+    organism: Organism | None = None
 
     def to_dict(self):
         return asdict(self)
@@ -132,6 +170,85 @@ def validate_config(c):
         bad("schema_version", "must be 1")
     if c.units != "mm":
         bad("units", "must be mm")
+    if c.organism is not None:
+        o = c.organism
+        if c.creature is not None or c.composition is not None:
+            bad("organism", "select only one composition family")
+        for key, lo, hi in (("focal_count", 4, 8), ("branching", 1, 3), ("complexity", 0, 2)):
+            v = getattr(o, key)
+            if type(v) is not int or not lo <= v <= hi:
+                bad("organism." + key, f"integer {lo}..{hi} required")
+        for key, hi in (("secondary_lobes", 1), ("channels", 3), ("segmentation", 5)):
+            v = getattr(o, key)
+            if v is not None and (type(v) is not int or not 0 <= v <= hi):
+                bad("organism." + key, f"null or integer 0..{hi} required")
+        for key, lo, hi in (
+            ("phase_deg", -180, 180),
+            ("anatomy_phase_deg", -180, 180),
+            ("spread", 0.85, 1.15),
+            ("curvature", 0.7, 1.3),
+            ("taper", 0.7, 1.3),
+            ("swelling", 0.8, 1.2),
+            ("angularity", 0, 0.6),
+            ("asymmetry", 0, 0.2),
+        ):
+            v = getattr(o, key)
+            if numeric("organism." + key, v, False) and not lo <= v <= hi:
+                bad("organism." + key, f"range {lo}..{hi} required")
+        if o.arrangement not in ("whorl", "bilateral"):
+            bad("organism.arrangement", "use whorl or bilateral")
+        if o.symmetry not in ("rotational", "bilateral", "none"):
+            bad("organism.symmetry", "use rotational, bilateral or none")
+        for key in ("width_mm", "height_mm", "depth_mm"):
+            numeric("envelope." + key, getattr(c.envelope, key))
+        if issues:
+            return ValidationReport(tuple(issues))
+        if not (800 <= c.envelope.width_mm <= 1400 and 800 <= c.envelope.height_mm <= 1400):
+            bad("envelope", "organism width and height require 800..1400 mm")
+        if not 0.7 <= c.envelope.width_mm / c.envelope.height_mm <= 1.4:
+            bad("envelope", "organism aspect ratio requires 0.7..1.4")
+        if not 120 <= c.envelope.depth_mm <= 240:
+            bad("envelope.depth_mm", "organism relief requires 120..240 mm")
+    if c.creature is not None:
+        creature = c.creature
+        if c.composition is not None:
+            bad("creature", "select only one composition family")
+        count_ranges = {
+            "limb_count": (2, 6),
+            "cavity_count": (3, 8),
+            "ribs_per_limb": (3, 7),
+            "shell_layers": (3, 6),
+            "limb_layers": (3, 5),
+        }
+        for field, (lo, hi) in count_ranges.items():
+            value = getattr(creature, field)
+            if type(value) is not int or not lo <= value <= hi:
+                bad("creature." + field, f"integer {lo}..{hi} required")
+        shape_ranges = {
+            "scale": (0.9, 1),
+            "curl": (0.8, 1.2),
+            "limb_reach": (0.85, 1.05),
+            "limb_width": (0.9, 1.1),
+            "rib_height_mm": (45, 80),
+            "asymmetry": (0, 0.15),
+        }
+        for field, (lo, hi) in shape_ranges.items():
+            value = getattr(creature, field)
+            if numeric("creature." + field, value, False) and not lo <= value <= hi:
+                bad("creature." + field, f"range {lo}..{hi} required")
+        if issues:
+            return ValidationReport(tuple(issues))
+        if not 0.9 <= creature.scale <= 1 or not 0.8 <= creature.curl <= 1.2:
+            bad("creature", "candidate scale .9..1 and curl .8..1.2 required")
+        if creature.posture not in ("rest", "raised_crown"):
+            bad("creature.posture", "use rest or raised_crown")
+        required = (
+            c.mounting.rear_clearance_mm
+            + (18 + 2 * (creature.shell_layers - 1)) * c.material.measured_mm
+            + c.mounting.hardware_outward_mm
+        )
+        if c.envelope.depth_mm < required:
+            bad("envelope.depth_mm", f"creature requires {required:g} mm including hardware")
     if c.composition is not None:
         w = c.composition
         for key in ("radius_mm", "amplitude_mm", "opening_radius_mm", "rotation_deg"):
@@ -215,7 +332,7 @@ def validate_config(c):
         + (152 if c.composition else m.rib_top_mm)
         + c.mounting.hardware_outward_mm
     )
-    if c.envelope.depth_mm < total:
+    if c.organism is None and c.envelope.depth_mm < total:
         bad("envelope.depth_mm", f"requires at least {total:g} including hardware")
     if not (0 < m.rib_bottom_mm < m.joint_datum_mm < m.spine_height_mm < m.rib_top_mm):
         bad("module.joint_datum_mm", "require bottom < datum < spine height < rib top")
@@ -300,6 +417,8 @@ def config_from_dict(data):
         "mounting": Mounting,
         "cutting_bed": CuttingBed,
         "composition": RadialWeave,
+        "creature": CreatureMask,
+        "organism": Organism,
     }
     try:
         for key, cls in classes.items():
