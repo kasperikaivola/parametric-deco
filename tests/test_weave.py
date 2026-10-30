@@ -8,7 +8,7 @@ from shapely.geometry import Point
 def config():
     from parametric_deco.config import DesignConfig, RadialWeave
 
-    return DesignConfig(composition=RadialWeave())
+    return DesignConfig(style="radial-weave", parameters=RadialWeave())
 
 
 def test_weave_blueprint_has_aperture_real_crossings_and_connected_parts():
@@ -40,7 +40,7 @@ def test_weave_configuration_rejects_impossible_opening_and_nonfinite_values():
         ("lobes", 1),
         ("ribs_per_module", 10),
     ):
-        report = validate_config(replace(c, composition=replace(c.composition, **{field: value})))
+        report = validate_config(replace(c, parameters=replace(c.parameters, **{field: value})))
         assert not report.digital_valid, field
 
 
@@ -67,8 +67,8 @@ def test_weave_inventory_reconfiguration_never_regenerates_parts():
     inventory = Inventory.from_dict(first.inventory.to_dict())
     changed = replace(
         c,
-        composition=replace(
-            c.composition, rotation_deg=180, rib_permutation=(0, 1, 3, 4, 5, 6, 2, 7, 8)
+        parameters=replace(
+            c.parameters, rotation_deg=180, rib_permutation=(0, 1, 3, 4, 5, 6, 2, 7, 8)
         ),
     )
     second = assemble(changed, inventory)
@@ -82,7 +82,7 @@ def test_weave_inventory_reconfiguration_never_regenerates_parts():
     assert first.assembly.to_dict() != second.assembly.to_dict()
     assert second.assembly.composition["crossings"][0]["theta_deg"] == 180
     with pytest.raises(ValueError, match="manufactured|inventory"):
-        assemble(replace(c, composition=replace(c.composition, radius_mm=310)), inventory)
+        assemble(replace(c, parameters=replace(c.parameters, radius_mm=310)), inventory)
     with pytest.raises(ValueError, match="missing|inventory"):
         assemble(changed, replace(inventory, instances=inventory.instances[:-1]))
 

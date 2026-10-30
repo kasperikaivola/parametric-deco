@@ -1,13 +1,7 @@
-# Two arrangements of one inventory
+# Rib-study inventory placement
 
-**Task 8 / full intertwined-composition milestone: INCOMPLETE.**
-
-intertwined.json is the legacy filename for a four-module mechanical study around
-an empty centre. It does not demonstrate the agreed integrated composition,
-continuous contours or apparent interweaving. Passing collision, inventory and
-module-count tests does not establish visual success. A future composition must
-coordinate boundaries or apparent crossings and then verify removal access.
-The existing images are retained as inspection evidence, not completed-art claims.
+The full style workflow is in the [design guide](../design.md). This page describes
+`parameters.placements` for the explicit mechanical study.
 
 All four modules use the same spine and closure revisions. Reusable rib
 profiles are shared across modules and repeated via identified instances.
@@ -15,8 +9,7 @@ reconfigured.json assigns physical instance IDs explicitly, permutes rib profile
 among manufactured stations, and exchanges rib-0 between m1 and m2. It preserves every instance ID and definition fingerprint while
 changing transforms, visual phase attribution and atlas mapping. It makes
 no new cuts or silently resized spines. examples/inventory.json is a compact
-saved inventory of the first arrangement; prefer regenerating it with the
-pinned version when changing generator geometry intentionally.
+saved inventory of the first arrangement; this manufactured fixture is kept unchanged. Generate a separate inventory for new cuts.
 
 Commands are in cli.md. The integrated test checks both states, all root-grid
 matches, envelope and actual static solid intersections, identity preservation,
@@ -45,11 +38,11 @@ The order of rib_instance_ids matches station_indices. Explicit rib assignments
 take precedence over rib_order; no part may be assigned twice. Assigning parts
 requires reconfigure/Inventory, not generate-new mode.
 
-The example uses these fields. For legacy configurations with no assignments,
+The example uses these fields. For configurations without explicit assignments,
 parts are selected from the reference module by role and deterministic definition
-order, with rib_order indexing that pool. This compatibility convenience is not
-needed for explicit assignments and never parses physical ID suffixes. New module
-names require complete explicit assignments. Local poses are reconstructed from
+order, with rib_order indexing that pool. Role-based selection never parses
+physical ID suffixes. New module names require complete explicit assignments.
+Local poses are reconstructed from
 manufactured paired slots and closure geometry, not the previous world poses or
 current generator thickness/spacing. A short rib is rejected if it cannot contact
 the manufactured closure plane; loaded assemblies also check +1 mm withdrawal

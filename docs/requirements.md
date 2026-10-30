@@ -4,7 +4,7 @@
 
 These decisions supersede conflicting earlier alternatives in this document.
 
-- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
+- Python CAD is selected. build123d is the selected backend.
 - Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
 - Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
 - Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
@@ -17,7 +17,7 @@ Status: confirmed requirements and explicitly identified proposals, 2026-10-27.
 
 Generate physical plywood artwork and a corresponding projection mapping representation. Reconfigure manufactured parts into new arrangements and regenerate the visual geometry without redrawing everything manually.
 
-The visual goal is a single intertwined composition. Modules are construction and transport units, not separate small decorations. Reference images supplied in the discussion show curved ribbed horns, stacked jagged profiles, and a radial stage composition. They establish visual intent, not evidence of their original joinery. Reference images are not reproduced in this repository.
+The default visual goal is a single integrated organic composition; alternate styles may explore layered masks, horns or radial braids. Modules are construction and transport units, not separate small decorations. Reference images supplied in the discussion show curved ribbed horns, stacked jagged profiles, and a radial stage composition. They establish visual intent, not evidence of their original joinery. Reference images are not reproduced in this repository.
 
 ## Confirmed physical requirements
 
@@ -43,7 +43,7 @@ The visual goal is a single intertwined composition. Modules are construction an
 
 ## Parameter semantics
 
-Proposed envelope convention: total assembly including backing and hardware, measured from the mounting surface. Confirm this convention before detailed drawings.
+Envelope convention: total assembly including backing and hardware, measured from the mounting surface. This includes hardware and rear clearance.
 
 Manufacturing parameters must not scale with the overall artwork. Bolt holes, material thickness, slot clearances, and cutting compensation retain physical dimensions.
 

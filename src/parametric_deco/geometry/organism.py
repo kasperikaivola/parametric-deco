@@ -184,7 +184,7 @@ def finished_profile(polygon, affine):
 
 
 def anatomy(c):
-    o = c.organism
+    o = c.parameters
     primaries = [primary_anatomy(o, i) for i in range(o.focal_count)]
     # Size is fitted once from complexity-independent outer anatomy.
     bounds = unary_union([p[1] for p in primaries]).bounds

@@ -1,3 +1,4 @@
+from parametric_deco.config import RibStudy
 import json
 import xml.etree.ElementTree as ET
 
@@ -60,7 +61,7 @@ def test_export_manifest_inventory_and_overwrite_guard(tmp_path):
     from parametric_deco.export.manifest import export_build
     from parametric_deco.model import Inventory
 
-    build = assemble(DesignConfig())
+    build = assemble(DesignConfig(style="rib-study", parameters=RibStudy()))
     out = tmp_path / "build"
     export_build(build, out)
     manifest = json.loads((out / "manifest.json").read_text())
@@ -119,7 +120,7 @@ def _small_export_build(width, bed):
     instance = PartInstance(
         "arm-spine", part.definition_id, part.revision, module_id="arm", role="spine"
     )
-    config = DesignConfig(cutting_bed=bed)
+    config = DesignConfig(style="rib-study", parameters=RibStudy(), cutting_bed=bed)
     return BuildResult(
         Assembly((part,), (instance,)), (part,), provenance={"config": config.to_dict()}
     )

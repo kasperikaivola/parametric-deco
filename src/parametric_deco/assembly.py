@@ -23,15 +23,28 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
-    if config.organism is not None:
+    report = validate_config(config)
+    if not report.digital_valid:
+        raise ValueError("; ".join(i.message for i in report.issues))
+    if inventory is not None:
+        expected_family = {
+            "laminar": "laminar-organism-v2",
+            "layered-creature": "creature-organism-v3",
+            "radial-weave": "radial-weave-v1",
+            "rib-study": None,
+        }[config.style]
+        family = inventory.layout.get("family") if isinstance(inventory.layout, dict) else None
+        if family != expected_family:
+            raise ValueError("inventory style/family differs from request; generate new cuts")
+    if config.style == "laminar":
         from .organism_assembly import assemble_organism
 
         return assemble_organism(config, inventory)
-    if config.creature is not None:
+    if config.style == "layered-creature":
         from .creature_assembly import assemble_creature
 
         return assemble_creature(config, inventory)
-    if config.composition is not None:
+    if config.style == "radial-weave":
         from .weave_assembly import assemble_weave
 
         return assemble_weave(config, inventory)

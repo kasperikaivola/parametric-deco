@@ -7,7 +7,7 @@ import pytest
 from shapely.geometry import box
 
 from parametric_deco.assembly import assemble
-from parametric_deco.config import DesignConfig, load_config
+from parametric_deco.config import DesignConfig, RibStudy, load_config
 from parametric_deco.model import Assembly, Inventory, PartDefinition, PartInstance
 
 
@@ -15,9 +15,9 @@ def test_short_ribs_rejected_by_closure_contact_interface_and_loaded_validation(
     from parametric_deco.geometry.module import generate_module
     from parametric_deco.validation import validate_assembly
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     original = assemble(c)
-    short = generate_module(replace(c, module=replace(c.module, rib_top_mm=81)))
+    short = generate_module(replace(c, parameters=replace(c.parameters, recipe=replace(c.module, rib_top_mm=81))))
     replacements = {d.definition_id: d for d in short.definitions if d.kind == "rib"}
     definitions = tuple(replacements.get(d.definition_id, d) for d in original.assembly.definitions)
     instances = tuple(
@@ -35,7 +35,7 @@ def test_short_ribs_rejected_by_closure_contact_interface_and_loaded_validation(
 
 
 def test_inventory_ids_are_not_parsed_as_rib_names():
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(c)
     inventory = Inventory(
         first.assembly.definitions,
@@ -75,7 +75,7 @@ def test_explicit_assignments_transfer_ribs_across_modules_with_arbitrary_ids():
                 rib_instance_ids=tuple(ids),
             )
         )
-    configured = replace(c, placements=tuple(placements))
+    configured = replace(c, parameters=replace(c.parameters, placements=tuple(placements)))
     result = assemble(configured, stock)
     assert result.report.digital_valid, result.report.to_dict()
     moved = next(i for i in result.assembly.instances if i.instance_id == renamed["m2-rib-0"])
@@ -83,11 +83,11 @@ def test_explicit_assignments_transfer_ribs_across_modules_with_arbitrary_ids():
     assert len(result.assembly.instances) == len(stock.instances)
     duplicated = replace(
         configured,
-        placements=(
+        parameters=replace(configured.parameters, placements=(
             placements[0],
             replace(placements[1], rib_instance_ids=placements[0].rib_instance_ids),
             *placements[2:],
-        ),
+        )),
     )
     with pytest.raises(ValueError, match="duplicate"):
         assemble(duplicated, stock)

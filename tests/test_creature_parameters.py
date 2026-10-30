@@ -12,7 +12,7 @@ def test_alien_default_controls_and_json_roundtrip():
     assert p.ribs_per_limb == 6
     assert p.limb_layers == 4
     assert p.shell_layers == 6
-    c = DesignConfig(creature=p)
+    c = DesignConfig(style="layered-creature", parameters=p)
     assert config_from_dict(c.to_dict()) == c
 
 
@@ -21,7 +21,7 @@ def test_alien_default_controls_and_json_roundtrip():
 )
 @pytest.mark.parametrize("value", [True, 3.5, 4.0, "4", -1, 100])
 def test_counts_reject_nonintegers_and_out_of_range(field, value):
-    c = DesignConfig(creature=replace(CreatureMask(), **{field: value}))
+    c = DesignConfig(style="layered-creature", parameters=replace(CreatureMask(), **{field: value}))
     assert not validate_config(c).digital_valid
     with pytest.raises(ValueError):
         config_from_dict(c.to_dict())
@@ -30,7 +30,7 @@ def test_counts_reject_nonintegers_and_out_of_range(field, value):
 @pytest.mark.parametrize("field", ["limb_reach", "limb_width", "rib_height_mm", "asymmetry"])
 @pytest.mark.parametrize("value", [True, float("nan"), float("inf"), -1, 1000])
 def test_shape_controls_reject_invalid_numbers(field, value):
-    c = DesignConfig(creature=replace(CreatureMask(), **{field: value}))
+    c = DesignConfig(style="layered-creature", parameters=replace(CreatureMask(), **{field: value}))
     assert not validate_config(c).digital_valid
 
 
@@ -94,7 +94,7 @@ def test_generated_inventory_counts_every_requested_limb_and_rib(limbs):
     p = CreatureMask(
         limb_count=limbs, ribs_per_limb=3, cavity_count=4, shell_layers=4, limb_layers=3
     )
-    bundle, layout = generate_creature(DesignConfig(creature=p))
+    bundle, layout = generate_creature(DesignConfig(style="layered-creature", parameters=p))
     assert len(layout["modules"]) == limbs + 1
     assert len([i for i in bundle.instances if i.role == "blade"]) == limbs * 3
     assert len(layout["removal_order"]) == limbs + 1
@@ -106,7 +106,7 @@ def test_generated_inventory_counts_every_requested_limb_and_rib(limbs):
 def default_manufacture():
     from parametric_deco.assembly import assemble
 
-    result = assemble(DesignConfig(creature=CreatureMask()))
+    result = assemble(DesignConfig(style="layered-creature", parameters=CreatureMask()))
     assert result.report.digital_valid, result.report.to_dict()
     return result
 
@@ -128,7 +128,7 @@ def default_manufacture():
 def test_changed_composition_or_shape_requires_new_cuts(default_manufacture, field, value):
     from parametric_deco.assembly import assemble
 
-    changed = DesignConfig(creature=replace(CreatureMask(), **{field: value}))
+    changed = DesignConfig(style="layered-creature", parameters=replace(CreatureMask(), **{field: value}))
     with pytest.raises(ValueError, match="new cuts"):
         assemble(changed, default_manufacture.inventory)
 
@@ -147,7 +147,7 @@ def test_composition_variants_assemble_as_actual_parts(count, cavities):
         limb_width=0.95,
         rib_height_mm=55,
     )
-    result = assemble(DesignConfig(creature=p))
+    result = assemble(DesignConfig(style="layered-creature", parameters=p))
     assert result.report.digital_valid, result.report.to_dict()
     assert len(result.assembly.composition["modules"]) == count + 1
     assert len([i for i in result.assembly.instances if i.role == "blade"]) == count * 3

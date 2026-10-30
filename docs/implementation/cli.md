@@ -7,7 +7,9 @@ python -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements.lock
 python -m pip install --no-deps -e .
-parametric-deco validate examples/single-module.json
+parametric-deco styles
+parametric-deco init --style laminar --out my-design.json
+parametric-deco validate my-design.json
 parametric-deco build examples/single-module.json --out build/single
 parametric-deco preview build/single
 parametric-deco visuals build/single --out build/single-visuals
@@ -45,3 +47,5 @@ The broad-face default omits edge and hole-wall tiles. `--surfaces all` includes
 all explicit faces when needed. Tile texel sizes and selected/available counts
 are recorded in atlas.json. Existing inventory configuration supports explicit
 physical-ID assignments; see reconfiguration.md and examples/reconfigured.json.
+
+Schema-v2 style/parameter controls and all current examples: [design guide](../design.md).

@@ -1,5 +1,7 @@
 {
-  "organism": {
+  "schema_version": 2,
+  "style": "laminar",
+  "parameters": {
     "complexity": 1
   },
   "envelope": {

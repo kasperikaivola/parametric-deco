@@ -159,16 +159,16 @@ def _export_into(build, out):
         resources.files("parametric_deco.resources")
         .joinpath(
             "organism-assembly-instructions.md"
-            if config.organism
+            if config.style == "laminar"
             else "creature-assembly-instructions.md"
-            if config.creature
+            if config.style == "layered-creature"
             else "radial-assembly-instructions.md"
             if build.assembly.composition
             else "assembly-instructions.md"
         )
         .read_text()
     )
-    if config.creature or config.organism:
+    if config.style in ("layered-creature", "laminar"):
         from ..visuals.visibility import projection_visibility
 
         write_json(out / "projection-visibility.json", projection_visibility(build.assembly))

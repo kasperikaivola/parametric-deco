@@ -85,7 +85,7 @@ def rib_definition(level, index, t, width, crest, outer):
 
 @lru_cache(maxsize=8)
 def generate_weave(config, root_flips=()):
-    design = config.composition
+    design = config.parameters
     if design is None:
         raise ValueError("composition is required for radial weave")
     t, w = config.material.measured_mm, slot_width(config)

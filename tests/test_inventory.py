@@ -1,3 +1,4 @@
+from parametric_deco.config import RibStudy
 from dataclasses import replace
 
 import pytest
@@ -8,13 +9,13 @@ def test_reconfigure_uses_saved_geometry_not_current_recipe():
     from parametric_deco.assembly import assemble
     from parametric_deco.model import Inventory
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(c)
     inventory = Inventory(first.assembly.definitions, first.assembly.instances)
     changed = replace(
         c,
-        module=replace(c.module, length_mm=400),
-        placements=(replace(c.placements[0], rib_order=(3, 2, 1, 0)),),
+        parameters=replace(c.parameters, recipe=replace(c.module, length_mm=400),
+            placements=(replace(c.placements[0], rib_order=(3, 2, 1, 0)),)),
     )
     second = assemble(changed, Inventory.from_dict(inventory.to_dict()))
     assert {d.fingerprint for d in first.assembly.definitions} == {
@@ -31,10 +32,10 @@ def test_inventory_shortage_and_stale_revision_rejected():
     from parametric_deco.assembly import assemble
     from parametric_deco.model import Inventory
 
-    build = assemble(DesignConfig())
+    build = assemble(DesignConfig(style="rib-study", parameters=RibStudy()))
     inv = Inventory(build.assembly.definitions, build.assembly.instances)
     with pytest.raises(ValueError, match="missing|insufficient"):
-        assemble(DesignConfig(), replace(inv, instances=inv.instances[:-1]))
+        assemble(DesignConfig(style="rib-study", parameters=RibStudy()), replace(inv, instances=inv.instances[:-1]))
     data = inv.to_dict()
     data["instances"][0]["revision"] = "unknown"
     with pytest.raises(ValueError, match="revision"):
@@ -51,12 +52,13 @@ def test_partial_reconfiguration_export_preserves_all_stock_and_can_restore(tmp_
     from parametric_deco.model import Inventory
     from parametric_deco.export.manifest import export_build
 
-    config = DesignConfig()
+    config = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(config)
     inventory = Inventory(first.assembly.definitions, first.assembly.instances)
     # Move and rotate the module while leaving its fourth rib in stock.
     partial_config = replace(
-        config, placements=(ModulePlacement("m1", 200, -200, 90, (0, 1, 2), (0, 1, 2)),)
+        config, parameters=replace(config.parameters,
+            placements=(ModulePlacement("m1", 200, -200, 90, (0, 1, 2), (0, 1, 2)),))
     )
     partial = assemble(partial_config, inventory)
     assert partial.report.digital_valid, partial.report.to_dict()
@@ -77,7 +79,7 @@ def test_saved_holes_require_real_washer_bearing_during_reconfiguration():
     from parametric_deco.assembly import assemble
     from parametric_deco.model import Inventory
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     large_holes = replace(
         c,
         grid=replace(c.grid, hole_diameter_mm=20),

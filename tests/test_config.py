@@ -1,3 +1,4 @@
+from parametric_deco.config import RibStudy
 import json
 from dataclasses import replace
 
@@ -7,7 +8,7 @@ import pytest
 def test_resize_keeps_manufacturing_dimensions():
     from parametric_deco.config import DesignConfig
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     large = replace(c, envelope=replace(c.envelope, width_mm=1500))
     assert large.material.nominal_mm == 6
     assert large.material.measured_mm == 6
@@ -33,8 +34,11 @@ def test_resize_keeps_manufacturing_dimensions():
 def test_invalid_fields_rejected(section, field, value):
     from parametric_deco.config import DesignConfig, validate_config
 
-    c = DesignConfig()
-    c = replace(c, **{section: replace(getattr(c, section), **{field: value})})
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
+    if section == "module":
+        c = replace(c, parameters=replace(c.parameters, recipe=replace(c.module, **{field: value})))
+    else:
+        c = replace(c, **{section: replace(getattr(c, section), **{field: value})})
     report = validate_config(c)
     assert not report.digital_valid
     assert any(f"{section}.{field}" in i.message for i in report.issues)
@@ -44,8 +48,8 @@ def test_load_roundtrip_and_unknown_fields(tmp_path):
     from parametric_deco.config import DesignConfig, load_config
 
     p = tmp_path / "config.json"
-    p.write_text(json.dumps(DesignConfig().to_dict()))
-    assert load_config(p) == DesignConfig()
+    p.write_text(json.dumps(DesignConfig(style="rib-study", parameters=RibStudy()).to_dict()))
+    assert load_config(p) == DesignConfig(style="rib-study", parameters=RibStudy())
     p.write_text('{"moduel": {}}')
     with pytest.raises(ValueError, match="moduel"):
         load_config(p)
@@ -55,7 +59,7 @@ def test_load_roundtrip_and_unknown_fields(tmp_path):
 def test_root_washer_requires_positive_bearing_around_hole(diameter, radius):
     from parametric_deco.config import DesignConfig, validate_config
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     c = replace(
         c,
         grid=replace(c.grid, hole_diameter_mm=diameter),
@@ -78,11 +82,11 @@ def test_root_washer_requires_positive_bearing_around_hole(diameter, radius):
 def test_radial_permutation_rejects_noninteger_indices_before_assembly(tmp_path, permutation):
     from parametric_deco.config import DesignConfig, RadialWeave, load_config, validate_config
 
-    config = DesignConfig(composition=RadialWeave(rib_permutation=permutation))
+    config = DesignConfig(style="radial-weave", parameters=RadialWeave(rib_permutation=permutation))
     assert not validate_config(config).digital_valid
     path = tmp_path / "radial.json"
     path.write_text(json.dumps(config.to_dict()))
-    with pytest.raises(ValueError, match="composition.rib_permutation"):
+    with pytest.raises(ValueError, match="parameters.rib_permutation"):
         load_config(path)
 
 
@@ -90,8 +94,8 @@ def test_radial_permutation_rejects_noninteger_indices_before_assembly(tmp_path,
 def test_radial_permutation_accepts_integer_indices(tmp_path, permutation):
     from parametric_deco.config import DesignConfig, RadialWeave, load_config, validate_config
 
-    config = DesignConfig(composition=RadialWeave(rib_permutation=permutation))
+    config = DesignConfig(style="radial-weave", parameters=RadialWeave(rib_permutation=permutation))
     assert validate_config(config).digital_valid
     path = tmp_path / "radial.json"
     path.write_text(json.dumps(config.to_dict()))
-    assert load_config(path).composition.rib_permutation == permutation
+    assert load_config(path).parameters.rib_permutation == permutation
