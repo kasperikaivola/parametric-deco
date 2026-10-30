@@ -10,10 +10,6 @@ from ..model import GeometryBundle, MountPoint, PartDefinition
 
 
 def backplate_polygon(config):
-    if config.style == "layered-creature":
-        from .creature_profiles import backing_outline
-
-        return backing_outline(settings=config.parameters)
     n = config.backplate.sides
     theta = math.radians(config.backplate.rotation_deg)
     points = [
@@ -31,6 +27,16 @@ def backplate_polygon(config):
     if config.style == "radial-weave":
         radius = config.parameters.opening_radius_mm / math.cos(math.pi / 384)
         polygon = polygon.difference(Point(0, 0).buffer(radius, quad_segs=96))
+    elif config.style == "layered-creature":
+        from shapely import affinity
+        from shapely.ops import unary_union
+        from .creature_profiles import cavity_voids, central_void
+
+        # These are real through channels, also cut in the armour above the board.
+        voids = [*cavity_voids(config.parameters, 1.06),
+                 affinity.scale(central_void(), xfact=config.parameters.scale,
+                                yfact=config.parameters.scale, origin=(0, 0))]
+        polygon = polygon.difference(unary_union(voids))
     return polygon
 
 
