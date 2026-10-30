@@ -1,34 +1,8 @@
 # Unified design workflow
 
-## Design and implementation plan
-
-The repository offers one generation schema (v2): choose `style`, then its
-`parameters`; envelope, stock, grid, mounting and export settings are shared.
-Laminar is the default artwork. Layered creature and radial weave retain their
-own useful geometry; rib study remains an explicit mechanical study. A single
-algorithm would erase useful topology, while aliases for the old optional groups
-would leave incompatible requests ambiguous. Typed style adapters are the chosen
-middle ground. These are implementation decisions delegated by the owner.
-
-Keep immutable inventory and existing geometry signatures. Reject schema-v1
-requests rather than silently migrating historical intent. Inventory schema and
-geometry families do not change. Physical and host checks remain NOT RUN.
-
-Implementation sequence:
-
-- [ ] Add failing tests for v2 round trips, typed style rejection, old-request errors,
-  CLI style discovery and starter configurations.
-- [ ] Implement the typed config, style dispatch and discoverable CLI, preserving
-  geometry-specific validation and shared output/preview/projection paths.
-- [ ] Convert tests/examples, prune superseded ledgers/images, document parameter
-  ranges and geometry/arrangement distinctions in this guide.
-- [ ] Run focused checks, full suite, lint and example harness; commit and submit
-  the whole branch for the one independent review required by AGENTS.md.
-
-Review focus: conflicting style parameters, unknown/bool schema versions, unusable
-starter recipes, ignored settings and cross-style inventory reuse must fail
-clearly rather than creating or changing cuts silently.
-
+Choose a style, vary its parameters, then generate or place saved inventory.
+Laminar is the default artwork; layered creature, radial weave and rib study
+retain useful different geometry and joinery behind the same public workflow.
 
 ## Generate and explore
 
