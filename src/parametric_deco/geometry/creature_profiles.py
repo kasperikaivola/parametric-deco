@@ -231,14 +231,18 @@ def profiles(scale=1, curl=1, *, settings=None):
         affinity.scale(p, xfact=-1, yfact=1, origin=(0, 0)) for p in shell_channels[:2]
     ]
     for j in range(settings.shell_layers):
-        # Alternate lobe exposure around the cavities; no solid rostrum cap.
-        outer = affinity.scale(
-            head_outline(), xfact=1 - 0.022 * j, yfact=1 - 0.018 * j, origin=(0, 0)
-        )
-        channels = unary_union([p.buffer(j * 1.2) for p in shell_channels])
+        # Depth-normalized, unequal lobe retreats expose terraces at every
+        # supported layer count rather than repeating a nearly full-size cap.
+        depth = j / (settings.shell_layers - 1)
+        outline = np.array(head_outline().exterior.coords)
+        angle = np.arctan2(outline[:, 1], outline[:, 0])
+        retreat = depth * (0.12 + 0.04 * np.cos(3 * angle + 3.1))
+        outer = Polygon(outline * (1 - retreat[:, None]))
+        channels = unary_union([p.buffer(depth * 7) for p in shell_channels])
         head.append(
             outer.difference(
-                unary_union([voids.buffer(j * 1.5), channels, inner_channels.buffer(j * 0.6)])
+                unary_union([voids.buffer(depth * 9), channels,
+                             inner_channels.buffer(depth * 5)])
             )
         )
     result = {"head": head}
@@ -257,6 +261,7 @@ def profiles(scale=1, curl=1, *, settings=None):
             ]
         )
         bridges = []
+        seats = []
         for center, normal, width, height in rib_stations(name, settings=nominal):
             tangent = np.array((-normal[1], normal[0]))
             corners = [
@@ -264,12 +269,23 @@ def profiles(scale=1, curl=1, *, settings=None):
                 for u, v in [(-width, -13), (width, -13), (width, 13), (-width, 13)]
             ]
             bridges.append(Polygon(corners))
+            # Keep a closed, rounded 9 mm bearing around the cap's 28 x 6.2
+            # tab slot. Keep this construction region physical when scaling the
+            # artwork; rails can narrow between ribs.
+            seats.append(Polygon([
+                center + (u * normal + v * tangent) / scale
+                for u, v in [(-14.1, -3.1), (14.1, -3.1),
+                             (14.1, 3.1), (-14.1, 3.1)]
+            ]).buffer(9 / scale, quad_segs=8))
         channels = channels.difference(unary_union(bridges))
         layers = []
         for j in range(count):
-            widths_j = np.array(widths) * (1 - 0.07 * j)
+            depth = j / (count - 1)
+            # Tips and outer rails retreat farther than the construction root.
+            taper = np.array([0.12, 0.30, 0.36, 0.32, 0.38, 0.44])
+            widths_j = np.array(widths) * (1 - depth * taper)
             widths_j[-1] = max(18, widths_j[-1])
-            shape = unary_union([sweep(points, widths_j), root])
+            shape = unary_union([sweep(points, widths_j), root, *seats])
             # Inset clipping keeps at least 10 mm rails around channel edges.
             holes = channels.intersection(shape.buffer(-10))
             shape = shape.difference(unary_union([holes, voids]))
