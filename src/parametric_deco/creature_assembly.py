@@ -187,6 +187,7 @@ def assemble_creature(c, inventory=None):
                 i.role,
             ):
                 raise ValueError("stale inventory revision or role")
+    offset_x, offset_y = layout.get("placement_offset_mm", (0, 0))
     moves = {}
     for m in layout["modules"]:
         name = m["module_id"]
@@ -199,11 +200,14 @@ def assemble_creature(c, inventory=None):
     for i in templates:
         pose = np.array(i.transform)
         dx, dy = moves.get(i.module_id, (0, 0))
+        if i.role != "backplate":
+            dx, dy = dx + offset_x, dy + offset_y
         pose[:2, 3] += (dx, dy)
         instances.append(replace(i, transform=pose))
     metadata = {
         "family": "creature-organism-v3",
         "posture": c.parameters.posture,
+        "placement_offset_mm": [offset_x, offset_y],
         "limb_count": c.parameters.limb_count,
         "cavity_count": c.parameters.cavity_count,
         "ribs_per_limb": c.parameters.ribs_per_limb,
@@ -225,6 +229,7 @@ def assemble_creature(c, inventory=None):
     hardware = []
     for m in metadata["modules"]:
         dx, dy = moves[m["module_id"]]
+        dx, dy = dx + offset_x, dy + offset_y
         roots = [(x + dx, y + dy) for x, y in m["roots"]]
         m["placed_roots"] = roots
         holes = match_root_pattern(c, roots)
@@ -321,6 +326,7 @@ def assemble_creature(c, inventory=None):
             central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0)
         ),
     ]
+    eyes = [affinity.translate(eye, xoff=offset_x, yoff=offset_y) for eye in eyes]
     for eye in eyes:
         for i in instances:
             if eye.intersection(xy_footprint(a.definition_for(i), i.transform)).area > 1e-5:

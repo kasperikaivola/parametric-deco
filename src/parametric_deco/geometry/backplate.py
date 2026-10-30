@@ -30,13 +30,15 @@ def backplate_polygon(config):
     elif config.style == "layered-creature":
         from shapely import affinity
         from shapely.ops import unary_union
-        from .creature_profiles import cavity_voids, central_void
+        from .creature_profiles import cavity_voids, central_void, placement_offset
 
         # These are real through channels, also cut in the armour above the board.
         voids = [*cavity_voids(config.parameters, 1.06),
                  affinity.scale(central_void(), xfact=config.parameters.scale,
                                 yfact=config.parameters.scale, origin=(0, 0))]
-        polygon = polygon.difference(unary_union(voids))
+        dx, dy = placement_offset(config)
+        polygon = polygon.difference(unary_union([
+            affinity.translate(v, xoff=dx, yoff=dy) for v in voids]))
     return polygon
 
 

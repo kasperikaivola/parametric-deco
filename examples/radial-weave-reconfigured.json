@@ -7,7 +7,7 @@
     "opening_radius_mm": 180,
     "lobes": 3,
     "ribs_per_module": 9,
-    "rotation_deg": 180,
+    "rotation_deg": 270,
     "rib_permutation": [
       0,
       1,

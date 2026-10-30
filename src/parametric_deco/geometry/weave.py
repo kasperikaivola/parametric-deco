@@ -30,7 +30,7 @@ def manufacturing_request(config):
 
 def radius(design, strand, theta):
     return design.radius_mm + (1 if strand == "a" else -1) * design.amplitude_mm * math.sin(
-        3 * theta
+        3 * (theta - math.radians(design.rotation_deg))
     )
 
 
@@ -100,7 +100,7 @@ def generate_weave(config, root_flips=()):
     for strand in ("a", "b"):
         for crossing in range(6):
             name = f"{strand}{crossing}"
-            centre = crossing * math.pi / 3
+            centre = crossing * math.pi / 3 + math.radians(design.rotation_deg)
             level = "high" if (crossing % 2 == 0) == (strand == "a") else "low"
             lid = 152 if level == "high" else 70
             zlevels = (102, 126) if level == "high" else (20, 44)
@@ -133,7 +133,7 @@ def generate_weave(config, root_flips=()):
                 crest = (
                     152
                     if level == "high"
-                    else round(70 + 82 * max(0.0, (abs(math.sin(3 * theta)) - 0.8) / 0.2), 6)
+                    else round(70 + 82 * max(0.0, (abs(math.sin(3 * (theta - math.radians(design.rotation_deg)))) - 0.8) / 0.2), 6)
                 )
                 outer = round(36 + 16 * math.sin(math.pi * j / 8), 6)
                 part = rib_definition(level, j, t, w, crest, outer)
@@ -323,7 +323,7 @@ def generate_weave(config, root_flips=()):
         )
     crossings = [
         {
-            "theta_deg": j * 60,
+            "theta_deg": (j * 60 + design.rotation_deg) % 360,
             "over_module": ("a" if j % 2 == 0 else "b") + str(j),
             "under_module": ("b" if j % 2 == 0 else "a") + str(j),
         }
@@ -333,6 +333,7 @@ def generate_weave(config, root_flips=()):
         "family": "radial-weave-v1",
         "manufacturing_request": manufacturing_request(config),
         "design": asdict(design),
+        "template_rotation_deg": design.rotation_deg,
         "modules": metadata,
         "mounting_grid": mounts,
         "hardware_bounds": hardware,

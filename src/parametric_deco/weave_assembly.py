@@ -196,7 +196,8 @@ def assemble_weave(config, inventory=None):
                 raise ValueError(f"{i.instance_id}: stale inventory/template revision or role")
         definitions = inventory.definitions
     by_id = {i.instance_id: i for i in templates}
-    theta = math.radians(config.parameters.rotation_deg)
+    relative_rotation = config.parameters.rotation_deg - layout.get("template_rotation_deg", 0)
+    theta = math.radians(relative_rotation)
     co, si = math.cos(theta), math.sin(theta)
     rotation = np.array(((co, -si, 0, 0), (si, co, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)))
     permutation = config.parameters.rib_permutation
@@ -247,7 +248,7 @@ def assemble_weave(config, inventory=None):
     metadata = json.loads(json.dumps(metadata))
     metadata["rotation_deg"] = config.parameters.rotation_deg
     for crossing in metadata["crossings"]:
-        crossing["theta_deg"] = (crossing["theta_deg"] + config.parameters.rotation_deg) % 360
+        crossing["theta_deg"] = (crossing["theta_deg"] + relative_rotation) % 360
         angle = math.radians(crossing["theta_deg"])
         crossing["position_mm"] = [
             config.parameters.radius_mm * math.cos(angle),

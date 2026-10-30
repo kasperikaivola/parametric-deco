@@ -304,3 +304,16 @@ def backing_outline(scale=1, *, settings=None):
         affinity.scale(central_void(), xfact=scale, yfact=scale, origin=(0, 0)),
     ]
     return shape.difference(unary_union(eyes))
+
+
+def placement_offset(config):
+    """Center the rest anatomy on the nearest equivalent staggered-grid row.
+
+    Two rows preserve both column positions and row parity. Keep this a
+    placement transform so all non-board manufactured profiles remain reusable.
+    """
+    bounds = [shape.bounds for layers in profiles(settings=config.parameters).values()
+              for shape in layers]
+    center_y = (min(b[1] for b in bounds) + max(b[3] for b in bounds)) / 2
+    repeat = 2 * config.grid.pitch_y_mm
+    return (0, repeat * round(-center_y / repeat))

@@ -9,6 +9,38 @@ from PIL import Image, ImageDraw, ImageFont
 from ..cad import mesh_for
 
 
+def rasterize_triangles(size, triangles):
+    """Resolve orthographic visibility per pixel, with larger depth in front.
+
+    Sorting whole faces by their average depth fails when their projected
+    footprints overlap: a face may be in front at one end and behind at the
+    other. Barycentric depth interpolation also handles these crossing faces.
+    """
+    width, height = size
+    pixels = np.full((height, width, 3), (18, 21, 27), dtype=np.uint8)
+    depth_buffer = np.full((height, width), -np.inf)
+    for xy, depth, color in triangles:
+        low = np.maximum(np.floor(xy.min(axis=0)).astype(int), 0)
+        high = np.minimum(np.ceil(xy.max(axis=0)).astype(int), (width - 1, height - 1))
+        if np.any(low > high):
+            continue
+        (ax, ay), (bx, by), (cx, cy) = xy
+        denominator = (by - cy) * (ax - cx) + (cx - bx) * (ay - cy)
+        if abs(denominator) < 1e-12:
+            continue
+        y, x = np.ogrid[low[1]:high[1] + 1, low[0]:high[0] + 1]
+        x, y = x + 0.5, y + 0.5
+        a = ((by - cy) * (x - cx) + (cx - bx) * (y - cy)) / denominator
+        b = ((cy - ay) * (x - cx) + (ax - cx) * (y - cy)) / denominator
+        c = 1 - a - b
+        z = a * depth[0] + b * depth[1] + c * depth[2]
+        region = np.s_[low[1]:high[1] + 1, low[0]:high[0] + 1]
+        visible = (a >= -1e-9) & (b >= -1e-9) & (c >= -1e-9) & (z > depth_buffer[region])
+        depth_buffer[region][visible] = z[visible]
+        pixels[region][visible] = color
+    return pixels
+
+
 def project_vertices(vertices, view):
     """Orthographic coordinates; front is XY, viewed from +Z toward the board.
 
@@ -116,7 +148,7 @@ def render_views(assembly, out_dir, views=None):
                     np.linalg.norm(normal) or 1
                 )
                 color = tuple(int(c * shade) for c in colors.get(instance.role, colors["part"]))
-                triangles.append((projected[face, 2].mean(), xy, color, False))
+                triangles.append((projected[face, 2], xy, color, False))
             if view == "front":
                 part = assembly.definition_for(instance)
                 pose = np.array(instance.transform)
@@ -130,7 +162,7 @@ def render_views(assembly, out_dir, views=None):
                         for j in range(len(ring)):
                             segment = pixels[[j, (j + 1) % len(ring)]]
                             triangles.append(
-                                (projected_ring[j, 2] + 1e-6, segment, (91, 65, 39), True)
+                                (projected_ring[j, 2:3] + 1e-6, segment, (91, 65, 39), True)
                             )
         if view == "joint-section":
             import trimesh
@@ -157,12 +189,17 @@ def render_views(assembly, out_dir, views=None):
                         (550, 465)
                     )
                     draw.line([tuple(p) for p in xy], fill=color, width=3)
-        else:
-            for _, xy, color, edge in sorted(triangles, key=lambda item: item[0]):
+        elif view == "front":
+            for _, xy, color, edge in sorted(triangles, key=lambda item: item[0].mean()):
                 if edge:
                     draw.line([tuple(p) for p in xy], fill=color, width=1)
                 else:
                     draw.polygon([tuple(p) for p in xy], fill=color)
+        else:
+            image = Image.fromarray(rasterize_triangles(
+                image.size, ((xy, depth, color) for depth, xy, color, _ in triangles)
+            ))
+            draw = ImageDraw.Draw(image)
         label = "FRONT (XY / +Z TOWARD VIEWER)" if view == "front" else view.upper()
         draw.text((36, 26), "PARAMETRIC DECO / " + label, font=font, fill="#ece1cd")
         draw.text(

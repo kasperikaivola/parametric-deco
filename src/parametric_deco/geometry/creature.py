@@ -12,6 +12,7 @@ from .creature_profiles import (
     central_void,
     rib_stations,
     smooth,
+    placement_offset,
 )
 from .backplate import generate_backplate, match_root_pattern
 
@@ -45,6 +46,7 @@ def generate_creature(c):
     t = c.material.measured_mm
     fit = c.material.clearance_mm
     base = c.mounting.rear_clearance_mm + t
+    offset_x, offset_y = placement_offset(c)
     definitions = []
     instances = []
     modules = []
@@ -81,7 +83,7 @@ def generate_creature(c):
     definitions.append(retainer)
     for name, layers in profiles(settings=c.parameters).items():
         roots = module_roots(c.parameters)[name]
-        match_root_pattern(c, roots)
+        match_root_pattern(c, [(x + offset_x, y + offset_y) for x, y in roots])
         keys = key_positions(roots)
         levels = (
             [16 + 2 * j for j in range(len(layers))]
@@ -257,6 +259,7 @@ def generate_creature(c):
     layout = {
         "family": "creature-organism-v3",
         "manufacturing_request": request_signature(c),
+        "placement_offset_mm": [offset_x, offset_y],
         "modules": modules,
         "templates": [asdict(i) for i in instances],
         "removal_order": [m["module_id"] for m in modules],

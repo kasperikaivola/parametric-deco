@@ -68,7 +68,7 @@ def test_weave_inventory_reconfiguration_never_regenerates_parts():
     changed = replace(
         c,
         parameters=replace(
-            c.parameters, rotation_deg=180, rib_permutation=(0, 1, 3, 4, 5, 6, 2, 7, 8)
+            c.parameters, rotation_deg=c.parameters.rotation_deg + 180, rib_permutation=(0, 1, 3, 4, 5, 6, 2, 7, 8)
         ),
     )
     second = assemble(changed, inventory)
@@ -80,7 +80,7 @@ def test_weave_inventory_reconfiguration_never_regenerates_parts():
         i.instance_id for i in second.assembly.instances
     }
     assert first.assembly.to_dict() != second.assembly.to_dict()
-    assert second.assembly.composition["crossings"][0]["theta_deg"] == 180
+    assert second.assembly.composition["crossings"][0]["theta_deg"] == (c.parameters.rotation_deg + 180) % 360
     with pytest.raises(ValueError, match="manufactured|inventory"):
         assemble(replace(c, parameters=replace(c.parameters, radius_mm=310)), inventory)
     with pytest.raises(ValueError, match="missing|inventory"):
