@@ -40,6 +40,11 @@ representatives; actual generated CAD with manufactured polygon backplates. Fron
 | Front | ![](docs/implementation/images/gallery/laminar/front.png) | ![](docs/implementation/images/gallery/layered-creature/front.png) | ![](docs/implementation/images/gallery/radial-weave/front.png) |
 | Three-quarter | ![](docs/implementation/images/gallery/laminar/three-quarter.png) | ![](docs/implementation/images/gallery/layered-creature/three-quarter.png) | ![](docs/implementation/images/gallery/radial-weave/three-quarter.png) |
 
+Creature anatomy is centered on equivalent grid rows; radial defaults to a vertical
+90° orientation with grid-matched cuts. Both views share the same exported assembly;
+[current gallery evidence](docs/implementation/gallery-evidence.json) records provenance
+and measured bounds.
+
 Build exports SVG cuts, quantities, fit coupon, scale check, immutable inventory,
 identified GLB/JSON, offline viewer, inspection images, assembly instructions and
 validation report. `reconfigure CONFIG --inventory SAVED --out DIRECTORY` reuses

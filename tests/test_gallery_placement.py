@@ -72,3 +72,49 @@ def test_explicit_zero_rotation_and_legacy_radial_inventory_replay():
     assert replay.assembly.to_dict() == build.assembly.to_dict()
     for _, _, x, y in replay.assembly.mounting_grid:
         assert match_root_pattern(c, [(x, y)])
+
+
+def test_legacy_creature_matches_saved_board_and_keeps_original_placement(monkeypatch):
+    import parametric_deco.geometry.creature as geometry
+    import parametric_deco.geometry.creature_profiles as profiles
+    from parametric_deco.assembly import assemble
+    from parametric_deco.model import Inventory, digest
+    c = load_config('examples/creature-alien-six.json')
+    from parametric_deco.geometry.backplate import generate_backplate, mounting_holes
+    generate_backplate.cache_clear()
+    mounting_holes.cache_clear()
+    with monkeypatch.context() as legacy:
+        legacy.setattr(geometry, 'placement_offset', lambda c: (0, 0))
+        legacy.setattr(profiles, 'placement_offset', lambda c: (0, 0))
+        bundle, layout = generate_creature(c)
+    generate_backplate.cache_clear()
+    mounting_holes.cache_clear()
+    layout.pop('placement_offset_mm')
+    layout.pop('fingerprint')
+    layout['fingerprint'] = digest(layout)
+    inventory = Inventory(bundle.definitions, bundle.instances, layout)
+    before = inventory.to_dict()
+    replay = assemble(c, inventory)
+    assert replay.report.digital_valid, replay.report.to_dict()
+    assert replay.assembly.composition['placement_offset_mm'] == [0, 0]
+    assert replay.assembly.definitions == inventory.definitions
+    assert replay.assembly.instances == inventory.instances
+    assert inventory.to_dict() == before
+
+
+def test_saved_mount_matching_requires_real_grid_bore_and_bearing():
+    import pytest
+    from shapely.geometry import Point, box
+    from parametric_deco.geometry.backplate import match_root_pattern
+    from parametric_deco.model import PartDefinition
+    c = load_config('examples/creature-alien-six.json')
+    def board(outer, radius):
+        return PartDefinition.from_polygon('board', outer.difference(
+            Point(0, 0).buffer(radius, quad_segs=8)), 6, kind='backplate')
+    valid = board(box(-60, -60, 60, 60), c.grid.hole_diameter_mm / 2)
+    assert match_root_pattern(c, [(0, 0)], backing=valid)[0].point_id == 'grid-r0-c0'
+    aperture = board(box(-60, -60, 60, 60), 30)
+    no_bearing = board(box(-12, -12, 12, 12), c.grid.hole_diameter_mm / 2)
+    for invalid in (aperture, no_bearing):
+        with pytest.raises(ValueError, match='saved grid bore/washer'):
+            match_root_pattern(c, [(0, 0)], backing=invalid)

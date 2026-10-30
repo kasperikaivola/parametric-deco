@@ -232,7 +232,8 @@ def assemble_creature(c, inventory=None):
         dx, dy = dx + offset_x, dy + offset_y
         roots = [(x + dx, y + dy) for x, y in m["roots"]]
         m["placed_roots"] = roots
-        holes = match_root_pattern(c, roots)
+        backing = next(d for d in definitions if d.kind == "backplate")
+        holes = match_root_pattern(c, roots, backing=backing)
         for h in holes:
             mounts.append((m["module_id"], h.point_id, h.x_mm, h.y_mm))
             r = c.mounting.washer_radius_mm
