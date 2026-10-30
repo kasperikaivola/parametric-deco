@@ -26,6 +26,8 @@ def main(argv=None):
             p.add_argument("--force", action="store_true")
         if name == "reconfigure":
             p.add_argument("--inventory", type=Path, required=True)
+    p = commands.add_parser("gui", help="open optional Python desktop live CAD editor")
+    p.add_argument("config", type=Path, nargs="?")
     p = commands.add_parser("preview")
     p.add_argument("directory", type=Path)
     p.add_argument("--port", type=int, default=8765)
@@ -49,6 +51,9 @@ def main(argv=None):
     p.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     try:
+        if args.command == "gui":
+            from .desktop import main as desktop_main
+            return desktop_main([str(args.config)] if args.config else [])
         if args.command == "styles":
             print(json.dumps([{"style": style, "parameters": config_from_dict(
                 {"style": style}).to_dict()["parameters"]} for style in STYLE_PARAMETERS], indent=2))

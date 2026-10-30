@@ -3,9 +3,13 @@
 (async function () {
   const $ = id => document.getElementById(id);
   const canvas = $('view'), ctx = canvas.getContext('2d');
-  const response = await fetch('../scene.json');
-  if (!response.ok) throw new Error('Cannot load generated scene.json');
-  const scene = await response.json(), hidden = new Set();
+  let scene = window.decoScene;
+  if (!scene) {
+    const response = await fetch('../scene.json');
+    if (!response.ok) throw new Error('Cannot load generated scene.json');
+    scene = await response.json();
+  }
+  const hidden = new Set();
   let yaw = -.4, pitch = .35, zoom = 1, triangles = [], drag = null, moved = false;
   const meshCache = new Map();
   for (const [id, mesh] of Object.entries(scene.meshes)) meshCache.set(id, mesh);
@@ -82,6 +86,12 @@
   $('orbit').onclick=()=>{yaw=-.4;pitch=.35;draw();};
   for(const id of ['explode','backing','hardware'])$(id).oninput=draw;
   window.addEventListener('resize',draw);
+  window.decoGetView=()=>({yaw,pitch,zoom,explode:$('explode').value,backing:$('backing').checked,hardware:$('hardware').checked});
+  window.decoSetView=view=>{
+    if(!view || ![view.yaw,view.pitch,view.zoom].every(Number.isFinite))return;
+    yaw=view.yaw;pitch=view.pitch;zoom=Math.max(.2,Math.min(5,view.zoom));
+    $('explode').value=view.explode||0;$('backing').checked=view.backing!==false;$('hardware').checked=view.hardware!==false;draw();
+  };
   $('status').textContent=scene.instances.length+' identified plywood instances · orbit preview';
   draw();
 })().catch(error=>{document.getElementById('status').textContent=error.message;console.error(error);});
