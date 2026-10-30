@@ -53,14 +53,16 @@ def test_default_is_laminar():
     assert DesignConfig().style == 'laminar'
 
 
-def test_creature_manufacturing_identity_matches_previous_public_schema():
+def test_common_polygon_board_changes_previous_creature_manufacturing_identity():
     from pathlib import Path
     from parametric_deco.geometry.creature import request_signature
+    # The earlier anatomical board cannot satisfy the new physical polygon cuts.
     # Captured from the pre-v2 public example; no Git checkout/history needed.
     config = config_from_dict(json.loads(Path('examples/creature-mask.json').read_text()))
-    assert request_signature(config) == (
+    assert request_signature(config) != (
         '9926851e9b6fca328ed53126efe5a6f0a940d5c72d44a6e8f3b1f80619c59841'
     )
+    assert request_signature(config_from_dict(config.to_dict())) == request_signature(config)
 
 
 def test_cross_style_inventory_requires_new_cuts():
