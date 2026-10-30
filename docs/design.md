@@ -65,7 +65,7 @@ once by laser software. Grade and finish are optional; no white paint is require
 
 | Setting | Meaning and style boundary |
 | --- | --- |
-| `envelope` | Laminar fits XY (2 mm boundary allowance) and generates actual relief for depth; XY 800–1400, aspect ratio 0.7–1.4, depth 120–240. For the other styles this is a containment budget, not a scale command: creature geometry uses its explicit scale/reach controls; radial uses millimetre radii; rib study uses recipe dimensions. Too small fails. |
+| `envelope` | Every polygon board fits requested XY. Laminar sculpture fits XY with 2 mm boundary allowance and generates actual relief for depth; XY 800–1400, aspect ratio 0.7–1.4, depth 120–240. Other sculpture geometry retains explicit dimensions: creature scale/reach controls, radial millimetre radii, rib-study recipe. The envelope contains those parts rather than rescaling them; too small fails. |
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
 | `grid` | Pitch X/Y 50, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Staggered grid locates radial, creature and rib-study roots; laminar derives roots from anatomy and uses the bore diameter, not grid pitch. |
 | `backplate` | Common envelope-fitted regular polygon for every style; sides 8 and rotation 22.5° by default. Laminar cuts its trestle seats/bores; creature retains through-eye/central channels and lattice; radial retains its central aperture. |
