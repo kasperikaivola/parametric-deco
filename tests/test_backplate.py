@@ -121,9 +121,11 @@ def test_creature_polygon_retains_through_eye_and_central_channels():
     from shapely.ops import unary_union
     from parametric_deco.config import config_from_dict
     from parametric_deco.geometry.backplate import backplate_polygon
-    from parametric_deco.geometry.creature_profiles import cavity_voids, central_void
+    from parametric_deco.geometry.creature_profiles import cavity_voids, central_void, placement_offset
 
     c = config_from_dict({'style': 'layered-creature'})
     voids = unary_union([*cavity_voids(c.parameters, 1.06), affinity.scale(
         central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0))])
-    assert backplate_polygon(c).intersection(voids).area < 1e-6
+    dx, dy = placement_offset(c)
+    placed_voids = affinity.translate(voids, xoff=dx, yoff=dy)
+    assert backplate_polygon(c).intersection(placed_voids).area < 1e-6
