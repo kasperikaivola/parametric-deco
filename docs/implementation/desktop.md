@@ -13,7 +13,7 @@ parametric-deco-gui examples/organism-low.json
 On Windows use `.venv\Scripts\activate`; on macOS/Linux use
 `. .venv/bin/activate`. The optional extra pins PySide6 (including QtWebEngine).
 CLI-only installation and commands do not require Qt. Linux needs Qt's usual
-platform libraries (including libXtst, libxkbfile, NSS, XComposite, XDamage, XRandR, GBM and
+platform libraries (including EGL/OpenGL, libXtst, libxkbfile, NSS, XComposite, XDamage, XRandR, GBM and
 ALSA); a normal desktop session is recommended. No browser, server or network
 service is required. The viewer uses the same offline canvas renderer as exports.
 
