@@ -7,13 +7,17 @@ import json
 from pathlib import Path
 import sys
 
-from .config import load_config
+from .config import STYLE_PARAMETERS, config_from_dict, load_config
 from .model import Assembly, Inventory
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="parametric-deco")
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("styles", help="list styles and their default parameters; see docs/design.md")
+    p = commands.add_parser("init", help="write a complete schema-v2 starter configuration")
+    p.add_argument("--style", choices=tuple(STYLE_PARAMETERS), default="laminar")
+    p.add_argument("--out", type=Path, required=True)
     for name in ("validate", "build", "reconfigure"):
         p = commands.add_parser(name)
         p.add_argument("config", type=Path)
@@ -40,11 +44,21 @@ def main(argv=None):
     p.add_argument(
         "--visible-only",
         action="store_true",
-        help="select sampled visible creature broad faces from frontal projector at (0,0,2000) mm",
+        help="select sampled visible broad faces from frontal projector at (0,0,2000) mm",
     )
     p.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     try:
+        if args.command == "styles":
+            print(json.dumps([{"style": style, "parameters": config_from_dict(
+                {"style": style}).to_dict()["parameters"]} for style in STYLE_PARAMETERS], indent=2))
+            return 0
+        if args.command == "init":
+            config = config_from_dict({"style": args.style})
+            with args.out.open("x") as stream:
+                stream.write(json.dumps(config.to_dict(), indent=2) + "\n")
+            print(str(args.out))
+            return 0
         if args.command == "preview":
             directory = args.directory.resolve()
             if not (directory / "preview/index.html").is_file():

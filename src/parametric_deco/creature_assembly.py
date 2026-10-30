@@ -192,7 +192,7 @@ def assemble_creature(c, inventory=None):
         name = m["module_id"]
         moves[name] = (
             ((-25 if "left" in name else 25), 50)
-            if c.creature.posture == "raised_crown" and name.startswith("crown")
+            if c.parameters.posture == "raised_crown" and name.startswith("crown")
             else (0, 0)
         )
     instances = []
@@ -203,10 +203,10 @@ def assemble_creature(c, inventory=None):
         instances.append(replace(i, transform=pose))
     metadata = {
         "family": "creature-organism-v3",
-        "posture": c.creature.posture,
-        "limb_count": c.creature.limb_count,
-        "cavity_count": c.creature.cavity_count,
-        "ribs_per_limb": c.creature.ribs_per_limb,
+        "posture": c.parameters.posture,
+        "limb_count": c.parameters.limb_count,
+        "cavity_count": c.parameters.cavity_count,
+        "ribs_per_limb": c.parameters.ribs_per_limb,
         "modules": json.loads(json.dumps(layout["modules"])),
         "removal_order": layout["removal_order"],
         "washer_radius_mm": c.mounting.washer_radius_mm,
@@ -316,9 +316,9 @@ def assemble_creature(c, inventory=None):
     from .geometry.creature_profiles import cavity_voids, central_void
 
     eyes = [
-        *cavity_voids(c.creature, 0.75),
+        *cavity_voids(c.parameters, 0.75),
         affinity.scale(
-            central_void(), xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0)
+            central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0)
         ),
     ]
     for eye in eyes:
@@ -327,8 +327,8 @@ def assemble_creature(c, inventory=None):
                 issues.append(
                     Issue("error", "eye_channel", f"{i.instance_id}: eye channel obstruction")
                 )
-    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes[: c.creature.cavity_count])
-    metadata["clear_aperture_probe_areas_mm2"] = [p.area for p in eyes[: c.creature.cavity_count]]
+    metadata["eye_aperture_area_mm2"] = sum(p.area for p in eyes[: c.parameters.cavity_count])
+    metadata["clear_aperture_probe_areas_mm2"] = [p.area for p in eyes[: c.parameters.cavity_count]]
     a = replace(a, composition=metadata)
     report = replace(report, issues=tuple(issues))
     return BuildResult(

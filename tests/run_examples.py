@@ -14,6 +14,12 @@ def main():
         root = Path(directory)
         (root / "examples").symlink_to(repo / "examples", target_is_directory=True)
         commands = [
+            ["styles"],
+            ["init", "--out", "default.json"],
+            ["build", "default.json", "--out", "build/default"],
+            ["reconfigure", "default.json", "--inventory", "build/default/inventory.json",
+             "--out", "build/default-replay"],
+            ["visuals", "build/default", "--out", "build/default-visuals", "--visible-only"],
             ["validate", "examples/single-module.json"],
             ["build", "examples/single-module.json", "--out", "build/single"],
             ["visuals", "build/single", "--out", "build/single-visuals"],
@@ -91,6 +97,9 @@ def main():
                     ],
                 ]
             )
+        for name in ("medium", "high", "bilateral", "small", "large"):
+            commands.append(["build", "examples/organism-" + name + ".json",
+                             "--out", "build/organism-" + name])
         for args in commands:
             print("RUN: parametric-deco " + " ".join(args), flush=True)
             result = subprocess.run(

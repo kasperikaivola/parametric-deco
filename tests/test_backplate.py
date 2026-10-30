@@ -1,3 +1,4 @@
+from parametric_deco.config import RibStudy
 from dataclasses import replace
 import math
 
@@ -9,7 +10,7 @@ def test_polygon_uniform_fit_and_grid_negative_parity():
     from parametric_deco.config import DesignConfig
     from parametric_deco.geometry.backplate import backplate_polygon, mounting_holes
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     for n in (6, 8):
         shape = backplate_polygon(replace(c, backplate=replace(c.backplate, sides=n)))
         assert shape.bounds[0] >= -500 - 1e-8
@@ -36,7 +37,7 @@ def test_root_requires_all_holes_and_washers():
     from parametric_deco.config import DesignConfig
     from parametric_deco.geometry.backplate import match_root_pattern
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     assert len(match_root_pattern(c, ((25, -50), (25, 50)))) == 2
     with pytest.raises(ValueError, match="mount"):
         match_root_pattern(c, ((25, -50), (26, 50)))

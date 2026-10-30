@@ -130,20 +130,39 @@ class Organism:
 
 
 @dataclass(frozen=True)
+class RibStudy:
+    recipe: ModuleRecipe = ModuleRecipe()
+    placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
+
+
+STYLE_PARAMETERS = {
+    "laminar": Organism,
+    "layered-creature": CreatureMask,
+    "radial-weave": RadialWeave,
+    "rib-study": RibStudy,
+}
+
+
+@dataclass(frozen=True)
 class DesignConfig:
-    schema_version: int = 1
+    schema_version: int = 2
     units: str = "mm"
+    style: str = "laminar"
+    parameters: Organism | CreatureMask | RadialWeave | RibStudy = Organism()
     envelope: Envelope = Envelope()
     material: Material = Material()
     grid: Grid = Grid()
     backplate: Backplate = Backplate()
-    module: ModuleRecipe = ModuleRecipe()
     mounting: Mounting = Mounting()
-    placements: tuple[ModulePlacement, ...] = (ModulePlacement(),)
     cutting_bed: CuttingBed | None = None
-    composition: RadialWeave | None = None
-    creature: CreatureMask | None = None
-    organism: Organism | None = None
+
+    @property
+    def module(self):
+        return self.parameters.recipe if isinstance(self.parameters, RibStudy) else ModuleRecipe()
+
+    @property
+    def placements(self):
+        return self.parameters.placements if isinstance(self.parameters, RibStudy) else ()
 
     def to_dict(self):
         return asdict(self)
@@ -166,22 +185,26 @@ def validate_config(c):
             return False
         return True
 
-    if c.schema_version != 1:
-        bad("schema_version", "must be 1")
+    if type(c.schema_version) is not int or c.schema_version != 2:
+        bad("schema_version", "must be 2; rewrite generation requests using schema-v2")
+    if not isinstance(c.style, str) or c.style not in STYLE_PARAMETERS:
+        bad("style", "use " + ", ".join(STYLE_PARAMETERS))
+    elif type(c.parameters) is not STYLE_PARAMETERS[c.style]:
+        bad("parameters", "must match selected style " + c.style)
+    if issues:
+        return ValidationReport(tuple(issues))
     if c.units != "mm":
         bad("units", "must be mm")
-    if c.organism is not None:
-        o = c.organism
-        if c.creature is not None or c.composition is not None:
-            bad("organism", "select only one composition family")
+    if c.style == "laminar":
+        o = c.parameters
         for key, lo, hi in (("focal_count", 4, 8), ("branching", 1, 3), ("complexity", 0, 2)):
             v = getattr(o, key)
             if type(v) is not int or not lo <= v <= hi:
-                bad("organism." + key, f"integer {lo}..{hi} required")
+                bad("parameters." + key, f"integer {lo}..{hi} required")
         for key, hi in (("secondary_lobes", 1), ("channels", 3), ("segmentation", 5)):
             v = getattr(o, key)
             if v is not None and (type(v) is not int or not 0 <= v <= hi):
-                bad("organism." + key, f"null or integer 0..{hi} required")
+                bad("parameters." + key, f"null or integer 0..{hi} required")
         for key, lo, hi in (
             ("phase_deg", -180, 180),
             ("anatomy_phase_deg", -180, 180),
@@ -193,12 +216,12 @@ def validate_config(c):
             ("asymmetry", 0, 0.2),
         ):
             v = getattr(o, key)
-            if numeric("organism." + key, v, False) and not lo <= v <= hi:
-                bad("organism." + key, f"range {lo}..{hi} required")
+            if numeric("parameters." + key, v, False) and not lo <= v <= hi:
+                bad("parameters." + key, f"range {lo}..{hi} required")
         if o.arrangement not in ("whorl", "bilateral"):
-            bad("organism.arrangement", "use whorl or bilateral")
+            bad("parameters.arrangement", "use whorl or bilateral")
         if o.symmetry not in ("rotational", "bilateral", "none"):
-            bad("organism.symmetry", "use rotational, bilateral or none")
+            bad("parameters.symmetry", "use rotational, bilateral or none")
         for key in ("width_mm", "height_mm", "depth_mm"):
             numeric("envelope." + key, getattr(c.envelope, key))
         if issues:
@@ -209,10 +232,8 @@ def validate_config(c):
             bad("envelope", "organism aspect ratio requires 0.7..1.4")
         if not 120 <= c.envelope.depth_mm <= 240:
             bad("envelope.depth_mm", "organism relief requires 120..240 mm")
-    if c.creature is not None:
-        creature = c.creature
-        if c.composition is not None:
-            bad("creature", "select only one composition family")
+    if c.style == "layered-creature":
+        creature = c.parameters
         count_ranges = {
             "limb_count": (2, 6),
             "cavity_count": (3, 8),
@@ -223,7 +244,7 @@ def validate_config(c):
         for field, (lo, hi) in count_ranges.items():
             value = getattr(creature, field)
             if type(value) is not int or not lo <= value <= hi:
-                bad("creature." + field, f"integer {lo}..{hi} required")
+                bad("parameters." + field, f"integer {lo}..{hi} required")
         shape_ranges = {
             "scale": (0.9, 1),
             "curl": (0.8, 1.2),
@@ -234,14 +255,14 @@ def validate_config(c):
         }
         for field, (lo, hi) in shape_ranges.items():
             value = getattr(creature, field)
-            if numeric("creature." + field, value, False) and not lo <= value <= hi:
-                bad("creature." + field, f"range {lo}..{hi} required")
+            if numeric("parameters." + field, value, False) and not lo <= value <= hi:
+                bad("parameters." + field, f"range {lo}..{hi} required")
         if issues:
             return ValidationReport(tuple(issues))
         if not 0.9 <= creature.scale <= 1 or not 0.8 <= creature.curl <= 1.2:
             bad("creature", "candidate scale .9..1 and curl .8..1.2 required")
         if creature.posture not in ("rest", "raised_crown"):
-            bad("creature.posture", "use rest or raised_crown")
+            bad("parameters.posture", "use rest or raised_crown")
         required = (
             c.mounting.rear_clearance_mm
             + (18 + 2 * (creature.shell_layers - 1)) * c.material.measured_mm
@@ -249,20 +270,20 @@ def validate_config(c):
         )
         if c.envelope.depth_mm < required:
             bad("envelope.depth_mm", f"creature requires {required:g} mm including hardware")
-    if c.composition is not None:
-        w = c.composition
+    if c.style == "radial-weave":
+        w = c.parameters
         for key in ("radius_mm", "amplitude_mm", "opening_radius_mm", "rotation_deg"):
-            numeric("composition." + key, getattr(w, key), key != "rotation_deg")
+            numeric("parameters." + key, getattr(w, key), key != "rotation_deg")
         if issues:
             return ValidationReport(tuple(issues))
         if w.lobes != 3 or type(w.lobes) is not int:
-            bad("composition.lobes", "this candidate family requires 3 lobes / 6 crossings")
+            bad("parameters.lobes", "this candidate family requires 3 lobes / 6 crossings")
         if w.ribs_per_module != 9 or type(w.ribs_per_module) is not int:
-            bad("composition.ribs_per_module", "this candidate family requires 9 ribs per module")
+            bad("parameters.ribs_per_module", "this candidate family requires 9 ribs per module")
         if not 40 <= w.amplitude_mm <= 80 or not 250 <= w.radius_mm <= 340:
-            bad("composition.radius_mm", "candidate range is radius 250..340, amplitude 40..80 mm")
+            bad("parameters.radius_mm", "candidate range is radius 250..340, amplitude 40..80 mm")
         if w.opening_radius_mm > w.radius_mm - w.amplitude_mm - 52:
-            bad("composition.opening_radius_mm", "must clear manufactured inner fins and root pads")
+            bad("parameters.opening_radius_mm", "must clear manufactured inner fins and root pads")
         if (
             len(w.rib_permutation) != 9
             or any(type(index) is not int for index in w.rib_permutation)
@@ -270,7 +291,7 @@ def validate_config(c):
             or any(w.rib_permutation[k] != k for k in (0, 1, 7, 8))
         ):
             bad(
-                "composition.rib_permutation",
+                "parameters.rib_permutation",
                 "use integer indices; permute compatible central stations 2..6 only",
             )
     for name in ("envelope", "material", "grid", "backplate", "module", "mounting", "cutting_bed"):
@@ -329,10 +350,10 @@ def validate_config(c):
     total = (
         c.mounting.rear_clearance_mm
         + c.material.measured_mm * 2
-        + (152 if c.composition else m.rib_top_mm)
+        + (152 if c.style == "radial-weave" else m.rib_top_mm)
         + c.mounting.hardware_outward_mm
     )
-    if c.organism is None and c.envelope.depth_mm < total:
+    if c.style in ("rib-study", "radial-weave") and c.envelope.depth_mm < total:
         bad("envelope.depth_mm", f"requires at least {total:g} including hardware")
     if not (0 < m.rib_bottom_mm < m.joint_datum_mm < m.spine_height_mm < m.rib_top_mm):
         bad("module.joint_datum_mm", "require bottom < datum < spine height < rib top")
@@ -396,60 +417,56 @@ def validate_config(c):
                 safe_id(identifier)
             except ValueError as e:
                 bad("placements.instance_ids", str(e))
-    if not c.placements:
+    if c.style == "rib-study" and not c.placements:
         bad("placements", "at least one module is required")
     return ValidationReport(tuple(issues))
+
+
+def _construct(cls, values):
+    if not isinstance(values, dict):
+        raise ValueError(f"{cls.__name__} must be a JSON object")
+    values = dict(values)
+    for f in fields(cls):
+        if isinstance(f.default, tuple) and f.name in values:
+            values[f.name] = tuple(values[f.name])
+    return cls(**values)
 
 
 def config_from_dict(data):
     if not isinstance(data, dict):
         raise ValueError("config must be a JSON object")
+    if ({"organism", "creature", "composition", "module", "placements"} & data.keys()
+            or data.get("schema_version", 2) != 2):
+        raise ValueError("unsupported old generation request; rewrite using schema-v2 style and "
+                         "parameters (see docs/design.md). Saved inventory is not migrated.")
     unknown = set(data) - {f.name for f in fields(DesignConfig)}
     if unknown:
         raise ValueError(f"unknown config fields: {sorted(unknown)}")
     kwargs = dict(data)
-    classes = {
-        "envelope": Envelope,
-        "material": Material,
-        "grid": Grid,
-        "backplate": Backplate,
-        "module": ModuleRecipe,
-        "mounting": Mounting,
-        "cutting_bed": CuttingBed,
-        "composition": RadialWeave,
-        "creature": CreatureMask,
-        "organism": Organism,
-    }
+    style = kwargs.get("style", "laminar")
+    if not isinstance(style, str) or style not in STYLE_PARAMETERS:
+        raise ValueError("unknown style; use " + ", ".join(STYLE_PARAMETERS))
     try:
-        for key, cls in classes.items():
-            if key in kwargs and kwargs[key] is not None:
-                values = dict(kwargs[key])
-                for f in fields(cls):
-                    if isinstance(f.default, tuple) and f.name in values:
-                        values[f.name] = tuple(values[f.name])
-                kwargs[key] = cls(**values)
-        if "placements" in kwargs:
-            kwargs["placements"] = tuple(
-                ModulePlacement(
-                    **{
-                        k: tuple(v)
-                        if k
-                        in (
-                            "rib_order",
-                            "station_indices",
-                            "spine_instance_ids",
-                            "rib_instance_ids",
-                        )
-                        else v
-                        for k, v in p.items()
-                    }
-                )
-                for p in kwargs["placements"]
-            )
+        values = kwargs.get("parameters", {})
+        if style == "rib-study":
+            if not isinstance(values, dict):
+                raise ValueError("parameters must be a JSON object")
+            values = dict(values)
+            if "recipe" in values:
+                values["recipe"] = _construct(ModuleRecipe, values["recipe"])
+            if "placements" in values:
+                values["placements"] = tuple(_construct(ModulePlacement, p)
+                                              for p in values["placements"])
+        kwargs["parameters"] = _construct(STYLE_PARAMETERS[style], values)
+        for key, cls in {"envelope": Envelope, "material": Material, "grid": Grid,
+                         "backplate": Backplate, "mounting": Mounting,
+                         "cutting_bed": CuttingBed}.items():
+            if key in kwargs and not (key == "cutting_bed" and kwargs[key] is None):
+                kwargs[key] = _construct(cls, kwargs[key])
         c = DesignConfig(**kwargs)
         report = validate_config(c)
     except (TypeError, KeyError) as e:
-        raise ValueError(f"invalid config: {e}") from e
+        raise ValueError(f"invalid {style} config: {e}") from e
     if not report.digital_valid:
         raise ValueError("; ".join(i.message for i in report.issues))
     canonical(c.to_dict())

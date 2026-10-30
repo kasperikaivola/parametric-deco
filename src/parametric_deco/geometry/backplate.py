@@ -10,10 +10,10 @@ from ..model import GeometryBundle, MountPoint, PartDefinition
 
 
 def backplate_polygon(config):
-    if config.creature is not None:
+    if config.style == "layered-creature":
         from .creature_profiles import backing_outline
 
-        return backing_outline(settings=config.creature)
+        return backing_outline(settings=config.parameters)
     n = config.backplate.sides
     theta = math.radians(config.backplate.rotation_deg)
     points = [
@@ -28,8 +28,8 @@ def backplate_polygon(config):
         config.envelope.height_mm / (max(ys) - min(ys)),
     )
     polygon = Polygon([((x - cx) * scale, (y - cy) * scale) for x, y in points])
-    if config.composition is not None:
-        radius = config.composition.opening_radius_mm / math.cos(math.pi / 384)
+    if config.style == "radial-weave":
+        radius = config.parameters.opening_radius_mm / math.cos(math.pi / 384)
         polygon = polygon.difference(Point(0, 0).buffer(radius, quad_segs=96))
     return polygon
 

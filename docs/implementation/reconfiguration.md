@@ -1,13 +1,7 @@
-# Two arrangements of one inventory
+# Rib-study inventory placement
 
-**Task 8 / full intertwined-composition milestone: INCOMPLETE.**
-
-intertwined.json is the legacy filename for a four-module mechanical study around
-an empty centre. It does not demonstrate the agreed integrated composition,
-continuous contours or apparent interweaving. Passing collision, inventory and
-module-count tests does not establish visual success. A future composition must
-coordinate boundaries or apparent crossings and then verify removal access.
-The existing images are retained as inspection evidence, not completed-art claims.
+The full style workflow is in the [design guide](../design.md). This page describes
+`parameters.placements` for the explicit mechanical study.
 
 All four modules use the same spine and closure revisions. Reusable rib
 profiles are shared across modules and repeated via identified instances.
@@ -15,8 +9,7 @@ reconfigured.json assigns physical instance IDs explicitly, permutes rib profile
 among manufactured stations, and exchanges rib-0 between m1 and m2. It preserves every instance ID and definition fingerprint while
 changing transforms, visual phase attribution and atlas mapping. It makes
 no new cuts or silently resized spines. examples/inventory.json is a compact
-saved inventory of the first arrangement; prefer regenerating it with the
-pinned version when changing generator geometry intentionally.
+saved inventory of the first arrangement; this manufactured fixture is kept unchanged. Generate a separate inventory for new cuts.
 
 Commands are in cli.md. The integrated test checks both states, all root-grid
 matches, envelope and actual static solid intersections, identity preservation,

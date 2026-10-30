@@ -4,28 +4,28 @@ from parametric_deco.config import config_from_dict
 
 
 def test_new_family_and_size_validation():
-    c = config_from_dict({"organism": {}})
-    assert c.organism.complexity == 0
+    c = config_from_dict({"style": "laminar", "parameters": {}})
+    assert c.parameters.complexity == 0
     for dimensions in [(800, 800, 120), (1000, 1000, 200), (1400, 1400, 240)]:
         config_from_dict(
             {
-                "organism": {},
+                "style": "laminar", "parameters": {},
                 "envelope": dict(zip(("width_mm", "height_mm", "depth_mm"), dimensions)),
             }
         )
     for bad in [{"complexity": True}, {"focal_count": 2}, {"curvature": float("nan")}]:
         with pytest.raises(ValueError):
-            config_from_dict({"organism": bad})
+            config_from_dict({"style": "laminar", "parameters": bad})
     with pytest.raises(ValueError, match="800"):
-        config_from_dict({"organism": {}, "envelope": {"width_mm": 300}})
+        config_from_dict({"style": "laminar", "parameters": {}, "envelope": {"width_mm": 300}})
 
 
 def test_complexity_preserves_primary_anatomy():
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {}})
+    c = config_from_dict({"style": "laminar", "parameters": {}})
     low = anatomy(c)
-    high = anatomy(replace(c, organism=replace(c.organism, complexity=2)))
+    high = anatomy(replace(c, parameters=replace(c.parameters, complexity=2)))
     assert len(high) > len(low)
     for a, b in zip(low, high):
         assert (a.name, a.z) == (b.name, b.z)
@@ -36,7 +36,7 @@ def test_complexity_preserves_primary_anatomy():
 def test_manufactured_module_depth_and_inventory():
     from parametric_deco.assembly import assemble
 
-    c = config_from_dict({"organism": {}})
+    c = config_from_dict({"style": "laminar", "parameters": {}})
     b = assemble(c)
     assert b.report.digital_valid, b.report.issues
     assert len(b.assembly.instances) == 19
@@ -45,7 +45,7 @@ def test_manufactured_module_depth_and_inventory():
     assert all(p.thickness_mm == 6 for p in b.fabrication_parts)
     assert assemble(c, b.inventory).inventory.to_dict() == b.inventory.to_dict()
     with pytest.raises(ValueError, match="new cuts"):
-        assemble(replace(c, organism=replace(c.organism, curvature=1.1)), b.inventory)
+        assemble(replace(c, parameters=replace(c.parameters, curvature=1.1)), b.inventory)
 
 
 def test_margins_and_necks_reject_real_thin_material():
@@ -63,7 +63,7 @@ def test_legacy_dense_slots_rejected_before_keys():
     from parametric_deco.geometry.creature import generate_creature
 
     c = DesignConfig(
-        creature=CreatureMask(
+        style="layered-creature", parameters=CreatureMask(
             limb_count=6,
             ribs_per_limb=7,
             limb_reach=0.85,
@@ -82,8 +82,8 @@ def test_legacy_dense_slots_rejected_before_keys():
 def test_segmentation_changes_material_without_replacing_focal_layout():
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {"segmentation": 2}})
-    dense = replace(c, organism=replace(c.organism, segmentation=4))
+    c = config_from_dict({"style": "laminar", "parameters": {"segmentation": 2}})
+    dense = replace(c, parameters=replace(c.parameters, segmentation=4))
     low, high = anatomy(c), anatomy(dense)
     assert [lobe.z for lobe in low] == [lobe.z for lobe in high]
     assert low[0].shape.area != high[0].shape.area
@@ -93,7 +93,7 @@ def test_secondary_relief_separates_overlapping_plates():
     from itertools import combinations
     from parametric_deco.geometry.organism import anatomy
 
-    lobes = anatomy(config_from_dict({"organism": {"complexity": 2}}))
+    lobes = anatomy(config_from_dict({"style": "laminar", "parameters": {"complexity": 2}}))
     for a, b in combinations(lobes, 2):
         if abs(a.z - b.z) < 6:
             assert a.shape.intersection(b.shape).area < 1e-6, (a.name, b.name)
@@ -132,7 +132,7 @@ def test_loaded_assembly_bearing_and_support_checks():
     from parametric_deco.model import PartDefinition
     from shapely.geometry import Point
 
-    b = assemble(config_from_dict({"organism": {}}))
+    b = assemble(config_from_dict({"style": "laminar", "parameters": {}}))
     assert verify_organism(b.assembly).digital_valid
     a = b.assembly
     instance = next(i for i in a.instances if i.role == "armour")
@@ -175,9 +175,9 @@ def test_loaded_assembly_bearing_and_support_checks():
 def test_each_shape_control_changes_actual_contours(field, value):
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {}})
+    c = config_from_dict({"style": "laminar", "parameters": {}})
     base = anatomy(c)
-    changed = anatomy(replace(c, organism=replace(c.organism, **{field: value})))
+    changed = anatomy(replace(c, parameters=replace(c.parameters, **{field: value})))
     assert any(not a.shape.equals(b.shape) for a, b in zip(base, changed))
 
 
@@ -223,7 +223,7 @@ def test_determinism_and_all_new_cut_requests():
     from parametric_deco.organism_assembly import manufacture
     from parametric_deco.model import Inventory
 
-    c = config_from_dict({"organism": {}})
+    c = config_from_dict({"style": "laminar", "parameters": {}})
     first = manufacture(c)
     second = manufacture(c)
     assert [p.fingerprint for p in first[0]] == [p.fingerprint for p in second[0]]
@@ -248,7 +248,7 @@ def test_determinism_and_all_new_cut_requests():
         "asymmetry": 0.15,
     }
     for field, value in changes.items():
-        changed = replace(c, organism=replace(c.organism, **{field: value}))
+        changed = replace(c, parameters=replace(c.parameters, **{field: value}))
         with pytest.raises(ValueError, match="new cuts"):
             assemble(changed, inv)
     with pytest.raises(ValueError, match="new cuts"):
@@ -272,7 +272,7 @@ def test_primary_anatomy_varies_beyond_rotated_copies():
     import numpy as np
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {"asymmetry": 0}})
+    c = config_from_dict({"style": "laminar", "parameters": {"asymmetry": 0}})
     lobes = anatomy(c)
     ratios = [
         np.linalg.norm(lobe.path[-1] - lobe.path[0])
@@ -280,16 +280,16 @@ def test_primary_anatomy_varies_beyond_rotated_copies():
         for lobe in lobes
     ]
     assert np.ptp(ratios) > 0.02
-    assert len({lobe.z for lobe in lobes}) == c.organism.focal_count
+    assert len({lobe.z for lobe in lobes}) == c.parameters.focal_count
 
 
 @pytest.mark.parametrize("before,after", [(0, 1), (1, 2)])
 def test_complexity_retains_existing_internal_material(before, after):
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {"complexity": before, "channels": 0, "secondary_lobes": 0}})
+    c = config_from_dict({"style": "laminar", "parameters": {"complexity": before, "channels": 0, "secondary_lobes": 0}})
     previous = anatomy(c)
-    enriched = anatomy(replace(c, organism=replace(c.organism, complexity=after)))
+    enriched = anatomy(replace(c, parameters=replace(c.parameters, complexity=after)))
     assert len(previous) == len(enriched)
     for a, b in zip(previous, enriched):
         assert a.shape.difference(b.shape).area < 1e-6, (a.name, a.shape.difference(b.shape).area)
@@ -299,9 +299,9 @@ def test_complexity_retains_existing_internal_material(before, after):
 def test_explicit_segmentation_is_prefix_preserving(count):
     from parametric_deco.geometry.organism import anatomy
 
-    c = config_from_dict({"organism": {"segmentation": count, "channels": 0, "secondary_lobes": 0}})
+    c = config_from_dict({"style": "laminar", "parameters": {"segmentation": count, "channels": 0, "secondary_lobes": 0}})
     previous = anatomy(c)
-    enriched = anatomy(replace(c, organism=replace(c.organism, segmentation=count + 1)))
+    enriched = anatomy(replace(c, parameters=replace(c.parameters, segmentation=count + 1)))
     assert all(a.shape.difference(b.shape).area < 1e-6 for a, b in zip(previous, enriched))
 
 
@@ -310,7 +310,7 @@ def test_primary_medial_paths_do_not_return_as_scrolls():
     from parametric_deco.geometry.organism import anatomy
 
     for arrangement in ("whorl", "bilateral"):
-        c = config_from_dict({"organism": {"arrangement": arrangement}})
+        c = config_from_dict({"style": "laminar", "parameters": {"arrangement": arrangement}})
         for lobe in anatomy(c):
             arc = np.linalg.norm(np.diff(lobe.path, axis=0), axis=1).sum()
             chord = np.linalg.norm(lobe.path[-1] - lobe.path[0])
@@ -333,7 +333,7 @@ def test_rejects_previous_scroll_inventory_family():
     from parametric_deco.assembly import assemble
     from parametric_deco.model import Inventory, digest
 
-    c = config_from_dict({"organism": {}})
+    c = config_from_dict({"style": "laminar", "parameters": {}})
     definitions, instances, layout = manufacture(c)
     layout["family"] = "flow-organism-v1"
     layout.pop("fingerprint")

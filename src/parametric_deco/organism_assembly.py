@@ -31,7 +31,7 @@ def signature(c):
     return digest(
         {
             "family": FAMILY,
-            "organism": asdict(c.organism),
+            "organism": asdict(c.parameters),
             "size": asdict(c.envelope),
             "stock_mm": c.material.measured_mm,
             "clearance_mm": c.material.clearance_mm,

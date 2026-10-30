@@ -1,3 +1,4 @@
+from parametric_deco.config import RibStudy
 import numpy as np
 import pytest
 
@@ -7,7 +8,7 @@ def test_crosslap_final_and_insertion_states_have_no_overlap():
     from parametric_deco.geometry.module import generate_module
     from parametric_deco.cad import overlap_volume
 
-    b = generate_module(DesignConfig())
+    b = generate_module(DesignConfig(style="rib-study", parameters=RibStudy()))
     defs = {d.definition_id: d for d in b.definitions}
     ribs = [i for i in b.instances if i.role == "rib"]
     spines = [i for i in b.instances if i.role == "spine"]
@@ -30,7 +31,7 @@ def test_real_closure_blocks_each_rib_withdrawal():
     from parametric_deco.geometry.module import generate_module
     from parametric_deco.cad import overlap_volume
 
-    b = generate_module(DesignConfig())
+    b = generate_module(DesignConfig(style="rib-study", parameters=RibStudy()))
     defs = {d.definition_id: d for d in b.definitions}
     closure = next(i for i in b.instances if i.role == "closure")
     for rib in (i for i in b.instances if i.role == "rib"):
@@ -50,7 +51,7 @@ def test_measured_stock_thickness_drives_geometry_and_finished_fit():
     from parametric_deco.geometry.module import generate_module
     from parametric_deco.assembly import assemble
 
-    c = DesignConfig()
+    c = DesignConfig(style="rib-study", parameters=RibStudy())
     c = replace(c, material=replace(c.material, measured_mm=5.7, measurement_status="measured"))
     assert validate_config(c).digital_valid
     module = generate_module(c)

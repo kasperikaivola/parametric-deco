@@ -29,7 +29,7 @@ def test_creature_profiles_have_ambiguous_cavity_cluster_and_open_sweeps():
 def creature_config(**kwargs):
     from parametric_deco.config import DesignConfig, CreatureMask
 
-    return DesignConfig(creature=CreatureMask(**kwargs))
+    return DesignConfig(style="layered-creature", parameters=CreatureMask(**kwargs))
 
 
 def test_creature_configuration_rejects_invalid_requests():
@@ -40,9 +40,9 @@ def test_creature_configuration_rejects_invalid_requests():
     c = creature_config()
     assert config_from_dict(c.to_dict()) == c
     for values in ({"scale": float("nan")}, {"scale": 1.4}, {"posture": "anything"}, {"curl": 0}):
-        assert not validate_config(replace(c, creature=replace(c.creature, **values))).digital_valid
+        assert not validate_config(replace(c, parameters=replace(c.parameters, **values))).digital_valid
     with pytest.raises(ValueError, match="family|creature|composition"):
-        config_from_dict(replace(c, composition=RadialWeave()).to_dict())
+        config_from_dict(replace(c, parameters=RadialWeave()).to_dict())
 
 
 def test_creature_assembly_checks_real_parts_and_root_hardware():

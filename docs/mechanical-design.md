@@ -1,114 +1,23 @@
-# Mechanical concept
+# Mechanical construction
 
-## Implemented prototype — 2026-10-27
+All styles use connected planar plywood cuts at one measured stock thickness,
+initially nominal 6 mm. Slot fit uses measured stock plus clearance, independent
+of envelope sizing; laser kerf compensation is applied once in laser software.
+Generated instructions identify parts, levels, fasteners and removal order.
 
-This section supersedes open software alternatives below; historical proposals
-remain as design rationale. build123d 0.13.0 is the selected Python CAD backend;
-GLB is the scene interchange format. The plywood backing uses a regular polygon
-and staggered grid. A full-length slotted upper closure with two long root bolts
-is the candidate retention mechanism; a lower flange with unretained tongues
-was rejected because it would not prevent lifting off. Root bolt envelopes and
-rear access allowances are explicit, but fastener/anchor/load selection remains
-unvalidated. Detached handling requires a support tray and manual compression.
+| Style | Construction and handling |
+| --- | --- |
+| Laminar | Anatomical plates on paired slotted trestles; two root bolts per module. No spacer rings or individual rib clips. Support detached parts in a cradle. |
+| Layered creature | Layered shells, spacer columns, alignment webs and transverse ribs. Headed retaining keys REQUIRE positive split-pin/clip stops. Service cap assemblies inverted in a padded cradle. |
+| Radial weave | Curved paired spines, radial fins and upper capture rails. Remove rails before inward fin withdrawal; high modules precede low at crossings. |
+| Rib study | Paired straight spines, transverse ribs and full upper closure clamped by two root bolts. Detached modules need tray support and compression. |
 
-CLI, immutable inventory/reconfiguration, SVG/GLB/JSON, offline preview and per-face
-ISF/PNG resources are implemented. See [validation status](implementation/validation-status.md)
-for software evidence and NOT RUN physical/host checks. ISF is hosted/packaged in
-Wire; no bare-Arena loading, fabricated patch schema or automatic screen-preset
-export is claimed. Grade/finish are optional. Older CAD/location alternatives
-and generalized custom-renderer plans below are not current implementation work.
+Root washers must bear on actual manufactured material; hardware clearance
+boxes are simplified proxies. Rear access is required. Staggered mounting grids
+serve the creature, radial and rib styles; laminar derives roots from anatomy.
+See [design guide](design.md) for supported dimensions, assembly effort and style
+parameters, and [rib-study joint detail](implementation/joint-mechanism.md).
 
-
-## Updated decisions — 2026-10-27
-
-These decisions supersede conflicting earlier alternatives in this document.
-
-- Python CAD is selected. Only the choice of Python library (CadQuery or build123d) remains open.
-- Use a plywood backplate with a configurable polygon outline; hexagon and octagon are examples. Use the same nominal 6 mm thickness parameter.
-- Provide laser-cut mounting holes in staggered rows. Parameterize diameter, horizontal/row pitch, alternate-row offset, grid origin, and edge margin.
-- Use simple robust mounting points: broad root flanges and ordinary spaced through-bolts with washers and nuts are the baseline proposal. Avoid fragile tabs and elaborate precision locating mechanisms.
-- Plywood grade and colouring are optional choices, not prerequisites for progress.
-- Target ISF shaders first through Resolume Wire hosting/packaging for Arena. A standalone custom renderer remains a later option.
-
-This is a design proposal, not a fabrication drawing or validated load rating.
-
-## Whole composition and modular construction
-
-Design the overall silhouette, curves, rhythm, and crossings first. Divide that artwork into manageable modules with unobtrusive visual boundaries. Module positions, rib profiles, and spacing should coordinate across boundaries.
-
-Apparent intertwining does not require mechanically trapped assemblies. Check both final-state collisions and the swept volume during extraction. If independent removal is impossible, document the dependency order rather than implying arbitrary removal.
-
-## Component hierarchy
-
-1. Polygonal plywood backplate: carries the modules and defines mounting stations.
-2. Root assembly: locates and clamps each module to the backing.
-3. Paired spines: establish profile and rib stations.
-4. Transverse ribs: form the visible contour and brace the spine pair.
-5. Closing member: blocks the internal disassembly direction and is retained at the backing connection.
-
-All plywood components use the same nominal 6 mm stock. Increase stiffness through section geometry, separation, bracing, or multiple pieces where appropriate; do not silently introduce a second stock thickness.
-
-The plywood polygon backplate is selected. An open frame is no longer the baseline.
-
-## Candidate joint system
-
-Complementary cross-lap slots locate ribs on two parallel spines. Slot bottoms and shoulders determine position; two separated connections determine orientation. Use a controlled sliding fit, not hammer-tight friction as the sole retention.
-
-Ordinary cross-laps retain an extraction direction. A closing member must positively obstruct that motion. Its connection to the backplate must also prevent the closing member itself from escaping.
-
-Do not assume one rail captures every degree of freedom merely because the model looks interlocked. The detailed design must show insertion directions, bearing/contact surfaces, restraints, and the complete assembly sequence.
-
-Target sequence:
-
-1. Assemble root, spines, ribs, and end bracing in the validated order.
-2. Insert the closing member.
-3. Locate the whole module on the backing.
-4. Secure the root and closing-member attachment using backplate bolts.
-5. To reconfigure, support and detach the module, move it to a bench, release the closure, and exchange/reposition ribs.
-6. Reattach and verify alignment.
-
-A detached assembly may lose retention when its backplate bolts are removed. The prototype must establish a handling method that keeps the closure engaged during removal and transport to the bench. Do not assume it remains self-locking.
-
-If the closure cannot meet restraint/access requirements, compare removable plywood keys or retained clips as explicit fallbacks before changing the accepted target.
-
-## Root interface
-
-Proposed root: broad mounting flange, gussets, and spaced attachments to resist cantilever bending. Through-bolts, washers, and captive nuts or a metal nut plate support repeated assembly.
-
-Use grid-hole IDs and orientation marks for nominal location. Dedicated locating pins are not the baseline; accept ordinary bolt clearance and check projection alignment after reattachment. Add a robust locating shoulder only if testing warrants it.
-
-Alternative mounting stations or indexed root adapters allow rotations/repositioning with known transforms. Bolts should not locate the module through loose clearance holes alone.
-
-Wall anchorage, plate thickness/stiffness, bolt diameter, edge distances, and capacities depend on mass, centre of gravity, support material, and installation conditions. No stage-scale load rating follows from the proposed 1 m prototype.
-
-## Reusable interfaces
-
-Provide connection regions with repeatable slot dimensions and optional stations. Candidate variations include multiple rib stations, alternative compatible spine spacing, mirrored orientations, and indexed root positions.
-
-Use interface families; equal thickness alone does not imply compatibility. Slot width, depth, direction, spacing, neighbouring clearance, and assembly access must agree.
-
-Standard perpendicular cross-laps are the first candidate. Arbitrary angles and spatial twists require separate joint geometry or adapters. A changed curve may require new spines while retaining ribs, root hardware, and backing.
-
-Extra slots are visually acceptable but reduce section strength. Enforce provisional minimum ligaments, distances between slot ends, and clear material around fasteners. Validate limits physically.
-
-Engrave unobtrusive part/revision IDs, orientation marks, and station labels. Keep marks available for inventory and assembly without disrupting the intended projection.
-
-## Fabrication and finish
-
-Use measured thickness t and intended total slot clearance c:
-
-finished slot width = t + c.
-
-Kerf compensation generates the toolpath needed to achieve the finished geometry. Apply compensation once, in either exporter or laser software. Keep cut and engraving layers distinct; export closed contours, explicit millimetre units, and a scale-check feature.
-
-Laser cutting does not need router dogbones. Account for taper, char, fragile tips, narrow webs, sheet dimensions, and nesting spacing.
-
-Thin spray paint/lacquer is expected. Test finished joints. Mask mating surfaces or adjust fit if necessary. Do not require a separate coating-thickness parameter initially.
-
-Natural wood, coloured paint, and neon finishes are intentional options. Inspect both unprojected appearance and projection response. Do not assume fluorescent coatings behave identically under projector and UV lighting.
-
-## Mounting-grid details
-
-A half-horizontal-pitch offset on alternate rows is a proposed default. Assign stable row/column IDs, exclude holes near the polygon edge, and preserve material between holes. Root hole patterns must match grid vectors: a fixed bolt pattern cannot rotate arbitrarily on a staggered grid. Record permitted orientations.
-
-Keep rear nuts accessible through rear clearance or bench assembly. Captive nuts are optional. The root still needs to retain the closing member. Prototype backing stiffness and detachment handling before claiming the mechanism works.
+Physical fit, wear, stiffness, bolt/clip selection, handling, backing stiffness,
+wall anchorage and load capacity remain NOT RUN. Digital static collisions and
+sampled translations are bounded checks, not strength or continuous-motion proof.

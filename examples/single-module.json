@@ -1,5 +1,48 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "style": "rib-study",
+  "parameters": {
+    "recipe": {
+      "length_mm": 300,
+      "spine_separation_mm": 60,
+      "spine_height_mm": 80,
+      "joint_datum_mm": 45,
+      "rib_top_mm": 116,
+      "rib_bottom_mm": 10,
+      "stations_mm": [
+        70,
+        130,
+        190,
+        250
+      ],
+      "rib_widths_mm": [
+        130,
+        160,
+        190,
+        160
+      ]
+    },
+    "placements": [
+      {
+        "module_id": "m1",
+        "x_mm": 25,
+        "y_mm": 0,
+        "angle_deg": 0,
+        "rib_order": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "station_indices": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
   "units": "mm",
   "envelope": {
     "width_mm": 1000,
@@ -27,51 +70,10 @@
     "sides": 8,
     "rotation_deg": 22.5
   },
-  "module": {
-    "length_mm": 300,
-    "spine_separation_mm": 60,
-    "spine_height_mm": 80,
-    "joint_datum_mm": 45,
-    "rib_top_mm": 116,
-    "rib_bottom_mm": 10,
-    "stations_mm": [
-      70,
-      130,
-      190,
-      250
-    ],
-    "rib_widths_mm": [
-      130,
-      160,
-      190,
-      160
-    ]
-  },
   "mounting": {
     "rear_clearance_mm": 10,
     "hardware_outward_mm": 12,
     "washer_radius_mm": 9,
     "root_half_span_mm": 50
-  },
-  "placements": [
-    {
-      "module_id": "m1",
-      "x_mm": 25,
-      "y_mm": 0,
-      "angle_deg": 0,
-      "rib_order": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "station_indices": [
-        0,
-        1,
-        2,
-        3
-      ]
-    }
-  ],
-  "cutting_bed": null
+  }
 }

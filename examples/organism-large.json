@@ -1,5 +1,7 @@
 {
-  "organism": {},
+  "schema_version": 2,
+  "style": "laminar",
+  "parameters": {},
   "envelope": {
     "width_mm": 1400,
     "height_mm": 1400,

@@ -17,10 +17,18 @@ from .backplate import generate_backplate, match_root_pattern
 
 
 def request_signature(c):
+    # Keep the exact v3 manufacturing identity across the public schema change.
+    # This is an identity adapter, never a migration of saved part geometry.
+    from ..config import ModuleRecipe, ModulePlacement
+
     values = c.to_dict()
-    # Preserve the field set of already manufactured v3 inventories.
-    values.pop("organism", None)
+    values.pop("style")
+    values["schema_version"] = 1
+    values["creature"] = values.pop("parameters")
     values["creature"].pop("posture")
+    values["composition"] = None
+    values["module"] = asdict(ModuleRecipe())
+    values["placements"] = [asdict(ModulePlacement())]
     values.pop("cutting_bed")
     return digest(values)
 
@@ -70,8 +78,8 @@ def generate_creature(c):
         kind="retainer",
     )
     definitions.append(retainer)
-    for name, layers in profiles(settings=c.creature).items():
-        roots = module_roots(c.creature)[name]
+    for name, layers in profiles(settings=c.parameters).items():
+        roots = module_roots(c.parameters)[name]
         match_root_pattern(c, roots)
         keys = key_positions(roots)
         levels = (
@@ -96,9 +104,9 @@ def generate_creature(c):
             from shapely import affinity
 
             voids = [
-                *cavity_voids(c.creature, 1.06),
+                *cavity_voids(c.parameters, 1.06),
                 affinity.scale(
-                    central_void(), xfact=c.creature.scale, yfact=c.creature.scale, origin=(0, 0)
+                    central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0)
                 ),
             ]
             if name.startswith("crown"):
@@ -116,7 +124,7 @@ def generate_creature(c):
             blade_parts = []
             if name != "head" and j == len(layers) - 1:
                 for k, (center, normal, width, height) in enumerate(
-                    rib_stations(name, settings=c.creature)
+                    rib_stations(name, settings=c.parameters)
                 ):
                     nx, ny = normal
                     tangent = np.array((ny, -nx))
@@ -198,7 +206,7 @@ def generate_creature(c):
                         float(center[1]),
                         "creature-blade-seat-v2",
                     )
-                    for k, (center, *_rest) in enumerate(rib_stations(name, settings=c.creature))
+                    for k, (center, *_rest) in enumerate(rib_stations(name, settings=c.parameters))
                 )
                 if name != "head"
                 else ()
