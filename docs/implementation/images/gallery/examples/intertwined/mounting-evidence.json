@@ -5,7 +5,7 @@
       "sides": 8
     },
     "definition_id": "backplate",
-    "fingerprint": "c27cc851f5dcf52819006b94d7db2e3573aa5156420527ef35f1b579d11261e1",
+    "fingerprint": "64a19588a6bd4cc032bcdc00426c8ff8a9c9537610e8a0a56d8c0c38f1e86958",
     "grid": {
       "edge_margin_mm": 15,
       "hole_diameter_mm": 6.5,
@@ -13,19 +13,19 @@
       "origin_x_mm": 0,
       "origin_y_mm": 0,
       "pitch_x_mm": 50,
-      "pitch_y_mm": 50
+      "pitch_y_mm": 43.30127018922193
     },
-    "grid_hole_count": 311,
+    "grid_hole_count": 361,
     "size_mm": [
       1000,
       1000
     ],
-    "standard": "universal-grid-board-v1",
+    "standard": "universal-triangular-board-v3",
     "stock_mm": 6
   },
   "end_supports": {
     "all_parts_reach_backplate": true,
-    "revision": "separated-end-clamps-v1",
+    "revision": "triangular-symmetric-mounts-v3",
     "spans": [
       {
         "axis_xy": [
@@ -50,8 +50,8 @@
         "path_kind": "straight-span",
         "path_length_mm": 300.0,
         "placed_station_fractions": [
-          0.08333333333333333,
-          0.9166666666666665
+          0.1666666666666667,
+          0.75
         ],
         "station_ids": [
           "end-clamp-0",
@@ -81,8 +81,8 @@
         "path_kind": "straight-span",
         "path_length_mm": 300.0,
         "placed_station_fractions": [
-          0.0,
-          1.0
+          0.08931639747704147,
+          0.9553418012614793
         ],
         "station_ids": [
           "end-clamp-2",
@@ -112,12 +112,12 @@
         "path_kind": "straight-span",
         "path_length_mm": 300.0,
         "placed_station_fractions": [
-          1.263187085795734e-16,
-          1.0
+          0.08931639747704133,
+          0.9553418012614793
         ],
         "station_ids": [
-          "end-clamp-4",
-          "end-clamp-5"
+          "end-clamp-5",
+          "end-clamp-4"
         ]
       },
       {
@@ -143,12 +143,12 @@
         "path_kind": "straight-span",
         "path_length_mm": 300.0,
         "placed_station_fractions": [
-          0.08333333333333333,
-          0.9166666666666666
+          0.16666666666666635,
+          0.7500000000000001
         ],
         "station_ids": [
-          "end-clamp-6",
-          "end-clamp-7"
+          "end-clamp-7",
+          "end-clamp-6"
         ]
       }
     ],
@@ -170,13 +170,16 @@
         ],
         "reference_id": "m1-closure",
         "reference_xy": [
-          25.0,
-          -8.526512829121202e-14
+          50.000000000000014,
+          -103.1088913245535
+        ],
+        "shared_modules": [
+          "m1"
         ],
         "top_mm": 138.0,
         "xy": [
-          -150.0,
-          -200.00000000000009
+          -124.99999999999999,
+          -303.1088913245535
         ]
       },
       {
@@ -196,13 +199,16 @@
         ],
         "reference_id": "m1-closure",
         "reference_xy": [
-          274.99999999999994,
-          -2.842170943040401e-14
+          225.0,
+          -59.8076211353316
+        ],
+        "shared_modules": [
+          "m1"
         ],
         "top_mm": 138.0,
         "xy": [
-          99.99999999999996,
-          -200.00000000000003
+          50.0,
+          -259.8076211353316
         ]
       },
       {
@@ -222,13 +228,16 @@
         ],
         "reference_id": "m2-closure",
         "reference_xy": [
-          -7.301866029973848e-14,
-          -2.842170943040401e-14
+          26.794919243112457,
+          50.0
+        ],
+        "shared_modules": [
+          "m2"
         ],
         "top_mm": 138.0,
         "xy": [
-          200.00000000000003,
-          -200.00000000000009
+          150.0,
+          -173.20508075688755
         ]
       },
       {
@@ -248,13 +257,16 @@
         ],
         "reference_id": "m2-closure",
         "reference_xy": [
-          300.0,
-          49.99999999999986
+          286.6025403784438,
+          1.9895196601282805e-13
+        ],
+        "shared_modules": [
+          "m2"
         ],
         "top_mm": 138.0,
         "xy": [
-          150.00000000000014,
-          100.0
+          199.9999999999998,
+          86.60254037844379
         ]
       },
       {
@@ -274,13 +286,16 @@
         ],
         "reference_id": "m4-closure",
         "reference_xy": [
-          300.0,
-          -50.00000000000003
+          286.60254037844385,
+          2.5579538487363607e-13
+        ],
+        "shared_modules": [
+          "m4"
         ],
         "top_mm": 138.0,
         "xy": [
-          -250.00000000000009,
-          -99.99999999999997
+          -199.9999999999998,
+          -86.6025403784438
         ]
       },
       {
@@ -300,13 +315,16 @@
         ],
         "reference_id": "m4-closure",
         "reference_xy": [
-          4.592425496802575e-14,
-          -50.00000000000003
+          26.794919243112407,
+          -49.99999999999994
+        ],
+        "shared_modules": [
+          "m4"
         ],
         "top_mm": 138.0,
         "xy": [
-          -250.00000000000003,
-          199.99999999999997
+          -249.99999999999994,
+          173.2050807568876
         ]
       },
       {
@@ -326,13 +344,16 @@
         ],
         "reference_id": "m3-closure",
         "reference_xy": [
-          275.0,
-          1.8277672457389758e-13
+          225.00000000000003,
+          -59.80762113533168
+        ],
+        "shared_modules": [
+          "m3"
         ],
         "top_mm": 138.0,
         "xy": [
-          -100.0,
-          199.99999999999986
+          -50.00000000000002,
+          259.8076211353317
         ]
       },
       {
@@ -352,13 +373,16 @@
         ],
         "reference_id": "m3-closure",
         "reference_xy": [
-          25.0,
-          3.847371687359772e-14
+          49.999999999999915,
+          70.09618943233421
+        ],
+        "shared_modules": [
+          "m3"
         ],
         "top_mm": 138.0,
         "xy": [
-          150.0,
-          199.99999999999997
+          125.00000000000009,
+          129.9038105676658
         ]
       }
     ]
@@ -369,7 +393,7 @@
       "distal_support_ids": [
         "end-clamp-1"
       ],
-      "distal_unbraced_path_mm": 25.000000000000043,
+      "distal_unbraced_path_mm": 75.0,
       "end_region_fraction": 0.3,
       "fraction_parameter": "path arclength",
       "part_id": "m1-closure",
@@ -382,20 +406,20 @@
       "root_support_ids": [
         "end-clamp-0"
       ],
-      "root_unbraced_path_mm": 25.0,
+      "root_unbraced_path_mm": 50.000000000000014,
       "station_fractions": [
         [
           "end-clamp-0",
-          0.08333333333333333
+          0.1666666666666667
         ],
         [
           "end-clamp-1",
-          0.9166666666666665
+          0.75
         ]
       ],
       "station_path_offsets_mm": {
-        "end-clamp-0": 8.526512829121202e-14,
-        "end-clamp-1": 2.842170943040401e-14
+        "end-clamp-0": 103.1088913245535,
+        "end-clamp-1": 59.8076211353316
       },
       "tip_mm": [
         125.0,
@@ -407,7 +431,7 @@
       "distal_support_ids": [
         "end-clamp-3"
       ],
-      "distal_unbraced_path_mm": 0.0,
+      "distal_unbraced_path_mm": 13.397459621556218,
       "end_region_fraction": 0.3,
       "fraction_parameter": "path arclength",
       "part_id": "m2-closure",
@@ -420,20 +444,20 @@
       "root_support_ids": [
         "end-clamp-2"
       ],
-      "root_unbraced_path_mm": 0.0,
+      "root_unbraced_path_mm": 26.79491924311244,
       "station_fractions": [
         [
           "end-clamp-2",
-          0.0
+          0.08931639747704147
         ],
         [
           "end-clamp-3",
-          1.0
+          0.9553418012614793
         ]
       ],
       "station_path_offsets_mm": {
-        "end-clamp-2": 8.987733679556355e-14,
-        "end-clamp-3": 49.999999999999886
+        "end-clamp-2": 50.0,
+        "end-clamp-3": 2.2610441309500059e-13
       },
       "tip_mm": [
         200.00000000000003,
@@ -445,7 +469,7 @@
       "distal_support_ids": [
         "end-clamp-6"
       ],
-      "distal_unbraced_path_mm": 25.00000000000001,
+      "distal_unbraced_path_mm": 74.99999999999997,
       "end_region_fraction": 0.3,
       "fraction_parameter": "path arclength",
       "part_id": "m3-closure",
@@ -458,20 +482,20 @@
       "root_support_ids": [
         "end-clamp-7"
       ],
-      "root_unbraced_path_mm": 25.0,
+      "root_unbraced_path_mm": 49.99999999999991,
       "station_fractions": [
         [
           "end-clamp-7",
-          0.08333333333333333
+          0.16666666666666635
         ],
         [
           "end-clamp-6",
-          0.9166666666666666
+          0.7500000000000001
         ]
       ],
       "station_path_offsets_mm": {
-        "end-clamp-6": 1.6816178079655703e-13,
-        "end-clamp-7": 3.0790185216271006e-14
+        "end-clamp-6": 59.8076211353317,
+        "end-clamp-7": 70.0961894323342
       },
       "tip_mm": [
         -125.0,
@@ -483,7 +507,7 @@
       "distal_support_ids": [
         "end-clamp-4"
       ],
-      "distal_unbraced_path_mm": 0.0,
+      "distal_unbraced_path_mm": 13.397459621556218,
       "end_region_fraction": 0.3,
       "fraction_parameter": "path arclength",
       "part_id": "m4-closure",
@@ -496,20 +520,20 @@
       "root_support_ids": [
         "end-clamp-5"
       ],
-      "root_unbraced_path_mm": 3.7895612573872014e-14,
+      "root_unbraced_path_mm": 26.7949192431124,
       "station_fractions": [
         [
           "end-clamp-5",
-          1.263187085795734e-16
+          0.08931639747704133
         ],
         [
           "end-clamp-4",
-          1.0
+          0.9553418012614793
         ]
       ],
       "station_path_offsets_mm": {
-        "end-clamp-4": 50.00000000000003,
-        "end-clamp-5": 50.00000000000003
+        "end-clamp-4": 2.532568601771731e-13,
+        "end-clamp-5": 49.999999999999936
       },
       "tip_mm": [
         -200.00000000000006,
@@ -517,6 +541,10 @@
       ]
     }
   ],
+  "symmetry": {
+    "actual_extruded_material_hardware_and_layer_orbits": "PASS",
+    "group": "none"
+  },
   "upright_joinery": [
     {
       "board_load_path": "captured join to grid-clamped structural panel",

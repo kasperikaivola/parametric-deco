@@ -11,13 +11,15 @@ import math
 import numpy as np
 from shapely.geometry import Point, Polygon, box, MultiPoint, LineString
 from shapely.ops import nearest_points, unary_union
+from shapely import affinity
+from .geometry.symmetry import kind as symmetry_kind, matrices as symmetry_matrices, canonical_id, mapped_id
 
 from .model import Connection, Inventory, Issue, PartDefinition, PartInstance, digest
 from .validation import instance_bounds, xy_footprint
 from .cad import overlap_volume
 
-REVISION = "path-end-clamps-v2"
-COMPATIBLE_REVISIONS = ("separated-end-clamps-v1", REVISION)
+REVISION = "triangular-symmetric-mounts-v3"
+COMPATIBLE_REVISIONS = (REVISION,)
 END_LIMIT = 0.30
 
 
@@ -42,7 +44,7 @@ def _filled(shape):
 
 
 def _disk(x, y, r):
-    return Point(float(x), float(y)).buffer(r, quad_segs=16)
+    return Point(float(x), float(y)).buffer(r, quad_segs=24)
 
 
 def physical_paths(a, c):
@@ -56,7 +58,7 @@ def physical_paths(a, c):
     if c.style == "laminar":
         from .geometry.organism import anatomy
         lobes = {lobe.name + "-plate": lobe for lobe in anatomy(c)}
-        local = {i.instance_id: (lobes[i.instance_id].path, "laminar-medial") for i in targets}
+        local = {i.instance_id: (lobes[canonical_id(i.instance_id, c) if symmetry_kind(c) == "C3" else i.instance_id].path, "laminar-medial") for i in targets}
     elif c.style == "layered-creature":
         from .geometry.creature_profiles import limb_recipe, smooth
         local = {i.instance_id: (smooth(limb_recipe(i.module_id, c.parameters)[0]) * c.parameters.scale,
@@ -117,8 +119,174 @@ def _plan(a, c):
     # Keep useful spread/intermediate supports from the original planar layout;
     # then ADD true root/distal supports rather than exchanging one cantilever
     # for another. The final path audit is independent of that initial layout.
+    if symmetry_kind(c) != 'none':
+        return _orbit_plan(a, c)
     spread = _select_stations(a, c)
     return _select_stations(a, c, spread["stations"], physical_paths(a, c))
+
+
+def _orbit_plan(a, c):
+    """Select complete physical symmetry orbits, with every member feasible."""
+    from .geometry.backplate import mounting_holes
+    board = next(i for i in a.instances if i.role == 'backplate')
+    board_shape = xy_footprint(a.definition_for(board), board.transform)
+    filled_board = Polygon(board_shape.exterior)
+    base = instance_bounds(a.definition_for(board), board.transform)[1, 2]
+    targets = [i for i in a.instances if _horizontal(i) and i.role in ('armour', 'cap', 'spine', 'closure')]
+    by_id = {i.instance_id: i for i in a.instances}
+    shapes = {i.instance_id: xy_footprint(a.definition_for(i), i.transform) for i in a.instances}
+    bounds = {i.instance_id: instance_bounds(a.definition_for(i), i.transform) for i in a.instances}
+    holes = {i.instance_id: [Polygon(r) for r in shapes[i.instance_id].interiors] for i in targets}
+    paths = physical_paths(a, c)
+    nodes = [(h.x_mm, h.y_mm) for h in mounting_holes(c)]
+    matrices = symmetry_matrices(c)
+    edge = max(c.mounting.washer_radius_mm + 2, c.grid.hole_diameter_mm / 2 + 7)
+    selected = []
+    def occupied(point):
+        return next((s for s in selected if Point(s['xy']).distance(point) < 1e-6), None)
+    def feasible(target, point):
+        pid = target.instance_id
+        disk = point.buffer(edge, quad_segs=24)
+        if not filled_board.buffer(1e-7).covers(disk) or shapes[pid].distance(point) > 60:
+            return None
+        if any(disk.intersects(h) for h in holes[pid]
+               if abs(h.area - math.pi * (c.grid.hole_diameter_mm / 2) ** 2) >= 1):
+            return None
+        top = max(bounds[i.instance_id][1, 2] for i in targets
+                  if c.style == 'laminar' or i.module_id == target.module_id)
+        plates = []
+        for other in a.instances:
+            oid = other.instance_id
+            if other.role == 'backplate' or bounds[oid][0, 2] >= top + 12:
+                continue
+            shape = shapes[oid]
+            if (other != target and not shape.intersects(disk.buffer(.2))
+                    and not (other.module_id == target.module_id and other in targets and shape.distance(point) <= 60)):
+                continue
+            if other in targets and (other.module_id == target.module_id or c.style == 'laminar'):
+                if shape.distance(point) > 60 or any(disk.intersects(h) for h in holes[oid]
+                    if abs(h.area - math.pi * (c.grid.hole_diameter_mm / 2) ** 2) >= 1):
+                    return None
+                plates.append(oid)
+            else:
+                return None
+        if pid not in plates:
+            return None
+        # Retained original root stacks have physical plywood spacers and their
+        # own shaft; an independent support may not collide with those axes.
+        if any(module != target.module_id and point.distance(Point(x, y)) < edge + c.mounting.washer_radius_mm + 1
+               for module, _, x, y in a.mounting_grid):
+            return None
+        previous = occupied(point)
+        if previous:
+            plates = sorted(set(plates) | set(previous['plate_ids']))
+        if any(min(bounds[p][1, 2], bounds[q][1, 2]) - max(bounds[p][0, 2], bounds[q][0, 2]) > 1e-6
+               for k, p in enumerate(plates) for q in plates[k + 1:]):
+            return None
+        return plates
+    def on_grid(raw):
+        # Only accept an existing actual board bore. Rounding an incompatible
+        # 120-degree coordinate onto a nearby hole is explicitly forbidden.
+        return next((p for p in nodes if np.linalg.norm(np.array(p) - raw) <= 1e-7), None)
+    canonical = [i for i in targets if canonical_id(i.instance_id, c) == i.instance_id]
+    canonical.sort(key=lambda i: (-shapes[i.instance_id].area, i.instance_id))
+    for target in canonical:
+        path, pkind = paths[target.instance_id]
+        requirements = ('root', 'distal', 'bend') if c.style == 'layered-creature' and target.module_id != 'head' and path.length > 350 else ('root', 'distal')
+        for requirement in requirements:
+            def meets(point):
+                f = path_fraction(path, pkind, point)
+                if requirement == 'bend':
+                    return .38 <= f <= .62 and path.distance(point) <= 60
+                return end_covered(path, pkind, point, int(requirement == 'distal'))
+            if any(target.instance_id in s['plate_ids'] and meets(Point(s['xy'])) for s in selected):
+                continue
+            candidates = []
+            for p in nodes:
+                point = Point(p)
+                if not meets(point):
+                    continue
+                if symmetry_kind(c) == 'mirror-X' and target.module_id == 'head' and p[0] > 1e-7:
+                    continue
+                members = {}
+                valid = True
+                for index, matrix in enumerate(matrices):
+                    q = on_grid(matrix @ np.array(p))
+                    partner_id = mapped_id(target.instance_id, c, index)
+                    if q is None or partner_id not in by_id:
+                        valid = False
+                        break
+                    plates = feasible(by_id[partner_id], Point(q))
+                    if plates is None:
+                        valid = False
+                        break
+                    key = tuple(round(v, 7) for v in q)
+                    if key not in members:
+                        members[key] = {'xy': q, 'plate_ids': set(), 'reference_id': partner_id}
+                    members[key]['plate_ids'].update(plates)
+                if not valid:
+                    continue
+                # Every clamped partner and source interference is evaluated,
+                # not merely an assumed transform of a good canonical marker.
+                if any(any(min(bounds[x][1, 2], bounds[y][1, 2]) - max(bounds[x][0, 2], bounds[y][0, 2]) > 1e-6
+                           for k, x in enumerate(sorted(m['plate_ids'])) for y in sorted(m['plate_ids'])[k + 1:])
+                       for m in members.values()):
+                    continue
+                goal = .10 if requirement == 'root' else .90 if requirement == 'distal' else .5
+                cost = (abs(path_fraction(path, pkind, point) - goal), shapes[target.instance_id].distance(point), p)
+                candidates.append((cost, members))
+            if not candidates:
+                raise ValueError(f'{target.instance_id}: no complete {symmetry_kind(c)} grid orbit for {requirement}')
+            # Simulate ALL accepted cuts plus the complete candidate orbit. A
+            # pair of individually safe pads/bores can otherwise sever a neck.
+            from types import SimpleNamespace
+            def material_ok(members):
+                trial = copy.deepcopy(selected)
+                for member in members.values():
+                    prior = next((s for s in trial if np.linalg.norm(np.array(s['xy']) - member['xy']) < 1e-7), None)
+                    if prior:
+                        prior['plate_ids'] = sorted(set(prior['plate_ids']) | member['plate_ids'])
+                    else:
+                        trial.append({'xy': member['xy'], 'plate_ids': sorted(member['plate_ids'])})
+                source = SimpleNamespace(assembly=a, inventory=Inventory(a.definitions, a.instances, {}))
+                try:
+                    stock = _machined_inventory(source, {'stations': trial}, c)
+                except ValueError:
+                    return False
+                manufactured = replace(a, definitions=stock.definitions, instances=stock.instances)
+                for station in trial:
+                    point = Point(station['xy'])
+                    for pid in station['plate_ids']:
+                        part = next(i for i in manufactured.instances if i.instance_id == pid)
+                        shape = xy_footprint(manufactured.definition_for(part), part.transform)
+                        bores = [Polygon(r) for r in shape.interiors]
+                        drilled = next((h for h in bores if h.centroid.distance(point) < 1e-5), None)
+                        if drilled is None or min([drilled.distance(shape.exterior), *(drilled.distance(h) for h in bores if h != drilled)]) < 7 - 1e-5:
+                            return False
+                return True
+            members = next((members for _, members in sorted(candidates, key=lambda item: item[0]) if material_ok(members)), None)
+            if members is None:
+                raise ValueError(f'{target.instance_id}: complete orbit severs material or washer web for {requirement}')
+            orbit_id = f'orbit-{len(selected)}'
+            for member in members.values():
+                point = Point(member['xy'])
+                previous = occupied(point)
+                if previous:
+                    previous['plate_ids'] = sorted(set(previous['plate_ids']) | member['plate_ids'])
+                    continue
+                ref = by_id[member['reference_id']]
+                local = np.linalg.inv(np.array(ref.transform)) @ np.array((*member['xy'], 0, 1))
+                selected.append({'id': f'end-clamp-{len(selected)}', 'module_id': ref.module_id,
+                    'reference_id': ref.instance_id, 'reference_xy': local[:2].tolist(),
+                    'xy': list(member['xy']), 'plate_ids': sorted(member['plate_ids']),
+                    'board_top_mm': float(base), 'orbit_id': orbit_id, 'purpose': requirement})
+    # No saved claims are used by the validator; these rows are inspection data.
+    spans = []
+    for target in targets:
+        path, pkind = paths[target.instance_id]
+        stations = [s['id'] for s in selected if target.instance_id in s['plate_ids']]
+        spans.append({'part_id': target.instance_id, 'path_kind': pkind, 'station_ids': stations})
+    return {'revision': REVISION, 'symmetry': symmetry_kind(c), 'stations': selected, 'spans': spans}
 
 
 def _select_stations(a, c, retained=None, paths=None):
@@ -300,9 +468,24 @@ def _machined_inventory(source, plan, c):
     """Each physical cut gets its own new revision; source templates stay digital."""
     a = source.assembly
     definitions, instances, mapping = [], [], {}
+    finished = {}
     radius = c.grid.hole_diameter_mm / 2
     for i in a.instances:
         d = a.definition_for(i)
+        canonical = canonical_id(i.instance_id, c) if symmetry_kind(c) != 'none' and _horizontal(i) and i.role != 'backplate' else i.instance_id
+        if canonical != i.instance_id and canonical in finished:
+            source_part = finished[canonical]
+            if symmetry_kind(c) == 'C3':
+                final = source_part
+            else:
+                shape = affinity.scale(source_part.polygon, xfact=-1, yfact=1, origin=(0, 0))
+                final = PartDefinition.from_polygon(i.instance_id + '-supported', shape, d.thickness_mm, d.interfaces, d.kind)
+            mapping[i.instance_id] = [final.definition_id, final.revision]
+            if final not in definitions:
+                definitions.append(final)
+            instances.append(replace(i, definition_id=final.definition_id, revision=final.revision))
+            finished[i.instance_id] = final
+            continue
         cuts = []
         for s in plan["stations"]:
             if i.instance_id in s["plate_ids"]:
@@ -315,6 +498,8 @@ def _machined_inventory(source, plan, c):
                 local = np.linalg.inv(np.array(i.transform)) @ np.array((*s["xy"], 0, 1))
                 point = Point(*local[:2])
                 safe = shape.difference(obstacles.buffer(max(c.mounting.washer_radius_mm + 2, radius + 7) + .2))
+                if c.style == 'layered-creature' and i.module_id == 'head':
+                    safe = safe.intersection(box(-10000, -10000, 0, 10000))
                 if safe.is_empty:
                     raise ValueError(i.instance_id + ": no material route for end-clamp pad")
                 anchor = nearest_points(point, safe)[1]
@@ -325,10 +510,14 @@ def _machined_inventory(source, plan, c):
         shape = shape.difference(unary_union(cuts)) if cuts else shape
         if cuts and c.style == "radial-weave":
             shape = shape.difference(Point(0, 0).buffer(c.parameters.opening_radius_mm + 2, quad_segs=96))
+        if c.style == 'layered-creature' and i.module_id == 'head' and _horizontal(i):
+            half = shape.intersection(box(-10000, -10000, 0, 10000))
+            shape = half.union(affinity.scale(half, xfact=-1, yfact=1, origin=(0, 0)))
         # Per-instance revisions are required where identical source profiles get
         # different drilled supports. Never overwrite source geometry in place.
         final = PartDefinition.from_polygon(i.instance_id + "-supported", shape, d.thickness_mm,
                                             d.interfaces, d.kind) if cuts else d
+        finished[i.instance_id] = final
         mapping[i.instance_id] = [final.definition_id, final.revision]
         if (final.definition_id, final.revision) not in {(p.definition_id, p.revision) for p in definitions}:
             definitions.append(final)
@@ -403,7 +592,7 @@ def _hardware(a, plan, c):
                 if pid != cap:
                     connections.append(Connection(pid, cap, "end-clamp-v1", "captured-load-path"))
     metadata = {**(a.composition or {}), "end_supports": plan,
-                "universal_backplate": {"standard": "universal-grid-board-v1",
+                "universal_backplate": {"standard": "universal-triangular-board-v3",
                     "definition_id": a.definition_for(board).definition_id,
                     "fingerprint": a.definition_for(board).fingerprint,
                     "grid": asdict(c.grid), "backplate": asdict(c.backplate),
@@ -514,6 +703,13 @@ def verify_supports(a, config=None):
             wb = wood_bounds[w.instance_id]
             if min(hb[1, 2], wb[1, 2]) - max(hb[0, 2], wb[0, 2]) > 1e-6 and hs.intersection(wood_shapes[w.instance_id]).area > 1e-5:
                 issues.append(Issue("error", "support_collision", "support hardware crosses manufactured material", (h.instance_id, w.instance_id)))
+    # Original source root shafts also need actual universal bores; their
+    # presence cannot be excused by correctly aligned added end clamps.
+    board_shape = xy_footprint(a.definition_for(board), board.transform)
+    for module, _, x, y in a.mounting_grid:
+        holes = [Polygon(r) for r in board_shape.interiors]
+        if not any(h.centroid.distance(Point(x, y)) < 1e-7 for h in holes):
+            issues.append(Issue("error", "support_grid", "original root has no universal board bore", (module,)))
     # Every board station must coincide with the same pre-existing coarse grid.
     for s in plan["stations"]:
         g = standard.get("grid", {})
@@ -541,6 +737,9 @@ def verify_supports(a, config=None):
     for missing in set(by_id) - reached:
         issues.append(Issue("error", "floating_part", "no connection path to backplate", (missing,)))
     plan["all_parts_reach_backplate"] = not bool(set(by_id) - reached)
+    if config is not None:
+        from .geometry.symmetry import verify_symmetry
+        issues.extend(verify_symmetry(a, config))
     return tuple(issues)
 
 
@@ -605,10 +804,16 @@ def _prepare_source(source, c):
         for index, i in enumerate(instances):
             if i.role == "backplate":
                 continue
-            d = PartDefinition.from_polygon(i.instance_id + "-grid-clamped", lobes[i.instance_id].shape,
+            canonical = canonical_id(i.instance_id, c) if symmetry_kind(c) == 'C3' else i.instance_id
+            d = PartDefinition.from_polygon(canonical + "-grid-clamped", lobes[canonical].shape,
                                             c.material.measured_mm, kind="armour")
-            definitions.append(d)
-            instances[index] = replace(i, definition_id=d.definition_id, revision=d.revision)
+            if d not in definitions:
+                definitions.append(d)
+            pose = np.array(i.transform)
+            if symmetry_kind(c) == 'C3':
+                sector = int(i.module_id.rsplit('-', 1)[1]) // (c.parameters.focal_count // 3)
+                pose[:2, :2] = symmetry_matrices(c)[sector]
+            instances[index] = replace(i, definition_id=d.definition_id, revision=d.revision, transform=pose)
         connections, hardware, mounts = [], (), ()
         for m in metadata["modules"]:
             m["roots"], m["web_ids"], m["slot_polygons"] = [], [], []

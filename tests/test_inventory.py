@@ -58,7 +58,7 @@ def test_partial_reconfiguration_export_preserves_all_stock_and_can_restore(tmp_
     # Translate by a parity-preserving grid offset, leaving its fourth rib in stock.
     partial_config = replace(
         config, parameters=replace(config.parameters,
-            placements=(ModulePlacement("m1", 75, -100, 0, (0, 1, 2), (0, 1, 2)),))
+            placements=(ModulePlacement("m1", 75, -2 * config.grid.pitch_y_mm, 0, (0, 1, 2), (0, 1, 2)),))
     )
     partial = assemble(partial_config, inventory)
     assert partial.report.digital_valid, partial.report.to_dict()

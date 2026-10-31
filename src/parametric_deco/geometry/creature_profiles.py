@@ -18,9 +18,34 @@ ROOTS = {
 }
 
 
-def module_roots(settings=None):
+def module_roots(settings=None, grid=None):
+    from ..config import Grid
     p = settings or CreatureMask()
-    return dict(list(ROOTS.items())[: 1 + p.limb_count])
+    g = grid or Grid()
+    voids = unary_union((*cavity_voids(p, 1.06), affinity.scale(central_void(), xfact=p.scale, yfact=p.scale, origin=(0, 0))))
+    def nearest(x, y):
+        candidates = []
+        row0 = round((y - g.origin_y_mm) / g.pitch_y_mm)
+        for row in range(row0 - 3, row0 + 4):
+            shift = g.origin_x_mm + (row % 2) * g.offset_mm
+            col0 = round((x - shift) / g.pitch_x_mm)
+            for col in range(col0 - 3, col0 + 4):
+                xx, yy = shift + col * g.pitch_x_mm, g.origin_y_mm + row * g.pitch_y_mm
+                if xx < -10 and voids.distance(Point(xx, yy)) >= 18:
+                    candidates.append(((xx - x) ** 2 + (yy - y) ** 2, xx, yy))
+        if not candidates:
+            raise ValueError("no mirrored grid root clear of creature cavities")
+        _, xx, yy = min(candidates)
+        return (xx, yy)
+    roots = {}
+    left = nearest(*ROOTS['head'][0])
+    roots['head'] = (left, (-left[0], left[1]))
+    for name in list(ROOTS)[1:1 + p.limb_count]:
+        if 'left' in name:
+            roots[name] = tuple(nearest(x, y) for x, y in ROOTS[name])
+        else:
+            roots[name] = tuple((-x, y) for x, y in roots[name.replace('right', 'left')])
+    return roots
 
 
 def cavity_voids(settings=None, factor=1):
@@ -72,18 +97,23 @@ def eye_voids(factor=1, count=6):
             [(-14, 151), (-5, 139), (15, 149), (10, 169), (-9, 171)],
         ]
     )
-    indices = np.rint(np.linspace(0, 5, count)).astype(int) if count <= 6 else np.arange(count)
     result = []
-    for index in indices:
-        points = controls[index]
+    left_controls = [controls[0], controls[2], controls[4], [(-65, 85), (-45, 102), (-28, 90), (-35, 67)]]
+    for points in left_controls[:count // 2]:
         shape = organic(points)
         scaled = affinity.scale(shape, xfact=factor, yfact=factor, origin=shape.centroid)
-        result.append(shape.union(scaled) if factor >= 1 else shape.intersection(scaled))
+        shape = shape.union(scaled) if factor >= 1 else shape.intersection(scaled)
+        result.extend((shape, affinity.scale(shape, xfact=-1, yfact=1, origin=(0, 0))))
+    if count % 2:
+        shape = Point(0, -100).buffer(12, quad_segs=16)
+        result.append(affinity.scale(shape, xfact=factor, yfact=factor, origin=shape.centroid))
     return tuple(result)
 
 
 def central_void():
-    return organic([(-35, 8), (-7, 37), (34, 15), (27, -19), (-11, -31)])
+    from shapely.geometry import box
+    half = organic([(-35, 8), (-7, 37), (34, 15), (27, -19), (-11, -31)]).intersection(box(-1000, -1000, 0, 1000))
+    return half.union(affinity.scale(half, xfact=-1, yfact=1, origin=(0, 0)))
 
 
 def head_outline():
@@ -159,8 +189,10 @@ def limb_recipe(name, settings):
     points = np.array(points, dtype=float)
     if "right" in name:
         points[:, 0] *= -1
-    anchor = np.mean(ROOTS[name], axis=0)
-    side = 0.5 if "right" in name else -0.5
+    anchor = np.mean(ROOTS[name.replace("right", "left")], axis=0)
+    if "right" in name:
+        anchor[0] *= -1
+    side = -0.5  # Within-pair detail varies, but both sides share one canonical morphology.
     points = anchor + (points - anchor) * settings.limb_reach * (1 + side * settings.asymmetry)
     widths = np.array(widths) * settings.limb_width * (1 + 0.3 * side * settings.asymmetry)
     return points, widths
@@ -245,11 +277,17 @@ def profiles(scale=1, curl=1, *, settings=None):
                              inner_channels.buffer(depth * 5)])
             )
         )
+    head = [shape.intersection(__import__('shapely').geometry.box(-10000, -10000, 0, 10000)) for shape in head]
+    head = [shape.union(affinity.scale(shape, xfact=-1, yfact=1, origin=(0, 0))) for shape in head]
     result = {"head": head}
     for name in list(module_roots(settings))[1:]:
+        if "right" in name:
+            left = name.replace("right", "left")
+            result[name] = [affinity.scale(shape, xfact=-1, yfact=1, origin=(0, 0)) for shape in result[left]]
+            continue
         points, widths = limb_recipe(name, nominal)
         count = settings.limb_layers
-        root = MultiPoint(ROOTS[name]).convex_hull.buffer(44, quad_segs=12)
+        root = MultiPoint(module_roots(settings)[name]).convex_hull.buffer(44, quad_segs=12)
         path = smooth(points)
         # Two long through channels, crossed only by deliberate rib-bearing bridges.
         from shapely.geometry import LineString
@@ -323,13 +361,12 @@ def backing_outline(scale=1, *, settings=None):
 
 
 def placement_offset(config):
-    """Center the rest anatomy on the nearest equivalent staggered-grid row.
+    """Center newly manufactured artwork continuously, before drilling grid bores.
 
-    Two rows preserve both column positions and row parity. Keep this a
-    placement transform so all non-board manufactured profiles remain reusable.
+    Saved-stock pose deltas remain lattice vectors; initial artwork placement
+    is independent of that restriction. Root axes are inverse-placed world holes.
     """
     bounds = [shape.bounds for layers in profiles(settings=config.parameters).values()
               for shape in layers]
     center_y = (min(b[1] for b in bounds) + max(b[3] for b in bounds)) / 2
-    repeat = 2 * config.grid.pitch_y_mm
-    return (0, repeat * round(-center_y / repeat))
+    return (0, -center_y)

@@ -8,13 +8,14 @@ from parametric_deco.geometry.backplate import backplate_polygon
 def test_six_limb_centering_preserves_grid_and_clear_board_channels():
     c = load_config('examples/creature-alien-six.json')
     bundle, layout = generate_creature(c)
-    assert layout.get('placement_offset_mm', [0, 0]) == [0, 100]
+    from parametric_deco.geometry.creature_profiles import placement_offset
+    assert layout.get('placement_offset_mm', [0, 0]) == list(placement_offset(c))
     from parametric_deco.geometry.creature_profiles import cavity_voids
     from shapely import affinity
     board = backplate_polygon(c)
     for eye in cavity_voids(c.parameters, .75):
         # Artwork cavities now retain the same dark universal stock behind them.
-        assert board.covers(affinity.translate(eye, yoff=100))
+        assert board.covers(affinity.translate(eye, yoff=layout["placement_offset_mm"][1]))
     assert all(np.isfinite(np.array(i.transform)).all() for i in bundle.instances)
 
 
@@ -38,7 +39,7 @@ def test_centered_six_limb_actual_assembly_and_saved_inventory():
     assert build.report.digital_valid, build.report.to_dict()
     a = build.assembly
     bounds = np.array([instance_bounds(a.definition_for(i), i.transform)
-                       for i in a.instances if i.role != 'backplate'])
+                       for i in a.instances if i.role not in ('backplate', 'mounting-hardware')])
     center_y = (bounds[:, 0, 1].min() + bounds[:, 1, 1].max()) / 2
     assert abs(center_y) < 2, center_y
     before = build.inventory.to_dict()
@@ -47,7 +48,7 @@ def test_centered_six_limb_actual_assembly_and_saved_inventory():
     assert raised.report.digital_valid, raised.report.to_dict()
     assert build.inventory.to_dict() == before
     assert raised.inventory.definitions == build.inventory.definitions
-    assert raised.assembly.composition['placement_offset_mm'] == [0, 100]
+    assert raised.assembly.composition['placement_offset_mm'] == a.composition['placement_offset_mm']
 
 
 def test_explicit_zero_rotation_and_legacy_radial_inventory_replay():

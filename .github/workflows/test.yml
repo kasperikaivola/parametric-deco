@@ -18,7 +18,15 @@ jobs:
       - run: python -m pip install -r requirements.lock
       - run: python -m pip install --no-deps -e .
       - run: python -m pip check
-      - run: python -m pytest -q -rs
+      - run: python -m pytest -q -rs --junitxml="${{ runner.temp }}/pytest-python.xml"
+      - name: Preserve Python test diagnostics
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-python
+          path: ${{ runner.temp }}/pytest-python.xml
+          if-no-files-found: ignore
       - run: python -m ruff check .
       - run: python tests/run_examples.py
       - run: node --check src/parametric_deco/resources/viewer.js
@@ -34,9 +42,17 @@ jobs:
       - run: python -m pip install -e ".[gui,dev]"
       - name: Check Qt native imports
         run: python -c "from PySide6.QtWidgets import QApplication; from PySide6.QtWebEngineWidgets import QWebEngineView; print('Qt Widgets and WebEngine imports passed')"
-      - run: python -m pytest tests/test_desktop_gui.py -q -rs
+      - run: python -m pytest tests/test_desktop_gui.py -q -rs --junitxml="${{ runner.temp }}/pytest-desktop.xml"
         env:
           DECO_GUI_TESTS: '1'
           QT_QPA_PLATFORM: offscreen
           QTWEBENGINE_DISABLE_SANDBOX: '1'
           QTWEBENGINE_CHROMIUM_FLAGS: --disable-gpu
+      - name: Preserve desktop test diagnostics
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-desktop
+          path: ${{ runner.temp }}/pytest-desktop.xml
+          if-no-files-found: ignore

@@ -1,0 +1,236 @@
+{
+  "manufacturing_revision": "triangular-symmetric-mounts-v3",
+  "examples_checked": 15,
+  "matching_view_sets_checked": 15,
+  "common_board_fingerprints_by_stock_size": {
+    "(1000, 1000)": [
+      "64a19588a6bd4cc032bcdc00426c8ff8a9c9537610e8a0a56d8c0c38f1e86958"
+    ],
+    "(800, 800)": [
+      "27d8726d9a7ce09005bd89bee37397a7d073ab9d2f41af1a02741592e94a0be3"
+    ],
+    "(1400, 1400)": [
+      "92723a5fc1a0cf956ffe67fb763164465a385cbf3c4ae8406d7883c472b8cf29"
+    ]
+  },
+  "checks": "actual family paths, actual manufactured bores/7mm webs/tubes, exact extruded material and hardware/layer orbits, original-root common-grid alignment, all-part board routes, immutable replay, artwork-only centering, matching view geometry and hashes/current links",
+  "radial_insertion_capture_evidence": "radial-v3-joint-evidence.json",
+  "physical_validation": "NOT RUN",
+  "host_validation": "NOT RUN",
+  "examples": {
+    "organism-low": {
+      "symmetry": "C3",
+      "end_axes": 12,
+      "structural_panels": 6,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "91af6769037e9567cca101b3873e417ee494ebc77781caa0769467491cddea49",
+        "three-quarter": "fbbfb87ae9c05a97388d5108d96b846d75b7757bb4e18c8f81169bc46ca3896b",
+        "mounting/front": "7dc42abb791a0750ba1ad38abdf36385f1198a9592f53c80b959122c1db33453",
+        "mounting/three-quarter": "0a7399db5131b6d0652a256c35cf0545dbfc017b4995170e19a598e33f52e723"
+      },
+      "assembly_sha256": "feb3a3155c499ce51c32bd158b1fab8c01a7068f5f9cad87ebb49084f8a689eb"
+    },
+    "organism-medium": {
+      "symmetry": "C3",
+      "end_axes": 18,
+      "structural_panels": 12,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "af66000a2a64885a40583bf6e58faf55e6c35d7574bbfea25adf456a69d0ad5e",
+        "three-quarter": "726af7baf91378f67b53a5cdc10972a96aac96a11551fae6a221929fcc5e1875",
+        "mounting/front": "bf90a830a30044fc2981c70cf8f6328bdaf8ee4dc01616ab08354d174209cea9",
+        "mounting/three-quarter": "c72ff75e5e8314baafa14f8870094dbd5aafbebadf2e057de63b00235b038a83"
+      },
+      "assembly_sha256": "1f6adb26a49d69f368cadfd45328337f92e8d6b6194a6872e287ecebede5f9d0"
+    },
+    "organism-high": {
+      "symmetry": "C3",
+      "end_axes": 18,
+      "structural_panels": 12,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "98261d5b9fc6ce0f60d902b5807a848721e046932b6141b53dcbd5ad4f89c585",
+        "three-quarter": "6f62603edff69a9055538a2931a9a179c19ca3f6a989c787963d0ec2a0fe5655",
+        "mounting/front": "854364717808d2b18445ffaa9803dffa6d5f5ebfa2dbf1b08b67e4008579cf49",
+        "mounting/three-quarter": "0104f6daa14ae4bc63acd568eb3179c0b2385bb6f2ebada93bedaa799893b4f9"
+      },
+      "assembly_sha256": "d197dd5ecfd94ee478ec4a0238f26e73ed3220f148334eec5c94cc94e74231c3"
+    },
+    "organism-bilateral": {
+      "symmetry": "mirror-X",
+      "end_axes": 12,
+      "structural_panels": 6,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "3c8f7eab8b585aa6d12221a84703bf228cfde2dc40d7b27d5e1883ab79fcc2bb",
+        "three-quarter": "a89cad4f72d298a9d1ac139061e50f8eecbf912e270ce3d9111e4a687afb334f",
+        "mounting/front": "d1b4c1ccfc42c5fa19dd0b98319ad83066d281fa55e7baa0faebea1376ffe1b9",
+        "mounting/three-quarter": "30ac33d16847c99460a2368722ca6d5db005159a605e056452717c57aaf634e3"
+      },
+      "assembly_sha256": "7e4351b35afd281bdc946f6304ad2377987a10f40f627fe1549dcdf4dc9ea39a"
+    },
+    "organism-small": {
+      "symmetry": "C3",
+      "end_axes": 12,
+      "structural_panels": 6,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "ed5a30ef52f1c4922e8f29cf8a2ae5c0d60e10cbacdfd5ea97ab435b2b9eb094",
+        "three-quarter": "dea51f3049a7bef62189261922c805c9b48db718ec8735f0b02b4868c2889a33",
+        "mounting/front": "d8ab20e2b972dcf082c7dea8573ec5ce78565513a247a910bd605f602686fce7",
+        "mounting/three-quarter": "d3052dacd786756b2bce49471e473c7e744fa52d3bef8cf181d9cfd2b82cdb62"
+      },
+      "assembly_sha256": "e55927b487eeb90ab7e64bf2dfdfafe4dbe40734da7324487234cf31e79200c3"
+    },
+    "organism-large": {
+      "symmetry": "C3",
+      "end_axes": 9,
+      "structural_panels": 6,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "d33f1af259861328c31ce46dc9a0f96c07b659e3b62fe4d7aa5b8d96faab906e",
+        "three-quarter": "5c82292c7bee1d2416a34fe00ff998a38926bb66476dc29705b39579e8f5160f",
+        "mounting/front": "df2c209cff1089a1df687289f89c0653b60828dcde019b10a3918d5fe5b4ed86",
+        "mounting/three-quarter": "9e051a679eddd72997f1285f5c997ceb88afbf1bdfdaede7b0a92952f2848808"
+      },
+      "assembly_sha256": "7d99075b7696d9b0e09130d1206521b12afe02ab2174cbe96c3091dbc05f27e7"
+    },
+    "creature-alien-two": {
+      "symmetry": "mirror-X",
+      "end_axes": 10,
+      "structural_panels": 10,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "46171bf66ded7f05af302374ffd0428587eb180a6e1d14e2622669b9c1a58a1d",
+        "three-quarter": "530fb3c3fa19b0251d641663bb49fdeeced4325d9c92a36bb6b48d61a3fd4baf",
+        "mounting/front": "66f3744d3c46d1064c653c171cf3be73e9a775866b4f4ee1a9fe03cc05d8ce0f",
+        "mounting/three-quarter": "74cd9997b434c5246bea8cd6e6177c6f1c9d280694757f5fc12a410057918329"
+      },
+      "assembly_sha256": "790834e02e9960454350f10840e235d19a3de7c3d924aac0c48b66899718bee9",
+      "artwork_only_center_xy_mm": [
+        0.0,
+        0.0
+      ]
+    },
+    "creature-mask": {
+      "symmetry": "mirror-X",
+      "end_axes": 16,
+      "structural_panels": 22,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "c9e0dc96518e56690f79c84c46a49157d60c969bacce7b52c805ca35ba99dc53",
+        "three-quarter": "7d7300ad644d26b994e89408a1e6942b225e989a960c1b328c0a8abea24028a3",
+        "mounting/front": "5604023c1136b3e06a6b368d2a8be0f7d192fb8dafaa9017b7c3ea974b994556",
+        "mounting/three-quarter": "57c6618b81766f66c56a3d7f8684f384c7516df24506bc01a5cba2bd9da2ae63"
+      },
+      "assembly_sha256": "cd60572c52b218fc07a798256324cfd9265af3e4224a0a4cd714b7f5ef5d2264",
+      "artwork_only_center_xy_mm": [
+        0.0,
+        0.0
+      ]
+    },
+    "creature-mask-raised": {
+      "symmetry": "mirror-X",
+      "end_axes": 16,
+      "structural_panels": 22,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "049b8c11425509dbd15850f8903c8b13c984ca4b46a513dc2538b9ac2bf8c635",
+        "three-quarter": "a406e11a1d3cfd44de2fbdebd6be02a3e7af8cc8970af1c6c73de27560831ecc",
+        "mounting/front": "29a7c08ad23336500e5e784555cc97fce1d79224fd9d6209b085bfb9cfea927c",
+        "mounting/three-quarter": "132f5ef8db637add84a4c14f43b2fee555d132ecdb9a7381ebb700ba5f150c47"
+      },
+      "assembly_sha256": "ffc4826a8329e0ac7ce339fc70191bc5960d3b41e482a135a9d06d9c389adc6f",
+      "artwork_only_center_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "unchanged_inventory_source": "creature-mask"
+    },
+    "creature-alien-six": {
+      "symmetry": "mirror-X",
+      "end_axes": 19,
+      "structural_panels": 29,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "e4640d0c8907ffc1cd0983854f50472eba5002222bf36a028692e1c0ec913679",
+        "three-quarter": "8c2914312e65de71b65715032169f89ba9cc57547ee56ded6058cfa0ffac3085",
+        "mounting/front": "45ed8bde85d15ba51547871827dbe516844f892473bdca57edea30c6af5054f5",
+        "mounting/three-quarter": "c51db76fa20acf17e0881fc733f6cb1fc67b9047df6ac978dfa9d634c0455f13"
+      },
+      "assembly_sha256": "f458d560470b7383f29fac4fd4febdf7fb30d921adaaf6bb8a6e4e10dd29d51f",
+      "artwork_only_center_xy_mm": [
+        0.0,
+        0.0
+      ]
+    },
+    "radial-weave": {
+      "symmetry": "none",
+      "end_axes": 24,
+      "structural_panels": 36,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "036a75e5f20a8daf067018721c0bcaf6cf3683d2d29390244d5b9c72d19f6c7e",
+        "three-quarter": "e6206371006e7e7860d125961ea3124283ad09db2bd49a7578f277fa38727cc6",
+        "mounting/front": "c350095bc2745f87fa5be6a37a172c389b15994a33187ed6f8b008cdbed3f76d",
+        "mounting/three-quarter": "fc955df5a85ab36ed7873d7d89780625dfcc848040411ec608c31e96ed8b8efe"
+      },
+      "assembly_sha256": "9dfd9d07ad0093743ae3743fd35188546573dbe6da158c169420726560b0df7d"
+    },
+    "radial-weave-reconfigured": {
+      "symmetry": "none",
+      "end_axes": 24,
+      "structural_panels": 36,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "7d8e65a49d1f9392ea849ac3073d5a3e11b117e12b961936b13bea5898077e40",
+        "three-quarter": "a5d395b572d2692a91429267d9b4cd32f70d2631546a7f2a70be068a7feb683a",
+        "mounting/front": "c358e960c3c89002d50c0d2ff1f993e79d8d104b4b79517f8b829e4279253f5c",
+        "mounting/three-quarter": "d665ba3e5c9558db7a70f7e975d8b598a2f61f54e1ade0fc87dbafc7d31daa4e"
+      },
+      "assembly_sha256": "3532e40f0cbe4c6bee2fb1672e56625632484be21bf73bcbae1e3873b94ec06d",
+      "unchanged_inventory_source": "radial-weave"
+    },
+    "single-module": {
+      "symmetry": "none",
+      "end_axes": 2,
+      "structural_panels": 1,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "1710a61f12618be9785f088cef61db830f1ef0c2354bff40bcfe1021919499e1",
+        "three-quarter": "aee02b0e6067022f7e3a5f9d694b0010f0e86d1f312281b448c2fe636856d0aa",
+        "mounting/front": "9ecf5f809f7e869d77003be215d568af7785ee96fd9bcfd837192cdbf888eb25",
+        "mounting/three-quarter": "7161a9e2346a3895bed5ef350ac652a65f3dcc3802192c5bf905de8867ec4500"
+      },
+      "assembly_sha256": "05b9b531a76dc6acb321ecb2c089d3cce3ac5f6a39c4f3893303a25b30d4ce21"
+    },
+    "intertwined": {
+      "symmetry": "none",
+      "end_axes": 8,
+      "structural_panels": 4,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "505faec8ae9c08d0bb6bab04ebafc929fe3bccb4d3a22a65d7ca81057035b248",
+        "three-quarter": "0dffd42cd47892e4c071e12618b72d255d060da10be7ee247fe8733487f703e3",
+        "mounting/front": "dea6cf52328847df7543ef8ff1c56b9d71629963b299fa8dce782d3c3d00a9d6",
+        "mounting/three-quarter": "5ab584578ef5442a42a18a0dfe5bc3c44c1ac2a1c47f64428eb4220fb1c23dab"
+      },
+      "assembly_sha256": "868aa1595a73d80e1574f26ade4f8bebb45f0792787a35d02cc94703af3a2b59"
+    },
+    "reconfigured": {
+      "symmetry": "none",
+      "end_axes": 8,
+      "structural_panels": 4,
+      "actual_path_grid_bore_web_tube_symmetry_load_path": "PASS",
+      "image_sha256": {
+        "front": "d6d1bb92f4a7746cff48463c857b9fad972a49b83fbf5ee4da767ba931241597",
+        "three-quarter": "c125ec6f7e481b7e5eb4bbf5dc377e431d9e2d8f719944268223e366e405394e",
+        "mounting/front": "dea6cf52328847df7543ef8ff1c56b9d71629963b299fa8dce782d3c3d00a9d6",
+        "mounting/three-quarter": "5ab584578ef5442a42a18a0dfe5bc3c44c1ac2a1c47f64428eb4220fb1c23dab"
+      },
+      "assembly_sha256": "d372fced94541f72fb617d0e1de9380062eeb3ca86335e4b7624700ef6f2a59c",
+      "unchanged_inventory_source": "intertwined"
+    }
+  }
+}

@@ -8,7 +8,13 @@ def test_creature_profiles_have_ambiguous_cavity_cluster_and_open_sweeps():
     shapes = profiles()
     cavities = eye_voids()
     assert len(cavities) == 6
-    assert max(p.area for p in cavities) / min(p.area for p in cavities) > 1.4
+    # Three unequal canonical cavities, each copied as an exact mirrored pair.
+    # The former six independently shaped cavities had a different area spread.
+    assert max(p.area for p in cavities) / min(p.area for p in cavities) > 1.3
+    assert len({round(p.area, 6) for p in cavities}) == 3
+    from shapely import affinity
+    assert all(affinity.scale(cavities[k], xfact=-1, origin=(0, 0)).equals(cavities[k + 1])
+               for k in range(0, 6, 2))
     assert all(
         p.is_valid and p.geom_type == "Polygon" for layers in shapes.values() for p in layers
     )

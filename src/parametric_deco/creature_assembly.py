@@ -192,7 +192,7 @@ def assemble_creature(c, inventory=None):
     for m in layout["modules"]:
         name = m["module_id"]
         moves[name] = (
-            ((-25 if "left" in name else 25), 50)
+            ((-25 if "left" in name else 25), c.grid.pitch_y_mm)
             if c.parameters.posture == "raised_crown" and name.startswith("crown")
             else (0, 0)
         )

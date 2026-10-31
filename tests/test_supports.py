@@ -40,7 +40,9 @@ def independent_laminar_paths(config):
 def independent_path(a, config, part):
     pose = np.array(part.transform)
     if config.style == 'laminar':
-        points = independent_laminar_paths(config)[part.module_id]
+        from parametric_deco.geometry.symmetry import canonical_id, kind
+        module = canonical_id(part.module_id, config) if kind(config) == 'C3' else part.module_id
+        points = independent_laminar_paths(config)[module]
     elif config.style == 'layered-creature':
         if part.module_id == 'head':
             return None
@@ -217,6 +219,14 @@ def test_curled_jaw_rectangle_extremes_do_not_support_actual_distal_tail():
     metadata['end_supports']['stations'] = [s for s in metadata['end_supports']['stations'] if s['id'] not in removed_ids]
     remaining = [s for s in metadata['end_supports']['stations'] if part.instance_id in s['plate_ids']]
     axis, lo, hi = span_axis(xy_footprint(a.definition_for(part), part.transform))
+    # The new symmetric station set no longer happens to satisfy the historical
+    # false proxy after removal alone. Move its intermediate marker to another
+    # real board axis near the curled middle: the old box proof then passes,
+    # while the actual distal path is still unambiguously unsupported.
+    candidates = [Point(h.x_mm, h.y_mm) for h in mounting_holes(config)]
+    false_spread = [p for p in candidates if path.project(p, normalized=True) < .65 and path.distance(p) < 60]
+    remaining[0]['xy'] = list(min(false_spread, key=lambda p: np.dot(p.coords[0], axis)).coords[0])
+    remaining[1]['xy'] = list(max(false_spread, key=lambda p: np.dot(p.coords[0], axis)).coords[0])
     rectangle = [(np.dot(s['xy'], axis) - lo) / (hi - lo) for s in remaining]
     assert min(rectangle) <= .30 and max(rectangle) >= .70  # The old proof still passes.
     actual = [path.project(Point(s['xy']), normalized=True) for s in remaining]

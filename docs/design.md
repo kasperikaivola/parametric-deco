@@ -67,9 +67,9 @@ once by laser software. Grade and finish are optional; no white paint is require
 | --- | --- |
 | `envelope` | Every polygon board fits requested XY. Laminar sculpture fits XY with 2 mm boundary allowance and generates actual relief for depth; XY 800–1400, aspect ratio 0.7–1.4, depth 120–240. Other sculpture geometry retains explicit dimensions: creature scale/reach controls, radial millimetre radii, rib-study recipe. The envelope contains those parts rather than rescaling them; too small fails. |
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
-| `grid` | Pitch X/Y 50, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Every style locates its deco mounting bores directly on this same predefined grid, including laminar. |
+| `grid` | Pitch X 50, row pitch 25√3 ≈43.301270, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Every style locates its deco mounting bores directly on this same predefined grid, including laminar. |
 | `backplate` | Identical physical polygon and full bore pattern for every style at matching stock size/settings; sides 8 and rotation 22.5° by default. No family-specific apertures, seats or extra drilling. |
-| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 50 (40–55) controls rib-study wings. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
+| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 25√3 (40–55) controls rib-study wings. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
 | `cutting_bed` | Optional width/height and spacing (default 5). Conservative rectangular shelf placement; oversized parts fail rather than shrink. Null gives individual cuts. |
 
 ## Laminar parameters
@@ -78,12 +78,12 @@ All rows below are inside `parameters` (except the explicit envelope rows).
 | Group | JSON field | Default / range | Actual geometry effect |
 | --- | --- | --- | --- |
 | Composition | `parameters.arrangement` | `whorl`, `bilateral` | Orbiting focal field or staggered paired rows |
-| Composition | `focal_count` | 6 / integers 4–8 | Number of primary focal/appendage modules |
+| Composition | `focal_count` | 6 / integers 3–9; exact C3 requires3,6,9; bilateral requires paired counts | Number of primary focal/appendage modules |
 | Composition | `branching` | 2 / integers 1–3 | Maximum daughter branches per region; the field varies actual counts |
 | Composition | `anatomy_phase_deg` | 0 / −180–180 | Shifts regional open/closed cavity and branch relationships |
 | Composition | `phase_deg` | 17 / −180–180 | Whorl orientation and relative phase of regional anatomy |
 | Composition | `spread` | 1 / 0.85–1.15 | Relative focal spacing before fitting the silhouette |
-| Composition | `symmetry` | `rotational`, `bilateral`, `none` | Repeated orientation, reflected local paths, or individually tilted forms |
+| Composition | `symmetry` | `rotational`, `bilateral`, `none` | Exact repeated120° material/layer/mount orbits, exact reflected pairs, or individually tilted forms |
 | Complexity | `complexity` | 0 / integers 0–2 | Coordinated secondary lobes, segmentation and channels |
 | Override | `secondary_lobes` | null / integers 0–1 | Null follows complexity; 1 adds an inner lobe per primary region |
 | Override | `segmentation` | null / integers 0–5 | Integral curved divisions in each appendage, 1/2/3 by complexity |
@@ -94,7 +94,7 @@ All rows below are inside `parameters` (except the explicit envelope rows).
 | Style | `taper` | 1 / 0.7–1.3 | Width distribution along paths |
 | Style | `swelling` | 1 / 0.8–1.2 | Broadening and anatomical weight |
 | Style | `angularity` | 0 / 0–0.6 | Continuous modulation of sweep radius along the path |
-| Style | `asymmetry` | 0.12 / 0–0.2 | Controlled differences in reach, orientation and curvature |
+| Style | `asymmetry` | 0.12 / 0–0.2 | Controlled differences within the canonical motif, repeated exactly in symmetry modes |
 
 Complexity 0/1/2 selects 1/2/3 internal divisions and channels, and optional inner
 lobes; explicit overrides replace those defaults. Subdivision accumulates material
@@ -116,7 +116,7 @@ All fields are inside `parameters`.
 | `limb_reach` |1.0|0.85–1.05| Path reach about fixed mounting roots |
 | `limb_width` |1.0|0.9–1.1| Swelling shell/rail widths and rib widths |
 | `rib_height_mm` |65|45–80 mm| Peak transverse-rib height, modulated along the limb |
-| `asymmetry` |0.08|0–0.15| Controlled side differences in reach/width;0 mirrors the paths |
+| `asymmetry` |0.08|0–0.15| Variation within one canonical limb, reflected exactly to its paired limb |
 | `scale` |1.0|0.9–1.0| XY profile AND transverse rib-height scale; roots/stock/joinery retain physical sizes |
 | `curl` |1.0|0.8–1.2| Terminal fold position |
 | `posture` |`rest`|`rest`, `raised_crown`| Placement of an unchanged manufactured inventory |
@@ -200,13 +200,13 @@ for rib study move `module` into
 as a new request. No automatic historical generation migration is promised.
 
 Inventory serialization retains the style family identifiers, but wraps the final
-physical cuts in the signed `path-end-clamps-v2` machining record. Its
+physical cuts in the signed `triangular-symmetric-mounts-v3` machining record. Its
 separately signed source placement template is historical digital input, not
 another physical inventory. All final part IDs/revisions and the exact common
 board remain authoritative on replay. Family names alone do not establish
 compatibility. Root-only/family-board stock and rectangle-only stock that misses
-actual curved endpoints require new cuts. Safe v1 stock may replay without changes
-when the independent path/geometry checks pass.
+actual curved endpoints require new cuts. All earlier square-row-grid revisions
+require new manufacturing; their physical definitions remain immutable.
 `examples/inventory.json` is retained unchanged as a historical fixture and is
 not a current universal-support inventory.
 
@@ -229,12 +229,15 @@ remain simplified. Deco panels can be hidden in the support views without
 changing hardware positions or geometry.
 
 All 1000 × 1000 mm examples share the exact same board cut fingerprint, including
-pitch, origin, stagger, parity and edge clipping. The 800/1400 mm laminar presets
+pitch, origin, stagger, parity and edge clipping. The common triangular lattice permits exact 120° mounting orbits; the old 50×50 staggered grid cannot. The 800/1400 mm laminar presets
 use separate stock sizes with the same grid standard. Artwork channels and voids
 remain in the deco; the universal board stays behind them. No family-specific
 board aperture or laminar seat pattern is needed.
 
-Creature centering remains a placement transform (+100 mm Y for six limbs).
+Creature artwork is initially centred by its measured anatomy bounds using an
+actual placement transform. Original bores are inverse-placed from the fixed
+world grid, so initial centering need not be a lattice translation. Only later
+saved-stock pose changes are restricted to lattice-compatible deltas.
 Raised-crown placement, radial 90°→270°/rib permutation, and the rib-study replay
 reuse their source physical inventory without adding bores. Unsupported placements
 fail instead of changing the saved stock. Radial low fin crests are trimmed at

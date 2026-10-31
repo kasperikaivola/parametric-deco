@@ -1,10 +1,10 @@
 # Universal board and separated end supports
 
-The current manufacturing revision is `path-end-clamps-v2` on
-`universal-grid-board-v1`. Every compatible deco uses **the exact same physical
+The current manufacturing revision is `triangular-symmetric-mounts-v3` on
+`universal-triangular-board-v3`. Every compatible deco uses **the exact same physical
 board**, not a family-specific outline, aperture or seat pattern. Default stock
 is a 1000 × 1000 mm envelope-fitted octagon, rotated 22.5°, 6 mm thick. Its bores
-are 6.5 mm on a 50 × 50 mm grid, alternate rows shifted 25 mm, origin (0,0),
+are 6.5 mm on a 50 × 25√3 mm equilateral triangular grid (row pitch ≈43.301270 mm), alternate rows shifted 25 mm, origin (0,0),
 including negative-row parity and the same 18.25 mm bore-centre edge exclusion.
 Changing board size, stock thickness, polygon controls or grid controls selects
 a different physical board; the 800 and 1400 mm laminar presets are explicitly
@@ -17,6 +17,24 @@ some deco outlines where necessary to carry a grid bore; these pads are part of
 the laser-cut deco itself. They retain the decorative channels and actual rib
 clearances. The universal board stays dark behind the artwork openings. Its
 full unused hole grid is visible in the actual CAD gallery and mounting views with transparent deco contours and station/module IDs.
+
+
+The C3 laminar presets repeat one canonical 120° motif, including all contours,
+channels, layer heights, integral pads, bores and hardware. Uniform fitting stays
+about the common grid origin. The explicitly named bilateral preset instead uses
+exact reflected pairs. Creature paired limbs, head layers and complete clamp
+stacks are exact X→−X reflections. Candidate support orbits are accepted together,
+then combined trial machining checks connectivity and7 mm bore ligaments. Finished
+extruded material and layer-specific support/hardware counterparts are audited
+independently; a symmetric silhouette alone does not pass. Long creature limbs
+also receive an intermediate bend support where their path exceeds 350 mm.
+
+Earlier square-row grid inventories remain immutable and are rejected for this
+revision with a new-cuts requirement. New repeated laminar sectors share one
+physical cut definition; their supported placement is a rigid 120° copy. New
+rib-study cuts omit obsolete original root mounting bores and root bolts: closed
+key/retainer apertures remain functional, and separated direct end clamps carry
+the captured spine/rib assembly. No replacement adapters are introduced.
 
 ## Long panels and real compression paths
 
@@ -33,7 +51,7 @@ Radial modules are audited along their angular arc, with a 0.315 end-region
 fraction accommodating the existing 1–2 mm grid/arc boundary discrepancy. Straight
 rib-study spans derive from actual manufactured spine length, not a changed recipe.
 Broad head shells use a planar spread criterion, rather than a fictitious limb
-path. Rectangle extrema are used only for initial intermediate support layout;
+path. For nonsymmetric legacy layouts rectangle extrema may seed intermediate supports;
 they are **not** evidence that a curved root or distal tail is supported.
 
 The validator reconstructs these paths from family geometry and current poses,
@@ -113,3 +131,10 @@ commercial fit, material stiffness, locking, load capacity, wear, handling and
 installation anchorage remain **physical NOT RUN**. Wire/Arena/projector checks
 remain **NOT RUN**. Support all affected layers in a cradle before releasing any
 root or end clamp. This is a prototype design, not a load-rated installation.
+
+The [v3 cached geometry/view audit](symmetry-grid-validation.json) binds all 15
+records and60 view images to their actual assembly hashes, including artwork-only
+centering and unchanged-inventory replays. [Fresh radial joint evidence](radial-v3-joint-evidence.json)
+checks all90 ribs on both new24-axis poses: inward 0/10/40/80 mm spine clearance
+with rails removed, then 1 mm capture against installed rails. This remains sampled
+nominal geometry evidence, not an exhaustive motion or physical fit proof.

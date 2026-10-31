@@ -41,6 +41,11 @@ pad solid clearances and all-part routes to the board. Nominal-size examples sha
 one physical board fingerprint. Older family evidence is historical; current
 support construction and its explicit physical limitations are in [mounting](mounting.md).
 
+## Historical path-end correction at `f215a34`
+
+The following ledger predates the new equilateral grid and symmetry revision.
+Its geometry, counts and views are historical; current evidence is linked above.
+
 The earlier `d360100` implementation ledger (43 + 13 + two focused checks)
 validated hardware, board identity, static clearances and the radial service
 corridors, but its rectangle-only end criterion did not establish actual curled
@@ -66,3 +71,41 @@ configuration/assembly provenance, current links, and all three unchanged-invent
 replays. Eight variants required changed cuts/hardware; seven reused physically
 identical geometry and their normal renders. No full-suite, full CLI, second
 complete-review, or CI run was performed for this correction.
+
+## Current symmetry and common-grid revision
+
+`triangular-symmetric-mounts-v3` changes all manufactured boards to the same
+equilateral lattice at each stock size. Canonical C3 laminar cuts/poses and exact
+mirrored creature structural layers receive complete support orbits; combined
+trial machining checks connected material and7 mm bore webs. The final audit
+independently compares actual extruded polygons (holes/pads included), placements,
+heights, hardware and per-layer support membership under the required symmetry.
+Old inventories are rejected with a new-cuts requirement; all three new-revision
+replay inventories remain byte-for-byte equivalent as structured records.
+
+Focused local checks cover 19 new symmetry regressions,15independent per-example
+actual-path/bore/tube/load-path checks,31 impacted inventory/config/negative checks,
+and6 changed geometry/root-grid checks. The curled negative fixture now deliberately
+selects a common-grid middle station that passes the obsolete rectangle test,
+while the actual distal path remains unsupported. See the current
+[support report](support-validation.json), [gallery](gallery.md) and per-example
+attachment evidence for authoritative counts and material revision provenance.
+No full local suite or duplicate CLI example pipeline was run. Physical fit,
+stiffness and Wire/Arena remain **NOT RUN**.
+
+Initial creature centering is a continuous CAD placement. Original root axes are
+selected on the fixed world grid and inverse-placed into newly manufactured
+profiles, so all four creature examples have measured bounding-box centre Y=0 mm
+without moving the camera or grid. Saved raised-crown changes remain triangular
+lattice vectors. The strict 2 mm actual-geometry centering check is retained.
+The superseded PR CI failure has no available log diagnosis: the GitHub log
+reader returned Transport closed again. It does not establish current test
+status or authorize a merge; only the later reviewed replacement CI may do so.
+
+The final [v3 geometry/view audit](symmetry-grid-validation.json) checks all 15
+actual cached records,60matching images/hashes,3 unchanged-inventory replays,
+common board identity at each stock size and current links. Fresh
+[radial joint probes](radial-v3-joint-evidence.json) pass on both24-axis poses.
+Layer-relief/parameter checks additionally cover20 profile/cavity/neck regressions
+and14 shape/size/creature-corner cases. Artwork-only bounds exclude the board and
+purchased hardware. Earlier test descriptions above remain historical.

@@ -5,7 +5,7 @@
       "sides": 8
     },
     "definition_id": "backplate",
-    "fingerprint": "c27cc851f5dcf52819006b94d7db2e3573aa5156420527ef35f1b579d11261e1",
+    "fingerprint": "64a19588a6bd4cc032bcdc00426c8ff8a9c9537610e8a0a56d8c0c38f1e86958",
     "grid": {
       "edge_margin_mm": 15,
       "hole_diameter_mm": 6.5,
@@ -13,19 +13,19 @@
       "origin_x_mm": 0,
       "origin_y_mm": 0,
       "pitch_x_mm": 50,
-      "pitch_y_mm": 50
+      "pitch_y_mm": 43.30127018922193
     },
-    "grid_hole_count": 311,
+    "grid_hole_count": 361,
     "size_mm": [
       1000,
       1000
     ],
-    "standard": "universal-grid-board-v1",
+    "standard": "universal-triangular-board-v3",
     "stock_mm": 6
   },
   "end_supports": {
     "all_parts_reach_backplate": true,
-    "revision": "separated-end-clamps-v1",
+    "revision": "triangular-symmetric-mounts-v3",
     "spans": [
       {
         "axis_xy": [
@@ -50,8 +50,8 @@
         "path_kind": "straight-span",
         "path_length_mm": 300.0,
         "placed_station_fractions": [
-          0.0833333333333334,
-          0.9166666666666663
+          0.08333333333333331,
+          0.9166666666666669
         ],
         "station_ids": [
           "end-clamp-0",
@@ -77,13 +77,16 @@
         ],
         "reference_id": "m1-closure",
         "reference_xy": [
-          25.00000000000002,
-          -5.353782038344337e-16
+          24.999999999999993,
+          1.0154719916672585e-16
+        ],
+        "shared_modules": [
+          "m1"
         ],
         "top_mm": 138.0,
         "xy": [
-          50.00000000000002,
-          -5.353782038344337e-16
+          49.99999999999999,
+          1.0154719916672585e-16
         ]
       },
       {
@@ -103,13 +106,16 @@
         ],
         "reference_id": "m1-closure",
         "reference_xy": [
-          274.9999999999999,
-          8.696099608380016e-16
+          275.00000000000006,
+          -2.524707593759249e-16
+        ],
+        "shared_modules": [
+          "m1"
         ],
         "top_mm": 138.0,
         "xy": [
-          299.9999999999999,
-          8.696099608380016e-16
+          300.00000000000006,
+          -2.524707593759249e-16
         ]
       }
     ]
@@ -120,7 +126,7 @@
       "distal_support_ids": [
         "end-clamp-1"
       ],
-      "distal_unbraced_path_mm": 25.00000000000011,
+      "distal_unbraced_path_mm": 24.999999999999943,
       "end_region_fraction": 0.3,
       "fraction_parameter": "path arclength",
       "part_id": "m1-closure",
@@ -133,20 +139,20 @@
       "root_support_ids": [
         "end-clamp-0"
       ],
-      "root_unbraced_path_mm": 25.000000000000018,
+      "root_unbraced_path_mm": 24.999999999999993,
       "station_fractions": [
         [
           "end-clamp-0",
-          0.0833333333333334
+          0.08333333333333331
         ],
         [
           "end-clamp-1",
-          0.9166666666666663
+          0.9166666666666669
         ]
       ],
       "station_path_offsets_mm": {
-        "end-clamp-0": 5.353782038344337e-16,
-        "end-clamp-1": 8.696099608380017e-16
+        "end-clamp-0": 1.0154719916672585e-16,
+        "end-clamp-1": 2.524707593759249e-16
       },
       "tip_mm": [
         325.0,
@@ -154,6 +160,10 @@
       ]
     }
   ],
+  "symmetry": {
+    "actual_extruded_material_hardware_and_layer_orbits": "PASS",
+    "group": "none"
+  },
   "upright_joinery": [
     {
       "board_load_path": "captured join to grid-clamped structural panel",

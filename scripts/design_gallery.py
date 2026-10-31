@@ -20,7 +20,8 @@ from parametric_deco.export.scene import write_scene
 from parametric_deco.export.views import render_views
 from parametric_deco.model import Assembly, BuildResult, Inventory, Issue, ValidationReport, digest
 from parametric_deco.validation import instance_bounds
-from parametric_deco.supports import verify_supports, physical_paths, path_fraction, path_limit, end_covered
+from parametric_deco.supports import verify_supports, physical_paths, path_fraction, path_limit, end_covered, REVISION
+from parametric_deco.geometry.symmetry import kind as symmetry_kind, verify_symmetry
 
 REPRESENTATIVES = {'laminar': 'organism-low', 'layered-creature': 'creature-alien-six',
                    'radial-weave': 'radial-weave', 'rib-study': 'single-module'}
@@ -247,6 +248,7 @@ def main():
                  'non_board_bounds_mm': [low.tolist(), high.tolist()],
                  'non_board_center_mm': ((low + high) / 2).tolist(),
                  'instances': len(a.instances), 'plywood_instances': len(build.inventory.instances),
+                 'symmetry': {'group': symmetry_kind(config), 'actual_extruded_material_hardware_and_layer_orbits': 'PASS' if not verify_symmetry(a, config) else 'FAIL'},
                  'mounting': a.composition['end_supports'],
                  'upright_joinery': upright_evidence(a),
                  'manufactured_support_spans': manufactured_spans(a),
@@ -259,7 +261,8 @@ def main():
         write_json(images / 'mounting-evidence.json', {'backplate': a.composition['universal_backplate'],
                                                       'end_supports': entry['mounting'],
                                                       'upright_joinery': entry['upright_joinery'],
-                                                      'manufactured_support_spans': entry['manufactured_support_spans']})
+                                                      'manufactured_support_spans': entry['manufactured_support_spans'],
+                                                      'symmetry': entry['symmetry']})
         if example == REPRESENTATIVES.get(config.style):
             alias = root / 'docs/implementation/images/gallery' / config.style
             alias.mkdir(parents=True, exist_ok=True)
@@ -273,10 +276,10 @@ def main():
     if any(len(values) != 1 for values in groups.values()):
         raise ValueError('incompatible physical boards within a shared stock-size group')
     write_json(root / 'docs/implementation/support-validation.json', {
-        'manufacturing_revision': 'path-end-clamps-v2',
+        'manufacturing_revision': REVISION,
         'examples_checked': len(evidence),
         'common_board_fingerprints_by_stock_size': {k: sorted(v) for k, v in groups.items()},
-        'checks': 'independent family root/distal paths or arc/straight span, actual grid axes, bores/7mm webs, hardware axes/envelope/corridors, gap tubes, all-parts graph',
+        'checks': 'independent family root/distal paths or arc/straight span, actual grid axes, bores/7mm webs, hardware axes/envelope/corridors, gap tubes, all-parts graph; exact extruded material and complete support/hardware symmetry orbits',
         'physical_validation': 'NOT RUN', 'Wire_Arena_validation': 'NOT RUN',
         'examples': {name: {'end_axes': len(e['mounting']['stations']),
             'structural_panels': len(e['mounting']['spans']),
@@ -292,9 +295,9 @@ def main():
             'Mounting views show the actual deco contours transparently with hardware visible through them, plus the common hole grid; cyan R-T traces identify actual curved root/distal paths, and station numbers/module labels link to exact end-clamp IDs in the evidence. '
             'Original root/clip hardware remains simplified. Physical and Wire/Arena checks are **NOT RUN**.', '',
             'Every 1000 × 1000 example uses the identical manufactured board fingerprint; '
-            '800 and 1400 mm size presets require separate board stock sizes with the same 50 mm staggered grid standard. '
+            '800 and 1400 mm size presets require separate board stock sizes with the same equilateral triangular grid (50 mm X, 25√3 mm rows, 25 mm stagger). '
             'Family-specific eye/aperture/trestle cuts are absent from the universal board. '
-            'The common board stays behind the artwork voids.', '',
+            'The common board stays behind the artwork voids. Standard laminar presets repeat exact120° sectors including mounts; organism-bilateral is explicitly mirrored instead. Creature geometry and every support stack are exact left/right reflections.', '',
             '| Example | Family / configuration | Front | Three-quarter | End clamps / panel spans | Mounting evidence |',
             '| --- | --- | --- | --- | --- | --- |']
     for name, e in evidence.items():

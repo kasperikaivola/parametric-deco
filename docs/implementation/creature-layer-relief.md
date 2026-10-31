@@ -1,5 +1,10 @@
 # Creature layer relief
 
+Historical contour/material study at the pre-symmetry revision. Its area metrics
+and family-specific images/evidence are not measurements of current v3 cuts.
+The [current gallery](gallery.md) and [mounting revision](mounting.md) supersede
+its geometry, root positions, bores, symmetry and board assumptions.
+
 New cuts use depth-normalized contour retreats rather than almost identical
 plates. Head lobes retreat by unequal amounts around the silhouette; widened
 curving channels and cavity rims expose lower terraces. Limb rails taper more

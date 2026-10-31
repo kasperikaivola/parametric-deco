@@ -38,9 +38,9 @@ def test_root_requires_all_holes_and_washers():
     from parametric_deco.geometry.backplate import match_root_pattern
 
     c = DesignConfig(style="rib-study", parameters=RibStudy())
-    assert len(match_root_pattern(c, ((25, -50), (25, 50)))) == 2
+    assert len(match_root_pattern(c, ((25, -c.grid.pitch_y_mm), (25, c.grid.pitch_y_mm)))) == 2
     with pytest.raises(ValueError, match="mount"):
-        match_root_pattern(c, ((25, -50), (26, 50)))
+        match_root_pattern(c, ((25, -c.grid.pitch_y_mm), (26, c.grid.pitch_y_mm)))
 
 
 @pytest.mark.parametrize("style", ["laminar", "layered-creature", "radial-weave", "rib-study"])
