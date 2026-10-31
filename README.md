@@ -32,13 +32,14 @@ parameter, regenerates validated CAD automatically, and keeps an orbitable previ
 visible while you tune a design. Install with `python -m pip install -e ".[gui]"`,
 then run `parametric-deco gui` (or `parametric-deco-gui`).
 
-Same two orthographic cameras, materials and fit-to-frame policy for all three
-representatives; actual generated CAD with manufactured polygon backplates. Front is straight onto the XY board plane from +Z; three-quarter shows the relief. Hardware is omitted in these images.
+There are **four implemented generators** and **15 example configurations**, including geometry presets and supported inventory poses. The [complete matched gallery](docs/implementation/gallery.md) shows every example, its actual mounting hardware, and exact end-support evidence. All nominal-size designs use the **same physical backplate and hole grid**; 800/1400 mm presets require different board stock sizes.
 
-| View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` |
-| --- | --- | --- | --- |
-| Front | ![](docs/implementation/images/gallery/laminar/front.png) | ![](docs/implementation/images/gallery/layered-creature/front.png) | ![](docs/implementation/images/gallery/radial-weave/front.png) |
-| Three-quarter | ![](docs/implementation/images/gallery/laminar/three-quarter.png) | ![](docs/implementation/images/gallery/layered-creature/three-quarter.png) | ![](docs/implementation/images/gallery/radial-weave/three-quarter.png) |
+The same orthographic cameras, materials and framing apply below. Front looks onto XY from +Z; three-quarter shows relief. Blue-grey end-clamp hardware is real modeled geometry; [mounting details](docs/implementation/mounting.md) explain the load paths.
+
+| View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` | Rib study · `single-module` |
+| --- | --- | --- | --- | --- |
+| Front | ![](docs/implementation/images/gallery/laminar/front.png) | ![](docs/implementation/images/gallery/layered-creature/front.png) | ![](docs/implementation/images/gallery/radial-weave/front.png) | ![](docs/implementation/images/gallery/rib-study/front.png) |
+| Three-quarter | ![](docs/implementation/images/gallery/laminar/three-quarter.png) | ![](docs/implementation/images/gallery/layered-creature/three-quarter.png) | ![](docs/implementation/images/gallery/radial-weave/three-quarter.png) | ![](docs/implementation/images/gallery/rib-study/three-quarter.png) |
 
 Creature anatomy is centered on equivalent grid rows; radial defaults to a vertical
 90° orientation with grid-matched cuts. Both views share the same exported assembly;
@@ -49,7 +50,7 @@ Build exports SVG cuts, quantities, fit coupon, scale check, immutable inventory
 identified GLB/JSON, offline viewer, inspection images, assembly instructions and
 validation report. `reconfigure CONFIG --inventory SAVED --out DIRECTORY` reuses
 manufactured cuts at supported placements. Changing geometry requires new cuts;
-old saved parts are never resized. Earlier laminar framework and creature anatomical-board inventories require new cuts for the common polygon board revision. The default laminar style supports identical
+old saved parts are never resized. Current stock uses one equilateral triangular grid: 50 mm X pitch, 25√3 mm row pitch and 25 mm alternate-row offset about (0,0). Default laminar artwork, layer heights and all mounts repeat exactly at 120°; creature construction and every support stack reflect exactly left/right. Earlier square-row grid stock requires a new manufacturing revision. Inventories predating the universal-grid separated-end support revision require new cuts; saved old parts are never silently drilled. Curled parts are checked against their actual root/distal paths rather than rectangle extrema; deficient older cuts require a new manufacturing revision. Each long structural panel has separated end clamps, with rigid compression tubes in every actual gap and deco bores directly aligned to the common board grid. No offset adapters are needed. The default laminar style supports identical
 inventory replay; creature posture, radial and rib-study arrangements offer
 bounded reuse. See the guide before choosing cuts.
 

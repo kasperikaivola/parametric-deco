@@ -113,7 +113,7 @@
   },
   "grid": {
     "pitch_x_mm": 50,
-    "pitch_y_mm": 50,
+    "pitch_y_mm": 43.30127018922193,
     "offset_mm": 25,
     "origin_x_mm": 0,
     "origin_y_mm": 0,
@@ -128,6 +128,6 @@
     "rear_clearance_mm": 10,
     "hardware_outward_mm": 12,
     "washer_radius_mm": 9,
-    "root_half_span_mm": 50
+    "root_half_span_mm": 43.30127018922193
   }
 }

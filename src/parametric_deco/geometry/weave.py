@@ -130,6 +130,8 @@ def generate_weave(config, root_flips=()):
             for j, offset in enumerate(offsets):
                 theta = centre + offset
                 r = radius(design, strand, theta)
+                # Placement-template profile. Final support machining trims any
+                # low crest above its capture rail (supports._prepare_source).
                 crest = (
                     152
                     if level == "high"

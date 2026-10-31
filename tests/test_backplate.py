@@ -38,9 +38,9 @@ def test_root_requires_all_holes_and_washers():
     from parametric_deco.geometry.backplate import match_root_pattern
 
     c = DesignConfig(style="rib-study", parameters=RibStudy())
-    assert len(match_root_pattern(c, ((25, -50), (25, 50)))) == 2
+    assert len(match_root_pattern(c, ((25, -c.grid.pitch_y_mm), (25, c.grid.pitch_y_mm)))) == 2
     with pytest.raises(ValueError, match="mount"):
-        match_root_pattern(c, ((25, -50), (26, 50)))
+        match_root_pattern(c, ((25, -c.grid.pitch_y_mm), (26, c.grid.pitch_y_mm)))
 
 
 @pytest.mark.parametrize("style", ["laminar", "layered-creature", "radial-weave", "rib-study"])
@@ -81,18 +81,10 @@ def test_new_boards_saved_replay_and_previous_requests_require_cuts(tmp_path, st
     assert len(board.outer) == c.backplate.sides
     assert board.polygon.exterior.equals(backplate_polygon(c).exterior)
     assert board.thickness_mm == 6
-    # Real bores and closed seats/apertures remain in the manufactured cut.
-    if style == 'laminar':
-        from shapely.geometry import Polygon
-        assert len(board.holes) == 4 * len(build.assembly.composition['modules'])
-        for module in build.assembly.composition['modules']:
-            for slot in module['slot_polygons']:
-                assert board.polygon.intersection(Polygon(slot)).area < 1e-6
-    else:
-        from parametric_deco.geometry.backplate import mounting_holes
-        assert len(board.holes) == len(mounting_holes(c)) + len(backplate_polygon(c).interiors)
-        assert all(not board.polygon.covers(Point(h.x_mm, h.y_mm))
-                   for h in mounting_holes(c))
+    # Every style uses the same complete manufactured grid; there are no family seats.
+    from parametric_deco.geometry.backplate import mounting_holes
+    assert len(board.holes) == len(mounting_holes(c))
+    assert all(not board.polygon.covers(Point(h.x_mm, h.y_mm)) for h in mounting_holes(c))
     path = tmp_path / 'inventory.json'
     path.write_text(json.dumps(build.inventory.to_dict()))
     saved = Inventory.load(path)
@@ -106,7 +98,7 @@ def test_new_boards_saved_replay_and_previous_requests_require_cuts(tmp_path, st
     # Baseline master requests predate common-polygon-v1. Even a valid signed
     # saved layout from that request must be rejected before any geometry replay.
     layout = saved.layout.copy()
-    layout['manufacturing_request'] = previous_request
+    layout['support_revision'] = previous_request
     layout.pop('fingerprint')
     layout['fingerprint'] = digest(layout)
     path.write_text(json.dumps(replace(saved, layout=layout).to_dict()))
@@ -116,16 +108,11 @@ def test_new_boards_saved_replay_and_previous_requests_require_cuts(tmp_path, st
     assert old_saved.to_dict() == Inventory.load(path).to_dict()
 
 
-def test_creature_polygon_retains_through_eye_and_central_channels():
-    from shapely import affinity
-    from shapely.ops import unary_union
+def test_creature_negative_space_does_not_make_board_stock_family_specific():
     from parametric_deco.config import config_from_dict
     from parametric_deco.geometry.backplate import backplate_polygon
-    from parametric_deco.geometry.creature_profiles import cavity_voids, central_void, placement_offset
 
-    c = config_from_dict({'style': 'layered-creature'})
-    voids = unary_union([*cavity_voids(c.parameters, 1.06), affinity.scale(
-        central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0))])
-    dx, dy = placement_offset(c)
-    placed_voids = affinity.translate(voids, xoff=dx, yoff=dy)
-    assert backplate_polygon(c).intersection(placed_voids).area < 1e-6
+    creature = config_from_dict({'style': 'layered-creature'})
+    radial = config_from_dict({'style': 'radial-weave'})
+    assert backplate_polygon(creature).equals(backplate_polygon(radial))
+    assert not backplate_polygon(creature).interiors

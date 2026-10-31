@@ -3,10 +3,9 @@
 import math
 
 import numpy as np
-from shapely.geometry import Polygon, Point
 
 from .config import validate_config
-from .geometry.backplate import generate_backplate, match_root_pattern
+from .geometry.backplate import generate_backplate
 from .geometry.module import generate_module
 from .geometry.joints import rib_slot_centres
 from .model import Assembly, BuildResult, Connection, Inventory, PartInstance, digest
@@ -23,6 +22,12 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
+    from .supports import supported_build
+
+    return supported_build(config, inventory, _assemble)
+
+
+def _assemble(config, inventory=None):
     report = validate_config(config)
     if not report.digital_valid:
         raise ValueError("; ".join(i.message for i in report.issues))
@@ -213,55 +218,8 @@ def assemble(config, inventory=None):
                         inst.instance_id, closure_placed.instance_id, "upper-closure-v1", "closure"
                     )
                 )
-        # Find real manufactured circular root holes, not assumed current dimensions.
-        root_rings = [Polygon(r) for r in cover_def.holes if abs(Polygon(r).centroid.x) < 1e-6]
-        root_holes = [ring.centroid for ring in root_rings]
-        if len(root_holes) != 2:
-            raise ValueError(f"{p.module_id}: missing manufactured root pattern")
-        roots = [(new_base @ np.array((h.x, h.y, 0, 1)))[:2] for h in root_holes]
-        matches = match_root_pattern(config, roots)
-        for h, (x, y), root_ring in zip(matches, roots, root_rings):
-            # Inventory backing holes are immutable too. Test full washer and hole centres.
-            actual = next(
-                (
-                    Polygon(r)
-                    for r in backing.holes
-                    if Polygon(r).centroid.distance(Point(x, y)) < 1e-6
-                ),
-                None,
-            )
-            if (
-                actual is None
-                or actual.area < math.pi * (config.grid.hole_diameter_mm / 2) ** 2 * 0.99
-            ):
-                raise ValueError(f"{p.module_id}: root mount absent from manufactured backing")
-            radius = config.mounting.washer_radius_mm
-            for part, hole in ((backing, actual), (cover_def, root_ring)):
-                centre = hole.centroid
-                hole_radius = max(
-                    math.hypot(px - centre.x, py - centre.y) for px, py in hole.exterior.coords
-                )
-                if (
-                    radius <= hole_radius + 1e-6
-                    or Polygon(part.outer).boundary.distance(centre) < radius - 1e-6
-                ):
-                    raise ValueError(
-                        f"{p.module_id}: washer has insufficient bearing "
-                        f"on manufactured {part.definition_id}"
-                    )
-            mount_refs.append((p.module_id, h.point_id, float(x), float(y)))
-            top_z = base_z + cover_z + cover_def.thickness_mm + config.mounting.hardware_outward_mm
-            hardware.append(
-                (
-                    p.module_id,
-                    float(x - radius),
-                    float(y - radius),
-                    0.0,
-                    float(x + radius),
-                    float(y + radius),
-                    float(top_z),
-                )
-            )
+        # The horizontal closure is clamped near both ends by the final common-
+        # grid support stage. Source joint templates contain no root-only bores.
         extraction.append(
             (
                 p.module_id,

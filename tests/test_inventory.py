@@ -11,7 +11,7 @@ def test_reconfigure_uses_saved_geometry_not_current_recipe():
 
     c = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(c)
-    inventory = Inventory(first.assembly.definitions, first.assembly.instances)
+    inventory = first.inventory
     changed = replace(
         c,
         parameters=replace(c.parameters, recipe=replace(c.module, length_mm=400),
@@ -33,7 +33,7 @@ def test_inventory_shortage_and_stale_revision_rejected():
     from parametric_deco.model import Inventory
 
     build = assemble(DesignConfig(style="rib-study", parameters=RibStudy()))
-    inv = Inventory(build.assembly.definitions, build.assembly.instances)
+    inv = build.inventory
     with pytest.raises(ValueError, match="missing|insufficient"):
         assemble(DesignConfig(style="rib-study", parameters=RibStudy()), replace(inv, instances=inv.instances[:-1]))
     data = inv.to_dict()
@@ -54,11 +54,11 @@ def test_partial_reconfiguration_export_preserves_all_stock_and_can_restore(tmp_
 
     config = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(config)
-    inventory = Inventory(first.assembly.definitions, first.assembly.instances)
-    # Move and rotate the module while leaving its fourth rib in stock.
+    inventory = first.inventory
+    # Translate by a parity-preserving grid offset, leaving its fourth rib in stock.
     partial_config = replace(
         config, parameters=replace(config.parameters,
-            placements=(ModulePlacement("m1", 200, -200, 90, (0, 1, 2), (0, 1, 2)),))
+            placements=(ModulePlacement("m1", 75, -2 * config.grid.pitch_y_mm, 0, (0, 1, 2), (0, 1, 2)),))
     )
     partial = assemble(partial_config, inventory)
     assert partial.report.digital_valid, partial.report.to_dict()
@@ -77,15 +77,9 @@ def test_partial_reconfiguration_export_preserves_all_stock_and_can_restore(tmp_
 def test_saved_holes_require_real_washer_bearing_during_reconfiguration():
     from parametric_deco.config import DesignConfig
     from parametric_deco.assembly import assemble
-    from parametric_deco.model import Inventory
 
     c = DesignConfig(style="rib-study", parameters=RibStudy())
-    large_holes = replace(
-        c,
-        grid=replace(c.grid, hole_diameter_mm=20),
-        mounting=replace(c.mounting, washer_radius_mm=12),
-    )
-    first = assemble(large_holes)
-    assert first.report.digital_valid
-    with pytest.raises(ValueError, match="washer.*bearing"):
-        assemble(c, Inventory(first.assembly.definitions, first.assembly.instances))
+    large_holes = replace(c, grid=replace(c.grid, hole_diameter_mm=20),
+                          mounting=replace(c.mounting, washer_radius_mm=12))
+    with pytest.raises(ValueError, match="M6.*bores"):
+        assemble(large_holes)

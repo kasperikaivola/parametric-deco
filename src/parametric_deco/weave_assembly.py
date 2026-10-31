@@ -48,7 +48,7 @@ def weave_evidence(assembly, report):
     opening = metadata["design"]["opening_radius_mm"]
     clearance = min(
         _projection(assembly.definition_for(i), i).distance(Point(0, 0)) - opening
-        for i in assembly.instances
+        for i in assembly.instances if i.role != "backplate"
     )
     metadata["opening_clearance_mm"] = clearance
     if clearance < -1e-5:

@@ -39,7 +39,7 @@ def test_manufactured_module_depth_and_inventory():
     c = config_from_dict({"style": "laminar", "parameters": {}})
     b = assemble(c)
     assert b.report.digital_valid, b.report.issues
-    assert len(b.assembly.instances) == 19
+    assert len(b.inventory.instances) == 7
     assert b.assembly.composition["construction"]["spacers"] == 0
     assert b.assembly.composition["construction"]["retainers"] == 0
     assert all(p.thickness_mm == 6 for p in b.fabrication_parts)
@@ -137,7 +137,8 @@ def test_loaded_assembly_bearing_and_support_checks():
     a = b.assembly
     instance = next(i for i in a.instances if i.role == "armour")
     original = a.definition_for(instance)
-    root = a.composition["modules"][0]["roots"][0]
+    root = next(s["xy"] for s in a.composition["end_supports"]["stations"]
+                if instance.instance_id in s["plate_ids"])
     damaged = PartDefinition.from_polygon(
         original.definition_id,
         original.polygon.difference(Point(root).buffer(12)),
@@ -197,7 +198,9 @@ def test_size_changes_geometry_but_not_joint_dimensions():
         for module in layout["modules"]:
             for slot in module["slot_polygons"]:
                 assert Polygon(slot).area == pytest.approx(6.2 * 14.2)
-        assert len(instances) == 19
+        assert len(instances) == 7
+        board = next(part for part in definitions if part.kind == "backplate")
+        assert all(Polygon(hole).bounds[2] - Polygon(hole).bounds[0] == pytest.approx(6.5) for hole in board.holes)
 
 
 def test_cut_ligaments_measure_actual_holes():
@@ -233,7 +236,7 @@ def test_determinism_and_all_new_cut_requests():
         "arrangement": "bilateral",
         "branching": 3,
         "anatomy_phase_deg": 55,
-        "focal_count": 5,
+        "focal_count": 9,
         "phase_deg": 31,
         "spread": 1.1,
         "symmetry": "none",
@@ -248,7 +251,10 @@ def test_determinism_and_all_new_cut_requests():
         "asymmetry": 0.15,
     }
     for field, value in changes.items():
-        changed = replace(c, parameters=replace(c.parameters, **{field: value}))
+        values = {field: value}
+        if field == "arrangement":
+            values["symmetry"] = "bilateral"
+        changed = replace(c, parameters=replace(c.parameters, **values))
         with pytest.raises(ValueError, match="new cuts"):
             assemble(changed, inv)
     with pytest.raises(ValueError, match="new cuts"):
@@ -280,7 +286,7 @@ def test_primary_anatomy_varies_beyond_rotated_copies():
         for lobe in lobes
     ]
     assert np.ptp(ratios) > 0.02
-    assert len({lobe.z for lobe in lobes}) == c.parameters.focal_count
+    assert len({lobe.z for lobe in lobes}) == c.parameters.focal_count // 3
 
 
 @pytest.mark.parametrize("before,after", [(0, 1), (1, 2)])
@@ -310,7 +316,7 @@ def test_primary_medial_paths_do_not_return_as_scrolls():
     from parametric_deco.geometry.organism import anatomy
 
     for arrangement in ("whorl", "bilateral"):
-        c = config_from_dict({"style": "laminar", "parameters": {"arrangement": arrangement}})
+        c = config_from_dict({"style": "laminar", "parameters": {"arrangement": arrangement, "symmetry": "bilateral" if arrangement == "bilateral" else "rotational"}})
         for lobe in anatomy(c):
             arc = np.linalg.norm(np.diff(lobe.path, axis=0), axis=1).sum()
             chord = np.linalg.norm(lobe.path[-1] - lobe.path[0])

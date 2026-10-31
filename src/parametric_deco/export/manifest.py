@@ -163,11 +163,33 @@ def _export_into(build, out):
             else "creature-assembly-instructions.md"
             if config.style == "layered-creature"
             else "radial-assembly-instructions.md"
-            if build.assembly.composition
+            if config.style == "radial-weave"
             else "assembly-instructions.md"
         )
         .read_text()
     )
+    support = (build.assembly.composition or {}).get("end_supports")
+    if support:
+        write_json(out / "mounting-evidence.json", support)
+        purchased = [i for i in build.assembly.instances if i.role == "mounting-hardware"]
+        write_json(out / "mounting-hardware.json", {
+            "specification": build.assembly.composition["support_hardware"],
+            "parts": [{"instance_id": i.instance_id, "definition_id": i.definition_id,
+                       "length_mm": build.assembly.definition_for(i).thickness_mm,
+                       "transform": i.transform} for i in purchased],
+            "note": "Purchased/cut-to-length metal hardware; excluded from plywood laser cuts.",
+        })
+        with (out / "assembly-instructions.md").open("a") as instructions:
+            instructions.write("\n\n## Universal-grid separated end clamps\n\n"
+                "Use mounting-evidence.json for every panel's two end stations and mounting-hardware.json "
+                "for tube lengths. Each deco bore is directly coaxial with a pre-existing universal board "
+                "bore; no offset adapters or extra board drilling. Fit the specified rigid metal tubes "
+                "in EVERY gap, including board-to-first-layer and every inter-layer gap. Fit rear/front "
+                "washers, M6 through bolts and locking nuts; the head and nut envelopes are modeled, "
+                "but commercial fastener/thread/preload selection and physical fit are NOT RUN. "
+                "Support all affected layers in a cradle before releasing ANY clamp. Remove all end "
+                "clamps and original root fasteners before the documented extraction sequence. "
+                "Purchased metal hardware is not a plywood laser cut.\n")
     if config.style in ("layered-creature", "laminar"):
         from ..visuals.visibility import projection_visibility
 
@@ -198,7 +220,7 @@ def _export_into(build, out):
         "validation": build.report.to_dict(),
         "provenance": build.provenance,
         "dependency_versions": versions,
-        "hardware": "conservative envelope proxies, not bolt specification",
+        "hardware": "M6 end-clamp tubes/shafts/washers/head/nut geometry; original root/clip hardware envelopes simplified; physical selection NOT RUN",
         "files": {
             p.relative_to(out).as_posix(): sha256(p.read_bytes()).hexdigest()
             for p in sorted(out.rglob("*"))

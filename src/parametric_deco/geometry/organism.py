@@ -183,7 +183,7 @@ def finished_profile(polygon, affine):
     return remove_repeated_points(affinity.affine_transform(polygon, affine), tolerance=0)
 
 
-def anatomy(c):
+def _unreplicated_anatomy(c, normalized=False):
     o = c.parameters
     primaries = [primary_anatomy(o, i) for i in range(o.focal_count)]
     # Size is fitted once from complexity-independent outer anatomy.
@@ -191,6 +191,8 @@ def anatomy(c):
     sx = (c.envelope.width_mm - 4) / (bounds[2] - bounds[0])
     sy = (c.envelope.height_mm - 4) / (bounds[3] - bounds[1])
     center = np.array(((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
+    if normalized:
+        sx, sy, center = 1.0, 1.0, np.zeros(2)
     affine = [sx, 0, 0, sy, -center[0] * sx, -center[1] * sy]
     base = c.mounting.rear_clearance_mm + c.material.measured_mm
     usable = c.envelope.depth_mm - base - c.material.measured_mm - 14
@@ -244,3 +246,67 @@ def anatomy(c):
                 )
             )
     return result
+
+
+def anatomy(c):
+    """Author one motif, then copy it exactly; fit uniformly about the grid origin."""
+    from dataclasses import replace
+    from .backplate import backplate_polygon
+    o = c.parameters
+    if o.symmetry not in ("rotational", "bilateral"):
+        return _unreplicated_anatomy(c)
+    source = _unreplicated_anatomy(c, normalized=True)
+    count = o.focal_count
+    if o.symmetry == "rotational":
+        if o.arrangement != "whorl" or count % 3:
+            raise ValueError("exact C3 laminar requires whorl and focal_count divisible by3")
+        motif = count // 3
+        canonical = [lobe for lobe in source if int(lobe.name.rsplit('-', 1)[1]) < motif]
+        copies = []
+        for sector in range(3):
+            angle = sector * 2 * math.pi / 3
+            co, si = math.cos(angle), math.sin(angle)
+            rotation = np.array(((co, -si), (si, co)))
+            for lobe in canonical:
+                j = int(lobe.name.rsplit('-', 1)[1])
+                name = lobe.name.rsplit('-', 1)[0] + '-' + str(j + sector * motif)
+                copies.append(replace(lobe, name=name,
+                    shape=affinity.rotate(lobe.shape, sector * 120, origin=(0, 0)),
+                    major_outline=affinity.rotate(lobe.major_outline, sector * 120, origin=(0, 0)) if lobe.major_outline is not None else None,
+                    path=lobe.path @ rotation.T,
+                    backing_path=lobe.backing_path @ rotation.T if lobe.backing_path is not None else None))
+    else:
+        if o.arrangement != "bilateral" or count % 2:
+            raise ValueError("bilateral laminar requires paired focal_count and bilateral arrangement")
+        motif = count // 2
+        canonical = [lobe for lobe in source if int(lobe.name.rsplit('-', 1)[1]) % 2 == 0]
+        shift = max(lobe.shape.bounds[2] for lobe in canonical) + .035
+        copies = []
+        for lobe in canonical:
+            left = replace(lobe, shape=affinity.translate(lobe.shape, xoff=-shift),
+                           major_outline=affinity.translate(lobe.major_outline, xoff=-shift) if lobe.major_outline is not None else None,
+                           path=lobe.path - (shift, 0),
+                           backing_path=lobe.backing_path - (shift, 0) if lobe.backing_path is not None else None)
+            right = replace(left, name=left.name.rsplit('-', 1)[0] + '-' + str(int(left.name.rsplit('-', 1)[1]) + 1),
+                            shape=affinity.scale(left.shape, xfact=-1, yfact=1, origin=(0, 0)),
+                            major_outline=affinity.scale(left.major_outline, xfact=-1, yfact=1, origin=(0, 0)) if left.major_outline is not None else None,
+                            path=left.path * (-1, 1),
+                            backing_path=left.backing_path * (-1, 1) if left.backing_path is not None else None)
+            copies.extend((left, right))
+    # A bounding-box translation after replication would move the rotation center.
+    # Inscribed-circle fitting keeps the entire repeated motif on the common board.
+    radius = max(np.linalg.norm(np.asarray(lobe.shape.exterior.coords), axis=1).max() for lobe in copies)
+    board_radius = backplate_polygon(c).boundary.distance(Point(0, 0))
+    scale = min((c.envelope.width_mm - 4) / 2, (c.envelope.height_mm - 4) / 2, board_radius - 2) / radius
+    base = c.mounting.rear_clearance_mm + c.material.measured_mm
+    usable = c.envelope.depth_mm - base - c.material.measured_mm - 14
+    result = []
+    for lobe in copies:
+        index = int(lobe.name.rsplit('-', 1)[1])
+        j = index % motif if o.symmetry == "rotational" else index // 2
+        level = (.40 + .55 * j / max(motif - 1, 1)) if lobe.tier == 0 else (.08 + .23 * j / max(motif - 1, 1))
+        result.append(replace(lobe, shape=affinity.scale(lobe.shape, xfact=scale, yfact=scale, origin=(0, 0)),
+                      major_outline=affinity.scale(lobe.major_outline, xfact=scale, yfact=scale, origin=(0, 0)) if lobe.major_outline is not None else None,
+                      path=lobe.path * scale, backing_path=lobe.backing_path * scale if lobe.backing_path is not None else None,
+                      z=base + usable * level))
+    return sorted(result, key=lambda lobe: (lobe.tier, int(lobe.name.rsplit('-', 1)[1])))
