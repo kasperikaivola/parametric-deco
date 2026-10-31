@@ -86,13 +86,13 @@
     }
   },
   "layered-creature": {
-    "assembly_sha256": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36",
+    "assembly_sha256": "a5202f71fa5de8af83d91e0a9dc76a39a8e2a618a0f3ec429248d619db73b378",
     "config_hash": "725960dab14d0ddf2a2ca6b850aa9785933f2b9510f8741387f8aefc701b92ee",
     "example": "examples/creature-alien-six.json",
     "export_directory": "build/gallery/creature-alien-six",
     "images_sha256": {
-      "front": "4460df43030dda27a1eec9e5cce1f922bad6550d191a1bfd0dfa73b2e425b6fc",
-      "three-quarter": "19bbd72c2ce739446a5f86015338d3a4cf3d749fb16514d9080c2a6daf862643"
+      "front": "f4263f5bca36e1e69a455cff0c0fd603c9ea84f64decf376921287f804758031",
+      "three-quarter": "e9c116c1c6b31ff3bd1d60278e9c63b08d61e86ac83a9867d33b906f3e6d3d3f"
     },
     "instances": 204,
     "non_board_bounds_mm": [
@@ -112,7 +112,7 @@
       -1.2620510849782534,
       91.0
     ],
-    "non_board_cut_fingerprints_hash": "3f02eb1b05b2e81edbacf1f128e33e7fd670576f608293f6441c7f26a2e19498",
+    "non_board_cut_fingerprints_hash": "3359dc3d06868ddd4be86b9c9deb92788bbe5b75c11a6e6e575a6f22bdd0709c",
     "placement_offset_mm": [
       0,
       100
@@ -186,8 +186,8 @@
       "top": 149.18981481481472
     },
     "view_assembly_sha256": {
-      "front": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36",
-      "three-quarter": "284f7e3abe7bc75e5ffbf4f06b937cedddab73ffbea2a65e889e362683641c36"
+      "front": "a5202f71fa5de8af83d91e0a9dc76a39a8e2a618a0f3ec429248d619db73b378",
+      "three-quarter": "a5202f71fa5de8af83d91e0a9dc76a39a8e2a618a0f3ec429248d619db73b378"
     }
   },
   "radial-weave": {

@@ -1,0 +1,42 @@
+{
+  "baseline_commit": "2f8879155a07ebed302523566b457a1ef2667bde",
+  "measurement": "Net 2D plywood polygon area summed once per physical instance; holes subtracted. Not stock-sheet consumption.",
+  "examples": {
+    "creature-mask": {
+      "before": {
+        "net_plywood_area_mm2": 2545606.136468534,
+        "armour_area_mm2": 1552757.2375502146
+      },
+      "after": {
+        "net_plywood_area_mm2": 2474834.06382922,
+        "armour_area_mm2": 1481985.1649109004
+      },
+      "net_area_reduction_percent": 2.780165856195438,
+      "armour_area_reduction_percent": 4.557832411135387
+    },
+    "creature-alien-two": {
+      "before": {
+        "net_plywood_area_mm2": 1713388.8233323744,
+        "armour_area_mm2": 823159.0649608998
+      },
+      "after": {
+        "net_plywood_area_mm2": 1632343.046582304,
+        "armour_area_mm2": 742113.2882108291
+      },
+      "net_area_reduction_percent": 4.730145057935209,
+      "armour_area_reduction_percent": 9.845700569903858
+    },
+    "creature-alien-six": {
+      "before": {
+        "net_plywood_area_mm2": 2442952.9221813893,
+        "armour_area_mm2": 1470022.3538899543
+      },
+      "after": {
+        "net_plywood_area_mm2": 2349960.8983123247,
+        "armour_area_mm2": 1377030.3300208899
+      },
+      "net_area_reduction_percent": 3.80654178902593,
+      "armour_area_reduction_percent": 6.325891822188289
+    }
+  }
+}

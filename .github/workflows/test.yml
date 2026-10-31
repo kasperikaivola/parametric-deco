@@ -1,7 +1,11 @@
 name: Tests and generated examples
+# Default checkout on pull_request tests the prospective merged result.
 on:
-  push:
   pull_request:
+    branches: [master]
+concurrency:
+  group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 jobs:
   python:
     runs-on: ubuntu-latest
