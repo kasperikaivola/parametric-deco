@@ -39,7 +39,7 @@ def test_manufactured_module_depth_and_inventory():
     c = config_from_dict({"style": "laminar", "parameters": {}})
     b = assemble(c)
     assert b.report.digital_valid, b.report.issues
-    assert len(b.assembly.instances) == 19
+    assert len(b.inventory.instances) == 7
     assert b.assembly.composition["construction"]["spacers"] == 0
     assert b.assembly.composition["construction"]["retainers"] == 0
     assert all(p.thickness_mm == 6 for p in b.fabrication_parts)
@@ -137,7 +137,8 @@ def test_loaded_assembly_bearing_and_support_checks():
     a = b.assembly
     instance = next(i for i in a.instances if i.role == "armour")
     original = a.definition_for(instance)
-    root = a.composition["modules"][0]["roots"][0]
+    root = next(s["xy"] for s in a.composition["end_supports"]["stations"]
+                if instance.instance_id in s["plate_ids"])
     damaged = PartDefinition.from_polygon(
         original.definition_id,
         original.polygon.difference(Point(root).buffer(12)),

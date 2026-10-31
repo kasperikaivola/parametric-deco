@@ -1,0 +1,219 @@
+{
+  "backplate": {
+    "backplate": {
+      "rotation_deg": 22.5,
+      "sides": 8
+    },
+    "definition_id": "backplate",
+    "fingerprint": "c27cc851f5dcf52819006b94d7db2e3573aa5156420527ef35f1b579d11261e1",
+    "grid": {
+      "edge_margin_mm": 15,
+      "hole_diameter_mm": 6.5,
+      "offset_mm": 25,
+      "origin_x_mm": 0,
+      "origin_y_mm": 0,
+      "pitch_x_mm": 50,
+      "pitch_y_mm": 50
+    },
+    "grid_hole_count": 311,
+    "size_mm": [
+      1000,
+      1000
+    ],
+    "standard": "universal-grid-board-v1",
+    "stock_mm": 6
+  },
+  "end_supports": {
+    "all_parts_reach_backplate": true,
+    "revision": "separated-end-clamps-v1",
+    "spans": [
+      {
+        "axis_xy": [
+          1.0,
+          0.0
+        ],
+        "extent_mm": [
+          0.0,
+          325.0
+        ],
+        "part_id": "m1-closure",
+        "path_endpoints_mm": [
+          [
+            25.0,
+            0.0
+          ],
+          [
+            325.0,
+            0.0
+          ]
+        ],
+        "path_kind": "straight-span",
+        "path_length_mm": 300.0,
+        "placed_station_fractions": [
+          0.0833333333333334,
+          0.9166666666666663
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      }
+    ],
+    "stations": [
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-0-tube-0",
+          "end-clamp-0-washer-front-1",
+          "end-clamp-0-washer-rear-2",
+          "end-clamp-0-shaft-3",
+          "end-clamp-0-head-4",
+          "end-clamp-0-locking-nut-5"
+        ],
+        "id": "end-clamp-0",
+        "module_id": "m1",
+        "plate_ids": [
+          "m1-closure"
+        ],
+        "reference_id": "m1-closure",
+        "reference_xy": [
+          25.00000000000002,
+          -5.353782038344337e-16
+        ],
+        "top_mm": 138.0,
+        "xy": [
+          50.00000000000002,
+          -5.353782038344337e-16
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-1-tube-0",
+          "end-clamp-1-washer-front-1",
+          "end-clamp-1-washer-rear-2",
+          "end-clamp-1-shaft-3",
+          "end-clamp-1-head-4",
+          "end-clamp-1-locking-nut-5"
+        ],
+        "id": "end-clamp-1",
+        "module_id": "m1",
+        "plate_ids": [
+          "m1-closure"
+        ],
+        "reference_id": "m1-closure",
+        "reference_xy": [
+          274.9999999999999,
+          8.696099608380016e-16
+        ],
+        "top_mm": 138.0,
+        "xy": [
+          299.9999999999999,
+          8.696099608380016e-16
+        ]
+      }
+    ]
+  },
+  "manufactured_support_spans": [
+    {
+      "criterion": "straight-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 25.00000000000011,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "m1-closure",
+      "path_length_mm": 300.0,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        25.0,
+        0.0
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 25.000000000000018,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.0833333333333334
+        ],
+        [
+          "end-clamp-1",
+          0.9166666666666663
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 5.353782038344337e-16,
+        "end-clamp-1": 8.696099608380017e-16
+      },
+      "tip_mm": [
+        325.0,
+        0.0
+      ]
+    }
+  ],
+  "upright_joinery": [
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "paired perpendicular spine notches plus top closure bearing/capture",
+      "joint_datum_mm": [
+        45
+      ],
+      "local_bounds_mm": [
+        -65.0,
+        10.0,
+        65.0,
+        116.0
+      ],
+      "part_id": "m1-rib-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "paired perpendicular spine notches plus top closure bearing/capture",
+      "joint_datum_mm": [
+        45
+      ],
+      "local_bounds_mm": [
+        -94.39999999999999,
+        10.0,
+        65.60000000000001,
+        116.0
+      ],
+      "part_id": "m1-rib-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "paired perpendicular spine notches plus top closure bearing/capture",
+      "joint_datum_mm": [
+        45
+      ],
+      "local_bounds_mm": [
+        -95.0,
+        10.0,
+        95.0,
+        116.0
+      ],
+      "part_id": "m1-rib-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "paired perpendicular spine notches plus top closure bearing/capture",
+      "joint_datum_mm": [
+        45
+      ],
+      "local_bounds_mm": [
+        -65.60000000000001,
+        10.0,
+        94.39999999999999,
+        116.0
+      ],
+      "part_id": "m1-rib-3",
+      "role": "rib"
+    }
+  ]
+}

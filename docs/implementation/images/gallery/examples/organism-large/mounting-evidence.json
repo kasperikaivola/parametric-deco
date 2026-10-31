@@ -1,0 +1,869 @@
+{
+  "backplate": {
+    "backplate": {
+      "rotation_deg": 22.5,
+      "sides": 8
+    },
+    "definition_id": "backplate",
+    "fingerprint": "6eee76d1c8d2488c65b5ecd201bdfa79888499249d59ff4aa43830a5094300fc",
+    "grid": {
+      "edge_margin_mm": 15,
+      "hole_diameter_mm": 6.5,
+      "offset_mm": 25,
+      "origin_x_mm": 0,
+      "origin_y_mm": 0,
+      "pitch_x_mm": 50,
+      "pitch_y_mm": 50
+    },
+    "grid_hole_count": 615,
+    "size_mm": [
+      1400,
+      1400
+    ],
+    "standard": "universal-grid-board-v1",
+    "stock_mm": 6
+  },
+  "end_supports": {
+    "all_parts_reach_backplate": true,
+    "revision": "path-end-clamps-v2",
+    "spans": [
+      {
+        "axis_xy": [
+          0.9988152436777903,
+          0.04866322016550636
+        ],
+        "extent_mm": [
+          6.542347403191286,
+          697.7481854174264
+        ],
+        "part_id": "primary-0-plate",
+        "path_endpoints_mm": [
+          [
+            36.74250950750901,
+            -19.836917238113216
+          ],
+          [
+            639.3051443698682,
+            355.0526412479831
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 761.7272844960903,
+        "placed_station_fractions": [
+          0.21700745910280825,
+          0.849703615890746
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.591635782717282,
+          0.8062053712352141
+        ],
+        "extent_mm": [
+          -690.1164532460278,
+          -16.362105448669382
+        ],
+        "part_id": "primary-4-plate",
+        "path_endpoints_mm": [
+          [
+            -34.04307687809538,
+            -25.83848081718428
+          ],
+          [
+            -84.78524721353075,
+            -679.4283916239278
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 696.7710783982758,
+        "placed_station_fractions": [
+          0.25742865228571854,
+          0.9183786826822841
+        ],
+        "station_ids": [
+          "end-clamp-3",
+          "end-clamp-2"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.4128741070065726,
+          -0.9107881047551758
+        ],
+        "extent_mm": [
+          -720.7009076992348,
+          -41.88610680034736
+        ],
+        "part_id": "primary-2-plate",
+        "path_endpoints_mm": [
+          [
+            -107.46644406545295,
+            17.650207212707976
+          ],
+          [
+            -349.3628473283434,
+            612.1691130197735
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 671.8087668617454,
+        "placed_station_fractions": [
+          0.23019750928434002,
+          0.8303750205132238
+        ],
+        "station_ids": [
+          "end-clamp-5",
+          "end-clamp-4"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.03864434872544758,
+          -0.9992530281723373
+        ],
+        "extent_mm": [
+          -697.2570470869504,
+          -31.620258909397204
+        ],
+        "part_id": "primary-1-plate",
+        "path_endpoints_mm": [
+          [
+            59.85287872989099,
+            53.16512226480981
+          ],
+          [
+            9.925153230969968,
+            678.9684713417507
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 647.7435581496624,
+        "placed_station_fractions": [
+          0.18620743386986502,
+          0.7584506268393123,
+          0.8778526778691542
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-12"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.5153966879789138,
+          -0.8569517221059575
+        ],
+        "extent_mm": [
+          -8.530389758942398,
+          624.8124000743154
+        ],
+        "part_id": "primary-5-plate",
+        "path_endpoints_mm": [
+          [
+            96.60724768126357,
+            44.3881632320184
+          ],
+          [
+            260.0304531349334,
+            -547.6823551397562
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 624.5277486597523,
+        "placed_station_fractions": [
+          0.1918693415785116,
+          0.6571940320532049,
+          0.923581563343465
+        ],
+        "station_ids": [
+          "end-clamp-8",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8543849354809501,
+          0.5196406277642392
+        ],
+        "extent_mm": [
+          -757.2604482032576,
+          -45.76451731323254
+        ],
+        "part_id": "primary-3-plate",
+        "path_endpoints_mm": [
+          [
+            -94.88869720007382,
+            30.21067695901866
+          ],
+          [
+            -677.8595839300991,
+            -304.95198543141055
+          ]
+        ],
+        "path_kind": "laminar-medial",
+        "path_length_mm": 698.3220880334,
+        "placed_station_fractions": [
+          0.19125348847356335,
+          0.8394930303110029
+        ],
+        "station_ids": [
+          "end-clamp-11",
+          "end-clamp-10"
+        ]
+      }
+    ],
+    "stations": [
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-0-tube-0",
+          "end-clamp-0-washer-front-1",
+          "end-clamp-0-washer-rear-2",
+          "end-clamp-0-shaft-3",
+          "end-clamp-0-head-4",
+          "end-clamp-0-locking-nut-5"
+        ],
+        "id": "end-clamp-0",
+        "module_id": "primary-0",
+        "plate_ids": [
+          "primary-0-plate"
+        ],
+        "reference_id": "primary-0-plate",
+        "reference_xy": [
+          150.00000000000014,
+          100.0
+        ],
+        "shared_modules": [
+          "primary-0"
+        ],
+        "top_mm": 103.60000000000001,
+        "xy": [
+          150.00000000000014,
+          100.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-1-tube-0",
+          "end-clamp-1-washer-front-1",
+          "end-clamp-1-washer-rear-2",
+          "end-clamp-1-shaft-3",
+          "end-clamp-1-head-4",
+          "end-clamp-1-locking-nut-5"
+        ],
+        "id": "end-clamp-1",
+        "module_id": "primary-0",
+        "plate_ids": [
+          "primary-0-plate"
+        ],
+        "reference_id": "primary-0-plate",
+        "reference_xy": [
+          524.9999999999999,
+          350.00000000000006
+        ],
+        "shared_modules": [
+          "primary-0"
+        ],
+        "top_mm": 103.60000000000001,
+        "xy": [
+          524.9999999999999,
+          350.00000000000006
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-2-tube-0",
+          "end-clamp-2-washer-front-1",
+          "end-clamp-2-washer-rear-2",
+          "end-clamp-2-shaft-3",
+          "end-clamp-2-head-4",
+          "end-clamp-2-locking-nut-5"
+        ],
+        "id": "end-clamp-2",
+        "module_id": "primary-4",
+        "plate_ids": [
+          "primary-4-plate"
+        ],
+        "reference_id": "primary-4-plate",
+        "reference_xy": [
+          -25.000000000000007,
+          -650.0000000000002
+        ],
+        "shared_modules": [
+          "primary-4"
+        ],
+        "top_mm": 193.36,
+        "xy": [
+          -25.000000000000007,
+          -650.0000000000002
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-3-tube-0",
+          "end-clamp-3-washer-front-1",
+          "end-clamp-3-washer-rear-2",
+          "end-clamp-3-shaft-3",
+          "end-clamp-3-head-4",
+          "end-clamp-3-locking-nut-5"
+        ],
+        "id": "end-clamp-3",
+        "module_id": "primary-4",
+        "plate_ids": [
+          "primary-4-plate"
+        ],
+        "reference_id": "primary-4-plate",
+        "reference_xy": [
+          -3.2519940972299583e-16,
+          -199.99999999999994
+        ],
+        "shared_modules": [
+          "primary-4"
+        ],
+        "top_mm": 193.36,
+        "xy": [
+          -3.2519940972299583e-16,
+          -199.99999999999994
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-4-tube-0",
+          "end-clamp-4-washer-front-1",
+          "end-clamp-4-washer-rear-2",
+          "end-clamp-4-shaft-3",
+          "end-clamp-4-head-4",
+          "end-clamp-4-locking-nut-5"
+        ],
+        "id": "end-clamp-4",
+        "module_id": "primary-2",
+        "plate_ids": [
+          "primary-2-plate"
+        ],
+        "reference_id": "primary-2-plate",
+        "reference_xy": [
+          -299.99999999999994,
+          500.00000000000034
+        ],
+        "shared_modules": [
+          "primary-2"
+        ],
+        "top_mm": 148.48000000000002,
+        "xy": [
+          -299.99999999999994,
+          500.00000000000034
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-5-tube-0",
+          "end-clamp-5-washer-front-1",
+          "end-clamp-5-washer-rear-2",
+          "end-clamp-5-shaft-3",
+          "end-clamp-5-head-4",
+          "end-clamp-5-locking-nut-5"
+        ],
+        "id": "end-clamp-5",
+        "module_id": "primary-2",
+        "plate_ids": [
+          "primary-2-plate"
+        ],
+        "reference_id": "primary-2-plate",
+        "reference_xy": [
+          -250.00000000000009,
+          100.0
+        ],
+        "shared_modules": [
+          "primary-2"
+        ],
+        "top_mm": 148.48000000000002,
+        "xy": [
+          -250.00000000000009,
+          100.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-6-tube-0",
+          "end-clamp-6-washer-front-1",
+          "end-clamp-6-washer-rear-2",
+          "end-clamp-6-shaft-3",
+          "end-clamp-6-head-4",
+          "end-clamp-6-locking-nut-5"
+        ],
+        "id": "end-clamp-6",
+        "module_id": "primary-1",
+        "plate_ids": [
+          "primary-1-plate"
+        ],
+        "reference_id": "primary-1-plate",
+        "reference_xy": [
+          -175.00000000000003,
+          550.0
+        ],
+        "shared_modules": [
+          "primary-1"
+        ],
+        "top_mm": 126.04,
+        "xy": [
+          -175.00000000000003,
+          550.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-7-tube-0",
+          "end-clamp-7-washer-front-1",
+          "end-clamp-7-washer-rear-2",
+          "end-clamp-7-shaft-3",
+          "end-clamp-7-head-4",
+          "end-clamp-7-locking-nut-5"
+        ],
+        "id": "end-clamp-7",
+        "module_id": "primary-1",
+        "plate_ids": [
+          "primary-1-plate"
+        ],
+        "reference_id": "primary-1-plate",
+        "reference_xy": [
+          -25.000000000000007,
+          149.99999999999997
+        ],
+        "shared_modules": [
+          "primary-1"
+        ],
+        "top_mm": 126.04,
+        "xy": [
+          -25.000000000000007,
+          149.99999999999997
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-8-tube-0",
+          "end-clamp-8-washer-front-1",
+          "end-clamp-8-washer-rear-2",
+          "end-clamp-8-shaft-3",
+          "end-clamp-8-head-4",
+          "end-clamp-8-locking-nut-5"
+        ],
+        "id": "end-clamp-8",
+        "module_id": "primary-5",
+        "plate_ids": [
+          "primary-5-plate"
+        ],
+        "reference_id": "primary-5-plate",
+        "reference_xy": [
+          175.00000000000009,
+          -50.000000000000036
+        ],
+        "shared_modules": [
+          "primary-5"
+        ],
+        "top_mm": 215.8,
+        "xy": [
+          175.00000000000009,
+          -50.000000000000036
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-9-tube-0",
+          "end-clamp-9-washer-front-1",
+          "end-clamp-9-washer-rear-2",
+          "end-clamp-9-shaft-3",
+          "end-clamp-9-head-4",
+          "end-clamp-9-locking-nut-5"
+        ],
+        "id": "end-clamp-9",
+        "module_id": "primary-5",
+        "plate_ids": [
+          "primary-5-plate"
+        ],
+        "reference_id": "primary-5-plate",
+        "reference_xy": [
+          450.00000000000017,
+          -300.0000000000001
+        ],
+        "shared_modules": [
+          "primary-5"
+        ],
+        "top_mm": 215.8,
+        "xy": [
+          450.00000000000017,
+          -300.0000000000001
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-10-tube-0",
+          "end-clamp-10-washer-front-1",
+          "end-clamp-10-washer-rear-2",
+          "end-clamp-10-shaft-3",
+          "end-clamp-10-head-4",
+          "end-clamp-10-locking-nut-5"
+        ],
+        "id": "end-clamp-10",
+        "module_id": "primary-3",
+        "plate_ids": [
+          "primary-3-plate"
+        ],
+        "reference_id": "primary-3-plate",
+        "reference_xy": [
+          -575.0000000000002,
+          -249.99999999999997
+        ],
+        "shared_modules": [
+          "primary-3"
+        ],
+        "top_mm": 170.92,
+        "xy": [
+          -575.0000000000002,
+          -249.99999999999997
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-11-tube-0",
+          "end-clamp-11-washer-front-1",
+          "end-clamp-11-washer-rear-2",
+          "end-clamp-11-shaft-3",
+          "end-clamp-11-head-4",
+          "end-clamp-11-locking-nut-5"
+        ],
+        "id": "end-clamp-11",
+        "module_id": "primary-3",
+        "plate_ids": [
+          "primary-3-plate"
+        ],
+        "reference_id": "primary-3-plate",
+        "reference_xy": [
+          -150.00000000000014,
+          -100.0
+        ],
+        "shared_modules": [
+          "primary-3"
+        ],
+        "top_mm": 170.92,
+        "xy": [
+          -150.00000000000014,
+          -100.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-12-tube-0",
+          "end-clamp-12-washer-front-1",
+          "end-clamp-12-washer-rear-2",
+          "end-clamp-12-shaft-3",
+          "end-clamp-12-head-4",
+          "end-clamp-12-locking-nut-5"
+        ],
+        "id": "end-clamp-12",
+        "module_id": "primary-1",
+        "plate_ids": [
+          "primary-1-plate"
+        ],
+        "reference_id": "primary-1-plate",
+        "reference_xy": [
+          -4.011583959356672e-16,
+          599.9999999999999
+        ],
+        "shared_modules": [
+          "primary-1"
+        ],
+        "top_mm": 126.04,
+        "xy": [
+          -4.011583959356672e-16,
+          599.9999999999999
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-13-tube-0",
+          "end-clamp-13-washer-front-1",
+          "end-clamp-13-washer-rear-2",
+          "end-clamp-13-shaft-3",
+          "end-clamp-13-head-4",
+          "end-clamp-13-locking-nut-5"
+        ],
+        "id": "end-clamp-13",
+        "module_id": "primary-5",
+        "plate_ids": [
+          "primary-5-plate"
+        ],
+        "reference_id": "primary-5-plate",
+        "reference_xy": [
+          249.9999999999999,
+          -499.99999999999994
+        ],
+        "shared_modules": [
+          "primary-5"
+        ],
+        "top_mm": 215.8,
+        "xy": [
+          249.9999999999999,
+          -499.99999999999994
+        ]
+      }
+    ]
+  },
+  "manufactured_support_spans": [
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 114.48485653712343,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-0-plate",
+      "path_length_mm": 761.7272844960903,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        36.74250950750901,
+        -19.836917238113216
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 165.3005025377785,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.21700745910280825
+        ],
+        [
+          "end-clamp-1",
+          0.849703615890746
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 42.538746267426774,
+        "end-clamp-1": 0.08907088911511729
+      },
+      "tip_mm": [
+        639.3051443698682,
+        355.0526412479831
+      ]
+    },
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-12"
+      ],
+      "distal_unbraced_path_mm": 79.12014105548704,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-1-plate",
+      "path_length_mm": 647.7435581496624,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        59.85287872989099,
+        53.16512226480981
+      ],
+      "root_support_ids": [
+        "end-clamp-7"
+      ],
+      "root_unbraced_path_mm": 120.61466576878432,
+      "station_fractions": [
+        [
+          "end-clamp-7",
+          0.18620743386986502
+        ],
+        [
+          "end-clamp-6",
+          0.7584506268393123
+        ],
+        [
+          "end-clamp-12",
+          0.8778526778691542
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 13.448172506118759,
+        "end-clamp-6": 148.32787934630585,
+        "end-clamp-7": 37.30995613731362
+      },
+      "tip_mm": [
+        9.925153230969968,
+        678.9684713417507
+      ]
+    },
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-4"
+      ],
+      "distal_unbraced_path_mm": 113.95554829796001,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-2-plate",
+      "path_length_mm": 671.8087668617454,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -107.46644406545295,
+        17.650207212707976
+      ],
+      "root_support_ids": [
+        "end-clamp-5"
+      ],
+      "root_unbraced_path_mm": 154.64870484695766,
+      "station_fractions": [
+        [
+          "end-clamp-5",
+          0.23019750928434002
+        ],
+        [
+          "end-clamp-4",
+          0.8303750205132238
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-4": 54.85414350866075,
+        "end-clamp-5": 44.10733691693586
+      },
+      "tip_mm": [
+        -349.3628473283434,
+        612.1691130197735
+      ]
+    },
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-10"
+      ],
+      "distal_unbraced_path_mm": 112.08556221713411,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-3-plate",
+      "path_length_mm": 698.3220880334,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -94.88869720007382,
+        30.21067695901866
+      ],
+      "root_support_ids": [
+        "end-clamp-11"
+      ],
+      "root_unbraced_path_mm": 133.55653541453054,
+      "station_fractions": [
+        [
+          "end-clamp-11",
+          0.19125348847356335
+        ],
+        [
+          "end-clamp-10",
+          0.8394930303110029
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 40.03213583063896,
+        "end-clamp-11": 36.41724982592619
+      },
+      "tip_mm": [
+        -677.8595839300991,
+        -304.95198543141055
+      ]
+    },
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-2"
+      ],
+      "distal_unbraced_path_mm": 56.871373287752796,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-4-plate",
+      "path_length_mm": 696.7710783982758,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -34.04307687809538,
+        -25.83848081718428
+      ],
+      "root_support_ids": [
+        "end-clamp-3"
+      ],
+      "root_unbraced_path_mm": 179.36883966373486,
+      "station_fractions": [
+        [
+          "end-clamp-3",
+          0.25742865228571854
+        ],
+        [
+          "end-clamp-2",
+          0.9183786826822841
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-2": 32.6094784216736,
+        "end-clamp-3": 31.202928511831903
+      },
+      "tip_mm": [
+        -84.78524721353075,
+        -679.4283916239278
+      ]
+    },
+    {
+      "criterion": "laminar-medial",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 47.72543420120371,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "primary-5-plate",
+      "path_length_mm": 624.5277486597523,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        96.60724768126357,
+        44.3881632320184
+      ],
+      "root_support_ids": [
+        "end-clamp-8"
+      ],
+      "root_unbraced_path_mm": 119.82772793285686,
+      "station_fractions": [
+        [
+          "end-clamp-8",
+          0.1918693415785116
+        ],
+        [
+          "end-clamp-9",
+          0.6571940320532049
+        ],
+        [
+          "end-clamp-13",
+          0.923581563343465
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-13": 11.07875557022755,
+        "end-clamp-8": 21.05661142033494,
+        "end-clamp-9": 205.763411187078
+      },
+      "tip_mm": [
+        260.0304531349334,
+        -547.6823551397562
+      ]
+    }
+  ],
+  "upright_joinery": []
+}

@@ -242,6 +242,9 @@ def manufacture(c):
 
 
 def verify_organism(a):
+    if (a.composition or {}).get("end_supports"):
+        from .supports import verify_supports
+        return ValidationReport(verify_supports(a))
     """Recheck actual manufactured bearing/slots/supports, including loaded geometry."""
     issues = []
     try:

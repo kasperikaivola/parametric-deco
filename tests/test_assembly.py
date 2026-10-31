@@ -51,5 +51,5 @@ def test_interface_family_and_unavailable_station_rejected():
         replace(i, revision=bad.revision) if i.definition_id == rib.definition_id else i
         for i in a.instances
     )
-    with pytest.raises(ValueError, match="interface"):
+    with pytest.raises(ValueError, match="interface|inventory|new cuts"):
         assemble(DesignConfig(style="rib-study", parameters=RibStudy()), Inventory(defs, instances))

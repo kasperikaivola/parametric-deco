@@ -85,6 +85,7 @@ def render_views(assembly, out_dir, views=None):
         "retainer": (151, 108, 64),
         "spacer": (163, 116, 70),
         "part": (200, 150, 95),
+        "mounting-hardware": (125, 160, 180),
         "backplate": (64, 55, 45),
     }
     font = ImageFont.load_default(size=22)
@@ -97,14 +98,15 @@ def render_views(assembly, out_dir, views=None):
         and assembly.composition.get("family") in ("flow-organism-v1", "laminar-organism-v2")
     )
     section_module = "head" if creature else modules[0] if modules else None
+    grid_flow = flow and bool((assembly.composition or {}).get("end_supports"))
     if views is None:
         views = ("front", "three-quarter", "oblique", "side", "exploded", "joint-section")
     for view in views:
         pieces = []
         for i in assembly.instances:
-            if view == "joint-section" and i.module_id != section_module:
+            if view == "joint-section" and i.module_id != section_module and not (grid_flow and i.role == "backplate"):
                 continue
-            if view == "joint-section" and i.role == "backplate":
+            if view == "joint-section" and i.role == "backplate" and not grid_flow:
                 continue
             mesh = cached[i.definition_id, i.revision]
             t = np.array(i.transform)
@@ -169,10 +171,14 @@ def render_views(assembly, out_dir, views=None):
 
             spine = next((p for p in pieces if p[0].role == "spine"), pieces[0])
             cut_y = float(np.mean(spine[3][:, 1]))
-            if creature or flow:
+            if grid_flow:
+                station = next(s for s in assembly.composition["end_supports"]["stations"]
+                               if s["module_id"] == section_module)
+                cut_y = station["xy"][1]
+            elif creature or flow:
                 web = next(p for p in pieces if p[0].role == "register")
                 cut_y = web[0].transform[1][3] - assembly.definition_for(web[0]).thickness_mm / 2
-            elif assembly.composition:
+            elif (assembly.composition or {}).get("family") == "radial-weave-v1":
                 rib = next(p for p in pieces if p[0].role == "rib" and p[0].station_id == "s4")
                 pose = np.asarray(rib[0].transform)
                 cut_y = float(
@@ -210,7 +216,7 @@ def render_views(assembly, out_dir, views=None):
         )
         draw.text(
             (36, 850),
-            "mm · hardware omitted in these inspection views; see manifest/GLB",
+            "mm · end-clamp tubes/bolts shown; original root hardware remains simplified",
             fill="#a7acb5",
         )
         if view == "joint-section":
@@ -219,10 +225,12 @@ def render_views(assembly, out_dir, views=None):
                 (
                     "XZ section through head roots: plate/spacer compression and captured alignment webs"
                     if creature
+                    else "Actual XZ section through grid bolt, tube, plate and universal board"
+                    if grid_flow
                     else "Actual XZ section through trestle-supported lobe"
                     if flow
                     else "Actual XZ mesh section through central radial rib: spine notches and capture tongue"
-                    if assembly.composition
+                    if (assembly.composition or {}).get("family") == "radial-weave-v1"
                     else "Actual XZ mesh section through one spine: common slot datum and closure contact"
                 ),
                 fill="#edbd74",

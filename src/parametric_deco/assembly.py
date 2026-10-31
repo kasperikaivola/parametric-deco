@@ -23,6 +23,12 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
+    from .supports import supported_build
+
+    return supported_build(config, inventory, _assemble)
+
+
+def _assemble(config, inventory=None):
     report = validate_config(config)
     if not report.digital_valid:
         raise ValueError("; ".join(i.message for i in report.issues))

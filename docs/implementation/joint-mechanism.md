@@ -1,5 +1,7 @@
 # Candidate backplate-clamped closure
 
+The joint profiles below remain the source placement-template design. Its root-only mounting description is historical; the current manufactured revision adds separated universal-grid end clamps and rigid tubes. Follow [current mounting](mounting.md) and exported mounting-hardware.json, including removal of every end clamp before the sequence below.
+
 All coordinates here are module-local, millimetres. X runs along the module,
 Y across it, Z away from the backing. Every wooden part is nominal 6 mm.
 

@@ -69,7 +69,8 @@ def test_export_manifest_inventory_and_overwrite_guard(tmp_path):
     assert manifest["nested_layout_valid"] is False
     assert manifest["validation"]["physical_validation"] == "not_run"
     inv = Inventory.load(out / "inventory.json")
-    assert len(inv.instances) == len(build.assembly.instances)
+    assert len(inv.instances) == sum(i.role != "mounting-hardware" for i in build.assembly.instances)
+    assert (out / "mounting-hardware.json").is_file()
     assert (out / "preview/index.html").exists()
     with pytest.raises(FileExistsError):
         export_build(build, out)

@@ -67,9 +67,9 @@ once by laser software. Grade and finish are optional; no white paint is require
 | --- | --- |
 | `envelope` | Every polygon board fits requested XY. Laminar sculpture fits XY with 2 mm boundary allowance and generates actual relief for depth; XY 800–1400, aspect ratio 0.7–1.4, depth 120–240. Other sculpture geometry retains explicit dimensions: creature scale/reach controls, radial millimetre radii, rib-study recipe. The envelope contains those parts rather than rescaling them; too small fails. |
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
-| `grid` | Pitch X/Y 50, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Staggered grid locates radial, creature and rib-study roots; laminar derives roots from anatomy and uses the bore diameter, not grid pitch. |
-| `backplate` | Common envelope-fitted regular polygon for every style; sides 8 and rotation 22.5° by default. Laminar cuts its trestle seats/bores; creature retains through-eye/central channels and lattice; radial retains its central aperture. |
-| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 50 (40–55) controls rib-study wings. Other styles derive root spacing. Hardware proxies are clearance envelopes. |
+| `grid` | Pitch X/Y 50, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Every style locates its deco mounting bores directly on this same predefined grid, including laminar. |
+| `backplate` | Identical physical polygon and full bore pattern for every style at matching stock size/settings; sides 8 and rotation 22.5° by default. No family-specific apertures, seats or extra drilling. |
+| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 50 (40–55) controls rib-study wings. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
 | `cutting_bed` | Optional width/height and spacing (default 5). Conservative rectangular shelf placement; oversized parts fail rather than shrink. Null gives individual cuts. |
 
 ## Laminar parameters
@@ -99,10 +99,9 @@ All rows below are inside `parameters` (except the explicit envelope rows).
 Complexity 0/1/2 selects 1/2/3 internal divisions and channels, and optional inner
 lobes; explicit overrides replace those defaults. Subdivision accumulates material
 without changing the primary paths/layout; channels intentionally remove material.
-Low uses 19 plywood pieces; medium/high 37. Complexity describes anatomical detail,
+Low uses 7 plywood pieces including the common board; medium/high use 13. Metal end-clamp hardware is counted separately. Complexity describes anatomical detail,
 not assembly effort. Whorl/bilateral and anatomy phase give different focal layouts.
-Each plate sits on two slotted trestles and two root bolts above a manufactured polygon board. No spacer rings or
-individual rib retaining clips are required. Detached modules need a cradle.
+Each plate has separated end clamps directly on universal board grid bores, with rigid tube standoffs filling the complete gap. No trestles, special board seats or offset adapters are needed. Detached plates need a cradle.
 
 ## Layered-creature parameters
 
@@ -143,7 +142,7 @@ layered relief, not presented as the simplest build.
 | --- | --- | --- |
 | `radius_mm` | 300 / 250–340 | Mean strand radius |
 | `amplitude_mm` | 65 / 40–80 | Alternating radial excursion; paths follow R ± A sin(3θ) |
-| `opening_radius_mm` | 180 / positive, ≤ radius − amplitude − 52 | Backing aperture clearing manufactured inner fins/root pads |
+| `opening_radius_mm` | 180 / positive, ≤ radius − amplitude − 52 | Artwork opening clearing manufactured inner fins/root pads; universal board remains behind it |
 | `lobes` | 3 only | Fixed six-crossing topology; other counts fail |
 | `ribs_per_module` | 9 only | Fixed stations/joint topology; other counts fail |
 | `rotation_deg` | 90 / finite | New cuts choose roots at this orientation; saved arrangements require compatible grid holes |
@@ -171,7 +170,7 @@ at least four times stock+clearance. Actual CAD checks still apply.
 At least three unique ribs/stations per module are required. Optional
 `spine_instance_ids` (two), `closure_instance_id` and `rib_instance_ids` explicitly
 assign physical inventory parts; these require `reconfigure`. The full upper
-closure blocks sampled upward rib withdrawals and is clamped by two root bolts.
+closure blocks sampled upward rib withdrawals and has separated near-root/distal universal-grid clamps with rigid tubes.
 See [joint mechanics](implementation/joint-mechanism.md).
 
 ## Manufacturing and saved inventory
@@ -188,7 +187,7 @@ Changing style requires new cuts. For laminar, changing anatomy, complexity, siz
 stock or mounting requires new cuts; saved inventory supports identical replay.
 Creature permits `posture` changes on unchanged cuts; all manufacturing controls
 must match. Radial permits compatible rotation/fin permutation; radius, amplitude,
-stock/backing/mounting changes require new cuts. The common polygon boards replace laminar framework and creature anatomical boards, so inventories manufactured before this board revision require new cuts; no saved part is converted or resized. Backplate sides and rotation participate in the manufacturing request for both styles. Rib study places actual saved
+stock/backing/mounting changes require new cuts. The universal-grid separated-end support revision requires new cuts relative to all earlier root-only manufacturing inventories; no saved part is converted, drilled or resized. Backplate sides and rotation participate in the manufacturing request for both styles. Rib study places actual saved
 interfaces and profiles: its current recipe does not resize inventory, so use
 placements/physical assignments to rearrange manufactured parts.
 
@@ -200,51 +199,59 @@ for rib study move `module` into
 `parameters.recipe` and `placements` into `parameters.placements`. Then validate
 as a new request. No automatic historical generation migration is promised.
 
-Inventory serialization and family names remain laminar-organism-v2,
-creature-organism-v3, radial-weave-v1 and existing rib definitions. The common
-polygon board revision changes laminar/creature board fingerprints and adds an
-explicit board-design marker to their manufacturing requests. Their earlier
-board inventories require new cuts. Radial and rib-study cuts are unchanged.
-Replay uses saved cuts; it never regenerates stock or rewrites an old contour.
-Semantic family names alone are not geometry compatibility.
-`examples/inventory.json` is a manufactured fixture and is retained unchanged.
+Inventory serialization retains the style family identifiers, but wraps the final
+physical cuts in the signed `path-end-clamps-v2` machining record. Its
+separately signed source placement template is historical digital input, not
+another physical inventory. All final part IDs/revisions and the exact common
+board remain authoritative on replay. Family names alone do not establish
+compatibility. Root-only/family-board stock and rectangle-only stock that misses
+actual curved endpoints require new cuts. Safe v1 stock may replay without changes
+when the independent path/geometry checks pass.
+`examples/inventory.json` is retained unchanged as a historical fixture and is
+not a current universal-support inventory.
 
 ## Actual CAD gallery
 
-These are actual manufactured CAD surfaces generated from three labeled example
-configs using current cuts. Each style has exactly the same front and three-quarter cameras. The
-front view looks straight down −Z onto the XY board plane (+Z toward the viewer): no perspective or foreshortening, and changing relief Z cannot move XY pixels. The front camera was already straight-on; the formerly narrow laminar framework made its plane hard to read. All styles now have visibly present manufactured polygon boards. The shared orthographic renderer uses yaw −0.48 radians and pitch 0.30 radians for
-three-quarter, the same plywood palette, light, background and 1100 × 900 canvas.
-Each complete assembly is framed within a 980 × 710 mm-relative pixel region: comparable
-framing, not a claim of equal physical scale. Hardware is omitted in these PNGs;
-the orbit viewer shows labeled conservative hardware envelopes.
+There are **four generators**: laminar, layered-creature, radial-weave and
+rib-study. The [complete matched gallery](implementation/gallery.md) covers all
+15 current example configurations (six laminar, four creature, two radial, three
+rib-study); `examples/inventory.json` is a historical inventory fixture, not a
+sixteenth design. Geometry presets and saved-inventory pose/permutation examples
+are labeled separately.
 
-| View | Laminar · `organism-low` | Layered creature · `creature-alien-six` | Radial weave · `radial-weave` |
-| --- | --- | --- | --- |
-| Front | ![](implementation/images/gallery/laminar/front.png) | ![](implementation/images/gallery/layered-creature/front.png) | ![](implementation/images/gallery/radial-weave/front.png) |
-| Three-quarter | ![](implementation/images/gallery/laminar/three-quarter.png) | ![](implementation/images/gallery/layered-creature/three-quarter.png) | ![](implementation/images/gallery/radial-weave/three-quarter.png) |
+Every example has actual CAD front and three-quarter views plus mounting
+views showing actual deco contours transparently over the common grid and
+actual clamp columns, with station and module labels. Front
+looks straight down −Z onto XY; the common three-quarter camera uses yaw −0.48
+and pitch 0.30 radians, with the same palette, canvas and fit-to-frame policy.
+Blue-grey end clamps are modeled metal geometry; original root/clip fasteners
+remain simplified. Deco panels can be hidden in the support views without
+changing hardware positions or geometry.
 
-The creature's rest anatomy is translated to the nearest equivalent pair of
-staggered grid rows: the six-limb example moves +100 mm in Y, leaving its actual
-wood-bound center at −1.262 mm (2.524 mm difference between top/bottom margins).
-Its board through-channels, mounts, hardware and aperture checks follow that same
-placement. Non-board cut profiles stay reusable; saved inventories retain their
-recorded placement. Radial defaults to 90° so its former right-side lobe lies
-vertically. New radial cuts select real root pairs on the grid at that angle;
-a quarter turn of existing drilled parts is not generally possible on a staggered
-grid. The reconfigured example turns the 90° arrangement to 270° with the same cuts.
+All 1000 × 1000 mm examples share the exact same board cut fingerprint, including
+pitch, origin, stagger, parity and edge clipping. The 800/1400 mm laminar presets
+use separate stock sizes with the same grid standard. Artwork channels and voids
+remain in the deco; the universal board stays behind them. No family-specific
+board aperture or laminar seat pattern is needed.
 
-Both gallery views and the exported GLB are generated from the same saved
-`assembly.json`. [Current gallery evidence](implementation/gallery-evidence.json)
-records the shared assembly hash, image hashes, actual wood bounds and validation.
-Angled views use per-pixel surface depth for correct occlusion; the true front
-camera remains unchanged.
+Creature centering remains a placement transform (+100 mm Y for six limbs).
+Raised-crown placement, radial 90°→270°/rib permutation, and the rib-study replay
+reuse their source physical inventory without adding bores. Unsupported placements
+fail instead of changing the saved stock. Radial low fin crests are trimmed at
+the capture rail to remove the previous long unsupported tip projection.
 
-Reproduce these six images from the repository root after installation:
-`python scripts/design_gallery.py`. It validates these three representatives, saves assembly/inventory/config/validation
-and GLB/scene exports under `build/gallery/<example>`, then renders the saved
-assembly and writes gallery evidence. The older family-specific evidence files
-remain snapshots of their recorded configurations.
+[Mounting details](implementation/mounting.md) explain actual medial-path root/distal checks, radial arcs, straight spans, bore
+and hardware alignment, compression tubes, construction-pad clearances and
+all-parts load paths. [Gallery evidence](implementation/gallery-evidence.json)
+records assembly/image hashes, exact stations, normalized panel locations,
+upright contact schemes and validation for every example. Physical and
+Wire/Arena checks remain **NOT RUN**.
+
+Run `python scripts/design_gallery.py` once to generate all gallery CAD, scene,
+matched views and evidence. `--reuse` renders already exported `result.json`
+assemblies without regenerating them. Images and GLB share cached tessellations.
+Older family-specific evidence and `images/flow-organism` are historical
+snapshots of earlier construction revisions, not current manufacturing guidance.
 
 For manufacturing inspection, each build exports front, side, oblique,
 three-quarter, exploded and joint-section views. The offline viewer supports

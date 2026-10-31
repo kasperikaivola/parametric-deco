@@ -26,8 +26,9 @@ def test_weave_blueprint_has_aperture_real_crossings_and_connected_parts():
         if d.kind in ("spine", "closure"):
             assert d.polygon.distance(Point(0, 0)) >= 180 - 1e-5
     backing = generate_backplate(c).definitions[0]
-    assert not backing.polygon.covers(Point(0, 0))
-    assert all(np.hypot(h.x_mm, h.y_mm) >= 198.25 - 1e-6 for h in mounting_holes(c))
+    assert len(backing.holes) == len(mounting_holes(c))
+    assert any(h.x_mm == 0 and h.y_mm == 0 for h in mounting_holes(c))
+    assert any(np.hypot(h.x_mm, h.y_mm) < 180 for h in mounting_holes(c))
 
 
 def test_weave_configuration_rejects_impossible_opening_and_nonfinite_values():

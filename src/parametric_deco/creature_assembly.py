@@ -330,6 +330,8 @@ def assemble_creature(c, inventory=None):
     eyes = [affinity.translate(eye, xoff=offset_x, yoff=offset_y) for eye in eyes]
     for eye in eyes:
         for i in instances:
+            if i.role == "backplate":
+                continue
             if eye.intersection(xy_footprint(a.definition_for(i), i.transform)).area > 1e-5:
                 issues.append(
                     Issue("error", "eye_channel", f"{i.instance_id}: eye channel obstruction")

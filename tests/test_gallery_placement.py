@@ -13,7 +13,8 @@ def test_six_limb_centering_preserves_grid_and_clear_board_channels():
     from shapely import affinity
     board = backplate_polygon(c)
     for eye in cavity_voids(c.parameters, .75):
-        assert board.intersection(affinity.translate(eye, yoff=100)).area < 1e-8
+        # Artwork cavities now retain the same dark universal stock behind them.
+        assert board.covers(affinity.translate(eye, yoff=100))
     assert all(np.isfinite(np.array(i.transform)).all() for i in bundle.instances)
 
 
@@ -60,10 +61,13 @@ def test_explicit_zero_rotation_and_legacy_radial_inventory_replay():
     build = assemble(c)
     assert build.report.digital_valid, build.report.to_dict()
     saved = build.inventory.to_dict()
-    layout = saved['layout']
+    layout = saved['layout']['source_template']['layout']
     layout.pop('template_rotation_deg')
     layout.pop('fingerprint')
     layout['fingerprint'] = digest(layout)
+    outer = saved['layout']
+    outer.pop('fingerprint')
+    outer['fingerprint'] = digest(outer)
     legacy = Inventory.from_dict(json.loads(json.dumps(saved)))
     before = legacy.to_dict()
     replay = assemble(c, legacy)
@@ -94,11 +98,9 @@ def test_legacy_creature_matches_saved_board_and_keeps_original_placement(monkey
     layout['fingerprint'] = digest(layout)
     inventory = Inventory(bundle.definitions, bundle.instances, layout)
     before = inventory.to_dict()
-    replay = assemble(c, inventory)
-    assert replay.report.digital_valid, replay.report.to_dict()
-    assert replay.assembly.composition['placement_offset_mm'] == [0, 0]
-    assert replay.assembly.definitions == inventory.definitions
-    assert replay.assembly.instances == inventory.instances
+    import pytest
+    with pytest.raises(ValueError, match='requires new cuts'):
+        assemble(c, inventory)
     assert inventory.to_dict() == before
 
 

@@ -31,9 +31,15 @@ def placed_solid(definition, transform):
     return solid_for(definition).moved(Location(trsf))
 
 
+@lru_cache(maxsize=1024)
 def mesh_for(definition):
-    vertices, triangles = solid_for(definition).tessellate(0.15, 0.15)
-    return trimesh.Trimesh(vertices=[tuple(v) for v in vertices], faces=triangles, process=True)
+    # All manufactured geometry is an exact planar polygon extrusion. Triangulate
+    # those authoritative contours directly, once, rather than retessellating an
+    # identical OCP extrusion for every view/export (especially hundreds of bores).
+    # The solid kernel remains the independent collision/STEP boundary.
+    return trimesh.creation.extrude_polygon(
+        definition.polygon, definition.thickness_mm, engine="earcut"
+    )
 
 
 def overlap_volume(a, ta, b, tb):

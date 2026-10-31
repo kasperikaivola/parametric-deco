@@ -1,0 +1,2656 @@
+{
+  "backplate": {
+    "backplate": {
+      "rotation_deg": 22.5,
+      "sides": 8
+    },
+    "definition_id": "backplate",
+    "fingerprint": "c27cc851f5dcf52819006b94d7db2e3573aa5156420527ef35f1b579d11261e1",
+    "grid": {
+      "edge_margin_mm": 15,
+      "hole_diameter_mm": 6.5,
+      "offset_mm": 25,
+      "origin_x_mm": 0,
+      "origin_y_mm": 0,
+      "pitch_x_mm": 50,
+      "pitch_y_mm": 50
+    },
+    "grid_hole_count": 311,
+    "size_mm": [
+      1000,
+      1000
+    ],
+    "standard": "universal-grid-board-v1",
+    "stock_mm": 6
+  },
+  "end_supports": {
+    "all_parts_reach_backplate": true,
+    "revision": "path-end-clamps-v2",
+    "spans": [
+      {
+        "axis_xy": [
+          -0.0,
+          1.0
+        ],
+        "extent_mm": [
+          -137.0,
+          350.8101851851852
+        ],
+        "part_id": "head-armour-0",
+        "path_endpoints_mm": [
+          [
+            0.9490492825246394,
+            -137.0
+          ],
+          [
+            0.9490492825246394,
+            350.8101851851852
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 487.8101851851852,
+        "placed_station_fractions": [
+          0.28084694448926134,
+          0.7933413687397383
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.019781856056799375,
+          0.9998043199401311
+        ],
+        "extent_mm": [
+          -133.8524964742571,
+          344.66734666992113
+        ],
+        "part_id": "head-armour-1",
+        "path_endpoints_mm": [
+          [
+            -4.3197165653246365,
+            -133.79322512925899
+          ],
+          [
+            5.146294092075712,
+            344.6329812233643
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 478.5198431441782,
+        "placed_station_fractions": [
+          0.2797219350294054,
+          0.8010305853552215
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.04054337288433123,
+          0.9991777794342517
+        ],
+        "extent_mm": [
+          -130.73474697291408,
+          338.356124557338
+        ],
+        "part_id": "head-armour-2",
+        "path_endpoints_mm": [
+          [
+            -9.732891774876467,
+            -130.44739924685155
+          ],
+          [
+            9.285634346210456,
+            338.2577761216235
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 469.09087153025206,
+        "placed_station_fractions": [
+          0.2786981263277106,
+          0.8090449645104497
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.06256338762296144,
+          0.9980409924091992
+        ],
+        "extent_mm": [
+          -127.70968131994184,
+          331.8748296688078
+        ],
+        "part_id": "head-armour-3",
+        "path_endpoints_mm": [
+          [
+            -15.350615592888335,
+            -126.99808501892215
+          ],
+          [
+            13.402548313609994,
+            331.6860964241861
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 459.5845109887497,
+        "placed_station_fractions": [
+          0.2778807341552642,
+          0.817381429856028
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.08579599404977672,
+          0.9963127257066481
+        ],
+        "extent_mm": [
+          -124.74832431578595,
+          325.1955266079308
+        ],
+        "part_id": "head-armour-4",
+        "path_endpoints_mm": [
+          [
+            -21.15124314842059,
+            -123.38859999734153
+          ],
+          [
+            17.45213680816424,
+            324.8961845314124
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 449.94385092371675,
+        "placed_station_fractions": [
+          0.27725309293522427,
+          0.8260621967122255
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.08452060553450454,
+          0.9964217316177325
+        ],
+        "extent_mm": [
+          -120.41661799696337,
+          321.02212756171434
+        ],
+        "part_id": "head-armour-5",
+        "path_endpoints_mm": [
+          [
+            -20.873763115157104,
+            -119.07844954971965
+          ],
+          [
+            16.436906965854412,
+            320.78070970301764
+          ]
+        ],
+        "path_kind": "broad-head-span",
+        "path_length_mm": 441.43874555867774,
+        "placed_station_fractions": [
+          0.27278216787374665,
+          0.8322990210069734
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.62673827188664,
+          -0.7792298367956325
+        ],
+        "extent_mm": [
+          -13.604171851772332,
+          470.3249167375735
+        ],
+        "part_id": "jaw-right-armour-0",
+        "path_endpoints_mm": [
+          [
+            104.2,
+            20.799999999999997
+          ],
+          [
+            260.20000000000005,
+            -213.20000000000005
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 567.3111137452925,
+        "placed_station_fractions": [
+          0.16992861403459636,
+          0.6986193445126239,
+          0.8228322563942777
+        ],
+        "station_ids": [
+          "end-clamp-2",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8809639624786045,
+          -0.47318336489567736
+        ],
+        "extent_mm": [
+          -32.248130237569534,
+          387.2473476002517
+        ],
+        "part_id": "crown-right-armour-0",
+        "path_endpoints_mm": [
+          [
+            156.89999999999998,
+            228.2
+          ],
+          [
+            359.7,
+            77.4
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 481.32449608517777,
+        "placed_station_fractions": [
+          0.0,
+          0.6127800377568291,
+          0.9522328307165097
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-12"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6303897735378264,
+          0.7762787730055022
+        ],
+        "extent_mm": [
+          -443.5682637032334,
+          9.465372259381333
+        ],
+        "part_id": "jaw-left-armour-0",
+        "path_endpoints_mm": [
+          [
+            -105.8,
+            19.200000000000003
+          ],
+          [
+            -249.8,
+            -196.79999999999995
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 523.6717973033471,
+        "placed_station_fractions": [
+          0.011521003249022619,
+          0.17957209325728715,
+          0.5640882665955813,
+          0.9949430477282089
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6313826215928549,
+          -0.7754714599200501
+        ],
+        "extent_mm": [
+          -10.60536281769882,
+          465.8614176715512
+        ],
+        "part_id": "jaw-right-armour-1",
+        "path_endpoints_mm": [
+          [
+            104.2,
+            20.799999999999997
+          ],
+          [
+            260.20000000000005,
+            -213.20000000000005
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 567.3111137452925,
+        "placed_station_fractions": [
+          0.16992861403459636,
+          0.6986193445126239,
+          0.8228322563942777
+        ],
+        "station_ids": [
+          "end-clamp-2",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8836823414080863,
+          -0.46808708536288673
+        ],
+        "extent_mm": [
+          -28.751740898315017,
+          383.1741324606803
+        ],
+        "part_id": "crown-right-armour-1",
+        "path_endpoints_mm": [
+          [
+            156.89999999999998,
+            228.2
+          ],
+          [
+            359.7,
+            77.4
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 481.32449608517777,
+        "placed_station_fractions": [
+          0.0,
+          0.6127800377568291,
+          0.9522328307165097
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-12"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8839739928352239,
+          0.46753607346487347
+        ],
+        "extent_mm": [
+          -367.77372017547236,
+          25.95323099684137
+        ],
+        "part_id": "crown-left-armour-0",
+        "path_endpoints_mm": [
+          [
+            -163.10000000000002,
+            231.8
+          ],
+          [
+            -350.3,
+            92.6
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 444.29953484785625,
+        "placed_station_fractions": [
+          0.0,
+          0.6320026751337884,
+          0.8132169357842451
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8869291760957383,
+          0.4619054411783162
+        ],
+        "extent_mm": [
+          -363.97672017544375,
+          22.53581550739298
+        ],
+        "part_id": "crown-left-armour-1",
+        "path_endpoints_mm": [
+          [
+            -163.10000000000002,
+            231.8
+          ],
+          [
+            -350.3,
+            92.6
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 444.29953484785625,
+        "placed_station_fractions": [
+          0.0,
+          0.6320026751337884,
+          0.8132169357842451
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6390853985769226,
+          0.7691357834126403
+        ],
+        "extent_mm": [
+          -439.8845454510661,
+          6.017408965977713
+        ],
+        "part_id": "jaw-left-armour-1",
+        "path_endpoints_mm": [
+          [
+            -105.8,
+            19.200000000000003
+          ],
+          [
+            -249.8,
+            -196.79999999999995
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 523.6717973033471,
+        "placed_station_fractions": [
+          0.011521003249022619,
+          0.17957209325728715,
+          0.5640882665955813,
+          0.9949430477282089
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8863870823663651,
+          -0.4629448565585786
+        ],
+        "extent_mm": [
+          -25.269407412610516,
+          379.08539774213193
+        ],
+        "part_id": "crown-right-armour-2",
+        "path_endpoints_mm": [
+          [
+            156.89999999999998,
+            228.2
+          ],
+          [
+            359.7,
+            77.4
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 481.32449608517777,
+        "placed_station_fractions": [
+          0.0,
+          0.6127800377568291,
+          0.9522328307165097
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-12"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6418726884509383,
+          -0.7668112230665151
+        ],
+        "extent_mm": [
+          -6.878110241831596,
+          462.3688130120151
+        ],
+        "part_id": "jaw-right-armour-2",
+        "path_endpoints_mm": [
+          [
+            104.2,
+            20.799999999999997
+          ],
+          [
+            260.20000000000005,
+            -213.20000000000005
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 567.3111137452925,
+        "placed_station_fractions": [
+          0.16992861403459636,
+          0.6986193445126239,
+          0.8228322563942777
+        ],
+        "station_ids": [
+          "end-clamp-2",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.889794512300635,
+          0.456361398323385
+        ],
+        "extent_mm": [
+          -360.12754427669944,
+          18.792066163319042
+        ],
+        "part_id": "crown-left-armour-2",
+        "path_endpoints_mm": [
+          [
+            -163.10000000000002,
+            231.8
+          ],
+          [
+            -350.3,
+            92.6
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 444.29953484785625,
+        "placed_station_fractions": [
+          0.0,
+          0.6320026751337884,
+          0.8132169357842451
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6499681492708579,
+          0.7599614496363719
+        ],
+        "extent_mm": [
+          -436.49449329835653,
+          2.2853682725869904
+        ],
+        "part_id": "jaw-left-armour-2",
+        "path_endpoints_mm": [
+          [
+            -105.8,
+            19.200000000000003
+          ],
+          [
+            -249.8,
+            -196.79999999999995
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 523.6717973033471,
+        "placed_station_fractions": [
+          0.011521003249022619,
+          0.17957209325728715,
+          0.5640882665955813,
+          0.9949430477282089
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8890658585938616,
+          -0.4577793126417573
+        ],
+        "extent_mm": [
+          -21.80465692708771,
+          374.9757038017375
+        ],
+        "part_id": "crown-right-armour-3",
+        "path_endpoints_mm": [
+          [
+            156.89999999999998,
+            228.2
+          ],
+          [
+            359.7,
+            77.4
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 481.32449608517777,
+        "placed_station_fractions": [
+          0.0,
+          0.6127800377568291,
+          0.9522328307165097
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-12"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6522774774337813,
+          -0.7579802717964518
+        ],
+        "extent_mm": [
+          -3.14816716185062,
+          458.7763604594322
+        ],
+        "part_id": "jaw-right-armour-3",
+        "path_endpoints_mm": [
+          [
+            104.2,
+            20.799999999999997
+          ],
+          [
+            260.20000000000005,
+            -213.20000000000005
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 567.3111137452925,
+        "placed_station_fractions": [
+          0.16992861403459636,
+          0.6986193445126239,
+          0.8228322563942777
+        ],
+        "station_ids": [
+          "end-clamp-2",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.892605977116363,
+          0.4508376311003141
+        ],
+        "extent_mm": [
+          -356.2451740499186,
+          14.948440049830511
+        ],
+        "part_id": "crown-left-armour-3",
+        "path_endpoints_mm": [
+          [
+            -163.10000000000002,
+            231.8
+          ],
+          [
+            -350.3,
+            92.6
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 444.29953484785625,
+        "placed_station_fractions": [
+          0.0,
+          0.6320026751337884,
+          0.8132169357842451
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.6607521437429141,
+          0.7506041596868108
+        ],
+        "extent_mm": [
+          -433.0024974359104,
+          -1.4349767720971633
+        ],
+        "part_id": "jaw-left-armour-3",
+        "path_endpoints_mm": [
+          [
+            -105.8,
+            19.200000000000003
+          ],
+          [
+            -249.8,
+            -196.79999999999995
+          ]
+        ],
+        "path_kind": "creature-limb",
+        "path_length_mm": 523.6717973033471,
+        "placed_station_fractions": [
+          0.011521003249022619,
+          0.17957209325728715,
+          0.5640882665955813,
+          0.9949430477282089
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-13"
+        ]
+      }
+    ],
+    "stations": [
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-0-tube-0",
+          "end-clamp-0-tube-1",
+          "end-clamp-0-tube-2",
+          "end-clamp-0-tube-3",
+          "end-clamp-0-tube-4",
+          "end-clamp-0-tube-5",
+          "end-clamp-0-washer-front-6",
+          "end-clamp-0-washer-rear-7",
+          "end-clamp-0-shaft-8",
+          "end-clamp-0-head-9",
+          "end-clamp-0-locking-nut-10"
+        ],
+        "id": "end-clamp-0",
+        "module_id": "head",
+        "plate_ids": [
+          "head-armour-0",
+          "head-armour-1",
+          "head-armour-2",
+          "head-armour-3",
+          "head-armour-4",
+          "head-armour-5"
+        ],
+        "reference_id": "head-armour-0",
+        "reference_xy": [
+          -1.3397545454238484e-16,
+          -100.0
+        ],
+        "shared_modules": [
+          "head"
+        ],
+        "top_mm": 178.0,
+        "xy": [
+          -1.3397545454238484e-16,
+          0.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-1-tube-0",
+          "end-clamp-1-tube-1",
+          "end-clamp-1-tube-2",
+          "end-clamp-1-tube-3",
+          "end-clamp-1-tube-4",
+          "end-clamp-1-tube-5",
+          "end-clamp-1-washer-front-6",
+          "end-clamp-1-washer-rear-7",
+          "end-clamp-1-shaft-8",
+          "end-clamp-1-head-9",
+          "end-clamp-1-locking-nut-10"
+        ],
+        "id": "end-clamp-1",
+        "module_id": "head",
+        "plate_ids": [
+          "head-armour-0",
+          "head-armour-1",
+          "head-armour-2",
+          "head-armour-3",
+          "head-armour-4",
+          "head-armour-5"
+        ],
+        "reference_id": "head-armour-0",
+        "reference_xy": [
+          -25.000000000000007,
+          150.00000000000003
+        ],
+        "shared_modules": [
+          "head"
+        ],
+        "top_mm": 178.0,
+        "xy": [
+          -25.000000000000007,
+          250.00000000000003
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-2-tube-0",
+          "end-clamp-2-tube-1",
+          "end-clamp-2-tube-2",
+          "end-clamp-2-washer-front-3",
+          "end-clamp-2-washer-rear-4",
+          "end-clamp-2-shaft-5",
+          "end-clamp-2-head-6",
+          "end-clamp-2-locking-nut-7"
+        ],
+        "id": "end-clamp-2",
+        "module_id": "jaw-right",
+        "plate_ids": [
+          "jaw-right-armour-0",
+          "jaw-right-armour-1",
+          "jaw-right-armour-2",
+          "jaw-right-armour-3"
+        ],
+        "reference_id": "jaw-right-armour-0",
+        "reference_xy": [
+          200.0,
+          -100.0
+        ],
+        "shared_modules": [
+          "jaw-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          200.0,
+          0.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-3-tube-0",
+          "end-clamp-3-tube-1",
+          "end-clamp-3-tube-2",
+          "end-clamp-3-washer-front-3",
+          "end-clamp-3-washer-rear-4",
+          "end-clamp-3-shaft-5",
+          "end-clamp-3-head-6",
+          "end-clamp-3-locking-nut-7"
+        ],
+        "id": "end-clamp-3",
+        "module_id": "jaw-right",
+        "plate_ids": [
+          "jaw-right-armour-0",
+          "jaw-right-armour-1",
+          "jaw-right-armour-2",
+          "jaw-right-armour-3"
+        ],
+        "reference_id": "jaw-right-armour-0",
+        "reference_xy": [
+          349.9999999999998,
+          -299.9999999999999
+        ],
+        "shared_modules": [
+          "jaw-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          349.9999999999998,
+          -199.9999999999999
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-4-tube-0",
+          "end-clamp-4-tube-1",
+          "end-clamp-4-tube-2",
+          "end-clamp-4-washer-front-3",
+          "end-clamp-4-washer-rear-4",
+          "end-clamp-4-shaft-5",
+          "end-clamp-4-head-6",
+          "end-clamp-4-locking-nut-7"
+        ],
+        "id": "end-clamp-4",
+        "module_id": "crown-right",
+        "plate_ids": [
+          "crown-right-armour-0",
+          "crown-right-armour-1",
+          "crown-right-armour-2",
+          "crown-right-armour-3"
+        ],
+        "reference_id": "crown-right-armour-0",
+        "reference_xy": [
+          125.00000000000004,
+          50.00000000000003
+        ],
+        "shared_modules": [
+          "crown-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          150.00000000000006,
+          200.00000000000003
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-5-tube-0",
+          "end-clamp-5-tube-1",
+          "end-clamp-5-tube-2",
+          "end-clamp-5-washer-front-3",
+          "end-clamp-5-washer-rear-4",
+          "end-clamp-5-shaft-5",
+          "end-clamp-5-head-6",
+          "end-clamp-5-locking-nut-7"
+        ],
+        "id": "end-clamp-5",
+        "module_id": "crown-right",
+        "plate_ids": [
+          "crown-right-armour-0",
+          "crown-right-armour-1",
+          "crown-right-armour-2",
+          "crown-right-armour-3"
+        ],
+        "reference_id": "crown-right-armour-0",
+        "reference_xy": [
+          424.9999999999998,
+          49.999999999999886
+        ],
+        "shared_modules": [
+          "crown-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          449.9999999999998,
+          199.9999999999999
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-6-tube-0",
+          "end-clamp-6-tube-1",
+          "end-clamp-6-tube-2",
+          "end-clamp-6-washer-front-3",
+          "end-clamp-6-washer-rear-4",
+          "end-clamp-6-shaft-5",
+          "end-clamp-6-head-6",
+          "end-clamp-6-locking-nut-7"
+        ],
+        "id": "end-clamp-6",
+        "module_id": "jaw-left",
+        "plate_ids": [
+          "jaw-left-armour-0",
+          "jaw-left-armour-1",
+          "jaw-left-armour-2",
+          "jaw-left-armour-3"
+        ],
+        "reference_id": "jaw-left-armour-0",
+        "reference_xy": [
+          -400.00000000000017,
+          -200.00000000000014
+        ],
+        "shared_modules": [
+          "jaw-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -400.00000000000017,
+          -100.00000000000014
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-7-tube-0",
+          "end-clamp-7-tube-1",
+          "end-clamp-7-tube-2",
+          "end-clamp-7-washer-front-3",
+          "end-clamp-7-washer-rear-4",
+          "end-clamp-7-shaft-5",
+          "end-clamp-7-head-6",
+          "end-clamp-7-locking-nut-7"
+        ],
+        "id": "end-clamp-7",
+        "module_id": "jaw-left",
+        "plate_ids": [
+          "jaw-left-armour-0",
+          "jaw-left-armour-1",
+          "jaw-left-armour-2",
+          "jaw-left-armour-3"
+        ],
+        "reference_id": "jaw-left-armour-0",
+        "reference_xy": [
+          -199.99999999999997,
+          -100.0
+        ],
+        "shared_modules": [
+          "jaw-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -199.99999999999997,
+          0.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-8-tube-0",
+          "end-clamp-8-tube-1",
+          "end-clamp-8-tube-2",
+          "end-clamp-8-washer-front-3",
+          "end-clamp-8-washer-rear-4",
+          "end-clamp-8-shaft-5",
+          "end-clamp-8-head-6",
+          "end-clamp-8-locking-nut-7"
+        ],
+        "id": "end-clamp-8",
+        "module_id": "crown-left",
+        "plate_ids": [
+          "crown-left-armour-0",
+          "crown-left-armour-1",
+          "crown-left-armour-2",
+          "crown-left-armour-3"
+        ],
+        "reference_id": "crown-left-armour-0",
+        "reference_xy": [
+          -424.99999999999955,
+          49.999999999999886
+        ],
+        "shared_modules": [
+          "crown-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -449.99999999999955,
+          199.9999999999999
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-9-tube-0",
+          "end-clamp-9-tube-1",
+          "end-clamp-9-tube-2",
+          "end-clamp-9-washer-front-3",
+          "end-clamp-9-washer-rear-4",
+          "end-clamp-9-shaft-5",
+          "end-clamp-9-head-6",
+          "end-clamp-9-locking-nut-7"
+        ],
+        "id": "end-clamp-9",
+        "module_id": "crown-left",
+        "plate_ids": [
+          "crown-left-armour-0",
+          "crown-left-armour-1",
+          "crown-left-armour-2",
+          "crown-left-armour-3"
+        ],
+        "reference_id": "crown-left-armour-0",
+        "reference_xy": [
+          -124.99999999999999,
+          50.00000000000006
+        ],
+        "shared_modules": [
+          "crown-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -150.0,
+          200.00000000000006
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-10-tube-0",
+          "end-clamp-10-tube-1",
+          "end-clamp-10-tube-2",
+          "end-clamp-10-washer-front-3",
+          "end-clamp-10-washer-rear-4",
+          "end-clamp-10-shaft-5",
+          "end-clamp-10-head-6",
+          "end-clamp-10-locking-nut-7"
+        ],
+        "id": "end-clamp-10",
+        "module_id": "jaw-left",
+        "plate_ids": [
+          "jaw-left-armour-0",
+          "jaw-left-armour-1",
+          "jaw-left-armour-2",
+          "jaw-left-armour-3"
+        ],
+        "reference_id": "jaw-left-armour-1",
+        "reference_xy": [
+          -124.99999999999996,
+          -50.00000000000001
+        ],
+        "shared_modules": [
+          "jaw-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -124.99999999999996,
+          49.99999999999999
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-11-tube-0",
+          "end-clamp-11-tube-1",
+          "end-clamp-11-tube-2",
+          "end-clamp-11-washer-front-3",
+          "end-clamp-11-washer-rear-4",
+          "end-clamp-11-shaft-5",
+          "end-clamp-11-head-6",
+          "end-clamp-11-locking-nut-7"
+        ],
+        "id": "end-clamp-11",
+        "module_id": "jaw-right",
+        "plate_ids": [
+          "jaw-right-armour-0",
+          "jaw-right-armour-1",
+          "jaw-right-armour-2",
+          "jaw-right-armour-3"
+        ],
+        "reference_id": "jaw-right-armour-0",
+        "reference_xy": [
+          350.0000000000001,
+          -400.0000000000001
+        ],
+        "shared_modules": [
+          "jaw-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          350.0000000000001,
+          -300.0000000000001
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-12-tube-0",
+          "end-clamp-12-tube-1",
+          "end-clamp-12-tube-2",
+          "end-clamp-12-washer-front-3",
+          "end-clamp-12-washer-rear-4",
+          "end-clamp-12-shaft-5",
+          "end-clamp-12-head-6",
+          "end-clamp-12-locking-nut-7"
+        ],
+        "id": "end-clamp-12",
+        "module_id": "crown-right",
+        "plate_ids": [
+          "crown-right-armour-0",
+          "crown-right-armour-1",
+          "crown-right-armour-2",
+          "crown-right-armour-3"
+        ],
+        "reference_id": "crown-right-armour-0",
+        "reference_xy": [
+          349.9999999999999,
+          -100.0
+        ],
+        "shared_modules": [
+          "crown-right"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          374.9999999999999,
+          50.0
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-13-tube-0",
+          "end-clamp-13-tube-1",
+          "end-clamp-13-tube-2",
+          "end-clamp-13-washer-front-3",
+          "end-clamp-13-washer-rear-4",
+          "end-clamp-13-shaft-5",
+          "end-clamp-13-head-6",
+          "end-clamp-13-locking-nut-7"
+        ],
+        "id": "end-clamp-13",
+        "module_id": "jaw-left",
+        "plate_ids": [
+          "jaw-left-armour-0",
+          "jaw-left-armour-1",
+          "jaw-left-armour-2",
+          "jaw-left-armour-3"
+        ],
+        "reference_id": "jaw-left-armour-0",
+        "reference_xy": [
+          -250.00000000000003,
+          -300.0000000000001
+        ],
+        "shared_modules": [
+          "jaw-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -250.00000000000003,
+          -200.0000000000001
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-14-tube-0",
+          "end-clamp-14-tube-1",
+          "end-clamp-14-tube-2",
+          "end-clamp-14-washer-front-3",
+          "end-clamp-14-washer-rear-4",
+          "end-clamp-14-shaft-5",
+          "end-clamp-14-head-6",
+          "end-clamp-14-locking-nut-7"
+        ],
+        "id": "end-clamp-14",
+        "module_id": "crown-left",
+        "plate_ids": [
+          "crown-left-armour-0",
+          "crown-left-armour-1",
+          "crown-left-armour-2",
+          "crown-left-armour-3"
+        ],
+        "reference_id": "crown-left-armour-0",
+        "reference_xy": [
+          -425.0000000000001,
+          -49.999999999999986
+        ],
+        "shared_modules": [
+          "crown-left"
+        ],
+        "top_mm": 82.0,
+        "xy": [
+          -450.0000000000001,
+          100.00000000000001
+        ]
+      }
+    ]
+  },
+  "manufactured_support_spans": [
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 100.81018518518519,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-0",
+      "path_length_mm": 487.8101851851852,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        0.9490492825246394,
+        -137.0
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 137.0,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.28084694448926134
+        ],
+        [
+          "end-clamp-1",
+          0.7933413687397383
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 0.9490492825246395,
+        "end-clamp-1": 25.949049282524648
+      },
+      "tip_mm": [
+        0.9490492825246394,
+        350.8101851851852
+      ]
+    },
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 95.21081308630835,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-1",
+      "path_length_mm": 478.5198431441782,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -4.3197165653246365,
+        -133.79322512925899
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 133.85249647425707,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.2797219350294054
+        ],
+        [
+          "end-clamp-1",
+          0.8010305853552215
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 1.672192962046563,
+        "end-clamp-1": 28.268379050656566
+      },
+      "tip_mm": [
+        5.146294092075712,
+        344.6329812233643
+      ]
+    },
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 89.57526402088335,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-2",
+      "path_length_mm": 469.09087153025206,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -9.732891774876467,
+        -130.44739924685155
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 130.73474697291405,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.2786981263277106
+        ],
+        [
+          "end-clamp-1",
+          0.8090449645104497
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 4.4361116416386315,
+        "end-clamp-1": 30.679176065300474
+      },
+      "tip_mm": [
+        9.285634346210456,
+        338.2577761216235
+      ]
+    },
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 83.92866625708204,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-3",
+      "path_length_mm": 459.5845109887497,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -15.350615592888335,
+        -126.99808501892215
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 127.70968131994185,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.2778807341552642
+        ],
+        [
+          "end-clamp-1",
+          0.817381429856028
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 7.375113200005761,
+        "end-clamp-1": 33.216758515964585
+      },
+      "tip_mm": [
+        13.402548313609994,
+        331.6860964241861
+      ]
+    },
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 78.26224503251319,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-4",
+      "path_length_mm": 449.94385092371675,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -21.15124314842059,
+        -123.38859999734153
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 124.74832431578594,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.27725309293522427
+        ],
+        [
+          "end-clamp-1",
+          0.8260621967122255
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 10.48700512210479,
+        "end-clamp-1": 35.86981153300561
+      },
+      "tip_mm": [
+        17.45213680816424,
+        324.8961845314124
+      ]
+    },
+    {
+      "criterion": "broad-head-span",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 74.02970979564384,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "head-armour-5",
+      "path_length_mm": 441.43874555867774,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -20.873763115157104,
+        -119.07844954971965
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 120.41661799696337,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.27278216787374665
+        ],
+        [
+          "end-clamp-1",
+          0.8322990210069734
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 10.73448852653094,
+        "end-clamp-1": 35.30620614753851
+      },
+      "tip_mm": [
+        16.436906965854412,
+        320.78070970301764
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 82.98762854851715,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-left-armour-0",
+      "path_length_mm": 444.29953484785625,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -163.10000000000002,
+        231.8
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.0
+        ],
+        [
+          "end-clamp-8",
+          0.6320026751337884
+        ],
+        [
+          "end-clamp-14",
+          0.8132169357842451
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 34.88814628688912,
+        "end-clamp-8": 42.89165150620332,
+        "end-clamp-9": 34.39258641044604
+      },
+      "tip_mm": [
+        -350.3,
+        92.6
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 82.98762854851715,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-left-armour-1",
+      "path_length_mm": 444.29953484785625,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -163.10000000000002,
+        231.8
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.0
+        ],
+        [
+          "end-clamp-8",
+          0.6320026751337884
+        ],
+        [
+          "end-clamp-14",
+          0.8132169357842451
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 34.88814628688912,
+        "end-clamp-8": 42.89165150620332,
+        "end-clamp-9": 34.39258641044604
+      },
+      "tip_mm": [
+        -350.3,
+        92.6
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 82.98762854851715,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-left-armour-2",
+      "path_length_mm": 444.29953484785625,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -163.10000000000002,
+        231.8
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.0
+        ],
+        [
+          "end-clamp-8",
+          0.6320026751337884
+        ],
+        [
+          "end-clamp-14",
+          0.8132169357842451
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 34.88814628688912,
+        "end-clamp-8": 42.89165150620332,
+        "end-clamp-9": 34.39258641044604
+      },
+      "tip_mm": [
+        -350.3,
+        92.6
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 82.98762854851715,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-left-armour-3",
+      "path_length_mm": 444.29953484785625,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -163.10000000000002,
+        231.8
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.0
+        ],
+        [
+          "end-clamp-8",
+          0.6320026751337884
+        ],
+        [
+          "end-clamp-14",
+          0.8132169357842451
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 34.88814628688912,
+        "end-clamp-8": 42.89165150620332,
+        "end-clamp-9": 34.39258641044604
+      },
+      "tip_mm": [
+        -350.3,
+        92.6
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-12"
+      ],
+      "distal_unbraced_path_mm": 22.99150868479137,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-right-armour-0",
+      "path_length_mm": 481.32449608517777,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        156.89999999999998,
+        228.2
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.0
+        ],
+        [
+          "end-clamp-5",
+          0.6127800377568291
+        ],
+        [
+          "end-clamp-12",
+          0.9522328307165097
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 21.418246637755132,
+        "end-clamp-4": 29.031879029783735,
+        "end-clamp-5": 31.784475766797645
+      },
+      "tip_mm": [
+        359.7,
+        77.4
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-12"
+      ],
+      "distal_unbraced_path_mm": 22.99150868479137,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-right-armour-1",
+      "path_length_mm": 481.32449608517777,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        156.89999999999998,
+        228.2
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.0
+        ],
+        [
+          "end-clamp-5",
+          0.6127800377568291
+        ],
+        [
+          "end-clamp-12",
+          0.9522328307165097
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 21.418246637755132,
+        "end-clamp-4": 29.031879029783735,
+        "end-clamp-5": 31.784475766797645
+      },
+      "tip_mm": [
+        359.7,
+        77.4
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-12"
+      ],
+      "distal_unbraced_path_mm": 22.99150868479137,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-right-armour-2",
+      "path_length_mm": 481.32449608517777,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        156.89999999999998,
+        228.2
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.0
+        ],
+        [
+          "end-clamp-5",
+          0.6127800377568291
+        ],
+        [
+          "end-clamp-12",
+          0.9522328307165097
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 21.418246637755132,
+        "end-clamp-4": 29.031879029783735,
+        "end-clamp-5": 31.784475766797645
+      },
+      "tip_mm": [
+        359.7,
+        77.4
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-12"
+      ],
+      "distal_unbraced_path_mm": 22.99150868479137,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "crown-right-armour-3",
+      "path_length_mm": 481.32449608517777,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        156.89999999999998,
+        228.2
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 0.0,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.0
+        ],
+        [
+          "end-clamp-5",
+          0.6127800377568291
+        ],
+        [
+          "end-clamp-12",
+          0.9522328307165097
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 21.418246637755132,
+        "end-clamp-4": 29.031879029783735,
+        "end-clamp-5": 31.784475766797645
+      },
+      "tip_mm": [
+        359.7,
+        77.4
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 2.648183285046115,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-left-armour-0",
+      "path_length_mm": 523.6717973033471,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -105.8,
+        19.200000000000003
+      ],
+      "root_support_ids": [
+        "end-clamp-7",
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 6.033224478153377,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.011521003249022619
+        ],
+        [
+          "end-clamp-7",
+          0.17957209325728715
+        ],
+        [
+          "end-clamp-6",
+          0.5640882665955813
+        ],
+        [
+          "end-clamp-13",
+          0.9949430477282089
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 35.78938672841725,
+        "end-clamp-13": 1.8075190977701008,
+        "end-clamp-6": 46.89434933976596,
+        "end-clamp-7": 17.09452870143679
+      },
+      "tip_mm": [
+        -249.8,
+        -196.79999999999995
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 2.648183285046115,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-left-armour-1",
+      "path_length_mm": 523.6717973033471,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -105.8,
+        19.200000000000003
+      ],
+      "root_support_ids": [
+        "end-clamp-7",
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 6.033224478153377,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.011521003249022619
+        ],
+        [
+          "end-clamp-7",
+          0.17957209325728715
+        ],
+        [
+          "end-clamp-6",
+          0.5640882665955813
+        ],
+        [
+          "end-clamp-13",
+          0.9949430477282089
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 35.78938672841725,
+        "end-clamp-13": 1.8075190977701008,
+        "end-clamp-6": 46.89434933976596,
+        "end-clamp-7": 17.09452870143679
+      },
+      "tip_mm": [
+        -249.8,
+        -196.79999999999995
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 2.648183285046115,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-left-armour-2",
+      "path_length_mm": 523.6717973033471,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -105.8,
+        19.200000000000003
+      ],
+      "root_support_ids": [
+        "end-clamp-7",
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 6.033224478153377,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.011521003249022619
+        ],
+        [
+          "end-clamp-7",
+          0.17957209325728715
+        ],
+        [
+          "end-clamp-6",
+          0.5640882665955813
+        ],
+        [
+          "end-clamp-13",
+          0.9949430477282089
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 35.78938672841725,
+        "end-clamp-13": 1.8075190977701008,
+        "end-clamp-6": 46.89434933976596,
+        "end-clamp-7": 17.09452870143679
+      },
+      "tip_mm": [
+        -249.8,
+        -196.79999999999995
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 2.648183285046115,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-left-armour-3",
+      "path_length_mm": 523.6717973033471,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        -105.8,
+        19.200000000000003
+      ],
+      "root_support_ids": [
+        "end-clamp-7",
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 6.033224478153377,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.011521003249022619
+        ],
+        [
+          "end-clamp-7",
+          0.17957209325728715
+        ],
+        [
+          "end-clamp-6",
+          0.5640882665955813
+        ],
+        [
+          "end-clamp-13",
+          0.9949430477282089
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 35.78938672841725,
+        "end-clamp-13": 1.8075190977701008,
+        "end-clamp-6": 46.89434933976596,
+        "end-clamp-7": 17.09452870143679
+      },
+      "tip_mm": [
+        -249.8,
+        -196.79999999999995
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 100.50922994470272,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-right-armour-0",
+      "path_length_mm": 567.3111137452925,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        104.2,
+        20.799999999999997
+      ],
+      "root_support_ids": [
+        "end-clamp-2"
+      ],
+      "root_unbraced_path_mm": 96.40239128516079,
+      "station_fractions": [
+        [
+          "end-clamp-2",
+          0.16992861403459636
+        ],
+        [
+          "end-clamp-3",
+          0.6986193445126239
+        ],
+        [
+          "end-clamp-11",
+          0.8228322563942777
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-11": 42.818962432657095,
+        "end-clamp-2": 16.06567355891335,
+        "end-clamp-3": 33.893646464293596
+      },
+      "tip_mm": [
+        260.20000000000005,
+        -213.20000000000005
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 100.50922994470272,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-right-armour-1",
+      "path_length_mm": 567.3111137452925,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        104.2,
+        20.799999999999997
+      ],
+      "root_support_ids": [
+        "end-clamp-2"
+      ],
+      "root_unbraced_path_mm": 96.40239128516079,
+      "station_fractions": [
+        [
+          "end-clamp-2",
+          0.16992861403459636
+        ],
+        [
+          "end-clamp-3",
+          0.6986193445126239
+        ],
+        [
+          "end-clamp-11",
+          0.8228322563942777
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-11": 42.818962432657095,
+        "end-clamp-2": 16.06567355891335,
+        "end-clamp-3": 33.893646464293596
+      },
+      "tip_mm": [
+        260.20000000000005,
+        -213.20000000000005
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 100.50922994470272,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-right-armour-2",
+      "path_length_mm": 567.3111137452925,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        104.2,
+        20.799999999999997
+      ],
+      "root_support_ids": [
+        "end-clamp-2"
+      ],
+      "root_unbraced_path_mm": 96.40239128516079,
+      "station_fractions": [
+        [
+          "end-clamp-2",
+          0.16992861403459636
+        ],
+        [
+          "end-clamp-3",
+          0.6986193445126239
+        ],
+        [
+          "end-clamp-11",
+          0.8228322563942777
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-11": 42.818962432657095,
+        "end-clamp-2": 16.06567355891335,
+        "end-clamp-3": 33.893646464293596
+      },
+      "tip_mm": [
+        260.20000000000005,
+        -213.20000000000005
+      ]
+    },
+    {
+      "criterion": "creature-limb",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 100.50922994470272,
+      "end_region_fraction": 0.3,
+      "fraction_parameter": "path arclength",
+      "part_id": "jaw-right-armour-3",
+      "path_length_mm": 567.3111137452925,
+      "path_offset_limit_mm": 60,
+      "root_mm": [
+        104.2,
+        20.799999999999997
+      ],
+      "root_support_ids": [
+        "end-clamp-2"
+      ],
+      "root_unbraced_path_mm": 96.40239128516079,
+      "station_fractions": [
+        [
+          "end-clamp-2",
+          0.16992861403459636
+        ],
+        [
+          "end-clamp-3",
+          0.6986193445126239
+        ],
+        [
+          "end-clamp-11",
+          0.8228322563942777
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-11": 42.818962432657095,
+        "end-clamp-2": 16.06567355891335,
+        "end-clamp-3": 33.893646464293596
+      },
+      "tip_mm": [
+        260.20000000000005,
+        -213.20000000000005
+      ]
+    }
+  ],
+  "upright_joinery": [
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        156.0
+      ],
+      "part_id": "head-web-0",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        156.0
+      ],
+      "part_id": "head-web-1",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -56.8347,
+        -18.0,
+        56.8347,
+        43.265536723524185
+      ],
+      "part_id": "crown-left-blade-0",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -54.42645,
+        -18.0,
+        54.42645,
+        56.14390520253807
+      ],
+      "part_id": "crown-left-blade-1",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -51.21545,
+        -18.0,
+        51.21545,
+        63.96189908933987
+      ],
+      "part_id": "crown-left-blade-2",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -46.39895,
+        -18.0,
+        46.39895,
+        65.03190187137092
+      ],
+      "part_id": "crown-left-blade-3",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -40.4586,
+        -18.0,
+        40.4586,
+        59.12293941516612
+      ],
+      "part_id": "crown-left-blade-4",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -30.825599999999998,
+        -18.0,
+        30.825599999999998,
+        47.51053876226171
+      ],
+      "part_id": "crown-left-blade-5",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "crown-left-web-0",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "crown-left-web-1",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -58.215300000000006,
+        -18.0,
+        58.215300000000006,
+        43.265536723524185
+      ],
+      "part_id": "crown-right-blade-0",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -55.74855000000001,
+        -18.0,
+        55.74855000000001,
+        56.14390520253807
+      ],
+      "part_id": "crown-right-blade-1",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -52.45955,
+        -18.0,
+        52.45955,
+        63.96189908933987
+      ],
+      "part_id": "crown-right-blade-2",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -47.52605,
+        -18.0,
+        47.52605,
+        65.03190187137092
+      ],
+      "part_id": "crown-right-blade-3",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -41.44140000000001,
+        -18.0,
+        41.44140000000001,
+        59.12293941516612
+      ],
+      "part_id": "crown-right-blade-4",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -31.574400000000004,
+        -18.0,
+        31.574400000000004,
+        47.51053876226171
+      ],
+      "part_id": "crown-right-blade-5",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "crown-right-web-0",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "crown-right-web-1",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -47.522800000000004,
+        -18.0,
+        47.522800000000004,
+        43.265536723524185
+      ],
+      "part_id": "jaw-left-blade-0",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -46.238400000000006,
+        -18.0,
+        46.238400000000006,
+        56.14390520253807
+      ],
+      "part_id": "jaw-left-blade-1",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -44.63290000000001,
+        -18.0,
+        44.63290000000001,
+        63.96189908933987
+      ],
+      "part_id": "jaw-left-blade-2",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -41.42190000000001,
+        -18.0,
+        41.42190000000001,
+        65.03190187137092
+      ],
+      "part_id": "jaw-left-blade-3",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -36.926500000000004,
+        -18.0,
+        36.926500000000004,
+        59.12293941516612
+      ],
+      "part_id": "jaw-left-blade-4",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -28.898999999999997,
+        -18.0,
+        28.898999999999997,
+        47.51053876226171
+      ],
+      "part_id": "jaw-left-blade-5",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "jaw-left-web-0",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "jaw-left-web-1",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -48.6772,
+        -18.0,
+        48.6772,
+        43.265536723524185
+      ],
+      "part_id": "jaw-right-blade-0",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -47.3616,
+        -18.0,
+        47.3616,
+        56.14390520253807
+      ],
+      "part_id": "jaw-right-blade-1",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -45.7171,
+        -18.0,
+        45.7171,
+        63.96189908933987
+      ],
+      "part_id": "jaw-right-blade-2",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -42.4281,
+        -18.0,
+        42.4281,
+        65.03190187137092
+      ],
+      "part_id": "jaw-right-blade-3",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -37.8235,
+        -18.0,
+        37.8235,
+        59.12293941516612
+      ],
+      "part_id": "jaw-right-blade-4",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "decorative_fin": true,
+      "joinery": "28 mm closed cap seat, shoulder bearing and transverse retained key",
+      "local_bounds_mm": [
+        -29.601000000000003,
+        -18.0,
+        29.601000000000003,
+        47.51053876226171
+      ],
+      "part_id": "jaw-right-blade-5",
+      "physical_bending_stiffness": "NOT RUN",
+      "role": "blade"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "jaw-right-web-0",
+      "role": "register"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "joinery": "closed layer slots; board/lower-plate and cap withdrawal restraint",
+      "local_bounds_mm": [
+        -9.0,
+        0.0,
+        9.0,
+        60.0
+      ],
+      "part_id": "jaw-right-web-1",
+      "role": "register"
+    }
+  ]
+}

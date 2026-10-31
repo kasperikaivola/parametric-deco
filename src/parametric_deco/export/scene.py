@@ -29,7 +29,9 @@ def write_scene(assembly, out_dir):
         mesh = trimesh.Trimesh(
             vertices=np.array(source["vertices"]) * 0.001, faces=source["triangles"], process=False
         )
-        color = [150, 105, 63, 255] if instance.role == "backplate" else [205, 158, 99, 255]
+        color = ([150, 105, 63, 255] if instance.role == "backplate"
+                 else [125, 160, 180, 255] if instance.role == "mounting-hardware"
+                 else [205, 158, 99, 255])
         mesh.visual.vertex_colors = color
         transform = np.array(instance.transform)
         transform[:3, 3] *= 0.001

@@ -57,7 +57,7 @@ def test_creature_assembly_checks_real_parts_and_root_hardware():
     assert result.assembly.composition["family"] == "creature-organism-v3"
     assert len(result.assembly.composition["removal_order"]) == 5
     assert result.assembly.composition["eye_aperture_area_mm2"] > 3000
-    assert {d.thickness_mm for d in result.assembly.definitions} == {6}
+    assert {d.thickness_mm for d in result.fabrication_parts} == {6}
 
 
 def test_creature_inventory_reuses_complete_modules_without_new_cuts(monkeypatch):
@@ -87,7 +87,7 @@ def test_creature_inventory_reuses_complete_modules_without_new_cuts(monkeypatch
         assemble(creature_config(curl=1.1), inventory)
     with pytest.raises(ValueError, match="missing|inventory"):
         assemble(creature_config(), replace(inventory, instances=inventory.instances[:-1]))
-    inventory.layout["templates"][1]["transform"][0][3] += 1
+    inventory.layout["source_template"]["layout"]["templates"][1]["transform"][0][3] += 1
     with pytest.raises(ValueError, match="stale"):
         assemble(creature_config(), inventory)
 
@@ -102,7 +102,7 @@ def test_creature_measured_stock_and_real_cap_capture():
         replace(c, material=replace(c.material, measured_mm=5.8, measurement_status="measured"))
     )
     assert result.report.digital_valid, result.report.to_dict()
-    assert {d.thickness_mm for d in result.assembly.definitions} == {5.8}
+    assert {d.thickness_mm for d in result.fabrication_parts} == {5.8}
     missing = replace(
         result.assembly,
         instances=tuple(i for i in result.assembly.instances if i.instance_id != "head-armour-5"),
