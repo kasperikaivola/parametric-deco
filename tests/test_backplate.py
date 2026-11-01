@@ -29,7 +29,7 @@ def test_polygon_uniform_fit_and_grid_negative_parity():
     shifted = replace(c, grid=replace(c.grid, origin_x_mm=13, origin_y_mm=-7))
     hs = {(h.row, h.column): h for h in mounting_holes(shifted)}
     assert hs[-1, 0].x_mm == 38
-    assert hs[-1, 0].y_mm == -57
+    assert hs[-1, 0].y_mm == shifted.grid.origin_y_mm - shifted.grid.pitch_y_mm
     assert hs[0, 0].point_id == holes[0, 0].point_id
 
 

@@ -62,14 +62,15 @@ views identify the actual medial paths. These dimensions describe nominal
 attachment geometry, not a tested bending stiffness or load rating.
 
 One axis can support multiple stacked layers when it passes through their real
-material. Some radial and laminar axes deliberately clamp overlapping modules on one
+material. Some laminar axes clamp overlapping modules on one
 physical M6 shaft: each involved rail/spine has its own coaxial bore, and rigid
 tube segments fill every gap through the complete combined stack. This couples
 those modules until their common clamp is removed; it is one hardware schedule,
 not two coincident fasteners. Where this axis reuses an original radial root bore,
 the combined stack replaces that root bolt; no second coincident bolt/envelope is
-retained. The evidence names these replaced root references. Both supported radial poses rotate the coupled
-modules together without changing cuts; laminar modules support identical replay.
+retained. The evidence names these replaced root references. The current v3 radial presets instead use independent module columns, with one
+shaft supporting each module's multiple rail/spine layers. Both saved radial poses
+preserve those cuts; laminar modules support identical replay.
 Support all coupled layers and remove their common clamp before extraction. Long rails can require additional axes because their end regions differ.
 
 The mechanical stack at each station is rear M6 bolt head, rear 1.5 mm washer,

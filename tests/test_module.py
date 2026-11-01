@@ -59,5 +59,5 @@ def test_measured_stock_thickness_drives_geometry_and_finished_fit():
     spine = next(d for d in module.definitions if d.kind == "spine")
     assert spine.interfaces[0].slot_width_mm == pytest.approx(5.9)
     build = assemble(c)
-    assert all(d.thickness_mm == pytest.approx(5.7) for d in build.assembly.definitions)
+    assert all(d.thickness_mm == pytest.approx(5.7) for d in build.fabrication_parts)
     assert build.report.digital_valid, build.report.to_dict()

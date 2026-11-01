@@ -106,31 +106,20 @@ def test_weave_export_includes_artwork_evidence_and_radial_instructions(tmp_path
 
 def test_saved_weave_rejects_changed_stock_and_stale_layout():
     from parametric_deco.assembly import assemble
+    from test_supports import build_example
+    from inventory_fixtures import edit_source_layout
     from parametric_deco.model import Inventory
-    import json
-
-    # Use the immutable blueprint directly: rejection must precede geometry validation.
-    from parametric_deco.geometry.weave import generate_weave
-    from parametric_deco.geometry.backplate import generate_backplate
-    from parametric_deco.model import PartInstance, digest
-    from dataclasses import asdict
 
     c = config()
-    bundle, layout = generate_weave(c)
-    backing = generate_backplate(c).definitions[0]
-    root = PartInstance(
-        "backplate",
-        backing.definition_id,
-        backing.revision,
-        ((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 10), (0, 0, 0, 1)),
-        role="backplate",
-    )
-    layout = json.loads(json.dumps(layout))
-    layout["templates"] = [asdict(i) for i in (root, *bundle.instances)]
-    layout["fingerprint"] = digest(layout)
-    inv = Inventory((backing, *bundle.definitions), (root, *bundle.instances), layout)
-    with pytest.raises(ValueError, match="manufactured|inventory"):
+    # Current physical stock reaches settings/source-layout guards, rather than
+    # being rejected earlier as an obsolete unmachined blueprint.
+    inv = build_example('radial-weave').inventory
+    with pytest.raises(ValueError, match="manufactured support hardware/board settings differ"):
         assemble(replace(c, material=replace(c.material, measured_mm=5.8)), inv)
-    layout["modules"][0]["station_transforms"][0][0][3] += 1
-    with pytest.raises(ValueError, match="stale"):
-        assemble(c, inv)
+    stale = edit_source_layout(inv, lambda layout: layout['modules'][0]['station_transforms'][0][0].__setitem__(3, 999),
+                               resign_source=False)
+    with pytest.raises(ValueError, match="stale inventory layout fingerprint"):
+        assemble(c, stale)
+    source = Inventory.from_dict(inv.layout['source_template'])
+    with pytest.raises(ValueError, match="predates.*requires new cuts"):
+        assemble(c, source)

@@ -234,14 +234,14 @@ def test_organism_transverse_ribs_have_real_slots_keys_and_bearing():
 
 
 def test_organism_rejects_previous_mask_inventory():
-    from dataclasses import replace
     import pytest
     from parametric_deco.assembly import assemble
 
     result = assemble(creature_config())
-    layout = dict(result.inventory.layout, family="creature-mask-v1")
+    from inventory_fixtures import edit_source_layout
+    older = edit_source_layout(result.inventory, lambda layout: layout.update(family="creature-mask-v1"))
     with pytest.raises(ValueError, match="family|new cuts"):
-        assemble(creature_config(), replace(result.inventory, layout=layout))
+        assemble(creature_config(), older)
 
 
 def test_organism_rejects_retainer_that_misses_its_tab():

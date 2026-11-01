@@ -8,7 +8,8 @@ from shapely.geometry import box
 
 from parametric_deco.assembly import assemble
 from parametric_deco.config import DesignConfig, RibStudy, load_config
-from parametric_deco.model import Assembly, Inventory, PartDefinition, PartInstance
+from parametric_deco.model import Assembly, PartDefinition, PartInstance
+from inventory_fixtures import relabel_inventory, replace_stock_parts
 
 
 def test_short_ribs_rejected_by_closure_contact_interface_and_loaded_validation():
@@ -24,7 +25,7 @@ def test_short_ribs_rejected_by_closure_contact_interface_and_loaded_validation(
         replace(i, revision=replacements[i.definition_id].revision) if i.role == "rib" else i
         for i in original.assembly.instances
     )
-    inventory = Inventory(definitions, instances)
+    inventory = replace_stock_parts(original.inventory, replacements)
     with pytest.raises(ValueError, match="closure"):
         assemble(c, inventory)
     report = validate_assembly(
@@ -37,16 +38,11 @@ def test_short_ribs_rejected_by_closure_contact_interface_and_loaded_validation(
 def test_inventory_ids_are_not_parsed_as_rib_names():
     c = DesignConfig(style="rib-study", parameters=RibStudy())
     first = assemble(c)
-    inventory = Inventory(
-        first.assembly.definitions,
-        tuple(
-            replace(i, instance_id=f"stock-{index}")
-            for index, i in enumerate(first.assembly.instances)
-        ),
-    )
+    names = {i.instance_id: f"stock-{index}" for index, i in enumerate(first.inventory.instances)}
+    inventory = relabel_inventory(first.inventory, names)
     result = assemble(c, inventory)
     assert result.report.digital_valid, result.report.to_dict()
-    assert {i.instance_id for i in result.assembly.instances} == {
+    assert {i.instance_id for i in result.assembly.instances if i.role != "mounting-hardware"} == {
         i.instance_id for i in inventory.instances
     }
 
@@ -54,11 +50,8 @@ def test_inventory_ids_are_not_parsed_as_rib_names():
 def test_explicit_assignments_transfer_ribs_across_modules_with_arbitrary_ids():
     c = load_config(Path("examples/intertwined.json"))
     first = assemble(c)
-    renamed = {i.instance_id: f"stock-{n}" for n, i in enumerate(first.assembly.instances)}
-    stock = Inventory(
-        first.assembly.definitions,
-        tuple(replace(i, instance_id=renamed[i.instance_id]) for i in first.assembly.instances),
-    )
+    renamed = {i.instance_id: f"stock-{n}" for n, i in enumerate(first.inventory.instances)}
+    stock = relabel_inventory(first.inventory, renamed)
     placements = []
     for p in c.placements:
         ids = [renamed[f"{p.module_id}-rib-{n}"] for n in p.rib_order]
@@ -80,7 +73,7 @@ def test_explicit_assignments_transfer_ribs_across_modules_with_arbitrary_ids():
     assert result.report.digital_valid, result.report.to_dict()
     moved = next(i for i in result.assembly.instances if i.instance_id == renamed["m2-rib-0"])
     assert moved.module_id == "new-m1"
-    assert len(result.assembly.instances) == len(stock.instances)
+    assert sum(i.role != "mounting-hardware" for i in result.assembly.instances) == len(stock.instances)
     duplicated = replace(
         configured,
         parameters=replace(configured.parameters, placements=(

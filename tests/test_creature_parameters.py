@@ -36,7 +36,7 @@ def test_shape_controls_reject_invalid_numbers(field, value):
 
 @pytest.mark.parametrize(
     "limbs,cavities,ribs,layers",
-    [(2, 3, 3, 3), (3, 5, 4, 4), (4, 6, 6, 6), (5, 7, 4, 5), (6, 8, 3, 3)],
+    [(2, 3, 3, 3), (2, 5, 4, 4), (4, 6, 6, 6), (4, 7, 4, 5), (6, 8, 3, 3)],
 )
 def test_profiles_follow_numeric_composition(limbs, cavities, ribs, layers):
     from parametric_deco.geometry.creature_profiles import (
@@ -133,7 +133,7 @@ def test_changed_composition_or_shape_requires_new_cuts(default_manufacture, fie
         assemble(changed, default_manufacture.inventory)
 
 
-@pytest.mark.parametrize("count,cavities", [(2, 3), (3, 5), (4, 6), (5, 7), (6, 8)])
+@pytest.mark.parametrize("count,cavities", [(2, 3), (2, 5), (4, 6), (4, 7), (6, 8)])
 def test_composition_variants_assemble_as_actual_parts(count, cavities):
     from parametric_deco.assembly import assemble
 
@@ -152,3 +152,10 @@ def test_composition_variants_assemble_as_actual_parts(count, cavities):
     assert len(result.assembly.composition["modules"]) == count + 1
     assert len([i for i in result.assembly.instances if i.role == "blade"]) == count * 3
     assert len(result.assembly.composition["clear_aperture_probe_areas_mm2"]) == cavities
+
+
+@pytest.mark.parametrize("limbs", [3, 5])
+def test_odd_limb_counts_require_exact_pairs(limbs):
+    c = DesignConfig(style="layered-creature", parameters=CreatureMask(limb_count=limbs))
+    with pytest.raises(ValueError, match="paired limb counts2,4,6"):
+        config_from_dict(c.to_dict())

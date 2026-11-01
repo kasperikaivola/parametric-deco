@@ -108,7 +108,7 @@ Each plate has separated end clamps directly on universal board grid bores, with
 All fields are inside `parameters`.
 | Parameter | Default | Range | Effect |
 | --- | --- | --- | --- |
-| `limb_count` |4| integer2–6 | Active complete appendage modules |
+| `limb_count` |4| paired counts 2, 4, 6 | Active complete appendage modules |
 | `cavity_count` |6| integer3–8 | Primary recesses selected from the anatomical cavity palette |
 | `ribs_per_limb` |6| integer3–7 | Transverse ribs, cap slots, keys and required clips on EVERY limb |
 | `shell_layers` |6| integer3–6 | Central shell plates, root column height and web height |

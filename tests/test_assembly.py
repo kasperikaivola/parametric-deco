@@ -11,7 +11,9 @@ def test_default_assembly_valid_and_envelope_includes_hardware():
 
     a = assemble(DesignConfig(style="rib-study", parameters=RibStudy())).assembly
     assert validate_assembly(a).digital_valid
-    assert a.hardware_bounds
+    hardware = [i for i in a.instances if i.role == "mounting-hardware"]
+    assert all(any(kind in i.instance_id for i in hardware) for kind in ("-shaft-", "-tube-", "-washer-"))
+    assert all(a.definition_for(i).kind == "purchased-hardware" for i in hardware)
     small = replace(a, envelope_mm=(1000, 1000, 140))
     assert not validate_assembly(small).digital_valid
 

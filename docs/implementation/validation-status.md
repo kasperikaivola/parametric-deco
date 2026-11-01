@@ -98,7 +98,7 @@ selected on the fixed world grid and inverse-placed into newly manufactured
 profiles, so all four creature examples have measured bounding-box centre Y=0 mm
 without moving the camera or grid. Saved raised-crown changes remain triangular
 lattice vectors. The strict 2 mm actual-geometry centering check is retained.
-The superseded PR CI failure has no available log diagnosis: the GitHub log
+The older run 41201609281 failure has no available log diagnosis: the GitHub log
 reader returned Transport closed again. It does not establish current test
 status or authorize a merge; only the later reviewed replacement CI may do so.
 
@@ -109,3 +109,20 @@ common board identity at each stock size and current links. Fresh
 Layer-relief/parameter checks additionally cover20 profile/cavity/neck regressions
 and14 shape/size/creature-corner cases. Artwork-only bounds exclude the board and
 purchased hardware. Earlier test descriptions above remain historical.
+
+## CI fixture and cold-replay correction
+
+Run 41226959340 (CI 58) reported 280 passed, 15 failed and 2 skipped. Its verified
+JUnit artifact identified stale test/fixture contracts, not a demonstrated
+mounting geometry defect. The correction supplies current physical inventory
+metadata, coherently relabels instance references without changing cut identities,
+reaches the intended nested family/fingerprint guards, and wires all three cold
+example replays to their source stock. Memoized models return isolated records.
+
+Focused checks cover all 15 diagnosed failures with valid even-count cavity
+variants and explicit 3/5-limb rejection, plus 3 cold-path regressions and 5 profile
+variants. Radial assertions retain exact saved-inventory equality, real multilayer
+columns, one shaft per stack and aperture clearance; v3 does not require
+cross-module coupling. Production source, manufactured geometry, images, revision
+guards and workflow are unchanged. No full-suite/CLI rerun or new CI was started
+for this correction; the replacement CI follows focused review.

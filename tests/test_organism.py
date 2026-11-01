@@ -75,7 +75,7 @@ def test_legacy_dense_slots_rejected_before_keys():
             rib_height_mm=45,
         )
     )
-    with pytest.raises(ValueError, match="neighboring rib slots"):
+    with pytest.raises(ValueError, match="insufficient cap slot bearing|neighboring rib slots"):
         generate_creature(c)
 
 
@@ -148,12 +148,13 @@ def test_loaded_assembly_bearing_and_support_checks():
     )
     altered = replace(
         a,
-        definitions=tuple(damaged if d == original else d for d in a.definitions),
+        definitions=(*a.definitions, damaged),
         instances=tuple(
             replace(i, revision=damaged.revision) if i == instance else i for i in a.instances
         ),
     )
-    assert not verify_organism(altered).digital_valid
+    report = verify_organism(altered)
+    assert any(i.code == "support_bore" and instance.instance_id in i.part_ids for i in report.issues)
 
 
 @pytest.mark.parametrize(
