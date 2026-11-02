@@ -68,7 +68,9 @@ def test_all_styles_physical_lighting(lit, lit_build):
     from parametric_deco.lighting import placement_fingerprint
     assert placement_fingerprint(replay.assembly) == placement_fingerprint(b.assembly)
     assert replay.assembly.lighting == b.assembly.lighting
-    assert replay.inventory.to_dict() == b.inventory.to_dict()
+    from parametric_deco.model import canonical
+    # JSON lists and in-memory tuples encode identical immutable stock records.
+    assert canonical(replay.inventory.to_dict()) == canonical(b.inventory.to_dict())
 
 
 def test_no_silent_inventory_manufacture(lit):

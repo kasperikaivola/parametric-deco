@@ -33,13 +33,16 @@ export/manifest.py and relevant preview/export integration. Create focused share
 lighting module(s), tests/test_lighting.py, documentation and enabled examples.
 Inspect actual interfaces before choosing new signatures and record them in docs.
 
-- [ ] Read AGENTS.md, existing assembly/model/inventory/export and desktop workflows.
-- [ ] Write focused failing tests for configuration, disabled compatibility,
+- [x] Read AGENTS.md, existing assembly/model/inventory/export and desktop workflows.
+- [x] Write focused failing tests for configuration, disabled compatibility,
   physical carrier/retention geometry, all-style placement/aim/concealment,
   deterministic serial route and bottom input, and inventory replay.
-- [ ] Implement shared configuration, actual carriers and cable retention,
+- [x] Implement shared configuration, actual carriers and cable retention,
   validation and inventory behavior using existing part/assembly interfaces.
-- [ ] Integrate exports, desktop controls, route/BOM instructions and examples.
-- [ ] Run focused tests, all Python tests, Ruff, JS syntax and example builds;
+- [x] Integrate exports, desktop controls, route/BOM instructions and examples.
+- [x] Run focused tests, Ruff, JS syntax and retained all-style example builds;
   render and inspect front/oblique lighting evidence for all styles.
-- [ ] Commit completed implementation and record exact verification/limitations.
+- [x] Commit completed implementation and record exact verification/limitations.
+
+Final full pytest/CLI/GUI gates are parent-owned GitHub CI per the user's final
+efficiency instruction; superseded local full runs are not claimed as passes.

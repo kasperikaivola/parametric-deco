@@ -1,0 +1,1471 @@
+{
+  "laminar": {
+    "addressable_units": 18,
+    "assembly_seconds": 23.866,
+    "config": {
+      "backplate": {
+        "rotation_deg": 22.5,
+        "sides": 8
+      },
+      "cutting_bed": null,
+      "envelope": {
+        "depth_mm": 140,
+        "height_mm": 800,
+        "width_mm": 800
+      },
+      "grid": {
+        "edge_margin_mm": 15,
+        "hole_diameter_mm": 6.5,
+        "offset_mm": 25,
+        "origin_x_mm": 0,
+        "origin_y_mm": 0,
+        "pitch_x_mm": 50,
+        "pitch_y_mm": 43.30127018922193
+      },
+      "lighting": {
+        "clearance_mm": 0.5,
+        "current_per_led_ma": 60,
+        "enabled": true,
+        "injection_limit_a": 2,
+        "led_pitch_mm": 16.666667,
+        "max_segments": 18,
+        "segment_leds": 1,
+        "strip_thickness_mm": 2,
+        "strip_width_mm": 10,
+        "voltage_v": 5,
+        "wire_slack_mm": 50
+      },
+      "material": {
+        "clearance_mm": 0.2,
+        "finish": null,
+        "grade": null,
+        "measured_mm": 6,
+        "measurement_status": "assumed_unmeasured",
+        "nominal_mm": 6
+      },
+      "mounting": {
+        "hardware_outward_mm": 12,
+        "rear_clearance_mm": 10,
+        "root_half_span_mm": 43.30127018922193,
+        "washer_radius_mm": 9
+      },
+      "parameters": {
+        "anatomy_phase_deg": 0.0,
+        "angularity": 0.0,
+        "arrangement": "whorl",
+        "asymmetry": 0.12,
+        "branching": 2,
+        "channels": null,
+        "complexity": 0,
+        "curvature": 1.0,
+        "focal_count": 6,
+        "phase_deg": 17.0,
+        "secondary_lobes": null,
+        "segmentation": null,
+        "spread": 1.0,
+        "swelling": 1.0,
+        "symmetry": "rotational",
+        "taper": 1.0
+      },
+      "schema_version": 2,
+      "style": "laminar",
+      "units": "mm"
+    },
+    "density": {
+      "achieved_segments": 18,
+      "capacity_limited": false,
+      "minimum_xy_separation_mm": 30.0,
+      "per_module": {
+        "primary-0": 3,
+        "primary-1": 3,
+        "primary-2": 3,
+        "primary-3": 3,
+        "primary-4": 3,
+        "primary-5": 3
+      },
+      "requested_max_segments": 18
+    },
+    "digital_valid": true,
+    "emitter_xyz_bounds_mm": [
+      [
+        -329.9414830001222,
+        -369.89409566550074,
+        53.6
+      ],
+      [
+        310.73388411226784,
+        325.1589545918009,
+        110.80000000000001
+      ]
+    ],
+    "export_seconds": 70.257,
+    "export_timing_note": "measured",
+    "exports": 122,
+    "geometry_source_commit": "bbc69ec",
+    "hosts": [
+      "primary-4-plate",
+      "primary-4-plate",
+      "primary-3-plate",
+      "primary-3-plate",
+      "primary-3-plate",
+      "primary-4-plate",
+      "primary-2-plate",
+      "primary-0-plate",
+      "primary-5-plate",
+      "primary-5-plate",
+      "primary-0-plate",
+      "primary-5-plate",
+      "primary-0-plate",
+      "primary-1-plate",
+      "primary-1-plate",
+      "primary-2-plate",
+      "primary-1-plate",
+      "primary-2-plate"
+    ],
+    "image_interpretation": "geometry only; no simulated illumination",
+    "integrated_master": "2dc348d",
+    "physical_optical_electrical_thermal_Wire_Arena": "NOT RUN",
+    "placements": [
+      {
+        "host": "primary-4-plate",
+        "position_mm": [
+          19.20759888785436,
+          -369.89409566550074,
+          53.6
+        ],
+        "segment": "led-02",
+        "target_mm": [
+          19.20759888785436,
+          -369.89409566550074,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-4-plate",
+        "position_mm": [
+          -137.54858561030215,
+          -265.42017371555824,
+          53.6
+        ],
+        "segment": "led-14",
+        "target_mm": [
+          -137.54858561030215,
+          -265.42017371555824,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-3-plate",
+        "position_mm": [
+          -116.40357838522463,
+          -145.33028965144214,
+          110.80000000000001
+        ],
+        "segment": "led-16",
+        "target_mm": [
+          -116.40357838522463,
+          -145.33028965144214,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-3-plate",
+        "position_mm": [
+          -172.62061817701917,
+          -53.48401502170738,
+          110.80000000000001
+        ],
+        "segment": "led-10",
+        "target_mm": [
+          -172.62061817701917,
+          -53.48401502170738,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-3-plate",
+        "position_mm": [
+          -274.2458667107678,
+          -175.3101342747897,
+          110.80000000000001
+        ],
+        "segment": "led-04",
+        "target_mm": [
+          -274.2458667107678,
+          -175.3101342747897,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-4-plate",
+        "position_mm": [
+          -7.053659844214267,
+          -35.492955498693306,
+          53.6
+        ],
+        "segment": "led-08",
+        "target_mm": [
+          -7.053659844214267,
+          -35.492955498693306,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-2-plate",
+        "position_mm": [
+          -27.21097119515185,
+          23.855126364090395,
+          53.6
+        ],
+        "segment": "led-07",
+        "target_mm": [
+          -27.21097119515185,
+          23.855126364090395,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-0-plate",
+        "position_mm": [
+          34.264631039366115,
+          11.637829134602914,
+          53.6
+        ],
+        "segment": "led-06",
+        "target_mm": [
+          34.264631039366115,
+          11.637829134602914,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-5-plate",
+        "position_mm": [
+          132.6288247936967,
+          -122.75183304741876,
+          110.80000000000001
+        ],
+        "segment": "led-11",
+        "target_mm": [
+          132.6288247936967,
+          -122.75183304741876,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-5-plate",
+        "position_mm": [
+          184.06151197011195,
+          -28.143311147296657,
+          110.80000000000001
+        ],
+        "segment": "led-17",
+        "target_mm": [
+          184.06151197011195,
+          -28.143311147296657,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-0-plate",
+        "position_mm": [
+          298.6349059197032,
+          13.589517464638758,
+          53.6
+        ],
+        "segment": "led-12",
+        "target_mm": [
+          298.6349059197032,
+          13.589517464638758,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-5-plate",
+        "position_mm": [
+          288.9459631782128,
+          -149.84882031701125,
+          110.80000000000001
+        ],
+        "segment": "led-05",
+        "target_mm": [
+          288.9459631782128,
+          -149.84882031701125,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-0-plate",
+        "position_mm": [
+          310.73388411226784,
+          201.581316415334,
+          53.6
+        ],
+        "segment": "led-00",
+        "target_mm": [
+          310.73388411226784,
+          201.581316415334,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-1-plate",
+        "position_mm": [
+          39.99179338332249,
+          176.23584806912615,
+          110.80000000000001
+        ],
+        "segment": "led-09",
+        "target_mm": [
+          39.99179338332249,
+          176.23584806912615,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-1-plate",
+        "position_mm": [
+          -67.65793358488729,
+          173.4736007987388,
+          110.80000000000001
+        ],
+        "segment": "led-15",
+        "target_mm": [
+          -67.65793358488729,
+          173.4736007987388,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-2-plate",
+        "position_mm": [
+          -161.08632030940106,
+          251.83065625091945,
+          53.6
+        ],
+        "segment": "led-13",
+        "target_mm": [
+          -161.08632030940106,
+          251.83065625091945,
+          57.6
+        ]
+      },
+      {
+        "host": "primary-1-plate",
+        "position_mm": [
+          -14.700096467444993,
+          325.1589545918009,
+          110.80000000000001
+        ],
+        "segment": "led-03",
+        "target_mm": [
+          -14.700096467444993,
+          325.1589545918009,
+          114.80000000000001
+        ]
+      },
+      {
+        "host": "primary-2-plate",
+        "position_mm": [
+          -329.9414830001222,
+          168.31277925016673,
+          53.6
+        ],
+        "segment": "led-01",
+        "target_mm": [
+          -329.9414830001222,
+          168.31277925016673,
+          57.6
+        ]
+      }
+    ],
+    "replay_seconds": 4.316,
+    "replay_source_commit": "1fa76da",
+    "retention_revision": "checked-tie-path-v2",
+    "saved_json_replay": "PASS",
+    "segments": 18,
+    "stock_and_geometry_unchanged_on_replay": "PASS",
+    "strip_length_mm": 300.000006,
+    "support_revision": "triangular-symmetric-mounts-v3",
+    "symmetry": {
+      "exact_symmetry_guaranteed": true,
+      "group": "C3",
+      "pair_attempts": 6,
+      "policy": "complete physical symmetry orbits; single bottom input exempt"
+    }
+  },
+  "layered-creature": {
+    "addressable_units": 16,
+    "assembly_seconds": 217.57,
+    "config": {
+      "backplate": {
+        "rotation_deg": 22.5,
+        "sides": 8
+      },
+      "cutting_bed": null,
+      "envelope": {
+        "depth_mm": 200,
+        "height_mm": 1000,
+        "width_mm": 1000
+      },
+      "grid": {
+        "edge_margin_mm": 15,
+        "hole_diameter_mm": 6.5,
+        "offset_mm": 25,
+        "origin_x_mm": 0,
+        "origin_y_mm": 0,
+        "pitch_x_mm": 50,
+        "pitch_y_mm": 43.30127018922193
+      },
+      "lighting": {
+        "clearance_mm": 0.5,
+        "current_per_led_ma": 60,
+        "enabled": true,
+        "injection_limit_a": 2,
+        "led_pitch_mm": 16.666667,
+        "max_segments": 16,
+        "segment_leds": 1,
+        "strip_thickness_mm": 2,
+        "strip_width_mm": 10,
+        "voltage_v": 5,
+        "wire_slack_mm": 50
+      },
+      "material": {
+        "clearance_mm": 0.2,
+        "finish": null,
+        "grade": null,
+        "measured_mm": 6,
+        "measurement_status": "assumed_unmeasured",
+        "nominal_mm": 6
+      },
+      "mounting": {
+        "hardware_outward_mm": 12,
+        "rear_clearance_mm": 10,
+        "root_half_span_mm": 43.30127018922193,
+        "washer_radius_mm": 9
+      },
+      "parameters": {
+        "asymmetry": 0.08,
+        "cavity_count": 6,
+        "curl": 1,
+        "limb_count": 4,
+        "limb_layers": 4,
+        "limb_reach": 1,
+        "limb_width": 1,
+        "posture": "rest",
+        "rib_height_mm": 65,
+        "ribs_per_limb": 6,
+        "scale": 1,
+        "shell_layers": 6
+      },
+      "schema_version": 2,
+      "style": "layered-creature",
+      "units": "mm"
+    },
+    "density": {
+      "achieved_segments": 16,
+      "capacity_limited": false,
+      "minimum_xy_separation_mm": 30.0,
+      "per_module": {
+        "crown-left": 3,
+        "crown-right": 3,
+        "head": 6,
+        "jaw-left": 2,
+        "jaw-right": 2
+      },
+      "requested_max_segments": 16
+    },
+    "digital_valid": true,
+    "emitter_xyz_bounds_mm": [
+      [
+        -410.454889796487,
+        -249.6459895710168,
+        72.0
+      ],
+      [
+        410.454889796487,
+        303.797524927201,
+        108.0
+      ]
+    ],
+    "export_seconds": null,
+    "export_timing_note": "existing successful export reused; no geometry regenerated",
+    "exports": 206,
+    "geometry_source_commit": "bbc69ec",
+    "hosts": [
+      "jaw-left-armour-3",
+      "jaw-left-armour-3",
+      "head-armour-0",
+      "crown-left-armour-3",
+      "head-armour-0",
+      "head-armour-0",
+      "crown-right-armour-3",
+      "crown-right-armour-3",
+      "crown-right-armour-3",
+      "jaw-right-armour-3",
+      "head-armour-0",
+      "head-armour-0",
+      "head-armour-0",
+      "jaw-right-armour-3",
+      "crown-left-armour-3",
+      "crown-left-armour-3"
+    ],
+    "image_interpretation": "geometry only; no simulated illumination",
+    "integrated_master": "2dc348d",
+    "physical_optical_electrical_thermal_Wire_Arena": "NOT RUN",
+    "placements": [
+      {
+        "host": "jaw-left-armour-3",
+        "position_mm": [
+          -378.81330361610793,
+          -249.64598957101674,
+          72.0
+        ],
+        "segment": "led-04",
+        "target_mm": [
+          -378.81330361610793,
+          -249.64598957101674,
+          76.0
+        ]
+      },
+      {
+        "host": "jaw-left-armour-3",
+        "position_mm": [
+          -341.7024270040809,
+          -101.26787892987389,
+          72.0
+        ],
+        "segment": "led-10",
+        "target_mm": [
+          -341.7024270040809,
+          -101.26787892987389,
+          76.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          -208.71323296833762,
+          1.5097255253307953,
+          108.0
+        ],
+        "segment": "led-08",
+        "target_mm": [
+          -208.71323296833762,
+          1.5097255253307953,
+          112.0
+        ]
+      },
+      {
+        "host": "crown-left-armour-3",
+        "position_mm": [
+          -103.65807650375791,
+          174.68223029651028,
+          72.0
+        ],
+        "segment": "led-06",
+        "target_mm": [
+          -103.65807650375791,
+          174.68223029651028,
+          76.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          -77.3500568260251,
+          303.797524927201,
+          108.0
+        ],
+        "segment": "led-14",
+        "target_mm": [
+          -77.3500568260251,
+          303.797524927201,
+          112.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          77.35005682602505,
+          303.797524927201,
+          108.0
+        ],
+        "segment": "led-15",
+        "target_mm": [
+          77.35005682602505,
+          303.797524927201,
+          112.0
+        ]
+      },
+      {
+        "host": "crown-right-armour-3",
+        "position_mm": [
+          103.65807650375793,
+          174.68223029651028,
+          72.0
+        ],
+        "segment": "led-07",
+        "target_mm": [
+          103.65807650375793,
+          174.68223029651028,
+          76.0
+        ]
+      },
+      {
+        "host": "crown-right-armour-3",
+        "position_mm": [
+          277.0239742801929,
+          218.15693205226722,
+          72.0
+        ],
+        "segment": "led-13",
+        "target_mm": [
+          277.0239742801929,
+          218.15693205226722,
+          76.0
+        ]
+      },
+      {
+        "host": "crown-right-armour-3",
+        "position_mm": [
+          410.454889796487,
+          119.00653718355707,
+          72.0
+        ],
+        "segment": "led-01",
+        "target_mm": [
+          410.454889796487,
+          119.00653718355707,
+          76.0
+        ]
+      },
+      {
+        "host": "jaw-right-armour-3",
+        "position_mm": [
+          341.70242700408073,
+          -101.26787892987375,
+          72.0
+        ],
+        "segment": "led-11",
+        "target_mm": [
+          341.70242700408073,
+          -101.26787892987375,
+          76.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          208.71323296833773,
+          1.5097255253308983,
+          108.0
+        ],
+        "segment": "led-09",
+        "target_mm": [
+          208.71323296833773,
+          1.5097255253308983,
+          112.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          30.869674114970728,
+          -137.55370829766417,
+          108.0
+        ],
+        "segment": "led-03",
+        "target_mm": [
+          30.869674114970728,
+          -137.55370829766417,
+          112.0
+        ]
+      },
+      {
+        "host": "head-armour-0",
+        "position_mm": [
+          -30.869674114970763,
+          -137.55370829766423,
+          108.0
+        ],
+        "segment": "led-02",
+        "target_mm": [
+          -30.869674114970763,
+          -137.55370829766423,
+          112.0
+        ]
+      },
+      {
+        "host": "jaw-right-armour-3",
+        "position_mm": [
+          378.81330361610793,
+          -249.6459895710168,
+          72.0
+        ],
+        "segment": "led-05",
+        "target_mm": [
+          378.81330361610793,
+          -249.6459895710168,
+          76.0
+        ]
+      },
+      {
+        "host": "crown-left-armour-3",
+        "position_mm": [
+          -277.0239742801929,
+          218.15693205226722,
+          72.0
+        ],
+        "segment": "led-12",
+        "target_mm": [
+          -277.0239742801929,
+          218.15693205226722,
+          76.0
+        ]
+      },
+      {
+        "host": "crown-left-armour-3",
+        "position_mm": [
+          -410.454889796487,
+          119.0065371835571,
+          72.0
+        ],
+        "segment": "led-00",
+        "target_mm": [
+          -410.454889796487,
+          119.0065371835571,
+          76.0
+        ]
+      }
+    ],
+    "replay_seconds": 30.488,
+    "replay_source_commit": "1fa76da",
+    "retention_revision": "checked-tie-path-v2",
+    "saved_json_replay": "PASS",
+    "segments": 16,
+    "stock_and_geometry_unchanged_on_replay": "PASS",
+    "strip_length_mm": 266.666672,
+    "support_revision": "triangular-symmetric-mounts-v3",
+    "symmetry": {
+      "exact_symmetry_guaranteed": true,
+      "group": "mirror-X",
+      "pair_attempts": 8,
+      "policy": "complete physical symmetry orbits; single bottom input exempt"
+    }
+  },
+  "radial-weave": {
+    "addressable_units": 24,
+    "assembly_seconds": 156.684,
+    "config": {
+      "backplate": {
+        "rotation_deg": 22.5,
+        "sides": 8
+      },
+      "cutting_bed": null,
+      "envelope": {
+        "depth_mm": 200,
+        "height_mm": 1000,
+        "width_mm": 1000
+      },
+      "grid": {
+        "edge_margin_mm": 15,
+        "hole_diameter_mm": 6.5,
+        "offset_mm": 25,
+        "origin_x_mm": 0,
+        "origin_y_mm": 0,
+        "pitch_x_mm": 50,
+        "pitch_y_mm": 43.30127018922193
+      },
+      "lighting": {
+        "clearance_mm": 0.5,
+        "current_per_led_ma": 60,
+        "enabled": true,
+        "injection_limit_a": 2,
+        "led_pitch_mm": 16.666667,
+        "max_segments": 24,
+        "segment_leds": 1,
+        "strip_thickness_mm": 2,
+        "strip_width_mm": 10,
+        "voltage_v": 5,
+        "wire_slack_mm": 50
+      },
+      "material": {
+        "clearance_mm": 0.2,
+        "finish": null,
+        "grade": null,
+        "measured_mm": 6,
+        "measurement_status": "assumed_unmeasured",
+        "nominal_mm": 6
+      },
+      "mounting": {
+        "hardware_outward_mm": 12,
+        "rear_clearance_mm": 10,
+        "root_half_span_mm": 43.30127018922193,
+        "washer_radius_mm": 9
+      },
+      "parameters": {
+        "amplitude_mm": 65,
+        "lobes": 3,
+        "opening_radius_mm": 180,
+        "radius_mm": 300,
+        "rib_permutation": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "ribs_per_module": 9,
+        "rotation_deg": 90
+      },
+      "schema_version": 2,
+      "style": "radial-weave",
+      "units": "mm"
+    },
+    "density": {
+      "achieved_segments": 24,
+      "capacity_limited": false,
+      "minimum_xy_separation_mm": 30.0,
+      "per_module": {
+        "a0": 2,
+        "a1": 2,
+        "a2": 2,
+        "a3": 2,
+        "a4": 2,
+        "a5": 2,
+        "b0": 2,
+        "b1": 2,
+        "b2": 2,
+        "b3": 2,
+        "b4": 2,
+        "b5": 2
+      },
+      "requested_max_segments": 24
+    },
+    "digital_valid": true,
+    "emitter_xyz_bounds_mm": [
+      [
+        -364.6780964848744,
+        -362.5660965973523,
+        82.0
+      ],
+      [
+        365.3343502071526,
+        363.07032817564885,
+        164.0
+      ]
+    ],
+    "export_seconds": 146.555,
+    "export_timing_note": "measured",
+    "exports": 245,
+    "geometry_source_commit": "1fa76da",
+    "hosts": [
+      "a3-rail",
+      "a3-rail",
+      "a2-rail",
+      "a2-rail",
+      "b2-rail",
+      "b2-rail",
+      "b1-rail",
+      "b1-rail",
+      "a1-rail",
+      "a1-rail",
+      "a0-rail",
+      "a0-rail",
+      "b0-rail",
+      "b0-rail",
+      "b5-rail",
+      "b5-rail",
+      "a5-rail",
+      "a5-rail",
+      "a4-rail",
+      "a4-rail",
+      "b4-rail",
+      "b4-rail",
+      "b3-rail",
+      "b3-rail"
+    ],
+    "image_interpretation": "geometry only; no simulated illumination",
+    "integrated_master": "2dc348d",
+    "physical_optical_electrical_thermal_Wire_Arena": "NOT RUN",
+    "placements": [
+      {
+        "host": "a3-rail",
+        "position_mm": [
+          -122.47464172377923,
+          -362.055595787678,
+          82.0
+        ],
+        "segment": "led-03",
+        "target_mm": [
+          -122.47464172377923,
+          -362.055595787678,
+          86.0
+        ]
+      },
+      {
+        "host": "a3-rail",
+        "position_mm": [
+          -113.55882928816182,
+          -307.94579459949466,
+          82.0
+        ],
+        "segment": "led-15",
+        "target_mm": [
+          -113.55882928816182,
+          -307.94579459949466,
+          86.0
+        ]
+      },
+      {
+        "host": "a2-rail",
+        "position_mm": [
+          -210.4405180495052,
+          -251.5681453470177,
+          164.0
+        ],
+        "segment": "led-14",
+        "target_mm": [
+          -210.4405180495052,
+          -251.5681453470177,
+          168.0
+        ]
+      },
+      {
+        "host": "a2-rail",
+        "position_mm": [
+          -245.16993401337814,
+          -282.0525062167756,
+          164.0
+        ],
+        "segment": "led-02",
+        "target_mm": [
+          -245.16993401337814,
+          -282.0525062167756,
+          168.0
+        ]
+      },
+      {
+        "host": "b2-rail",
+        "position_mm": [
+          -323.4400777133281,
+          -55.689631807708146,
+          82.0
+        ],
+        "segment": "led-08",
+        "target_mm": [
+          -323.4400777133281,
+          -55.689631807708146,
+          86.0
+        ]
+      },
+      {
+        "host": "b2-rail",
+        "position_mm": [
+          -364.6607896859119,
+          -70.28657205885278,
+          82.0
+        ],
+        "segment": "led-20",
+        "target_mm": [
+          -364.6607896859119,
+          -70.28657205885278,
+          86.0
+        ]
+      },
+      {
+        "host": "b1-rail",
+        "position_mm": [
+          -323.4753321924935,
+          55.61271132861905,
+          164.0
+        ],
+        "segment": "led-19",
+        "target_mm": [
+          -323.4753321924935,
+          55.61271132861905,
+          168.0
+        ]
+      },
+      {
+        "host": "b1-rail",
+        "position_mm": [
+          -364.6780964848744,
+          70.29456253688211,
+          164.0
+        ],
+        "segment": "led-07",
+        "target_mm": [
+          -364.6780964848744,
+          70.29456253688211,
+          168.0
+        ]
+      },
+      {
+        "host": "a1-rail",
+        "position_mm": [
+          -210.44051804950493,
+          251.56814534701806,
+          82.0
+        ],
+        "segment": "led-01",
+        "target_mm": [
+          -210.44051804950493,
+          251.56814534701806,
+          86.0
+        ]
+      },
+      {
+        "host": "a1-rail",
+        "position_mm": [
+          -245.1699340133776,
+          282.05250621677556,
+          82.0
+        ],
+        "segment": "led-13",
+        "target_mm": [
+          -245.1699340133776,
+          282.05250621677556,
+          86.0
+        ]
+      },
+      {
+        "host": "a0-rail",
+        "position_mm": [
+          -113.47167809898788,
+          307.9539944862201,
+          164.0
+        ],
+        "segment": "led-12",
+        "target_mm": [
+          -113.47167809898788,
+          307.9539944862201,
+          168.0
+        ]
+      },
+      {
+        "host": "a0-rail",
+        "position_mm": [
+          -122.48152796209749,
+          362.13100872167524,
+          164.0
+        ],
+        "segment": "led-00",
+        "target_mm": [
+          -122.48152796209749,
+          362.13100872167524,
+          168.0
+        ]
+      },
+      {
+        "host": "b0-rail",
+        "position_mm": [
+          112.70757676436767,
+          308.0253025949261,
+          82.0
+        ],
+        "segment": "led-18",
+        "target_mm": [
+          112.70757676436767,
+          308.0253025949261,
+          86.0
+        ]
+      },
+      {
+        "host": "b0-rail",
+        "position_mm": [
+          122.5673007503209,
+          363.07032817564885,
+          82.0
+        ],
+        "segment": "led-06",
+        "target_mm": [
+          122.5673007503209,
+          363.07032817564885,
+          86.0
+        ]
+      },
+      {
+        "host": "b5-rail",
+        "position_mm": [
+          210.0103343535737,
+          252.17563912272237,
+          164.0
+        ],
+        "segment": "led-11",
+        "target_mm": [
+          210.0103343535737,
+          252.17563912272237,
+          168.0
+        ]
+      },
+      {
+        "host": "b5-rail",
+        "position_mm": [
+          245.68571262272025,
+          282.41658295175625,
+          164.0
+        ],
+        "segment": "led-23",
+        "target_mm": [
+          245.68571262272025,
+          282.41658295175625,
+          168.0
+        ]
+      },
+      {
+        "host": "a5-rail",
+        "position_mm": [
+          323.56519733545576,
+          55.41649976044877,
+          82.0
+        ],
+        "segment": "led-05",
+        "target_mm": [
+          323.56519733545576,
+          55.41649976044877,
+          86.0
+        ]
+      },
+      {
+        "host": "a5-rail",
+        "position_mm": [
+          364.8442768760232,
+          70.37128734123453,
+          82.0
+        ],
+        "segment": "led-17",
+        "target_mm": [
+          364.8442768760232,
+          70.37128734123453,
+          86.0
+        ]
+      },
+      {
+        "host": "a4-rail",
+        "position_mm": [
+          322.9396656553112,
+          -56.75913964237347,
+          164.0
+        ],
+        "segment": "led-16",
+        "target_mm": [
+          322.9396656553112,
+          -56.75913964237347,
+          168.0
+        ]
+      },
+      {
+        "host": "a4-rail",
+        "position_mm": [
+          365.3343502071526,
+          -70.59755218625858,
+          164.0
+        ],
+        "segment": "led-04",
+        "target_mm": [
+          365.3343502071526,
+          -70.59755218625858,
+          168.0
+        ]
+      },
+      {
+        "host": "b4-rail",
+        "position_mm": [
+          210.01033435357368,
+          -252.17563912272243,
+          82.0
+        ],
+        "segment": "led-10",
+        "target_mm": [
+          210.01033435357368,
+          -252.17563912272243,
+          86.0
+        ]
+      },
+      {
+        "host": "b4-rail",
+        "position_mm": [
+          245.68571262272025,
+          -282.4165829517564,
+          82.0
+        ],
+        "segment": "led-22",
+        "target_mm": [
+          245.68571262272025,
+          -282.4165829517564,
+          86.0
+        ]
+      },
+      {
+        "host": "b3-rail",
+        "position_mm": [
+          112.2902351438982,
+          -308.0552162610258,
+          164.0
+        ],
+        "segment": "led-21",
+        "target_mm": [
+          112.2902351438982,
+          -308.0552162610258,
+          168.0
+        ]
+      },
+      {
+        "host": "b3-rail",
+        "position_mm": [
+          122.52125747058487,
+          -362.5660965973523,
+          164.0
+        ],
+        "segment": "led-09",
+        "target_mm": [
+          122.52125747058487,
+          -362.5660965973523,
+          168.0
+        ]
+      }
+    ],
+    "replay_seconds": 10.744,
+    "replay_source_commit": "1fa76da",
+    "retention_revision": "checked-tie-path-v2",
+    "saved_json_replay": "PASS",
+    "segments": 24,
+    "stock_and_geometry_unchanged_on_replay": "PASS",
+    "strip_length_mm": 400.000008,
+    "support_revision": "triangular-symmetric-mounts-v3",
+    "symmetry": {
+      "exact_symmetry_guaranteed": true,
+      "group": "none",
+      "pair_attempts": 0,
+      "policy": "complete physical symmetry orbits; single bottom input exempt"
+    }
+  },
+  "rib-study": {
+    "addressable_units": 5,
+    "assembly_seconds": 6.735,
+    "config": {
+      "backplate": {
+        "rotation_deg": 22.5,
+        "sides": 8
+      },
+      "cutting_bed": null,
+      "envelope": {
+        "depth_mm": 200,
+        "height_mm": 1000,
+        "width_mm": 1000
+      },
+      "grid": {
+        "edge_margin_mm": 15,
+        "hole_diameter_mm": 6.5,
+        "offset_mm": 25,
+        "origin_x_mm": 0,
+        "origin_y_mm": 0,
+        "pitch_x_mm": 50,
+        "pitch_y_mm": 43.30127018922193
+      },
+      "lighting": {
+        "clearance_mm": 0.5,
+        "current_per_led_ma": 60,
+        "enabled": true,
+        "injection_limit_a": 2,
+        "led_pitch_mm": 16.666667,
+        "max_segments": 8,
+        "segment_leds": 1,
+        "strip_thickness_mm": 2,
+        "strip_width_mm": 10,
+        "voltage_v": 5,
+        "wire_slack_mm": 50
+      },
+      "material": {
+        "clearance_mm": 0.2,
+        "finish": null,
+        "grade": null,
+        "measured_mm": 6,
+        "measurement_status": "assumed_unmeasured",
+        "nominal_mm": 6
+      },
+      "mounting": {
+        "hardware_outward_mm": 12,
+        "rear_clearance_mm": 10,
+        "root_half_span_mm": 43.30127018922193,
+        "washer_radius_mm": 9
+      },
+      "parameters": {
+        "placements": [
+          {
+            "angle_deg": 0,
+            "closure_instance_id": null,
+            "module_id": "m1",
+            "rib_instance_ids": [],
+            "rib_order": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "spine_instance_ids": [],
+            "station_indices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "x_mm": 25,
+            "y_mm": 0
+          }
+        ],
+        "recipe": {
+          "joint_datum_mm": 45,
+          "length_mm": 300,
+          "rib_bottom_mm": 10,
+          "rib_top_mm": 116,
+          "rib_widths_mm": [
+            130,
+            160,
+            190,
+            160
+          ],
+          "spine_height_mm": 80,
+          "spine_separation_mm": 60,
+          "stations_mm": [
+            70,
+            130,
+            190,
+            250
+          ]
+        }
+      },
+      "schema_version": 2,
+      "style": "rib-study",
+      "units": "mm"
+    },
+    "density": {
+      "achieved_segments": 5,
+      "capacity_limited": true,
+      "minimum_xy_separation_mm": 30.0,
+      "per_module": {
+        "m1": 5
+      },
+      "requested_max_segments": 8
+    },
+    "digital_valid": true,
+    "emitter_xyz_bounds_mm": [
+      [
+        11.95620718344719,
+        -50.30127018922193,
+        128.0
+      ],
+      [
+        69.82086334961677,
+        50.30127018922193,
+        128.0
+      ]
+    ],
+    "export_seconds": 30.054,
+    "export_timing_note": "measured",
+    "exports": 60,
+    "geometry_source_commit": "1fa76da",
+    "hosts": [
+      "m1-closure",
+      "m1-closure",
+      "m1-closure",
+      "m1-closure",
+      "m1-closure"
+    ],
+    "image_interpretation": "geometry only; no simulated illumination",
+    "integrated_master": "2dc348d",
+    "physical_optical_electrical_thermal_Wire_Arena": "NOT RUN",
+    "placements": [
+      {
+        "host": "m1-closure",
+        "position_mm": [
+          11.95620718344719,
+          -50.30127018922193,
+          128.0
+        ],
+        "segment": "led-01",
+        "target_mm": [
+          11.95620718344719,
+          -50.30127018922193,
+          132.0
+        ]
+      },
+      {
+        "host": "m1-closure",
+        "position_mm": [
+          68.32118390541245,
+          -50.30127018922193,
+          128.0
+        ],
+        "segment": "led-03",
+        "target_mm": [
+          68.32118390541245,
+          -50.30127018922193,
+          132.0
+        ]
+      },
+      {
+        "host": "m1-closure",
+        "position_mm": [
+          13.0,
+          -13.768411857797943,
+          128.0
+        ],
+        "segment": "led-04",
+        "target_mm": [
+          13.0,
+          -13.768411857797943,
+          132.0
+        ]
+      },
+      {
+        "host": "m1-closure",
+        "position_mm": [
+          13.0,
+          23.808239290178868,
+          128.0
+        ],
+        "segment": "led-02",
+        "target_mm": [
+          13.0,
+          23.808239290178868,
+          132.0
+        ]
+      },
+      {
+        "host": "m1-closure",
+        "position_mm": [
+          69.82086334961677,
+          50.30127018922193,
+          128.0
+        ],
+        "segment": "led-00",
+        "target_mm": [
+          69.82086334961677,
+          50.30127018922193,
+          132.0
+        ]
+      }
+    ],
+    "replay_seconds": 0.893,
+    "replay_source_commit": "1fa76da",
+    "retention_revision": "checked-tie-path-v2",
+    "saved_json_replay": "PASS",
+    "segments": 5,
+    "stock_and_geometry_unchanged_on_replay": "PASS",
+    "strip_length_mm": 83.333335,
+    "support_revision": "triangular-symmetric-mounts-v3",
+    "symmetry": {
+      "exact_symmetry_guaranteed": true,
+      "group": "none",
+      "pair_attempts": 0,
+      "policy": "complete physical symmetry orbits; single bottom input exempt"
+    }
+  }
+}

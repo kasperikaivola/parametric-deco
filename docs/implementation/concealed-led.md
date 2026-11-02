@@ -160,10 +160,10 @@ work where geometry permits. Candidates maintain at least 30 mm XY spacing
 
 | Example style | Segments / addressable units | Spatial coverage |
 | --- | ---: | --- |
-| laminar | up to 18 / 18 | Repeated carriers across six independent lobe plates |
-| layered-creature | up to 16 / 16 | Mirrored carriers on head plus all four limb stacks |
-| radial-weave | up to 24 / 24 | Multiple short strips across twelve curved modules on both strands |
-| rib-study | up to 8 / 8 | Separated carriers around the broad closure |
+| laminar | 18 / 18 | Three carriers per each of six lobe plates |
+| layered-creature | 16 / 16 | Head six, crown limbs three each, jaw limbs two each |
+| radial-weave | 24 / 24 | Two short strips per each of twelve modules on both strands |
+| rib-study | 5 / 5 (requested ceiling 8) | Five separated carriers on available broad closure material; capacity limited |
 
 Actual positions and XYZ spans are recorded in `concealed-led-evidence.json`.
 Coverage refers to mechanical placement, not measured light spread. Individual
@@ -178,3 +178,21 @@ The per-module minimum remains mandatory; an unsupported module rejects the buil
 | Front | ![](images/concealed-led/laminar/front.png) | ![](images/concealed-led/layered-creature/front.png) | ![](images/concealed-led/radial-weave/front.png) | ![](images/concealed-led/rib-study/front.png) |
 | Oblique | ![](images/concealed-led/laminar/oblique.png) | ![](images/concealed-led/layered-creature/oblique.png) | ![](images/concealed-led/radial-weave/oblique.png) | ![](images/concealed-led/rib-study/oblique.png) |
 | Local section | ![](images/concealed-led/laminar/lighting-section.png) | ![](images/concealed-led/layered-creature/lighting-section.png) | ![](images/concealed-led/radial-weave/lighting-section.png) | ![](images/concealed-led/rib-study/lighting-section.png) |
+| Input tie path | ![](images/concealed-led/laminar/lighting-input-section.png) | ![](images/concealed-led/layered-creature/lighting-input-section.png) | ![](images/concealed-led/radial-weave/lighting-input-section.png) | ![](images/concealed-led/rib-study/lighting-input-section.png) |
+
+Final retained exports and JSON replay passed for all four examples. Rib study
+explicitly reports `capacity_limited=true`: narrow rails and standing structure
+leave five supported carrier locations, not eight. Its available wide closure
+region limits longitudinal coverage; the exact XYZ spans in the evidence record
+make that limitation visible. All 16 front/oblique/strip/input images were inspected.
+
+The final JSON guard normalizes both Python and NumPy numeric scalars to the same
+eight decimal places, including signed zero. It preserves exact part fingerprints;
+no tolerance increase is used. The dense creature example is included in actual
+JSON replay tests. Successful existing geometry exports were preserved: creature's
+old numeric inventory hash was corrected only after product replay confirmed exact
+stock/poses and unchanged physical geometry, then only hash-bearing files changed.
+
+Final full pytest, CLI examples and native GUI checks are owned by parent GitHub CI;
+local verification includes focused regressions, all-style placement/replay, complete
+retained builds, manifest hashes, spacing checks, Ruff and viewer JS syntax.
