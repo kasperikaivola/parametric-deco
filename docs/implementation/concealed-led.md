@@ -7,7 +7,9 @@ base part polygons, revisions, joints and backing holes remain unchanged.
 Enable it in JSON, or expand `lighting` in the desktop parameter tree, edit
 `enabled` to `true`, and validate/preview/export as usual. Opening an old JSON
 request fills shared defaults in the tree. The desktop JSON editor exposes the
-same controls. No separate lighting-only generation mode is necessary.
+same controls. Its tree overlays JSON-compatible defaults while preserving raw
+invalid fields, so tuple-backed array settings remain editable lists and a bad
+value can be corrected in the tree. Preview/export still require validation. No separate lighting-only generation mode is necessary.
 
 ```sh
 PYTHONPATH=src python -m parametric_deco.cli build examples/laminar-led.json --out build/laminar-led
@@ -33,7 +35,8 @@ PYTHONPATH=src python -m parametric_deco.cli build examples/rib-study-led.json -
 All numeric settings must be finite and positive. Enabled segments must be at
 least 12 mm long to accommodate both retaining ties. For 12/24 V grouped strips,
 count and pitch refer to the addressable CUT UNIT; set its actual current.
-Manufactured stock thickness must exceed strip thickness by at least clearance.
+Manufactured stock thickness must accommodate strip thickness + 1 mm tie body
++ requested clearance (6 mm stock / 0.5 mm clearance permits <=4.5 mm strip).
 The strip's real cut interval and component/tie locations still require checking.
 Long segments and wide strips must fit, otherwise generation fails with a module
 and an actionable sizing/geometry message. Small envelopes may have no supported
@@ -53,7 +56,10 @@ Each removable carrier has five plywood parts, all in the measured stock:
 a rear tray, two end bearing pads and two front jaws. Two outside-edge M3 bolts
 compress the jaws/pads onto the existing host edge without drilling it. Two
 reusable ties pass through paired 3 x 2 mm tray slots and hold the strip against
-the tray. Extra 3 x 2 mm jaw slots retain short cable service loops. M3 holes are
+the tray. Extra 3 x 2 mm jaw slots retain short cable service loops. Supported ties have
+body <=2.5 x 1 mm and locking head <=5 x 5 x 3 mm, with heads behind the tray.
+Full upper/rear returns, through-slot legs and heads are checked as purchased
+envelopes against real wood/obstacles and total envelope; previews show them. M3 holes are
 3.4 mm nominal; washers must have OD <=7 mm. Bolt lengths round UP to 5 mm steps,
 including a 7 mm nut/washer/thread allowance, with rear-to-front insertion.
 Conservative 7 mm diameter hardware envelopes are checked and exported; they
@@ -91,8 +97,12 @@ The CAD images are not simulated illumination and promise no brightness/uniformi
 
 ## Single input, connections and BOM
 
-A three-piece removable cable clamp grips the bottom backplate edge. Two ties
-provide strain relief for one external V+/DATA/GND cable and purchased inline
+A three-piece removable cable clamp grips the bottom backplate edge. Its four
+2 x 3 mm slots lie outside intact board at Y=-8/-3 mm, paired at X=-5/+5 mm.
+Two ties wrap an incoming <=5 mm diameter cable along Y; heads sit behind tray.
+The full cable/tie/head paths clear the board without adding rear spacers, so
+the default 10 mm rear clearance remains supported. A dedicated input section
+shows this stack. Two ties provide strain relief for one external V+/DATA/GND cable and purchased inline
 connector. Internal power feeds all originate from that same input. Deterministic
 nearest-neighbour ordering links controller DATA to first DIN, then each DOUT to
 next DIN. This data input is not a firmware programming port. Separate fused
@@ -115,7 +125,9 @@ A fingerprinted `lighting_supplement` lives alongside the original inventory
 layout. The original style layout/fingerprint is unchanged inside it. Before
 style replay the supplement is separated; exact saved definitions and instances
 are validated and reattached without generating supplemental cuts. Saved JSON
-roundtrips are supported. Pose identity compares physical stock/placements to 1e-8 mm precision and ignores
+roundtrips are supported. Inventories before the checked-tie-path retention
+revision require explicit new supplemental cuts when relighting; their stock
+is never silently changed. Pose identity compares physical stock/placements to 1e-8 mm precision and ignores
 recomputed support evidence; exact part geometry fingerprints are retained. This
 permits the universal mounting replay's ~1e-13 mm floating-point roundoff without
 accepting meaningful placement changes. Lighting settings or host placement changes reject

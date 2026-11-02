@@ -201,3 +201,71 @@ def test_density_preserves_actual_rotational_carrier_material():
     assert not verify_symmetry(lamps,c)
     assert len(b.assembly.lighting['segments']) == 6
     assert b.assembly.lighting['density']['capacity_limited']
+
+
+def _retention_fixture(strip_thickness=2):
+    from shapely.geometry import box
+    from parametric_deco.model import Assembly, PartDefinition, PartInstance
+    from parametric_deco.lighting import _candidate
+    part = PartDefinition.from_polygon('flat-host', box(-100,-80,100,80),6)
+    host = PartInstance('host',part.definition_id,part.revision,
+                       ((1,0,0,0),(0,1,0,0),(0,0,1,60),(0,0,0,1)),role='armour')
+    a = Assembly((part,),(host,),envelope_mm=(400,400,100))
+    c = config_from_dict({'style':'rib-study','lighting':{'enabled':True,
+                          'strip_thickness_mm':strip_thickness,'max_segments':2}})
+    from shapely.geometry import Point
+    distance = part.polygon.exterior.project(Point(0,-80))
+    return a,host,c,distance,_candidate
+
+
+@pytest.mark.parametrize('board_z',[10,20])
+def test_f1_input_slots_and_full_ties_clear_intact_board(board_z):
+    from parametric_deco.validation import xy_footprint
+    from parametric_deco.cad import overlap_volume
+    from shapely.geometry import Polygon
+    a,host,c,distance,candidate = _retention_fixture()
+    pose=np.array(host.transform)
+    pose[2,3]=board_z
+    host=replace(host,transform=pose)
+    a=replace(a,instances=(host,))
+    ds,ins,s = candidate(a,host,c,distance,0,input_anchor=True)
+    tray = ds[0]
+    board = a.definition_for(host)
+    # Both exits of every strain-relief slot must be exposed outside intact board.
+    slot_parts = [type(tray).from_polygon('slot',Polygon(h),1)
+                  for h in tray.holes if abs(Polygon(h).area-6) < 1e-6]
+    assert len(slot_parts) == 4
+    assert all(xy_footprint(p,ins[0].transform).intersection(
+        xy_footprint(board,host.transform)).area < 1e-8 for p in slot_parts)
+    from parametric_deco.lighting import retention_geometry
+    envelopes = retention_geometry(s)
+    assert any(p.kind == 'tie-head' for _,p in envelopes)
+    assert any(p.kind == 'input-cable' for _,p in envelopes)
+    assert all(overlap_volume(p,i.transform,board,host.transform) < 1e-8
+               for i,p in envelopes)
+    assert all(overlap_volume(p,i.transform,wood,inst.transform) < 1e-8
+               for i,p in envelopes for inst,wood in zip(ins,ds))
+
+
+def test_f2_strip_thickness_reserves_tie_and_clearance():
+    a,host,c,distance,candidate = _retention_fixture(5.5)
+    with pytest.raises(ValueError,match='tie'):
+        candidate(a,host,c,distance,0)
+
+
+@pytest.mark.parametrize('depth,y0,y1',[(12.5,5,21),(14.5,2.5,7.5)])
+def test_f2_rear_return_and_head_are_collision_checked(depth,y0,y1):
+    from parametric_deco.lighting import _hardware_clear, _clear
+    from parametric_deco.model import PartDefinition,PartInstance
+    from shapely.geometry import box
+    a,host,c,distance,candidate = _retention_fixture(4.5)
+    ds,ins,s = candidate(a,host,c,distance,0)
+    # Half-mm obstacle immediately behind tray: wood clears, rear tie does not.
+    obstacle = PartDefinition.from_polygon('obstacle',box(-1.25,y0,1.25,y1),.5)
+    pose=np.array(s['carrier_frame'])
+    pose[:3,3]-=pose[:3,2]*depth
+    # Align with the first real tie rather than a schematic centre line.
+    pose[:3,3]+=pose[:3,0]*(-s['strip_length_mm']/2+3)
+    other = PartInstance('obstacle','obstacle',obstacle.revision,pose)
+    assert _clear(a,{d.definition_id:d for d in ds},ins,[(other,obstacle)])
+    assert not _hardware_clear(a,s,[(host,a.definition_for(host)),(other,obstacle)])

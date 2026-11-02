@@ -17,6 +17,11 @@ from .geometry.symmetry import kind as symmetry_kind, matrices, mapped_id, canon
 
 KEY = 'lighting_supplement'
 ROLES = {'led-tray', 'led-pad', 'led-jaw', 'led-input'}
+RETENTION_REVISION = 'checked-tie-path-v2'
+TIE_WIDTH = 2.5
+TIE_THICKNESS = 1.0
+TIE_HEAD = (5.0, 5.0, 3.0)
+INPUT_CABLE_DIAMETER = 5.0
 
 
 def prepare_inventory(config, inventory):
@@ -32,6 +37,10 @@ def prepare_inventory(config, inventory):
         return inventory, None
     if digest({k: v for k, v in saved.items() if k != 'fingerprint'}) != saved['fingerprint']:
         raise ValueError('lighting inventory supplement fingerprint mismatch')
+    if (config.lighting.enabled and
+            saved['metadata'].get('retention_revision') != RETENTION_REVISION):
+        raise ValueError('lighting inventory retention predates verified tie paths; '
+                         'generate new supplemental cuts')
     ids = set(saved['instance_ids'])
     parts = {(i.definition_id, i.revision) for i in inventory.instances if i.instance_id in ids}
     actual = Inventory(tuple(d for d in inventory.definitions
@@ -85,6 +94,67 @@ def _clear(assembly, definitions, instances, existing):
     return True
 
 
+def _retention_spec(stock, length, width, strip_thickness, input_anchor):
+    envelopes = []
+
+    def add(kind, bounds):
+        envelopes.append({'kind': kind, 'local_bounds_mm': list(bounds)})
+
+    if input_anchor:
+        rear, upper = -stock, INPUT_CABLE_DIAMETER
+        add('input-cable', (-2.5, -12, 0, 2.5, -.5, upper))
+        for y in (-8, -3):
+            add('tie-upper', (-5.5, y-TIE_WIDTH/2, upper,
+                              5.5, y+TIE_WIDTH/2, upper+TIE_THICKNESS))
+            add('tie-rear', (-5.5, y-TIE_WIDTH/2, rear-TIE_THICKNESS,
+                             5.5, y+TIE_WIDTH/2, rear))
+            for x in (-5, 5):
+                add('tie-leg', (x-TIE_THICKNESS/2, y-TIE_WIDTH/2, rear-TIE_THICKNESS,
+                                x+TIE_THICKNESS/2, y+TIE_WIDTH/2, upper+TIE_THICKNESS))
+            add('tie-head', (-5-TIE_HEAD[0]/2, y-TIE_HEAD[1]/2, rear-TIE_HEAD[2],
+                             -5+TIE_HEAD[0]/2, y+TIE_HEAD[1]/2, rear))
+    else:
+        rear, upper = -2*stock, -stock+strip_thickness
+        for x in (-length/2+3, length/2-3):
+            add('tie-upper', (x-TIE_WIDTH/2, 4.5, upper,
+                              x+TIE_WIDTH/2, 11.5+width, upper+TIE_THICKNESS))
+            add('tie-rear', (x-TIE_WIDTH/2, 4.5, rear-TIE_THICKNESS,
+                             x+TIE_WIDTH/2, 11.5+width, rear))
+            for y in (5, 11+width):
+                add('tie-leg', (x-TIE_WIDTH/2, y-TIE_THICKNESS/2, rear-TIE_THICKNESS,
+                                x+TIE_WIDTH/2, y+TIE_THICKNESS/2, upper+TIE_THICKNESS))
+            add('tie-head', (x-TIE_HEAD[0]/2, 5-TIE_HEAD[1]/2, rear-TIE_HEAD[2],
+                             x+TIE_HEAD[0]/2, 5+TIE_HEAD[1]/2, rear))
+    return {'revision': RETENTION_REVISION, 'input_anchor': input_anchor,
+            'tie_width_mm': TIE_WIDTH, 'tie_thickness_mm': TIE_THICKNESS,
+            'tie_head_max_mm': list(TIE_HEAD),
+            'cable_diameter_max_mm': INPUT_CABLE_DIAMETER if input_anchor else None,
+            'envelopes': envelopes}
+
+
+def retention_geometry(segment):
+    """Purchased tie/cable bounding solids: preview and clearance, never cut inventory."""
+    result = []
+    for n, record in enumerate(segment['retention']['envelopes']):
+        x0, y0, z0, x1, y1, z1 = record['local_bounds_mm']
+        name = segment['segment_id']+f'-retention-{n}'
+        part = PartDefinition.from_polygon(name, box(x0,y0,x1,y1), z1-z0,
+                                           kind=record['kind'])
+        pose = np.asarray(segment['carrier_frame']).copy()
+        pose[:3, 3] += pose[:3, 2]*z0
+        inst = PartInstance(name, name, part.revision, tuple(map(tuple, pose)),
+                            segment.get('module_id', 'backing'),
+                            'led-cable' if record['kind'] == 'input-cable' else 'led-tie')
+        result.append((inst, part))
+    return result
+
+
+def _retention_clear(assembly, segment, existing):
+    geometry = retention_geometry(segment)
+    return _clear(assembly, {p.definition_id:p for _,p in geometry},
+                   [i for i,_ in geometry], existing)
+
+
 def _candidate(assembly, host, config, distance, index, input_anchor=False):
     part = assembly.definition_for(host)
     polygon = part.polygon
@@ -105,8 +175,9 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
     stock = config.material.measured_mm
     width = config.lighting.strip_width_mm
     gap = stock - config.lighting.strip_thickness_mm
-    if not input_anchor and gap < config.lighting.clearance_mm:
-        raise ValueError('lighting strip thickness + clearance must fit one stock thickness')
+    if not input_anchor and gap < TIE_THICKNESS + config.lighting.clearance_mm:
+        raise ValueError('lighting strip thickness + 1 mm tie body + clearance must fit '
+                         'one stock thickness; reduce strip_thickness_mm')
     depth = width + 15 if not input_anchor else 16
     half = length/2
     pose = _pose(host, p.x, p.y, u, v, 0)
@@ -135,8 +206,8 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
     slots = [box(x-1.5, y-1, x+1.5, y+1)
              for x in (-half+3, half-3) for y in (5, 11+width)]
     if input_anchor:
-        slots = [box(x-1.5, y-1, x+1.5, y+1)
-                 for x in (-5, 5) for y in (3, 12)]
+        slots = [box(x-1, y-1.5, x+1, y+1.5)
+                 for x in (-5, 5) for y in (-8, -3)]
     for slot in slots:
         tray = tray.difference(slot)
     name = 'led-input' if input_anchor else f'led-{index:02d}'
@@ -166,7 +237,7 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
     emitter = _point(pose, (0, 8+width/2, -gap))
     target = _point(pose, (0, 8+width/2, 0))
     if input_anchor:
-        emitter = _point(pose, (0, 4, part.thickness_mm+stock))
+        emitter = _point(pose, (0, -6, INPUT_CABLE_DIAMETER/2))
     min_bolt = part.thickness_mm + (2 if input_anchor else 3)*stock + 7
     bolt_length = 5*math.ceil(min_bolt/5)
     tray_rear = -stock if input_anchor else -2*stock
@@ -186,10 +257,15 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
         'strip_start_mm': _point(pose, (-half, 8+width/2, -gap)),
         'strip_end_mm': _point(pose, (half, 8+width/2, -gap)),
         'bolt_length_min_mm': min_bolt, 'bolt_envelopes': bolt_envelopes,
+        'retention': _retention_spec(stock, length, width,
+                                    config.lighting.strip_thickness_mm, input_anchor),
         'checks': {'full_emitter_footprint_hits_host': not input_anchor,
                    'front_occluded_by_host': not input_anchor,
                    'solid_clearance': True},
     }
+    if not _retention_clear(assembly, segment, [(host, part), *zip(instances, definitions)]):
+        return None
+    segment['checks']['retention_body_head_cable_clear'] = True
     return definitions, instances, segment
 
 
@@ -205,7 +281,7 @@ def _hardware_clear(assembly, segment, existing):
                             tuple(map(tuple, pose)))
         if not _clear(assembly, {part.definition_id: part}, [inst], existing):
             return False
-    return True
+    return _retention_clear(assembly, segment, existing)
 
 
 def _emission_clear(assembly, segment, config, existing):
@@ -359,8 +435,11 @@ def _generate(config, assembly):
     if anchor is None:
         raise ValueError('lighting: bottom input clamp cannot fit envelope/rear clearance')
     for segment in segments:
-        if not _emission_clear(assembly, segment, config, existing):
+        if (not _emission_clear(assembly, segment, config, existing) or
+                not _retention_clear(assembly, segment, existing)):
             raise ValueError('lighting: completed carrier placement blocks an emitter corridor')
+    if not _retention_clear(assembly, anchor, existing):
+        raise ValueError('lighting: bottom input tie/head/cable clearance blocked')
     # Stable nearest-neighbour serial route from the single input.
     pending = list(segments)
     ordered, jumpers = [], []
@@ -408,6 +487,7 @@ def _generate(config, assembly):
                       'fuse': 'select below wire/connector rating and above normal load'})
     metadata = {
         'schema_version': 1, 'units': 'mm', 'config': asdict(light), 'segments': ordered,
+        'retention_revision': RETENTION_REVISION,
         'density': {'requested_max_segments': light.max_segments,
                     'achieved_segments': len(ordered), 'per_module': counts,
                     'minimum_xy_separation_mm': separation,
@@ -419,6 +499,8 @@ def _generate(config, assembly):
         'data_route': [s['segment_id'] for s in ordered], 'jumpers': jumpers,
         'input': {'position_mm': anchor['emitter_position_mm'], 'signals': ['V+', 'DATA', 'GND'],
                   'part_instances': anchor['part_instances'], 'host_instance': backing.instance_id,
+                  'segment_id': anchor['segment_id'], 'carrier_frame': anchor['carrier_frame'],
+                  'retention': anchor['retention'],
                   'bolt_envelopes': anchor['bolt_envelopes'],
                   'strain_relief': 'two reusable cable ties through input tray slots',
                   'port_semantics': 'controller serial pixel data input; NOT firmware programming'},
@@ -437,7 +519,8 @@ def _generate(config, assembly):
              'note': 'two per clamp; length includes 7 mm for washers/nut/thread; verify stock'},
             {'item': 'M3 locking nuts', 'quantity': 2*(len(segments)+1)},
             {'item': 'M3 flat washers, OD 7 mm maximum', 'quantity': 4*(len(segments)+1)},
-            {'item': 'reusable ties, width <= 2.5 mm, thickness <= 1 mm',
+            {'item': 'reusable ties, body <= 2.5 x 1 mm, locking head <= 5 x 5 x 3 mm',
+             'head_placement': 'behind tray at first slot; input slots outside board',
              'minimum_length_mm': max(100, 10*math.ceil((2*(light.strip_width_mm+6+
                  config.material.measured_mm+light.strip_thickness_mm)+20)/10)),
              'quantity': 2*(len(segments)+1)},
@@ -531,4 +614,8 @@ def preview_assembly(assembly):
         instances.append(PartInstance(part.definition_id, part.definition_id, part.revision,
                                        tuple(map(tuple, pose)), next(i.module_id for i in assembly.instances
                     if i.instance_id == segment['host_instance']), 'led-strip'))
+    for clamp in [*assembly.lighting['segments'], assembly.lighting['input']]:
+        for inst, part in retention_geometry(clamp):
+            definitions.append(part)
+            instances.append(inst)
     return replace(assembly, definitions=tuple(definitions), instances=tuple(instances))

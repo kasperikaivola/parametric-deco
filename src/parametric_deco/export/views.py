@@ -79,6 +79,8 @@ def render_views(assembly, out_dir, views=None):
     cached = {(d.definition_id, d.revision): mesh_for(d) for d in assembly.definitions}
     colors = {
         "led-strip": (240, 210, 60),
+        "led-tie": (210, 213, 216),
+        "led-cable": (70, 80, 90),
         "led-tray": (80, 145, 160),
         "led-pad": (70, 120, 145),
         "led-jaw": (80, 145, 160),

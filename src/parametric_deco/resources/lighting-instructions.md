@@ -5,6 +5,7 @@ any base plywood. Match every part ID and host to `lighting-routing.json`.
 Front and oblique CAD views show geometry and purchased-strip dimensional proxies;
 they are NOT simulated illumination. `views/lighting-section.png` shows an actual
 local cross section and cut contour for the first clamp.
+`views/lighting-input-section.png` shows the exposed bottom tie/cable path.
 
 ## Mechanical installation
 
@@ -18,9 +19,11 @@ stock and verify actual nut engagement and protrusion. Use washers no larger tha
 7 mm OD. Nominal bolt holes are 3.4 mm; laser kerf compensation belongs in CAM.
 
 Lay the strip flat on the rear tray, emitters facing the host underside (+Z).
-Two reusable ties (<=2.5 mm wide, <=1 mm thick, length at least the BOM minimum; 100 mm for defaults) thread through the
+Use reusable ties with body <=2.5 x 1 mm and locking head <=5 x 5 x 3 mm.
+Length must meet the BOM minimum (100 mm for defaults). Two ties thread through the
 paired 3 x 2 mm tray slots and wrap OVER the strip at its ends. Move ties onto
-non-emitting cut-pad areas and solder leads without covering emitters or shorting
+non-emitting cut-pad areas, place locking heads BEHIND the tray at the first
+slot row, and solder leads without covering emitters or shorting
 pads. LED pitch alone cannot describe real component footprints: check the actual
 strip and its marked cut intervals before cutting. No adhesive is required for
 retention. Replace ties or alter purchased strip if component positions obstruct
@@ -28,8 +31,12 @@ them; do not claim fit without checking. Cable ties through jaw anchor holes can
 secure short service loops; disconnect leads before removing a sculptural module.
 
 Mount the input clamp on the bottom backplate edge: rear tray and front jaws
-bear directly on the board (no spacer pads). Two reusable ties provide cable
-strain relief. Fit a purchased inline connector/cable; no PCB/connector is
+bear directly on the board (no spacer pads). The paired 2 x 3 mm slots are
+OUTSIDE the board at local Y=-8/-3 mm and X=-5/+5 mm. Two ties wrap a cable up
+to 5 mm diameter along Y, with heads behind the tray. Both slot exits and the
+front cable loop/rear tie return are exposed, not trapped against the board.
+Route leads around the board edge with a service loop before dressing inward.
+No extra stock thickness is added behind the board, preserving 10 mm rear defaults. Fit a purchased inline connector/cable; no PCB/connector is
 manufactured by this generator. All power, data and ground enter here.
 
 ## Wiring and electrical selection
@@ -77,7 +84,11 @@ References:
 
 The full strip footprint is checked against intact host plywood with a positive
 front shield margin. Solid clamp collisions, envelope and root hardware proxies
-are checked digitally. Emission aims at the host UNDERSIDE, not the wall or
+are checked digitally. Fixed maximum tie bodies/heads, rear returns and the
+input cable envelope are also checked against board, artwork and total envelope.
+Strip thickness + 1 mm tie body + requested clearance must fit the stock:
+with 6 mm stock and 0.5 mm clearance, maximum strip thickness is 4.5 mm.
+Emission aims at the host UNDERSIDE, not the wall or
 backplate. Direct front-face lighting is not guaranteed; front faces may stay
 dark, and oblique observers may see LEDs through open carrier ends. This design
 needs optical prototyping; it is not a photometric or thermal simulation.
@@ -98,3 +109,6 @@ thus be distributed around fins instead of requiring a long colliding strip.
 Laminar and creature carrier geometry follows complete physical symmetry groups;
 the single bottom cable input is intentionally exempt. This is mechanical coverage,
 not a prediction of uniform illumination or brightness.
+
+Inventories predating verified tie paths are rejected when relighting; generate
+explicit supplemental new cuts. Disabling still preserves their physical inventory.

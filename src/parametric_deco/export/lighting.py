@@ -12,6 +12,7 @@ def export_lighting(assembly, out):
     (out / 'lighting-instructions.md').write_text(
         resources.files('parametric_deco.resources').joinpath('lighting-instructions.md').read_text())
     render_section(assembly, out / 'views' / 'lighting-section.png')
+    render_input_section(assembly, out / 'views' / 'lighting-input-section.png')
 
 
 def render_section(assembly, path):
@@ -42,17 +43,14 @@ def render_section(assembly, path):
                        outline='white')
 
     rect(0, 0, width+22, host.thickness_mm, '#c99d66')
-    rect(-12, -2*stock, width+15, -stock, '#508fa0')
+    # Section through a real end tie: the vertical legs use actual tray slots.
+    for y0,y1 in ((-12,4),(6,10+width),(12+width,15+width)):
+        rect(y0,-2*stock,y1,-stock,'#508fa0')
     rect(8, -stock, 8+width, -stock+thick, '#f0d23c')
-    tie = [(5, -2*stock-.8), (5, -stock+thick+.8),
-           (11+width, -stock+thick+.8), (11+width, -2*stock-.8),
-           (5, -2*stock-.8)]
-    draw.line([(ox+y*scale, oy-z*scale) for y, z in tie], fill='#eee9da', width=3)
-    start = (ox+(8+width/2)*scale, oy+(stock-thick)*scale)
-    end = (start[0], oy)
-    draw.line((start, end), fill='#f0d23c', width=3)
-    draw.polygon((end, (end[0]-5, end[1]+8), (end[0]+5, end[1]+8)), fill='#f0d23c')
-    draw.text((35, 150), 'Mid-span section: strip faces +Z into plywood underside',
+    for record in s['retention']['envelopes'][:5]:
+        _,y0,z0,_,y1,z1 = record['local_bounds_mm']
+        rect(y0,z0,y1,z1,'#d2d5d8')
+    draw.text((35, 150), 'Strip-end tie section: adjacent LED faces +Z into plywood',
               font=font, fill='white')
     draw.text((35, 190), f'Host {host.thickness_mm:g} mm; carrier stock {stock:g} mm',
               font=font, fill='white')
@@ -79,12 +77,50 @@ def render_section(assembly, path):
         draw.polygon(points(hole), fill='#12151b', outline='white')
     draw.text((750, 150), 'Actual tray cut contour and tie slots', font=font, fill='white')
     draw.text((750, 550), 'Two end ties wrap over strip via paired slots.', font=font, fill='white')
-    draw.text((750, 585), '2 x M3 bolts + locking nuts; 4 washers.', font=font, fill='white')
+    draw.text((750, 585), 'Tie body <=2.5 x 1; head <=5 x 5 x 3 mm.', font=font, fill='white')
     draw.text((750, 620), f'Bolt length >= {s["bolt_length_min_mm"]:g} mm;',
               font=font, fill='white')
-    draw.text((750, 655), 'round UP to available length (see BOM).', font=font, fill='white')
+    draw.text((750, 655), '2 x M3 bolts/nuts; 4 washers. Round UP.', font=font, fill='white')
     draw.text((35, 810), 'Host blocks direct front view. Underside illumination may leave front '
               'faces dark.', font=font, fill='white')
     draw.text((35, 850), 'Open ends permit oblique LED visibility. Optical/electrical/thermal '
               'and Wire/Arena: NOT RUN.', font=font, fill='#f1bf65')
+    image.save(path)
+
+
+def render_input_section(assembly, path):
+    """Actual input stack and purchased envelope projection; board edge at Y zero."""
+    anchor = assembly.lighting['input']
+    inst = next(i for i in assembly.instances if i.instance_id == anchor['part_instances'][0])
+    stock = assembly.definition_for(inst).thickness_mm
+    host = next(i for i in assembly.instances if i.instance_id == anchor['host_instance'])
+    thickness = assembly.definition_for(host).thickness_mm
+    image = Image.new('RGB',(1200,780),'#12151b')
+    draw = ImageDraw.Draw(image)
+    title = ImageFont.load_default(size=25)
+    font = ImageFont.load_default(size=20)
+    draw.text((30,25),'Bottom input: exposed tie paths outside intact board',font=title,fill='white')
+    draw.text((30,70),'Local Y/Z projection; purchased envelopes, not manufactured electronics.',font=font,fill='white')
+    scale = min(14,330/(stock+thickness+16))
+    ox,oy = 460,420
+
+    def rect(bounds,color):
+        y0,z0,y1,z1 = bounds
+        draw.rectangle((ox+y0*scale,oy-z1*scale,ox+y1*scale,oy-z0*scale),fill=color,outline='white')
+
+    rect((0,0,26,thickness),'#c99d66')
+    rect((-12,-stock,16,0),'#508fa0')
+    # The two ties run along X: projection shows upper/rear returns and head limits.
+    for row in anchor['retention']['envelopes']:
+        _,y0,z0,_,y1,z1 = row['local_bounds_mm']
+        if row['kind'] == 'tie-leg':
+            continue
+        rect((y0,z0,y1,z1),'#596776' if row['kind']=='input-cable' else '#d2d5d8')
+    draw.line((ox,170,ox,620),fill='#e4b96b',width=2)
+    draw.text((35,135),'OUTSIDE board (Y<0)',font=font,fill='white')
+    draw.text((640,135),'INTACT board (Y>=0)',font=font,fill='white')
+    draw.text((35,590),'Slots at Y=-8/-3 mm, paired across X=-5/+5 mm; both exits exposed.',font=font,fill='white')
+    draw.text((35,630),'Cable <=5 mm diameter; ties <=2.5 x 1 mm; heads <=5 x 5 x 3 mm.',font=font,fill='white')
+    draw.text((35,670),'Heads on rear face. Front/rear paths and total envelope checked; no extra stock pads.',font=font,fill='white')
+    draw.text((35,710),'Physical fit, optical, electrical/thermal and Wire/Arena checks NOT RUN.',font=font,fill='#f1bf65')
     image.save(path)
