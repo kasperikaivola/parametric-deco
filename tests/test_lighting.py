@@ -30,6 +30,8 @@ def test_default_and_desktop_controls():
 @pytest.fixture(scope='module', params=['organism-small', 'creature-mask',
                                       'radial-weave', 'single-module'])
 def lit(request):
+    if request.param == 'creature-mask':
+        return load_config(Path('examples/layered-creature-led.json'))
     c = load_config(Path('examples') / (request.param + '.json'))
     return config_from_dict({**c.to_dict(), 'lighting': {'enabled': True}})
 
@@ -61,7 +63,8 @@ def test_all_styles_physical_lighting(lit, lit_build):
     assert light['data_route'] == [s['segment_id'] for s in light['segments']]
     assert len(light['jumpers']) == len(light['segments'])
     assert b.inventory == Inventory.from_dict(b.inventory.to_dict())
-    replay = assemble(lit, b.inventory)
+    import json
+    replay = assemble(lit, Inventory.from_dict(json.loads(json.dumps(b.inventory.to_dict()))))
     from parametric_deco.lighting import placement_fingerprint
     assert placement_fingerprint(replay.assembly) == placement_fingerprint(b.assembly)
     assert replay.assembly.lighting == b.assembly.lighting
@@ -269,3 +272,16 @@ def test_f2_rear_return_and_head_are_collision_checked(depth,y0,y1):
     other = PartInstance('obstacle','obstacle',obstacle.revision,pose)
     assert _clear(a,{d.definition_id:d for d in ds},ins,[(other,obstacle)])
     assert not _hardware_clear(a,s,[(host,a.definition_for(host)),(other,obstacle)])
+
+
+def test_placement_hash_normalizes_numpy_scalars_and_signed_zero_after_json():
+    import json
+    from parametric_deco.model import Assembly
+    from parametric_deco.lighting import placement_fingerprint
+    # Source blade-clip envelopes use NumPy bounds; JSON reload uses Python floats.
+    a = Assembly((), (), hardware_bounds=(('clip',np.float64(-0.0),np.float64(.123456789),
+                  np.float64(0),np.float64(1),np.float64(2),np.float64(3)),))
+    loaded = Assembly.from_dict(json.loads(json.dumps(a.to_dict())))
+    assert placement_fingerprint(a) == placement_fingerprint(loaded)
+    moved = replace(loaded, hardware_bounds=(('clip',0.001,.123456789,0,1,2,3),))
+    assert placement_fingerprint(a) != placement_fingerprint(moved)

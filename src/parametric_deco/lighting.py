@@ -547,7 +547,8 @@ def placement_fingerprint(assembly):
             return {k: normalized(v) for k, v in value.items()}
         if isinstance(value, (tuple, list)):
             return [normalized(v) for v in value]
-        if type(value) in (int, float):
+        if (isinstance(value, (int, float, np.integer, np.floating))
+                and not isinstance(value, (bool, np.bool_))):
             result = round(float(value), 8)
             return result if result else 0.0
         return value
