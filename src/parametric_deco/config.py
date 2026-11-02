@@ -144,6 +144,21 @@ STYLE_PARAMETERS = {
 
 
 @dataclass(frozen=True)
+class Lighting:
+    enabled: bool = False
+    strip_width_mm: float = 10
+    strip_thickness_mm: float = 2
+    led_pitch_mm: float = 16.666667
+    clearance_mm: float = 0.5
+    segment_leds: int = 1
+    max_segments: int = 12
+    voltage_v: float = 5
+    current_per_led_ma: float = 60
+    injection_limit_a: float = 2
+    wire_slack_mm: float = 50
+
+
+@dataclass(frozen=True)
 class DesignConfig:
     schema_version: int = 2
     units: str = "mm"
@@ -155,6 +170,7 @@ class DesignConfig:
     backplate: Backplate = Backplate()
     mounting: Mounting = Mounting()
     cutting_bed: CuttingBed | None = None
+    lighting: Lighting = Lighting()
 
     @property
     def module(self):
@@ -193,6 +209,22 @@ def validate_config(c):
         bad("parameters", "must match selected style " + c.style)
     if issues:
         return ValidationReport(tuple(issues))
+    light = c.lighting
+    if type(light.enabled) is not bool:
+        bad("lighting.enabled", "must be boolean")
+    for name in ("strip_width_mm", "strip_thickness_mm", "led_pitch_mm", "clearance_mm",
+                 "current_per_led_ma", "injection_limit_a", "wire_slack_mm"):
+        numeric("lighting." + name, getattr(light, name))
+    for name, lo, hi in (("segment_leds", 1, 20), ("max_segments", 2, 64)):
+        value = getattr(light, name)
+        if type(value) is not int or not lo <= value <= hi:
+            bad("lighting." + name, f"integer {lo}..{hi} required")
+    if type(light.voltage_v) not in (int, float) or light.voltage_v not in (5, 12, 24):
+        bad("lighting.voltage_v", "select 5, 12 or 24 V to match purchased strip")
+    if (light.enabled is True and type(light.segment_leds) is int
+            and type(light.led_pitch_mm) in (int, float)
+            and light.segment_leds * light.led_pitch_mm < 12):
+        bad("lighting", "segment length must be at least 12 mm for two retaining ties")
     if c.units != "mm":
         bad("units", "must be mm")
     if c.style == "laminar":
@@ -471,7 +503,7 @@ def config_from_dict(data):
         kwargs["parameters"] = _construct(STYLE_PARAMETERS[style], values)
         for key, cls in {"envelope": Envelope, "material": Material, "grid": Grid,
                          "backplate": Backplate, "mounting": Mounting,
-                         "cutting_bed": CuttingBed}.items():
+                         "cutting_bed": CuttingBed, "lighting": Lighting}.items():
             if key in kwargs and not (key == "cutting_bed" and kwargs[key] is None):
                 kwargs[key] = _construct(cls, kwargs[key])
         c = DesignConfig(**kwargs)

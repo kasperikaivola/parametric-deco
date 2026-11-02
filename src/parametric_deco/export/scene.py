@@ -10,6 +10,9 @@ from ..cad import mesh_for
 
 
 def write_scene(assembly, out_dir):
+    from ..lighting import preview_assembly
+
+    assembly = preview_assembly(assembly)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     scene = trimesh.Scene()
@@ -31,6 +34,7 @@ def write_scene(assembly, out_dir):
         )
         color = ([150, 105, 63, 255] if instance.role == "backplate"
                  else [125, 160, 180, 255] if instance.role == "mounting-hardware"
+                 else [240, 210, 60, 255] if instance.role == "led-strip"
                  else [205, 158, 99, 255])
         mesh.visual.vertex_colors = color
         transform = np.array(instance.transform)
@@ -77,6 +81,7 @@ def write_scene(assembly, out_dir):
                 "meshes": meshes,
                 "instances": records,
                 "hardware_bounds": assembly.hardware_bounds,
+                **({"lighting": assembly.lighting} if assembly.lighting else {}),
             },
             separators=(",", ":"),
         )

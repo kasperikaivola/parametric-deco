@@ -71,10 +71,18 @@ def project_vertices(vertices, view):
 
 
 def render_views(assembly, out_dir, views=None):
+    from ..lighting import preview_assembly
+
+    assembly = preview_assembly(assembly)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     cached = {(d.definition_id, d.revision): mesh_for(d) for d in assembly.definitions}
     colors = {
+        "led-strip": (240, 210, 60),
+        "led-tray": (80, 145, 160),
+        "led-pad": (70, 120, 145),
+        "led-jaw": (80, 145, 160),
+        "led-input": (80, 145, 160),
         "rib": (218, 172, 112),
         "spine": (161, 111, 62),
         "closure": (189, 144, 88),
@@ -89,7 +97,8 @@ def render_views(assembly, out_dir, views=None):
         "backplate": (64, 55, 45),
     }
     font = ImageFont.load_default(size=22)
-    modules = sorted({i.module_id for i in assembly.instances if i.role != "backplate"})
+    modules = sorted({i.module_id for i in assembly.instances
+                      if i.role != "backplate" and not i.role.startswith("led-")})
     creature = bool(
         assembly.composition and assembly.composition.get("family") == "creature-organism-v3"
     )

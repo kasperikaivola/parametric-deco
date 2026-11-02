@@ -155,7 +155,7 @@ def create_window():
         def refresh_tree(self, *_):
             self.tree.clear()
             try:
-                data = json.loads(self.editor.toPlainText())
+                data = config_from_dict(json.loads(self.editor.toPlainText())).to_dict()
                 if not isinstance(data, dict):
                     return
             except ValueError:
@@ -179,7 +179,7 @@ def create_window():
 
         def edit_item(self, item, column):
             path = tuple(item.data(0, Qt.ItemDataRole.UserRole))
-            data = json.loads(self.editor.toPlainText())
+            data = config_from_dict(json.loads(self.editor.toPlainText())).to_dict()
             value = data
             for key in path:
                 value = value[key]
@@ -200,7 +200,7 @@ def create_window():
             if self.updating:
                 return
             try:
-                data = json.loads(self.editor.toPlainText())
+                data = config_from_dict(json.loads(self.editor.toPlainText())).to_dict()
                 if not isinstance(data, dict):
                     raise ValueError('Config must be an object')
             except ValueError as error:
