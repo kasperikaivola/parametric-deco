@@ -117,7 +117,7 @@ class PartDefinition:
             )
         ]
         # Explicit edge faces, including cut-hole walls. Back face is optional/excluded.
-        for ri, ring in enumerate(() if kind == "backplate" else (outer, *holes)):
+        for ri, ring in enumerate(() if kind in ("backplate", "purchased-hardware") else (outer, *holes)):
             for ei, (a, b) in enumerate(zip(ring, ring[1:] + ring[:1])):
                 dx, dy = b[0] - a[0], b[1] - a[1]
                 length = float(np.hypot(dx, dy))
@@ -135,7 +135,7 @@ class PartDefinition:
                         ),
                     )
                 )
-        if kind == "backplate":
+        if kind in ("backplate", "purchased-hardware"):
             surfaces = []
         payload = {
             "thickness_mm": float(thickness_mm),

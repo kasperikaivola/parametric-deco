@@ -1,4 +1,4 @@
-"""Slotted trestle-supported lobes and immutable manufactured inventory."""
+"""Canonical layered lobes and immutable inventory for direct grid tube clamps."""
 
 from dataclasses import asdict
 import json
@@ -10,12 +10,10 @@ from shapely.ops import unary_union
 from .config import validate_config
 from .cad import overlap_volume
 from .geometry.organism import anatomy
-from .geometry.backplate import backplate_polygon
 from .model import (
     Assembly,
     BuildResult,
     Connection,
-    InterfaceStation,
     Inventory,
     PartDefinition,
     PartInstance,
@@ -143,105 +141,33 @@ def support_layout(lobe, lobes, c, used):
 
 
 def manufacture(c):
+    from .geometry.backplate import generate_backplate
     lobes = anatomy(c)
     t = c.material.measured_mm
-    fit = c.material.clearance_mm
-    base = c.mounting.rear_clearance_mm + t
-    definitions, instances, modules, used = [], [], [], []
-    backing_cuts = []
-
-    def add(name, shape, pose, module, role, interfaces=()):
-        part = PartDefinition.from_polygon("flow-" + name, shape, t, interfaces, kind=role)
-        definitions.append(part)
-        inst = PartInstance(name, part.definition_id, part.revision, pose, module, role)
-        instances.append(inst)
-        return part
-
+    board = generate_backplate(c).definitions[0]
+    definitions, instances, modules = [board], [], []
     for lobe in lobes:
-        pose, slots, holes, feet, bearings, corridor = support_layout(lobe, lobes, c, used)
-        used.append(corridor)
-        center = np.array(pose)[:2, 3]
-        backing_cuts.extend([*slots, *holes])
-        cap = lobe.shape.difference(unary_union([*slots, *holes]))
         neck_check(lobe.shape, 10)
-        ligament = cut_ligaments(cap, 7)
-        name = lobe.name
-        cap_id = name + "-plate"
-        add(
-            cap_id,
-            cap,
-            pose2((0, 0), 0, lobe.z),
-            name,
-            "armour",
-            tuple(
-                InterfaceStation(
-                    f"seat-{j}",
-                    float(s.centroid.x),
-                    t + fit,
-                    float(s.centroid.y),
-                    "flow-trestle-v1",
-                )
-                for j, s in enumerate(slots)
-            ),
-        )
-        height = lobe.z - base
-        web = box(-15, 0, 15, height).union(box(-7, -t, 7, height + t))
-        neck_check(web, 8)
-        web_ids = []
-        for j, x in enumerate((-12, 12)):
-            # Web local X = cap local Y, local Y = world Z, normal = cap local X.
-            p = np.array(pose)
-            u, v = p[:3, 0], p[:3, 1]
-            origin = np.array((center[0], center[1], base)) + (x - t / 2) * u
-            transform = np.eye(4)
-            transform[:3, :3] = np.column_stack((v, (0, 0, 1), u))
-            transform[:3, 3] = origin
-            wid = name + f"-trestle-{j}"
-            add(wid, web, tuple(map(tuple, transform)), name, "register")
-            web_ids.append(wid)
-        roots = [tuple(h.centroid.coords[0]) for h in holes]
-        modules.append(
-            {
-                "module_id": name,
-                "plate_id": cap_id,
-                "web_ids": web_ids,
-                "roots": roots,
-                "slot_polygons": [list(s.exterior.coords) for s in slots],
-                "z_mm": lobe.z,
-                "height_mm": height,
-                "tier": lobe.tier,
-                "minimum_cut_ligament_mm": ligament,
-            }
-        )
-    # A manufactured common polygon board with the actual trestle seats and bores.
-    # No decorative overlay or extra lattice holes near the closed support slots.
-    backing = backplate_polygon(c)
-    guard_slots(
-        backing,
-        [Polygon(m["slot_polygons"][j]) for m in modules for j in (0, 1)],
-        [
-            Point(x, y).buffer(c.grid.hole_diameter_mm / 2, quad_segs=16)
-            for m in modules
-            for x, y in m["roots"]
-        ],
-    )
-    backing = backing.difference(unary_union(backing_cuts))
-    cut_ligaments(backing, 7)
-    add(
-        "backplate", backing, pose2((0, 0), 0, c.mounting.rear_clearance_mm), "backing", "backplate"
-    )
-    layout = {
-        "family": FAMILY,
-        "manufacturing_request": signature(c),
-        "modules": modules,
-        "removal_order": [lobe.name for lobe in sorted(lobes, key=lambda lobe: -lobe.z)],
-        "templates": [asdict(i) for i in instances],
-    }
+        cut_ligaments(lobe.shape, 7)
+        pid = lobe.name + "-plate"
+        part = PartDefinition.from_polygon("flow-" + pid, lobe.shape, t, kind="armour")
+        definitions.append(part)
+        instances.append(PartInstance(pid, part.definition_id, part.revision, pose2((0, 0), 0, lobe.z), lobe.name, "armour"))
+        modules.append({"module_id": lobe.name, "plate_id": pid, "roots": [], "web_ids": [], "slot_polygons": [],
+                        "z_mm": lobe.z, "height_mm": lobe.z - c.mounting.rear_clearance_mm - t,
+                        "tier": lobe.tier, "minimum_cut_ligament_mm": None})
+    instances.append(PartInstance("backplate", board.definition_id, board.revision, pose2((0, 0), 0, c.mounting.rear_clearance_mm), "backing", "backplate"))
+    layout = {"family": FAMILY, "manufacturing_request": signature(c), "modules": modules,
+              "removal_order": [lobe.name for lobe in sorted(lobes, key=lambda lobe: -lobe.z)],
+              "templates": [asdict(i) for i in instances]}
     layout["fingerprint"] = digest(layout)
-    return definitions, instances, json.loads(json.dumps(layout))
+    return tuple(definitions), tuple(instances), layout
 
 
 def verify_organism(a):
+    if (a.composition or {}).get("end_supports"):
+        from .supports import verify_supports
+        return ValidationReport(verify_supports(a))
     """Recheck actual manufactured bearing/slots/supports, including loaded geometry."""
     issues = []
     try:

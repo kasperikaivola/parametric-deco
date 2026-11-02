@@ -124,6 +124,7 @@ def validate_assembly(assembly):
             "upper-closure-v1",
             "radial-capture-v1",
             "creature-root-clamp-v1",
+            "end-clamp-v1",
         ):
             station_ids = {s.station_id for s in definitions[connection.b].interfaces}
             if connection.station_id not in station_ids:
@@ -131,8 +132,12 @@ def validate_assembly(assembly):
     # Root bolts are removed before these checks. Backing is behind extraction direction.
     for module_id, direction, steps in assembly.extraction_paths:
         blocked = set()
-        movers = [i for i in assembly.instances if i.module_id == module_id]
-        obstacles = [i for i in assembly.instances if i.module_id not in (module_id, "backing")]
+        # End clamps/tubes are removed in the documented service sequence before
+        # any wooden module extraction, including shared radial stack hardware.
+        movers = [i for i in assembly.instances if i.module_id == module_id
+                  and i.role != "mounting-hardware"]
+        obstacles = [i for i in assembly.instances if i.module_id not in (module_id, "backing")
+                     and i.role != "mounting-hardware"]
         for mover in movers:
             for obstacle in obstacles:
                 if obstacle.module_id in blocked:

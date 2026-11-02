@@ -81,8 +81,14 @@ def generate_creature(c):
         kind="retainer",
     )
     definitions.append(retainer)
+    # Initial artwork centering is continuous. Manufacture each root bore by
+    # inverse-placing a REAL world-grid hole, rather than quantizing the artwork.
+    from dataclasses import replace
+    local_grid = replace(c.grid, origin_x_mm=c.grid.origin_x_mm - offset_x,
+                         origin_y_mm=c.grid.origin_y_mm - offset_y)
+    roots_by_module = module_roots(c.parameters, local_grid)
     for name, layers in profiles(settings=c.parameters).items():
-        roots = module_roots(c.parameters)[name]
+        roots = roots_by_module[name]
         match_root_pattern(c, [(x + offset_x, y + offset_y) for x, y in roots])
         keys = key_positions(roots)
         levels = (
@@ -113,8 +119,8 @@ def generate_creature(c):
                 ),
             ]
             if name.startswith("crown"):
-                dx = -25 if "left" in name else 25
-                voids += [affinity.translate(p, xoff=-dx, yoff=-50) for p in list(voids)]
+                dx = -c.grid.offset_mm if "left" in name else c.grid.offset_mm
+                voids += [affinity.translate(p, xoff=-dx, yoff=-c.grid.pitch_y_mm) for p in list(voids)]
             shape = shape.difference(unary_union(voids))
             for x, y in roots:
                 shape = shape.difference(
@@ -160,6 +166,8 @@ def generate_creature(c):
                     body = body.difference(
                         box(-5 - fit / 2, -2 * t - fit / 2, 5 + fit / 2, -t + fit / 2)
                     )
+                    if "right" in name:
+                        body = affinity.scale(body, xfact=-1, yfact=1, origin=(0, 0))
                     blade = PartDefinition.from_polygon(
                         f"organism-{name}-blade-{k}",
                         body,

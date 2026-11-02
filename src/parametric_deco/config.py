@@ -28,7 +28,7 @@ class Material:
 @dataclass(frozen=True)
 class Grid:
     pitch_x_mm: float = 50
-    pitch_y_mm: float = 50
+    pitch_y_mm: float = 25 * math.sqrt(3)
     offset_mm: float = 25
     origin_x_mm: float = 0
     origin_y_mm: float = 0
@@ -59,7 +59,7 @@ class Mounting:
     rear_clearance_mm: float = 10
     hardware_outward_mm: float = 12
     washer_radius_mm: float = 9
-    root_half_span_mm: float = 50
+    root_half_span_mm: float = 25 * math.sqrt(3)
 
 
 @dataclass(frozen=True)
@@ -197,7 +197,7 @@ def validate_config(c):
         bad("units", "must be mm")
     if c.style == "laminar":
         o = c.parameters
-        for key, lo, hi in (("focal_count", 4, 8), ("branching", 1, 3), ("complexity", 0, 2)):
+        for key, lo, hi in (("focal_count", 3, 9), ("branching", 1, 3), ("complexity", 0, 2)):
             v = getattr(o, key)
             if type(v) is not int or not lo <= v <= hi:
                 bad("parameters." + key, f"integer {lo}..{hi} required")
@@ -232,6 +232,17 @@ def validate_config(c):
             bad("envelope", "organism aspect ratio requires 0.7..1.4")
         if not 120 <= c.envelope.depth_mm <= 240:
             bad("envelope.depth_mm", "organism relief requires 120..240 mm")
+    if c.style == "laminar" and c.parameters.symmetry == "rotational" and all(isinstance(v, (int, float)) and math.isfinite(v) for v in (c.grid.pitch_x_mm, c.grid.pitch_y_mm, c.grid.offset_mm, c.grid.origin_x_mm, c.grid.origin_y_mm)):
+        if c.parameters.arrangement != "whorl" or c.parameters.focal_count % 3:
+            bad("parameters.symmetry", "exact C3 requires whorl and focal_count divisible by3")
+        if (abs(c.grid.pitch_y_mm - c.grid.pitch_x_mm * math.sqrt(3) / 2) > 1e-8
+                or abs(c.grid.offset_mm - c.grid.pitch_x_mm / 2) > 1e-8
+                or abs(c.grid.origin_x_mm) > 1e-8 or abs(c.grid.origin_y_mm) > 1e-8):
+            bad("grid", "exact C3 mounts require origin0 equilateral lattice: pitchY=pitchX*sqrt(3)/2, offset=pitchX/2")
+    if c.style == "layered-creature" and type(c.parameters.limb_count) is int and c.parameters.limb_count % 2:
+        bad("parameters.limb_count", "mirrored creature requires paired limb counts2,4,6")
+    if c.style == "layered-creature" and all(isinstance(v, (int, float)) and math.isfinite(v) for v in (c.grid.origin_x_mm, c.grid.offset_mm, c.grid.pitch_x_mm)) and c.grid.pitch_x_mm > 0 and (abs(c.grid.origin_x_mm) > 1e-8 or min(abs(c.grid.offset_mm % c.grid.pitch_x_mm), abs(c.grid.offset_mm % c.grid.pitch_x_mm - c.grid.pitch_x_mm / 2)) > 1e-8):
+        bad("grid", "mirrored mounts require originX0 and offset0 or pitchX/2")
     if c.style == "layered-creature":
         creature = c.parameters
         count_ranges = {

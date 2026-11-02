@@ -192,7 +192,7 @@ def assemble_creature(c, inventory=None):
     for m in layout["modules"]:
         name = m["module_id"]
         moves[name] = (
-            ((-25 if "left" in name else 25), 50)
+            ((-25 if "left" in name else 25), c.grid.pitch_y_mm)
             if c.parameters.posture == "raised_crown" and name.startswith("crown")
             else (0, 0)
         )
@@ -330,6 +330,8 @@ def assemble_creature(c, inventory=None):
     eyes = [affinity.translate(eye, xoff=offset_x, yoff=offset_y) for eye in eyes]
     for eye in eyes:
         for i in instances:
+            if i.role == "backplate":
+                continue
             if eye.intersection(xy_footprint(a.definition_for(i), i.transform)).area > 1e-5:
                 issues.append(
                     Issue("error", "eye_channel", f"{i.instance_id}: eye channel obstruction")

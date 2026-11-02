@@ -3,7 +3,7 @@
 from functools import lru_cache
 import math
 
-from shapely.geometry import Point, Polygon, box
+from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
 
 from ..cad import solid_for
@@ -85,7 +85,7 @@ def generate_module(config):
         )
     closure_shape = unary_union(
         [
-            box(-25, -70, 55, 70),
+            box(-25, -config.mounting.root_half_span_mm - 20, 55, config.mounting.root_half_span_mm + 20),
             *rails,
             box(m.length_mm - 45, -half - 10, m.length_mm, half + 10),
         ]
@@ -101,10 +101,8 @@ def generate_module(config):
                     y + w / 2,
                 )
             )
-    for y in (-config.mounting.root_half_span_mm, config.mounting.root_half_span_mm):
-        closure_shape = closure_shape.difference(
-            Point(0, y).buffer(config.grid.hole_diameter_mm / 2, quad_segs=16)
-        )
+    # All installed mounting bores are chosen directly on the common board grid
+    # by the end-clamp stage. No obsolete off-grid root bores remain in new cuts.
     closure = PartDefinition.from_polygon("closure", closure_shape, t, kind="closure")
     instances = []
     for index, y in enumerate((-half, half)):

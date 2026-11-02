@@ -1,0 +1,5310 @@
+{
+  "backplate": {
+    "backplate": {
+      "rotation_deg": 22.5,
+      "sides": 8
+    },
+    "definition_id": "backplate",
+    "fingerprint": "64a19588a6bd4cc032bcdc00426c8ff8a9c9537610e8a0a56d8c0c38f1e86958",
+    "grid": {
+      "edge_margin_mm": 15,
+      "hole_diameter_mm": 6.5,
+      "offset_mm": 25,
+      "origin_x_mm": 0,
+      "origin_y_mm": 0,
+      "pitch_x_mm": 50,
+      "pitch_y_mm": 43.30127018922193
+    },
+    "grid_hole_count": 361,
+    "size_mm": [
+      1000,
+      1000
+    ],
+    "standard": "universal-triangular-board-v3",
+    "stock_mm": 6
+  },
+  "end_supports": {
+    "all_parts_reach_backplate": true,
+    "revision": "triangular-symmetric-mounts-v3",
+    "spans": [
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          -0.3735453539019921
+        ],
+        "extent_mm": [
+          -31.457893070102017,
+          293.70718287411484
+        ],
+        "part_id": "b3-spine-0",
+        "path_endpoints_mm": [
+          [
+            114.85047785428299,
+            205.08028474420917
+          ],
+          [
+            -178.32226704389006,
+            318.41731949946904
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.14014146264319846,
+          0.6862118743441176
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          -0.3735453539019921
+        ],
+        "extent_mm": [
+          -31.457893070102017,
+          293.70718287411484
+        ],
+        "part_id": "b3-spine-1",
+        "path_endpoints_mm": [
+          [
+            114.85047785428299,
+            205.08028474420917
+          ],
+          [
+            -178.32226704389006,
+            318.41731949946904
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.14014146264319846,
+          0.6862118743441176
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          -0.37354535390199206
+        ],
+        "extent_mm": [
+          -293.70718287411484,
+          31.457893070101953
+        ],
+        "part_id": "a0-spine-0",
+        "path_endpoints_mm": [
+          [
+            -114.85047785428291,
+            -205.08028474420917
+          ],
+          [
+            178.3222670438901,
+            -318.41731949946904
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.14014146264319743,
+          0.686211874344118
+        ],
+        "station_ids": [
+          "end-clamp-3",
+          "end-clamp-2"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          -0.37354535390199206
+        ],
+        "extent_mm": [
+          -293.70718287411484,
+          31.457893070101953
+        ],
+        "part_id": "a0-spine-1",
+        "path_endpoints_mm": [
+          [
+            -114.85047785428291,
+            -205.08028474420917
+          ],
+          [
+            178.3222670438901,
+            -318.41731949946904
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.14014146264319743,
+          0.686211874344118
+        ],
+        "station_ids": [
+          "end-clamp-3",
+          "end-clamp-2"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495781,
+          0.6165628080325029
+        ],
+        "extent_mm": [
+          -31.457893070101452,
+          293.70718287411535
+        ],
+        "part_id": "a4-spine-0",
+        "path_endpoints_mm": [
+          [
+            -120.1794974766898,
+            202.00357383069576
+          ],
+          [
+            -364.9186212134313,
+            4.777046429293289
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.14014146264319832,
+          0.6862118743441186
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-5"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495781,
+          0.6165628080325029
+        ],
+        "extent_mm": [
+          -31.457893070101452,
+          293.70718287411535
+        ],
+        "part_id": "a4-spine-1",
+        "path_endpoints_mm": [
+          [
+            -120.1794974766898,
+            202.00357383069576
+          ],
+          [
+            -364.9186212134313,
+            4.777046429293289
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.14014146264319832,
+          0.6862118743441186
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-5"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495782,
+          -0.6165628080325027
+        ],
+        "extent_mm": [
+          -31.45789307010129,
+          293.70718287411546
+        ],
+        "part_id": "a5-spine-0",
+        "path_endpoints_mm": [
+          [
+            -364.9186212134313,
+            -4.777046429293022
+          ],
+          [
+            -120.17949747668997,
+            -202.00357383069567
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602465,
+        "placed_station_fractions": [
+          0.3137881256558821,
+          0.8598585373568022
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-6"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495782,
+          -0.6165628080325027
+        ],
+        "extent_mm": [
+          -31.45789307010129,
+          293.70718287411546
+        ],
+        "part_id": "a5-spine-1",
+        "path_endpoints_mm": [
+          [
+            -364.9186212134313,
+            -4.777046429293022
+          ],
+          [
+            -120.17949747668997,
+            -202.00357383069567
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602465,
+        "placed_station_fractions": [
+          0.3137881256558821,
+          0.8598585373568022
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-6"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          -0.9901081619344952
+        ],
+        "extent_mm": [
+          -293.7071828741121,
+          31.457893070104817
+        ],
+        "part_id": "b5-spine-0",
+        "path_endpoints_mm": [
+          [
+            -235.02997533097286,
+            -3.076710913513466
+          ],
+          [
+            -186.59635416954126,
+            -313.640273070176
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260248,
+        "placed_station_fractions": [
+          0.14014146264319827,
+          0.6862118743441179
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-8"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          -0.9901081619344952
+        ],
+        "extent_mm": [
+          -293.7071828741121,
+          31.457893070104817
+        ],
+        "part_id": "b5-spine-1",
+        "path_endpoints_mm": [
+          [
+            -235.02997533097286,
+            -3.076710913513466
+          ],
+          [
+            -186.59635416954126,
+            -313.640273070176
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260248,
+        "placed_station_fractions": [
+          0.14014146264319827,
+          0.6862118743441179
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-8"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096055,
+          0.3735453539019921
+        ],
+        "extent_mm": [
+          -293.7071828741149,
+          31.457893070101925
+        ],
+        "part_id": "a3-spine-0",
+        "path_endpoints_mm": [
+          [
+            178.32226704389024,
+            318.41731949946904
+          ],
+          [
+            -114.85047785428286,
+            205.08028474420917
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.8598585373568017
+        ],
+        "station_ids": [
+          "end-clamp-10",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096055,
+          0.3735453539019921
+        ],
+        "extent_mm": [
+          -293.7071828741149,
+          31.457893070101925
+        ],
+        "part_id": "a3-spine-1",
+        "path_endpoints_mm": [
+          [
+            178.32226704389024,
+            318.41731949946904
+          ],
+          [
+            -114.85047785428286,
+            205.08028474420917
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260247,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.8598585373568017
+        ],
+        "station_ids": [
+          "end-clamp-10",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          0.9901081619344952
+        ],
+        "extent_mm": [
+          -293.7071828741122,
+          31.457893070104696
+        ],
+        "part_id": "b4-spine-0",
+        "path_endpoints_mm": [
+          [
+            -186.59635416954103,
+            313.6402730701761
+          ],
+          [
+            -235.02997533097286,
+            3.076710913513639
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.859858537356803
+        ],
+        "station_ids": [
+          "end-clamp-12",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          0.9901081619344952
+        ],
+        "extent_mm": [
+          -293.7071828741122,
+          31.457893070104696
+        ],
+        "part_id": "b4-spine-1",
+        "path_endpoints_mm": [
+          [
+            -186.59635416954103,
+            313.6402730701761
+          ],
+          [
+            -235.02997533097286,
+            3.076710913513639
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.859858537356803
+        ],
+        "station_ids": [
+          "end-clamp-12",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          0.9901081619344952
+        ],
+        "extent_mm": [
+          -31.457893070104728,
+          293.7071828741122
+        ],
+        "part_id": "a1-spine-0",
+        "path_endpoints_mm": [
+          [
+            186.59635416954134,
+            -313.64027307017585
+          ],
+          [
+            235.02997533097286,
+            -3.07671091351361
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602414,
+        "placed_station_fractions": [
+          0.3137881256558816,
+          0.8598585373568023
+        ],
+        "station_ids": [
+          "end-clamp-15",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004062,
+          0.9901081619344952
+        ],
+        "extent_mm": [
+          -31.457893070104728,
+          293.7071828741122
+        ],
+        "part_id": "a1-spine-1",
+        "path_endpoints_mm": [
+          [
+            186.59635416954134,
+            -313.64027307017585
+          ],
+          [
+            235.02997533097286,
+            -3.07671091351361
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602414,
+        "placed_station_fractions": [
+          0.3137881256558816,
+          0.8598585373568023
+        ],
+        "station_ids": [
+          "end-clamp-15",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          0.3735453539019921
+        ],
+        "extent_mm": [
+          -31.45789307010195,
+          293.70718287411484
+        ],
+        "part_id": "b0-spine-0",
+        "path_endpoints_mm": [
+          [
+            -178.32226704389012,
+            -318.41731949946904
+          ],
+          [
+            114.85047785428289,
+            -205.08028474420917
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.31378812565588177,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-17",
+          "end-clamp-16"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9276119170096057,
+          0.3735453539019921
+        ],
+        "extent_mm": [
+          -31.45789307010195,
+          293.70718287411484
+        ],
+        "part_id": "b0-spine-1",
+        "path_endpoints_mm": [
+          [
+            -178.32226704389012,
+            -318.41731949946904
+          ],
+          [
+            114.85047785428289,
+            -205.08028474420917
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.5376244260246,
+        "placed_station_fractions": [
+          0.31378812565588177,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-17",
+          "end-clamp-16"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.787305724449578,
+          -0.6165628080325027
+        ],
+        "extent_mm": [
+          -293.70718287411535,
+          31.45789307010114
+        ],
+        "part_id": "b2-spine-0",
+        "path_endpoints_mm": [
+          [
+            364.9186212134313,
+            4.777046429293066
+          ],
+          [
+            120.17949747668995,
+            202.00357383069567
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602454,
+        "placed_station_fractions": [
+          0.3137881256558819,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-18",
+          "end-clamp-19"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.787305724449578,
+          -0.6165628080325027
+        ],
+        "extent_mm": [
+          -293.70718287411535,
+          31.45789307010114
+        ],
+        "part_id": "b2-spine-1",
+        "path_endpoints_mm": [
+          [
+            364.9186212134313,
+            4.777046429293066
+          ],
+          [
+            120.17949747668995,
+            202.00357383069567
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602454,
+        "placed_station_fractions": [
+          0.3137881256558819,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-18",
+          "end-clamp-19"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495781,
+          0.616562808032503
+        ],
+        "extent_mm": [
+          -293.70718287411535,
+          31.457893070101456
+        ],
+        "part_id": "b1-spine-0",
+        "path_endpoints_mm": [
+          [
+            120.17949747669002,
+            -202.00357383069564
+          ],
+          [
+            364.9186212134313,
+            -4.777046429293245
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602437,
+        "placed_station_fractions": [
+          0.14014146264319774,
+          0.6862118743441182
+        ],
+        "station_ids": [
+          "end-clamp-21",
+          "end-clamp-20"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.7873057244495781,
+          0.616562808032503
+        ],
+        "extent_mm": [
+          -293.70718287411535,
+          31.457893070101456
+        ],
+        "part_id": "b1-spine-1",
+        "path_endpoints_mm": [
+          [
+            120.17949747669002,
+            -202.00357383069564
+          ],
+          [
+            364.9186212134313,
+            -4.777046429293245
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602437,
+        "placed_station_fractions": [
+          0.14014146264319774,
+          0.6862118743441182
+        ],
+        "station_ids": [
+          "end-clamp-21",
+          "end-clamp-20"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004054,
+          -0.9901081619344952
+        ],
+        "extent_mm": [
+          -31.457893070104767,
+          293.7071828741119
+        ],
+        "part_id": "a2-spine-0",
+        "path_endpoints_mm": [
+          [
+            235.02997533097286,
+            3.0767109135134945
+          ],
+          [
+            186.5963541695412,
+            313.640273070176
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602465,
+        "placed_station_fractions": [
+          0.14014146264319852,
+          0.6862118743441177
+        ],
+        "station_ids": [
+          "end-clamp-22",
+          "end-clamp-23"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.14030619256004054,
+          -0.9901081619344952
+        ],
+        "extent_mm": [
+          -31.457893070104767,
+          293.7071828741119
+        ],
+        "part_id": "a2-spine-1",
+        "path_endpoints_mm": [
+          [
+            235.02997533097286,
+            3.0767109135134945
+          ],
+          [
+            186.5963541695412,
+            313.640273070176
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 337.53762442602465,
+        "placed_station_fractions": [
+          0.14014146264319852,
+          0.6862118743441177
+        ],
+        "station_ids": [
+          "end-clamp-22",
+          "end-clamp-23"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8111139356421757,
+          -0.5848881802593213
+        ],
+        "extent_mm": [
+          -19.790840473781284,
+          286.7887953966359
+        ],
+        "part_id": "a5-rail",
+        "path_endpoints_mm": [
+          [
+            -338.92084869650716,
+            -4.436716944438074
+          ],
+          [
+            -106.88587723868662,
+            -179.65900713165792
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967573,
+        "placed_station_fractions": [
+          0.3137881256558821,
+          0.8598585373568022
+        ],
+        "station_ids": [
+          "end-clamp-7",
+          "end-clamp-6"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.10097105465673367,
+          0.9948893637593613
+        ],
+        "extent_mm": [
+          -286.7887953966367,
+          19.790840473780552
+        ],
+        "part_id": "b4-rail",
+        "path_endpoints_mm": [
+          [
+            -173.3027339315377,
+            291.2957063711383
+          ],
+          [
+            -209.03220281404867,
+            2.736381428658672
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967574,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.859858537356803
+        ],
+        "station_ids": [
+          "end-clamp-12",
+          "end-clamp-13"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9120849902989183,
+          -0.410001183500026
+        ],
+        "extent_mm": [
+          -286.7887953966313,
+          19.79084047378462
+        ],
+        "part_id": "a0-rail",
+        "path_endpoints_mm": [
+          [
+            -102.14632557536208,
+            -182.39538856031646
+          ],
+          [
+            165.61811476496928,
+            -295.73242331557634
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.59233409675744,
+        "placed_station_fractions": [
+          0.14014146264319743,
+          0.686211874344118
+        ],
+        "station_ids": [
+          "end-clamp-3",
+          "end-clamp-2"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9120849902989183,
+          0.4100011835000261
+        ],
+        "extent_mm": [
+          -286.7887953966314,
+          19.790840473784606
+        ],
+        "part_id": "a3-rail",
+        "path_endpoints_mm": [
+          [
+            165.6181147649694,
+            295.7324233155763
+          ],
+          [
+            -102.14632557536203,
+            182.39538856031646
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967573,
+        "placed_station_fractions": [
+          0.3137881256558818,
+          0.8598585373568017
+        ],
+        "station_ids": [
+          "end-clamp-10",
+          "end-clamp-11"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9120849902989183,
+          0.410001183500026
+        ],
+        "extent_mm": [
+          -19.790840473784645,
+          286.7887953966313
+        ],
+        "part_id": "b0-rail",
+        "path_endpoints_mm": [
+          [
+            -165.61811476496928,
+            -295.73242331557634
+          ],
+          [
+            102.14632557536206,
+            -182.39538856031646
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.59233409675716,
+        "placed_station_fractions": [
+          0.31378812565588177,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-17",
+          "end-clamp-16"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8111139356421758,
+          0.5848881802593213
+        ],
+        "extent_mm": [
+          -19.79084047378138,
+          286.7887953966359
+        ],
+        "part_id": "a4-rail",
+        "path_endpoints_mm": [
+          [
+            -106.88587723868648,
+            179.65900713165797
+          ],
+          [
+            -338.92084869650716,
+            4.436716944438324
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967574,
+        "placed_station_fractions": [
+          0.14014146264319832,
+          0.6862118743441186
+        ],
+        "station_ids": [
+          "end-clamp-4",
+          "end-clamp-5"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8111139356421757,
+          0.5848881802593212
+        ],
+        "extent_mm": [
+          -286.7887953966359,
+          19.790840473781355
+        ],
+        "part_id": "b1-rail",
+        "path_endpoints_mm": [
+          [
+            106.88587723868666,
+            -179.65900713165786
+          ],
+          [
+            338.92084869650716,
+            -4.436716944438282
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967572,
+        "placed_station_fractions": [
+          0.14014146264319774,
+          0.6862118743441182
+        ],
+        "station_ids": [
+          "end-clamp-21",
+          "end-clamp-20"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.10097105465673366,
+          0.9948893637593613
+        ],
+        "extent_mm": [
+          -19.790840473780577,
+          286.7887953966367
+        ],
+        "part_id": "a1-rail",
+        "path_endpoints_mm": [
+          [
+            173.302733931538,
+            -291.2957063711381
+          ],
+          [
+            209.03220281404867,
+            -2.736381428658646
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967574,
+        "placed_station_fractions": [
+          0.3137881256558813,
+          0.8598585373568018
+        ],
+        "station_ids": [
+          "end-clamp-15",
+          "end-clamp-14"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.8111139356421758,
+          -0.5848881802593213
+        ],
+        "extent_mm": [
+          -286.788795396636,
+          19.7908404737811
+        ],
+        "part_id": "b2-rail",
+        "path_endpoints_mm": [
+          [
+            338.92084869650716,
+            4.436716944438115
+          ],
+          [
+            106.88587723868659,
+            179.65900713165792
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.59233409675744,
+        "placed_station_fractions": [
+          0.3137881256558819,
+          0.859858537356802
+        ],
+        "station_ids": [
+          "end-clamp-18",
+          "end-clamp-19"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.1009710546567338,
+          -0.9948893637593613
+        ],
+        "extent_mm": [
+          -286.7887953966367,
+          19.79084047378069
+        ],
+        "part_id": "b5-rail",
+        "path_endpoints_mm": [
+          [
+            -209.03220281404867,
+            -2.736381428658518
+          ],
+          [
+            -173.3027339315379,
+            -291.29570637113824
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.59233409675755,
+        "placed_station_fractions": [
+          0.14014146264319827,
+          0.6862118743441179
+        ],
+        "station_ids": [
+          "end-clamp-9",
+          "end-clamp-8"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.1009710546567338,
+          -0.9948893637593613
+        ],
+        "extent_mm": [
+          -19.790840473780662,
+          286.7887953966367
+        ],
+        "part_id": "a2-rail",
+        "path_endpoints_mm": [
+          [
+            209.03220281404867,
+            2.7363814286585435
+          ],
+          [
+            173.30273393153786,
+            291.29570637113824
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967575,
+        "placed_station_fractions": [
+          0.14014146264319852,
+          0.6862118743441177
+        ],
+        "station_ids": [
+          "end-clamp-22",
+          "end-clamp-23"
+        ]
+      },
+      {
+        "axis_xy": [
+          0.9120849902989183,
+          -0.41000118350002607
+        ],
+        "extent_mm": [
+          -19.790840473784684,
+          286.7887953966314
+        ],
+        "part_id": "b3-rail",
+        "path_endpoints_mm": [
+          [
+            102.14632557536216,
+            182.39538856031643
+          ],
+          [
+            -165.61811476496922,
+            295.73242331557634
+          ]
+        ],
+        "path_kind": "radial-arc",
+        "path_length_mm": 313.5923340967573,
+        "placed_station_fractions": [
+          0.14014146264319846,
+          0.6862118743441176
+        ],
+        "station_ids": [
+          "end-clamp-0",
+          "end-clamp-1"
+        ]
+      }
+    ],
+    "stations": [
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-0-tube-0",
+          "end-clamp-0-tube-1",
+          "end-clamp-0-tube-2",
+          "end-clamp-0-washer-front-3",
+          "end-clamp-0-washer-rear-4",
+          "end-clamp-0-shaft-5",
+          "end-clamp-0-head-6",
+          "end-clamp-0-locking-nut-7"
+        ],
+        "id": "end-clamp-0",
+        "module_id": "b3",
+        "plate_ids": [
+          "b3-rail",
+          "b3-spine-0",
+          "b3-spine-1"
+        ],
+        "reference_id": "b3-spine-0",
+        "reference_xy": [
+          -99.99999999999997,
+          -259.80762113533143
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b3"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          100.0,
+          259.80762113533143
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-1-tube-0",
+          "end-clamp-1-tube-1",
+          "end-clamp-1-tube-2",
+          "end-clamp-1-washer-front-3",
+          "end-clamp-1-washer-rear-4",
+          "end-clamp-1-shaft-5",
+          "end-clamp-1-head-6",
+          "end-clamp-1-locking-nut-7"
+        ],
+        "id": "end-clamp-1",
+        "module_id": "b3",
+        "plate_ids": [
+          "b3-spine-0",
+          "b3-spine-1",
+          "b3-rail"
+        ],
+        "reference_id": "b3-spine-0",
+        "reference_xy": [
+          75.0,
+          -389.7114317029973
+        ],
+        "replaces_root_references": [
+          [
+            "b3",
+            "grid-r9-c-2",
+            -74.99999999999996,
+            389.7114317029974
+          ]
+        ],
+        "shared_modules": [
+          "b3"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -74.99999999999996,
+          389.7114317029973
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-2-tube-0",
+          "end-clamp-2-tube-1",
+          "end-clamp-2-tube-2",
+          "end-clamp-2-washer-front-3",
+          "end-clamp-2-washer-rear-4",
+          "end-clamp-2-shaft-5",
+          "end-clamp-2-head-6",
+          "end-clamp-2-locking-nut-7"
+        ],
+        "id": "end-clamp-2",
+        "module_id": "a0",
+        "plate_ids": [
+          "a0-spine-0",
+          "a0-spine-1",
+          "a0-rail"
+        ],
+        "reference_id": "a0-spine-0",
+        "reference_xy": [
+          -75.00000000000001,
+          389.71143170299746
+        ],
+        "replaces_root_references": [
+          [
+            "a0",
+            "grid-r-9-c1",
+            74.99999999999996,
+            -389.7114317029974
+          ]
+        ],
+        "shared_modules": [
+          "a0"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          74.99999999999997,
+          -389.71143170299746
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-3-tube-0",
+          "end-clamp-3-tube-1",
+          "end-clamp-3-tube-2",
+          "end-clamp-3-washer-front-3",
+          "end-clamp-3-washer-rear-4",
+          "end-clamp-3-shaft-5",
+          "end-clamp-3-head-6",
+          "end-clamp-3-locking-nut-7"
+        ],
+        "id": "end-clamp-3",
+        "module_id": "a0",
+        "plate_ids": [
+          "a0-rail",
+          "a0-spine-0",
+          "a0-spine-1"
+        ],
+        "reference_id": "a0-spine-0",
+        "reference_xy": [
+          100.00000000000009,
+          259.80762113533154
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a0"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -100.00000000000011,
+          -259.80762113533154
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-4-tube-0",
+          "end-clamp-4-tube-1",
+          "end-clamp-4-tube-2",
+          "end-clamp-4-washer-front-3",
+          "end-clamp-4-washer-rear-4",
+          "end-clamp-4-shaft-5",
+          "end-clamp-4-head-6",
+          "end-clamp-4-locking-nut-7"
+        ],
+        "id": "end-clamp-4",
+        "module_id": "a4",
+        "plate_ids": [
+          "a4-rail",
+          "a4-spine-0",
+          "a4-spine-1"
+        ],
+        "reference_id": "a4-spine-0",
+        "reference_xy": [
+          174.99999999999991,
+          -216.50635094610965
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a4"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -174.9999999999999,
+          216.50635094610968
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-5-tube-0",
+          "end-clamp-5-tube-1",
+          "end-clamp-5-tube-2",
+          "end-clamp-5-washer-front-3",
+          "end-clamp-5-washer-rear-4",
+          "end-clamp-5-shaft-5",
+          "end-clamp-5-head-6",
+          "end-clamp-5-locking-nut-7"
+        ],
+        "id": "end-clamp-5",
+        "module_id": "a4",
+        "plate_ids": [
+          "a4-spine-0",
+          "a4-spine-1",
+          "a4-rail"
+        ],
+        "reference_id": "a4-spine-0",
+        "reference_xy": [
+          375.0000000000001,
+          -129.90381056766586
+        ],
+        "replaces_root_references": [
+          [
+            "a4",
+            "grid-r3-c-8",
+            -375.0,
+            129.90381056766586
+          ]
+        ],
+        "shared_modules": [
+          "a4"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -375.0000000000001,
+          129.90381056766591
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-6-tube-0",
+          "end-clamp-6-tube-1",
+          "end-clamp-6-tube-2",
+          "end-clamp-6-washer-front-3",
+          "end-clamp-6-washer-rear-4",
+          "end-clamp-6-shaft-5",
+          "end-clamp-6-head-6",
+          "end-clamp-6-locking-nut-7"
+        ],
+        "id": "end-clamp-6",
+        "module_id": "a5",
+        "plate_ids": [
+          "a5-rail",
+          "a5-spine-0",
+          "a5-spine-1"
+        ],
+        "reference_id": "a5-spine-0",
+        "reference_xy": [
+          174.99999999999991,
+          216.50635094610965
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a5"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -174.99999999999994,
+          -216.50635094610962
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-7-tube-0",
+          "end-clamp-7-tube-1",
+          "end-clamp-7-tube-2",
+          "end-clamp-7-washer-front-3",
+          "end-clamp-7-washer-rear-4",
+          "end-clamp-7-shaft-5",
+          "end-clamp-7-head-6",
+          "end-clamp-7-locking-nut-7"
+        ],
+        "id": "end-clamp-7",
+        "module_id": "a5",
+        "plate_ids": [
+          "a5-spine-0",
+          "a5-spine-1",
+          "a5-rail"
+        ],
+        "reference_id": "a5-spine-0",
+        "reference_xy": [
+          374.99999999999983,
+          129.90381056766577
+        ],
+        "replaces_root_references": [
+          [
+            "a5",
+            "grid-r-3-c-8",
+            -375.0,
+            -129.90381056766574
+          ]
+        ],
+        "shared_modules": [
+          "a5"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -374.99999999999983,
+          -129.90381056766572
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-8-tube-0",
+          "end-clamp-8-tube-1",
+          "end-clamp-8-tube-2",
+          "end-clamp-8-washer-front-3",
+          "end-clamp-8-washer-rear-4",
+          "end-clamp-8-shaft-5",
+          "end-clamp-8-head-6",
+          "end-clamp-8-locking-nut-7"
+        ],
+        "id": "end-clamp-8",
+        "module_id": "b5",
+        "plate_ids": [
+          "b5-spine-0",
+          "b5-spine-1",
+          "b5-rail"
+        ],
+        "reference_id": "b5-spine-0",
+        "reference_xy": [
+          299.99999999999994,
+          259.80762113533154
+        ],
+        "replaces_root_references": [
+          [
+            "b5",
+            "grid-r-6-c-6",
+            -300.00000000000006,
+            -259.80762113533154
+          ]
+        ],
+        "shared_modules": [
+          "b5"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -300.0,
+          -259.8076211353315
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-9-tube-0",
+          "end-clamp-9-tube-1",
+          "end-clamp-9-tube-2",
+          "end-clamp-9-washer-front-3",
+          "end-clamp-9-washer-rear-4",
+          "end-clamp-9-shaft-5",
+          "end-clamp-9-head-6",
+          "end-clamp-9-locking-nut-7"
+        ],
+        "id": "end-clamp-9",
+        "module_id": "b5",
+        "plate_ids": [
+          "b5-rail",
+          "b5-spine-0",
+          "b5-spine-1"
+        ],
+        "reference_id": "b5-spine-0",
+        "reference_xy": [
+          274.99999999999983,
+          43.3012701892219
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b5"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          -274.99999999999983,
+          -43.30127018922187
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-10-tube-0",
+          "end-clamp-10-tube-1",
+          "end-clamp-10-tube-2",
+          "end-clamp-10-washer-front-3",
+          "end-clamp-10-washer-rear-4",
+          "end-clamp-10-shaft-5",
+          "end-clamp-10-head-6",
+          "end-clamp-10-locking-nut-7"
+        ],
+        "id": "end-clamp-10",
+        "module_id": "a3",
+        "plate_ids": [
+          "a3-spine-0",
+          "a3-spine-1",
+          "a3-rail"
+        ],
+        "reference_id": "a3-spine-0",
+        "reference_xy": [
+          -75.00000000000001,
+          -389.7114317029973
+        ],
+        "replaces_root_references": [
+          [
+            "a3",
+            "grid-r9-c1",
+            75.00000000000004,
+            389.7114317029974
+          ]
+        ],
+        "shared_modules": [
+          "a3"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          75.00000000000006,
+          389.7114317029973
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-11-tube-0",
+          "end-clamp-11-tube-1",
+          "end-clamp-11-tube-2",
+          "end-clamp-11-washer-front-3",
+          "end-clamp-11-washer-rear-4",
+          "end-clamp-11-shaft-5",
+          "end-clamp-11-head-6",
+          "end-clamp-11-locking-nut-7"
+        ],
+        "id": "end-clamp-11",
+        "module_id": "a3",
+        "plate_ids": [
+          "a3-rail",
+          "a3-spine-0",
+          "a3-spine-1"
+        ],
+        "reference_id": "a3-spine-0",
+        "reference_xy": [
+          100.00000000000009,
+          -259.8076211353315
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a3"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -100.00000000000006,
+          259.8076211353315
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-12-tube-0",
+          "end-clamp-12-tube-1",
+          "end-clamp-12-tube-2",
+          "end-clamp-12-washer-front-3",
+          "end-clamp-12-washer-rear-4",
+          "end-clamp-12-shaft-5",
+          "end-clamp-12-head-6",
+          "end-clamp-12-locking-nut-7"
+        ],
+        "id": "end-clamp-12",
+        "module_id": "b4",
+        "plate_ids": [
+          "b4-spine-0",
+          "b4-spine-1",
+          "b4-rail"
+        ],
+        "reference_id": "b4-spine-0",
+        "reference_xy": [
+          299.99999999999994,
+          -259.8076211353316
+        ],
+        "replaces_root_references": [
+          [
+            "b4",
+            "grid-r6-c-6",
+            -299.99999999999994,
+            259.80762113533166
+          ]
+        ],
+        "shared_modules": [
+          "b4"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -299.9999999999999,
+          259.80762113533166
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-13-tube-0",
+          "end-clamp-13-tube-1",
+          "end-clamp-13-tube-2",
+          "end-clamp-13-washer-front-3",
+          "end-clamp-13-washer-rear-4",
+          "end-clamp-13-shaft-5",
+          "end-clamp-13-head-6",
+          "end-clamp-13-locking-nut-7"
+        ],
+        "id": "end-clamp-13",
+        "module_id": "b4",
+        "plate_ids": [
+          "b4-rail",
+          "b4-spine-0",
+          "b4-spine-1"
+        ],
+        "reference_id": "b4-spine-0",
+        "reference_xy": [
+          274.9999999999999,
+          -43.301270189221896
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b4"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -274.9999999999999,
+          43.30127018922193
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-14-tube-0",
+          "end-clamp-14-tube-1",
+          "end-clamp-14-tube-2",
+          "end-clamp-14-washer-front-3",
+          "end-clamp-14-washer-rear-4",
+          "end-clamp-14-shaft-5",
+          "end-clamp-14-head-6",
+          "end-clamp-14-locking-nut-7"
+        ],
+        "id": "end-clamp-14",
+        "module_id": "a1",
+        "plate_ids": [
+          "a1-rail",
+          "a1-spine-0",
+          "a1-spine-1"
+        ],
+        "reference_id": "a1-spine-0",
+        "reference_xy": [
+          -274.99999999999955,
+          43.301270189221896
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a1"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          274.99999999999955,
+          -43.30127018922193
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-15-tube-0",
+          "end-clamp-15-tube-1",
+          "end-clamp-15-tube-2",
+          "end-clamp-15-washer-front-3",
+          "end-clamp-15-washer-rear-4",
+          "end-clamp-15-shaft-5",
+          "end-clamp-15-head-6",
+          "end-clamp-15-locking-nut-7"
+        ],
+        "id": "end-clamp-15",
+        "module_id": "a1",
+        "plate_ids": [
+          "a1-spine-0",
+          "a1-spine-1",
+          "a1-rail"
+        ],
+        "reference_id": "a1-spine-0",
+        "reference_xy": [
+          -299.99999999999994,
+          259.80762113533154
+        ],
+        "replaces_root_references": [
+          [
+            "a1",
+            "grid-r-6-c6",
+            299.99999999999994,
+            -259.80762113533166
+          ]
+        ],
+        "shared_modules": [
+          "a1"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          299.9999999999999,
+          -259.8076211353316
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-16-tube-0",
+          "end-clamp-16-tube-1",
+          "end-clamp-16-tube-2",
+          "end-clamp-16-washer-front-3",
+          "end-clamp-16-washer-rear-4",
+          "end-clamp-16-shaft-5",
+          "end-clamp-16-head-6",
+          "end-clamp-16-locking-nut-7"
+        ],
+        "id": "end-clamp-16",
+        "module_id": "b0",
+        "plate_ids": [
+          "b0-rail",
+          "b0-spine-0",
+          "b0-spine-1"
+        ],
+        "reference_id": "b0-spine-0",
+        "reference_xy": [
+          -99.99999999999997,
+          259.80762113533154
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b0"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          99.99999999999994,
+          -259.80762113533154
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-17-tube-0",
+          "end-clamp-17-tube-1",
+          "end-clamp-17-tube-2",
+          "end-clamp-17-washer-front-3",
+          "end-clamp-17-washer-rear-4",
+          "end-clamp-17-shaft-5",
+          "end-clamp-17-head-6",
+          "end-clamp-17-locking-nut-7"
+        ],
+        "id": "end-clamp-17",
+        "module_id": "b0",
+        "plate_ids": [
+          "b0-spine-0",
+          "b0-spine-1",
+          "b0-rail"
+        ],
+        "reference_id": "b0-spine-0",
+        "reference_xy": [
+          75.0,
+          389.71143170299746
+        ],
+        "replaces_root_references": [
+          [
+            "b0",
+            "grid-r-9-c-2",
+            -75.00000000000004,
+            -389.7114317029974
+          ]
+        ],
+        "shared_modules": [
+          "b0"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          -75.00000000000004,
+          -389.71143170299746
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-18-tube-0",
+          "end-clamp-18-tube-1",
+          "end-clamp-18-tube-2",
+          "end-clamp-18-washer-front-3",
+          "end-clamp-18-washer-rear-4",
+          "end-clamp-18-shaft-5",
+          "end-clamp-18-head-6",
+          "end-clamp-18-locking-nut-7"
+        ],
+        "id": "end-clamp-18",
+        "module_id": "b2",
+        "plate_ids": [
+          "b2-spine-0",
+          "b2-spine-1",
+          "b2-rail"
+        ],
+        "reference_id": "b2-spine-0",
+        "reference_xy": [
+          -375.00000000000034,
+          -129.90381056766586
+        ],
+        "replaces_root_references": [
+          [
+            "b2",
+            "grid-r3-c7",
+            375.0,
+            129.90381056766574
+          ]
+        ],
+        "shared_modules": [
+          "b2"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          375.00000000000034,
+          129.9038105676658
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-19-tube-0",
+          "end-clamp-19-tube-1",
+          "end-clamp-19-tube-2",
+          "end-clamp-19-washer-front-3",
+          "end-clamp-19-washer-rear-4",
+          "end-clamp-19-shaft-5",
+          "end-clamp-19-head-6",
+          "end-clamp-19-locking-nut-7"
+        ],
+        "id": "end-clamp-19",
+        "module_id": "b2",
+        "plate_ids": [
+          "b2-rail",
+          "b2-spine-0",
+          "b2-spine-1"
+        ],
+        "reference_id": "b2-spine-0",
+        "reference_xy": [
+          -174.9999999999999,
+          -216.50635094610965
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b2"
+        ],
+        "top_mm": 92.0,
+        "xy": [
+          174.99999999999991,
+          216.50635094610962
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-20-tube-0",
+          "end-clamp-20-tube-1",
+          "end-clamp-20-tube-2",
+          "end-clamp-20-washer-front-3",
+          "end-clamp-20-washer-rear-4",
+          "end-clamp-20-shaft-5",
+          "end-clamp-20-head-6",
+          "end-clamp-20-locking-nut-7"
+        ],
+        "id": "end-clamp-20",
+        "module_id": "b1",
+        "plate_ids": [
+          "b1-spine-0",
+          "b1-spine-1",
+          "b1-rail"
+        ],
+        "reference_id": "b1-spine-0",
+        "reference_xy": [
+          -375.0,
+          129.90381056766577
+        ],
+        "replaces_root_references": [
+          [
+            "b1",
+            "grid-r-3-c7",
+            375.0,
+            -129.90381056766586
+          ]
+        ],
+        "shared_modules": [
+          "b1"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          375.0,
+          -129.90381056766583
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-21-tube-0",
+          "end-clamp-21-tube-1",
+          "end-clamp-21-tube-2",
+          "end-clamp-21-washer-front-3",
+          "end-clamp-21-washer-rear-4",
+          "end-clamp-21-shaft-5",
+          "end-clamp-21-head-6",
+          "end-clamp-21-locking-nut-7"
+        ],
+        "id": "end-clamp-21",
+        "module_id": "b1",
+        "plate_ids": [
+          "b1-rail",
+          "b1-spine-0",
+          "b1-spine-1"
+        ],
+        "reference_id": "b1-spine-0",
+        "reference_xy": [
+          -174.99999999999991,
+          216.50635094610965
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "b1"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          174.9999999999999,
+          -216.50635094610968
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-22-tube-0",
+          "end-clamp-22-tube-1",
+          "end-clamp-22-tube-2",
+          "end-clamp-22-washer-front-3",
+          "end-clamp-22-washer-rear-4",
+          "end-clamp-22-shaft-5",
+          "end-clamp-22-head-6",
+          "end-clamp-22-locking-nut-7"
+        ],
+        "id": "end-clamp-22",
+        "module_id": "a2",
+        "plate_ids": [
+          "a2-rail",
+          "a2-spine-0",
+          "a2-spine-1"
+        ],
+        "reference_id": "a2-spine-0",
+        "reference_xy": [
+          -274.99999999999966,
+          -43.301270189221896
+        ],
+        "replaces_root_references": [],
+        "shared_modules": [
+          "a2"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          274.99999999999966,
+          43.30127018922186
+        ]
+      },
+      {
+        "board_top_mm": 16.0,
+        "hardware_ids": [
+          "end-clamp-23-tube-0",
+          "end-clamp-23-tube-1",
+          "end-clamp-23-tube-2",
+          "end-clamp-23-washer-front-3",
+          "end-clamp-23-washer-rear-4",
+          "end-clamp-23-shaft-5",
+          "end-clamp-23-head-6",
+          "end-clamp-23-locking-nut-7"
+        ],
+        "id": "end-clamp-23",
+        "module_id": "a2",
+        "plate_ids": [
+          "a2-spine-0",
+          "a2-spine-1",
+          "a2-rail"
+        ],
+        "reference_id": "a2-spine-0",
+        "reference_xy": [
+          -299.99999999999994,
+          -259.8076211353316
+        ],
+        "replaces_root_references": [
+          [
+            "a2",
+            "grid-r6-c6",
+            300.00000000000006,
+            259.80762113533154
+          ]
+        ],
+        "shared_modules": [
+          "a2"
+        ],
+        "top_mm": 174.0,
+        "xy": [
+          300.0,
+          259.80762113533154
+        ]
+      }
+    ]
+  },
+  "manufactured_support_spans": [
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-2"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a0-spine-0",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -114.85047785428291,
+        -205.08028474420917
+      ],
+      "root_support_ids": [
+        "end-clamp-3"
+      ],
+      "root_unbraced_path_mm": 34.844703868466866,
+      "station_fractions": [
+        [
+          "end-clamp-3",
+          0.14014146264319743
+        ],
+        [
+          "end-clamp-2",
+          0.686211874344118
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-2": 56.997772605912985,
+        "end-clamp-3": 33.97590871412831
+      },
+      "tip_mm": [
+        178.3222670438901,
+        -318.41731949946904
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-2"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a0-spine-1",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -114.85047785428291,
+        -205.08028474420917
+      ],
+      "root_support_ids": [
+        "end-clamp-3"
+      ],
+      "root_unbraced_path_mm": 34.844703868466866,
+      "station_fractions": [
+        [
+          "end-clamp-3",
+          0.14014146264319743
+        ],
+        [
+          "end-clamp-2",
+          0.686211874344118
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-2": 56.997772605912985,
+        "end-clamp-3": 33.97590871412831
+      },
+      "tip_mm": [
+        178.3222670438901,
+        -318.41731949946904
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-2"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801524,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a0-rail",
+      "path_length_mm": 313.59233409675744,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -102.14632557536208,
+        -182.39538856031646
+      ],
+      "root_support_ids": [
+        "end-clamp-3"
+      ],
+      "root_unbraced_path_mm": 31.223734881552904,
+      "station_fractions": [
+        [
+          "end-clamp-3",
+          0.14014146264319743
+        ],
+        [
+          "end-clamp-2",
+          0.686211874344118
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-2": 80.96934760108704,
+        "end-clamp-3": 56.944565429751925
+      },
+      "tip_mm": [
+        165.61811476496928,
+        -295.73242331557634
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 34.844703868466695,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a1-spine-0",
+      "path_length_mm": 337.53762442602414,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        186.59635416954134,
+        -313.64027307017585
+      ],
+      "root_support_ids": [
+        "end-clamp-15"
+      ],
+      "root_unbraced_path_mm": 118.31366337723254,
+      "station_fractions": [
+        [
+          "end-clamp-15",
+          0.3137881256558816
+        ],
+        [
+          "end-clamp-14",
+          0.8598585373568023
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 33.97590871412785,
+        "end-clamp-15": 56.99777260591287
+      },
+      "tip_mm": [
+        235.02997533097286,
+        -3.07671091351361
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 34.844703868466695,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a1-spine-1",
+      "path_length_mm": 337.53762442602414,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        186.59635416954134,
+        -313.64027307017585
+      ],
+      "root_support_ids": [
+        "end-clamp-15"
+      ],
+      "root_unbraced_path_mm": 118.31366337723254,
+      "station_fractions": [
+        [
+          "end-clamp-15",
+          0.3137881256558816
+        ],
+        [
+          "end-clamp-14",
+          0.8598585373568023
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 33.97590871412785,
+        "end-clamp-15": 56.99777260591287
+      },
+      "tip_mm": [
+        235.02997533097286,
+        -3.07671091351361
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-14"
+      ],
+      "distal_unbraced_path_mm": 31.223734881553014,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a1-rail",
+      "path_length_mm": 313.5923340967574,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        173.302733931538,
+        -291.2957063711381
+      ],
+      "root_support_ids": [
+        "end-clamp-15"
+      ],
+      "root_unbraced_path_mm": 110.34500775801493,
+      "station_fractions": [
+        [
+          "end-clamp-15",
+          0.3137881256558813
+        ],
+        [
+          "end-clamp-14",
+          0.8598585373568018
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-14": 56.94456542975146,
+        "end-clamp-15": 80.96934760108688
+      },
+      "tip_mm": [
+        209.03220281404867,
+        -2.736381428658646
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-23"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723293,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a2-spine-0",
+      "path_length_mm": 337.53762442602465,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        235.02997533097286,
+        3.0767109135134945
+      ],
+      "root_support_ids": [
+        "end-clamp-22"
+      ],
+      "root_unbraced_path_mm": 34.84470386846714,
+      "station_fractions": [
+        [
+          "end-clamp-22",
+          0.14014146264319852
+        ],
+        [
+          "end-clamp-23",
+          0.6862118743441177
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-22": 33.97590871412797,
+        "end-clamp-23": 56.99777260591293
+      },
+      "tip_mm": [
+        186.5963541695412,
+        313.640273070176
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-23"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723293,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a2-spine-1",
+      "path_length_mm": 337.53762442602465,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        235.02997533097286,
+        3.0767109135134945
+      ],
+      "root_support_ids": [
+        "end-clamp-22"
+      ],
+      "root_unbraced_path_mm": 34.84470386846714,
+      "station_fractions": [
+        [
+          "end-clamp-22",
+          0.14014146264319852
+        ],
+        [
+          "end-clamp-23",
+          0.6862118743441177
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-22": 33.97590871412797,
+        "end-clamp-23": 56.99777260591293
+      },
+      "tip_mm": [
+        186.5963541695412,
+        313.640273070176
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-23"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801544,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a2-rail",
+      "path_length_mm": 313.5923340967575,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        209.03220281404867,
+        2.7363814286585435
+      ],
+      "root_support_ids": [
+        "end-clamp-22"
+      ],
+      "root_unbraced_path_mm": 31.223734881553145,
+      "station_fractions": [
+        [
+          "end-clamp-22",
+          0.14014146264319852
+        ],
+        [
+          "end-clamp-23",
+          0.6862118743441177
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-22": 56.94456542975158,
+        "end-clamp-23": 80.96934760108691
+      },
+      "tip_mm": [
+        173.30273393153786,
+        291.29570637113824
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846709,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a3-spine-0",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        178.32226704389024,
+        318.41731949946904
+      ],
+      "root_support_ids": [
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 118.3136633772326,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-11",
+          0.8598585373568017
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 56.99777260591283,
+        "end-clamp-11": 33.975908714128295
+      },
+      "tip_mm": [
+        -114.85047785428286,
+        205.08028474420917
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846709,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a3-spine-1",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        178.32226704389024,
+        318.41731949946904
+      ],
+      "root_support_ids": [
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 118.3136633772326,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-11",
+          0.8598585373568017
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 56.99777260591283,
+        "end-clamp-11": 33.975908714128295
+      },
+      "tip_mm": [
+        -114.85047785428286,
+        205.08028474420917
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-11"
+      ],
+      "distal_unbraced_path_mm": 31.223734881552957,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a3-rail",
+      "path_length_mm": 313.5923340967573,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        165.6181147649694,
+        295.7324233155763
+      ],
+      "root_support_ids": [
+        "end-clamp-10"
+      ],
+      "root_unbraced_path_mm": 110.34500775801509,
+      "station_fractions": [
+        [
+          "end-clamp-10",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-11",
+          0.8598585373568017
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-10": 80.96934760108698,
+        "end-clamp-11": 56.94456542975186
+      },
+      "tip_mm": [
+        -102.14632557536203,
+        182.39538856031646
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-5"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a4-spine-0",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -120.1794974766898,
+        202.00357383069576
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 34.84470386846697,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.14014146264319832
+        ],
+        [
+          "end-clamp-5",
+          0.6862118743441186
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-4": 33.97590871412826,
+        "end-clamp-5": 56.997772605913056
+      },
+      "tip_mm": [
+        -364.9186212134313,
+        4.777046429293289
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-5"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a4-spine-1",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -120.1794974766898,
+        202.00357383069576
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 34.84470386846697,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.14014146264319832
+        ],
+        [
+          "end-clamp-5",
+          0.6862118743441186
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-4": 33.97590871412826,
+        "end-clamp-5": 56.997772605913056
+      },
+      "tip_mm": [
+        -364.9186212134313,
+        4.777046429293289
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-5"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801496,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a4-rail",
+      "path_length_mm": 313.5923340967574,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -106.88587723868648,
+        179.65900713165797
+      ],
+      "root_support_ids": [
+        "end-clamp-4"
+      ],
+      "root_unbraced_path_mm": 31.223734881552986,
+      "station_fractions": [
+        [
+          "end-clamp-4",
+          0.14014146264319832
+        ],
+        [
+          "end-clamp-5",
+          0.6862118743441186
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-4": 56.94456542975184,
+        "end-clamp-5": 80.9693476010871
+      },
+      "tip_mm": [
+        -338.92084869650716,
+        4.436716944438324
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-6"
+      ],
+      "distal_unbraced_path_mm": 34.844703868467036,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a5-spine-0",
+      "path_length_mm": 337.53762442602465,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -364.9186212134313,
+        -4.777046429293022
+      ],
+      "root_support_ids": [
+        "end-clamp-7"
+      ],
+      "root_unbraced_path_mm": 118.31366337723277,
+      "station_fractions": [
+        [
+          "end-clamp-7",
+          0.3137881256558821
+        ],
+        [
+          "end-clamp-6",
+          0.8598585373568022
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-6": 33.975908714128266,
+        "end-clamp-7": 56.997772605912765
+      },
+      "tip_mm": [
+        -120.17949747668997,
+        -202.00357383069567
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-6"
+      ],
+      "distal_unbraced_path_mm": 34.844703868467036,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a5-spine-1",
+      "path_length_mm": 337.53762442602465,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -364.9186212134313,
+        -4.777046429293022
+      ],
+      "root_support_ids": [
+        "end-clamp-7"
+      ],
+      "root_unbraced_path_mm": 118.31366337723277,
+      "station_fractions": [
+        [
+          "end-clamp-7",
+          0.3137881256558821
+        ],
+        [
+          "end-clamp-6",
+          0.8598585373568022
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-6": 33.975908714128266,
+        "end-clamp-7": 56.997772605912765
+      },
+      "tip_mm": [
+        -120.17949747668997,
+        -202.00357383069567
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-6"
+      ],
+      "distal_unbraced_path_mm": 31.22373488155307,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "a5-rail",
+      "path_length_mm": 313.5923340967573,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -338.92084869650716,
+        -4.436716944438074
+      ],
+      "root_support_ids": [
+        "end-clamp-7"
+      ],
+      "root_unbraced_path_mm": 110.34500775801526,
+      "station_fractions": [
+        [
+          "end-clamp-7",
+          0.3137881256558821
+        ],
+        [
+          "end-clamp-6",
+          0.8598585373568022
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-6": 56.9445654297518,
+        "end-clamp-7": 80.96934760108684
+      },
+      "tip_mm": [
+        -106.88587723868662,
+        -179.65900713165792
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-16"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846709,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b0-spine-0",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -178.32226704389012,
+        -318.41731949946904
+      ],
+      "root_support_ids": [
+        "end-clamp-17"
+      ],
+      "root_unbraced_path_mm": 118.31366337723274,
+      "station_fractions": [
+        [
+          "end-clamp-17",
+          0.31378812565588177
+        ],
+        [
+          "end-clamp-16",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-16": 33.975908714128266,
+        "end-clamp-17": 56.99777260591303
+      },
+      "tip_mm": [
+        114.85047785428289,
+        -205.08028474420917
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-16"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846709,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b0-spine-1",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -178.32226704389012,
+        -318.41731949946904
+      ],
+      "root_support_ids": [
+        "end-clamp-17"
+      ],
+      "root_unbraced_path_mm": 118.31366337723274,
+      "station_fractions": [
+        [
+          "end-clamp-17",
+          0.31378812565588177
+        ],
+        [
+          "end-clamp-16",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-16": 33.975908714128266,
+        "end-clamp-17": 56.99777260591303
+      },
+      "tip_mm": [
+        114.85047785428289,
+        -205.08028474420917
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-16"
+      ],
+      "distal_unbraced_path_mm": 31.223734881552957,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b0-rail",
+      "path_length_mm": 313.59233409675716,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -165.61811476496928,
+        -295.73242331557634
+      ],
+      "root_support_ids": [
+        "end-clamp-17"
+      ],
+      "root_unbraced_path_mm": 110.34500775801521,
+      "station_fractions": [
+        [
+          "end-clamp-17",
+          0.31378812565588177
+        ],
+        [
+          "end-clamp-16",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-16": 56.94456542975184,
+        "end-clamp-17": 80.96934760108705
+      },
+      "tip_mm": [
+        102.14632557536206,
+        -182.39538856031646
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-20"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b1-spine-0",
+      "path_length_mm": 337.53762442602437,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        120.17949747669002,
+        -202.00357383069564
+      ],
+      "root_support_ids": [
+        "end-clamp-21"
+      ],
+      "root_unbraced_path_mm": 34.84470386846692,
+      "station_fractions": [
+        [
+          "end-clamp-21",
+          0.14014146264319774
+        ],
+        [
+          "end-clamp-20",
+          0.6862118743441182
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-20": 56.99777260591289,
+        "end-clamp-21": 33.97590871412827
+      },
+      "tip_mm": [
+        364.9186212134313,
+        -4.777046429293245
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-20"
+      ],
+      "distal_unbraced_path_mm": 118.3136633772327,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b1-spine-1",
+      "path_length_mm": 337.53762442602437,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        120.17949747669002,
+        -202.00357383069564
+      ],
+      "root_support_ids": [
+        "end-clamp-21"
+      ],
+      "root_unbraced_path_mm": 34.84470386846692,
+      "station_fractions": [
+        [
+          "end-clamp-21",
+          0.14014146264319774
+        ],
+        [
+          "end-clamp-20",
+          0.6862118743441182
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-20": 56.99777260591289,
+        "end-clamp-21": 33.97590871412827
+      },
+      "tip_mm": [
+        364.9186212134313,
+        -4.777046429293245
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-20"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801516,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b1-rail",
+      "path_length_mm": 313.5923340967572,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        106.88587723868666,
+        -179.65900713165786
+      ],
+      "root_support_ids": [
+        "end-clamp-21"
+      ],
+      "root_unbraced_path_mm": 31.22373488155295,
+      "station_fractions": [
+        [
+          "end-clamp-21",
+          0.14014146264319774
+        ],
+        [
+          "end-clamp-20",
+          0.6862118743441182
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-20": 80.96934760108701,
+        "end-clamp-21": 56.94456542975183
+      },
+      "tip_mm": [
+        338.92084869650716,
+        -4.436716944438282
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-19"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846715,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b2-spine-0",
+      "path_length_mm": 337.53762442602454,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        364.9186212134313,
+        4.777046429293066
+      ],
+      "root_support_ids": [
+        "end-clamp-18"
+      ],
+      "root_unbraced_path_mm": 118.31366337723284,
+      "station_fractions": [
+        [
+          "end-clamp-18",
+          0.3137881256558819
+        ],
+        [
+          "end-clamp-19",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-18": 56.99777260591326,
+        "end-clamp-19": 33.975908714128245
+      },
+      "tip_mm": [
+        120.17949747668995,
+        202.00357383069567
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-19"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846715,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b2-spine-1",
+      "path_length_mm": 337.53762442602454,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        364.9186212134313,
+        4.777046429293066
+      ],
+      "root_support_ids": [
+        "end-clamp-18"
+      ],
+      "root_unbraced_path_mm": 118.31366337723284,
+      "station_fractions": [
+        [
+          "end-clamp-18",
+          0.3137881256558819
+        ],
+        [
+          "end-clamp-19",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-18": 56.99777260591326,
+        "end-clamp-19": 33.975908714128245
+      },
+      "tip_mm": [
+        120.17949747668995,
+        202.00357383069567
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-19"
+      ],
+      "distal_unbraced_path_mm": 31.223734881553128,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b2-rail",
+      "path_length_mm": 313.59233409675744,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        338.92084869650716,
+        4.436716944438115
+      ],
+      "root_support_ids": [
+        "end-clamp-18"
+      ],
+      "root_unbraced_path_mm": 110.34500775801534,
+      "station_fractions": [
+        [
+          "end-clamp-18",
+          0.3137881256558819
+        ],
+        [
+          "end-clamp-19",
+          0.859858537356802
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-18": 80.96934760108726,
+        "end-clamp-19": 56.94456542975187
+      },
+      "tip_mm": [
+        106.88587723868659,
+        179.65900713165792
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723298,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b3-spine-0",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        114.85047785428299,
+        205.08028474420917
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 34.84470386846701,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.14014146264319846
+        ],
+        [
+          "end-clamp-1",
+          0.6862118743441176
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 33.97590871412816,
+        "end-clamp-1": 56.997772605912814
+      },
+      "tip_mm": [
+        -178.32226704389006,
+        318.41731949946904
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723298,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b3-spine-1",
+      "path_length_mm": 337.5376244260247,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        114.85047785428299,
+        205.08028474420917
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 34.84470386846701,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.14014146264319846
+        ],
+        [
+          "end-clamp-1",
+          0.6862118743441176
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 33.97590871412816,
+        "end-clamp-1": 56.997772605912814
+      },
+      "tip_mm": [
+        -178.32226704389006,
+        318.41731949946904
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-1"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801527,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b3-rail",
+      "path_length_mm": 313.5923340967573,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        102.14632557536216,
+        182.39538856031643
+      ],
+      "root_support_ids": [
+        "end-clamp-0"
+      ],
+      "root_unbraced_path_mm": 31.223734881553035,
+      "station_fractions": [
+        [
+          "end-clamp-0",
+          0.14014146264319846
+        ],
+        [
+          "end-clamp-1",
+          0.6862118743441176
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-0": 56.94456542975172,
+        "end-clamp-1": 80.9693476010869
+      },
+      "tip_mm": [
+        -165.61811476496922,
+        295.73242331557634
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846681,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b4-spine-0",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -186.59635416954103,
+        313.6402730701761
+      ],
+      "root_support_ids": [
+        "end-clamp-12"
+      ],
+      "root_unbraced_path_mm": 118.3136633772326,
+      "station_fractions": [
+        [
+          "end-clamp-12",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-13",
+          0.859858537356803
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 56.99777260591291,
+        "end-clamp-13": 33.97590871412817
+      },
+      "tip_mm": [
+        -235.02997533097286,
+        3.076710913513639
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 34.84470386846681,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b4-spine-1",
+      "path_length_mm": 337.5376244260246,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -186.59635416954103,
+        313.6402730701761
+      ],
+      "root_support_ids": [
+        "end-clamp-12"
+      ],
+      "root_unbraced_path_mm": 118.3136633772326,
+      "station_fractions": [
+        [
+          "end-clamp-12",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-13",
+          0.859858537356803
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 56.99777260591291,
+        "end-clamp-13": 33.97590871412817
+      },
+      "tip_mm": [
+        -235.02997533097286,
+        3.076710913513639
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-13"
+      ],
+      "distal_unbraced_path_mm": 31.223734881552787,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b4-rail",
+      "path_length_mm": 313.5923340967574,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -173.3027339315377,
+        291.2957063711383
+      ],
+      "root_support_ids": [
+        "end-clamp-12"
+      ],
+      "root_unbraced_path_mm": 110.3450077580151,
+      "station_fractions": [
+        [
+          "end-clamp-12",
+          0.3137881256558818
+        ],
+        [
+          "end-clamp-13",
+          0.859858537356803
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-12": 80.96934760108692,
+        "end-clamp-13": 56.944565429751776
+      },
+      "tip_mm": [
+        -209.03220281404867,
+        2.736381428658672
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-8"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723296,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b5-spine-0",
+      "path_length_mm": 337.5376244260248,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -235.02997533097286,
+        -3.076710913513466
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 34.84470386846698,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.14014146264319827
+        ],
+        [
+          "end-clamp-8",
+          0.6862118743441179
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-8": 56.99777260591293,
+        "end-clamp-9": 33.97590871412812
+      },
+      "tip_mm": [
+        -186.59635416954126,
+        -313.640273070176
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-8"
+      ],
+      "distal_unbraced_path_mm": 118.31366337723296,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b5-spine-1",
+      "path_length_mm": 337.5376244260248,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -235.02997533097286,
+        -3.076710913513466
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 34.84470386846698,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.14014146264319827
+        ],
+        [
+          "end-clamp-8",
+          0.6862118743441179
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-8": 56.99777260591293,
+        "end-clamp-9": 33.97590871412812
+      },
+      "tip_mm": [
+        -186.59635416954126,
+        -313.640273070176
+      ]
+    },
+    {
+      "criterion": "radial-arc",
+      "distal_support_ids": [
+        "end-clamp-8"
+      ],
+      "distal_unbraced_path_mm": 110.34500775801524,
+      "end_region_fraction": 0.315,
+      "fraction_parameter": "module angle",
+      "part_id": "b5-rail",
+      "path_length_mm": 313.59233409675755,
+      "path_offset_limit_mm": null,
+      "root_mm": [
+        -209.03220281404867,
+        -2.736381428658518
+      ],
+      "root_support_ids": [
+        "end-clamp-9"
+      ],
+      "root_unbraced_path_mm": 31.22373488155302,
+      "station_fractions": [
+        [
+          "end-clamp-9",
+          0.14014146264319827
+        ],
+        [
+          "end-clamp-8",
+          0.6862118743441179
+        ]
+      ],
+      "station_path_offsets_mm": {
+        "end-clamp-8": 80.96934760108694,
+        "end-clamp-9": 56.94456542975171
+      },
+      "tip_mm": [
+        -173.3027339315379,
+        -291.29570637113824
+      ]
+    }
+  ],
+  "symmetry": {
+    "actual_extruded_material_hardware_and_layer_orbits": "PASS",
+    "group": "none"
+  },
+  "upright_joinery": [
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a0-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a0-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a0-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a0-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "a0-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a0-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a0-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a0-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a0-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a1-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a1-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a1-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a1-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "a1-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a1-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a1-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a1-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a1-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a2-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a2-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a2-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a2-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "a2-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a2-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a2-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a2-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a2-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a3-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a3-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a3-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a3-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "a3-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a3-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a3-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a3-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a3-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a4-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a4-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a4-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a4-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "a4-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "a4-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "a4-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "a4-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "a4-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a5-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a5-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a5-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a5-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "a5-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "a5-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "a5-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "a5-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "a5-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b0-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b0-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b0-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b0-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "b0-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b0-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b0-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b0-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b0-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b1-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b1-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b1-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b1-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "b1-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b1-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b1-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b1-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b1-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b2-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b2-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b2-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b2-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "b2-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b2-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b2-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b2-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b2-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b3-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b3-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b3-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b3-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "b3-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b3-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b3-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b3-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b3-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b4-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b4-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b4-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b4-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        52.0,
+        76.0
+      ],
+      "part_id": "b4-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        50.782073,
+        76.0
+      ],
+      "part_id": "b4-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        47.313708,
+        76.0
+      ],
+      "part_id": "b4-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        10.0,
+        42.122935,
+        76.0
+      ],
+      "part_id": "b4-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        20,
+        44,
+        70
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        76.0
+      ],
+      "part_id": "b4-fin-8",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b5-fin-0",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b5-fin-1",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b5-fin-2",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b5-fin-3",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        52.0,
+        158.0
+      ],
+      "part_id": "b5-fin-4",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        50.782073,
+        158.0
+      ],
+      "part_id": "b5-fin-5",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        47.313708,
+        158.0
+      ],
+      "part_id": "b5-fin-6",
+      "role": "rib"
+    },
+    {
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        92.0,
+        42.122935,
+        158.0
+      ],
+      "part_id": "b5-fin-7",
+      "role": "rib"
+    },
+    {
+      "board_foot_bearing": true,
+      "board_load_path": "captured join to grid-clamped structural panel",
+      "crest_above_capture_rail_mm": 0,
+      "local_bearing_heights_mm": [
+        0,
+        102,
+        126,
+        152
+      ],
+      "local_bounds_mm": [
+        -50.0,
+        0.0,
+        36.0,
+        158.0
+      ],
+      "part_id": "b5-fin-8",
+      "role": "rib"
+    }
+  ]
+}

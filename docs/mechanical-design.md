@@ -7,14 +7,12 @@ Generated instructions identify parts, levels, fasteners and removal order.
 
 | Style | Construction and handling |
 | --- | --- |
-| Laminar | Anatomical plates on paired slotted trestles; two root bolts per module. No spacer rings or individual rib clips. Support detached parts in a cradle. |
-| Layered creature | Layered shells, spacer columns, alignment webs and transverse ribs. Headed retaining keys REQUIRE positive split-pin/clip stops. Service cap assemblies inverted in a padded cradle. |
-| Radial weave | Curved paired spines, radial fins and upper capture rails. Remove rails before inward fin withdrawal; high modules precede low at crossings. |
-| Rib study | Paired straight spines, transverse ribs and full upper closure clamped by two root bolts. Detached modules need tray support and compression. |
+| Laminar | Anatomical plates on separated direct grid-aligned end clamps with rigid metal tube standoffs; no unique board seats or offset adapters. Support detached parts in a cradle. |
+| Layered creature | Layered shells, original root spacer columns, alignment webs and transverse ribs, plus separated end clamps and gap-filling tube columns for every broad layer. Headed retaining keys REQUIRE positive split-pin/clip stops. Service cap assemblies inverted in a padded cradle. |
+| Radial weave | Curved paired spines, radial fins and upper capture rails on separated end clamps; some axes share one segmented compression stack between neighboring modules. Low fins stop at the capture rail. Remove rails before inward fin withdrawal; high modules precede low at crossings. |
+| Rib study | Paired straight spines, transverse ribs and full upper closure with separated near-root/distal tube clamps. Detached modules need tray support and compression. |
 
-Root washers must bear on actual manufactured material; hardware clearance
-boxes are simplified proxies. Rear access is required. Staggered mounting grids
-serve the creature, radial and rib styles; laminar derives roots from anatomy.
+Every deco mounting axis is directly coaxial with the same physical board grid at matching stock size/settings. Washers bear on real material and rigid tubes fill every actual gap. End-clamp geometry is modeled; original root/clip envelopes remain simplified. Rear access is required. See [current mounting evidence](implementation/mounting.md) and the [all-example gallery](implementation/gallery.md).
 See [design guide](design.md) for supported dimensions, assembly effort and style
 parameters, and [rib-study joint detail](implementation/joint-mechanism.md).
 

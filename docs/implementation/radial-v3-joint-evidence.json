@@ -1,0 +1,46 @@
+{
+  "radial-weave": {
+    "digital_valid": true,
+    "report": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "rib_instances": 108,
+    "sampled_inward_mm": [
+      0,
+      10,
+      40,
+      80
+    ],
+    "capture_probe_mm": 1,
+    "axes": 24,
+    "assembly_sha256": "9dfd9d07ad0093743ae3743fd35188546573dbe6da158c169420726560b0df7d",
+    "scope": "Actual manufactured spine inward paths with capture rail removed, and1mm inward capture against installed rail; sampled, not exhaustive motion proof."
+  },
+  "radial-weave-reconfigured": {
+    "digital_valid": true,
+    "report": {
+      "schema_version": 1,
+      "digital_valid": true,
+      "issues": [],
+      "physical_validation": "not_run",
+      "host_validation": "not_run",
+      "motion_validation": "sampled_translations_only"
+    },
+    "rib_instances": 108,
+    "sampled_inward_mm": [
+      0,
+      10,
+      40,
+      80
+    ],
+    "capture_probe_mm": 1,
+    "axes": 24,
+    "assembly_sha256": "3532e40f0cbe4c6bee2fb1672e56625632484be21bf73bcbae1e3873b94ec06d",
+    "scope": "Actual manufactured spine inward paths with capture rail removed, and1mm inward capture against installed rail; sampled, not exhaustive motion proof."
+  }
+}
