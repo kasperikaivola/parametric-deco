@@ -237,6 +237,7 @@ class Assembly:
     hardware_bounds: tuple = ()
     extraction_paths: tuple = ()
     composition: dict | None = None
+    lighting: dict | None = None
 
     def definition_for(self, instance):
         for d in self.definitions:
@@ -249,7 +250,8 @@ class Assembly:
             "schema_version": 1,
             "units": "mm",
             "definitions": [d.to_dict() for d in self.definitions],
-            **{k: v for k, v in asdict(self).items() if k != "definitions"},
+            **{k: v for k, v in asdict(self).items() if k not in ("definitions", "lighting")},
+            **({"lighting": self.lighting} if self.lighting else {}),
         }
 
     @classmethod
@@ -266,6 +268,7 @@ class Assembly:
             tuple(data["hardware_bounds"]),
             tuple(data["extraction_paths"]),
             data.get("composition"),
+            data.get("lighting"),
         )
 
 

@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "style": "layered-creature",
+  "parameters": {
+    "limb_count": 4,
+    "cavity_count": 6,
+    "ribs_per_limb": 6,
+    "shell_layers": 6,
+    "limb_layers": 4,
+    "limb_reach": 1,
+    "limb_width": 1,
+    "rib_height_mm": 65,
+    "asymmetry": 0.08,
+    "scale": 1,
+    "curl": 1,
+    "posture": "rest"
+  },
+  "units": "mm",
+  "envelope": {
+    "width_mm": 1000,
+    "height_mm": 1000,
+    "depth_mm": 200
+  },
+  "material": {
+    "nominal_mm": 6,
+    "measured_mm": 6,
+    "measurement_status": "assumed_unmeasured",
+    "clearance_mm": 0.2,
+    "grade": null,
+    "finish": null
+  },
+  "grid": {
+    "pitch_x_mm": 50,
+    "pitch_y_mm": 43.30127018922193,
+    "offset_mm": 25,
+    "origin_x_mm": 0,
+    "origin_y_mm": 0,
+    "hole_diameter_mm": 6.5,
+    "edge_margin_mm": 15
+  },
+  "backplate": {
+    "sides": 8,
+    "rotation_deg": 22.5
+  },
+  "mounting": {
+    "rear_clearance_mm": 10,
+    "hardware_outward_mm": 12,
+    "washer_radius_mm": 9,
+    "root_half_span_mm": 43.30127018922193
+  },
+  "lighting": {
+    "enabled": true,
+    "max_segments": 16
+  }
+}

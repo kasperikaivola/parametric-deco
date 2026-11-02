@@ -84,6 +84,9 @@ def main():
                 ],
             ]
         )
+        for style in ("laminar", "layered-creature", "radial-weave", "rib-study"):
+            commands.append(["build", "examples/" + style + "-led.json",
+                             "--out", "build/" + style + "-led"])
         for name in ("creature-alien-two", "creature-alien-six"):
             commands.extend(
                 [

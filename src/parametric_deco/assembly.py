@@ -22,9 +22,12 @@ def _tuple_matrix(matrix):
 
 
 def assemble(config, inventory=None):
+    from .lighting import prepare_inventory, add_lighting
     from .supports import supported_build
 
-    return supported_build(config, inventory, _assemble)
+    base_inventory, saved = prepare_inventory(config, inventory)
+    build = supported_build(config, base_inventory, _assemble)
+    return add_lighting(config, build, inventory, saved)
 
 
 def _assemble(config, inventory=None):

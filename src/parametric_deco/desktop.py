@@ -8,7 +8,7 @@ import tempfile
 import time
 
 from .config import STYLE_PARAMETERS, config_from_dict
-from .desktop_state import PreviewState, fingerprint
+from .desktop_state import PreviewState, editable_config, fingerprint
 from .parameter_edit import allowed_text, apply_parameter_edit
 
 
@@ -345,7 +345,7 @@ def create_window():
             try:
                 self.tree.clear()
                 try:
-                    data = json.loads(self.editor.toPlainText())
+                    data = editable_config(json.loads(self.editor.toPlainText()))
                 except ValueError:
                     return
                 if not isinstance(data, dict):
@@ -389,7 +389,7 @@ def create_window():
 
         def _apply_tree_edit(self, path, text):
             try:
-                data = json.loads(self.editor.toPlainText())
+                data = editable_config(json.loads(self.editor.toPlainText()))
                 updated = apply_parameter_edit(data, path, text)
             except json.JSONDecodeError as error:
                 self.refresh_tree()
@@ -408,7 +408,7 @@ def create_window():
             if self.updating:
                 return
             try:
-                data = json.loads(self.editor.toPlainText())
+                data = editable_config(json.loads(self.editor.toPlainText()))
                 if not isinstance(data, dict):
                     raise ValueError('Config must be an object')
             except ValueError as error:

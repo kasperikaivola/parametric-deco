@@ -235,3 +235,25 @@ def test_failed_new_request_keeps_last_good_revision():
     state.complete(second, False, 'physical geometry invalid')
     assert state.good_revision == first and not state.ready
     assert state.config['style'] == 'rib-study'
+
+
+def test_f3_editable_tree_keeps_lists_defaults_and_invalid_values():
+    from parametric_deco.desktop_state import editable_config, replace_value
+    raw = {'style':'rib-study','parameters':{'placements':[{'module_id':'old'}]}}
+    data = editable_config(raw)
+    assert isinstance(data['parameters']['placements'],list)
+    assert data['parameters']['placements'][0]['x_mm'] == 25
+    assert data['lighting']['enabled'] is False
+    replace_value(data,('parameters','placements',0,'x_mm'),'75')
+    replace_value(data,('parameters','recipe','stations_mm',0),'60')
+    assert data['parameters']['placements'][0]['x_mm'] == 75
+    assert data['parameters']['recipe']['stations_mm'][0] == 60
+    replace_value(data,('lighting','strip_width_mm'),'0')
+    invalid = editable_config(data)
+    assert invalid['lighting']['strip_width_mm'] == 0
+    replace_value(invalid,('lighting','strip_width_mm'),'12')
+    assert config_from_dict(invalid).lighting.strip_width_mm == 12
+    radial=editable_config({'style':'radial-weave','parameters':{'rib_permutation':[8,7,6,5,4,3,2,1,0]}})
+    replace_value(radial,('parameters','rib_permutation',0),'0')
+    assert radial['parameters']['rib_permutation'][0] == 0
+    assert editable_config({'style':'invalid','lighting':{'strip_width_mm':0}})['style'] == 'invalid'

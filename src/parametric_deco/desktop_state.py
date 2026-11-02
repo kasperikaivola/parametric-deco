@@ -11,6 +11,34 @@ def fingerprint(config, inventory=None):
                              sort_keys=True, allow_nan=False).encode()).hexdigest()
 
 
+def editable_config(raw):
+    """JSON-compatible defaults overlaid by raw edits, including invalid values.
+
+    Semantic validation belongs to PreviewState. Arrays stay mutable lists so
+    tree paths and replace_value use exactly the same representation.
+    """
+    if not isinstance(raw, dict):
+        raise ValueError('config must be a JSON object')
+    from .config import STYLE_PARAMETERS
+
+    raw = json.loads(json.dumps(raw))
+    style = raw.get('style', 'laminar')
+    if not isinstance(style, str) or style not in STYLE_PARAMETERS:
+        style = 'laminar'
+    defaults = json.loads(json.dumps(config_from_dict({'style': style}).to_dict()))
+
+    def overlay(base, value):
+        if isinstance(base, dict) and isinstance(value, dict):
+            return {**base, **{key: overlay(base.get(key), child)
+                              for key, child in value.items()}}
+        if isinstance(base, list) and isinstance(value, list):
+            return [overlay(base[min(n, len(base)-1)] if base else None, child)
+                    for n, child in enumerate(value)]
+        return value
+
+    return overlay(defaults, raw)
+
+
 def replace_value(data, path, text):
     value = json.loads(text)
     parent = data

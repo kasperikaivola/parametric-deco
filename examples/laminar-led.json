@@ -1,0 +1,14 @@
+{
+  "schema_version": 2,
+  "style": "laminar",
+  "parameters": {},
+  "envelope": {
+    "width_mm": 800,
+    "height_mm": 800,
+    "depth_mm": 140
+  },
+  "lighting": {
+    "enabled": true,
+    "max_segments": 18
+  }
+}

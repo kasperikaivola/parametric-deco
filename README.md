@@ -39,6 +39,12 @@ installs this package with `--no-deps`, and installs the pinned PySide6 extra.
 argument is a schema-v2 configuration, for example
 `.\scripts\run-gui.ps1 examples\organism-low.json`.
 
+Optional [concealed addressable lighting](docs/implementation/concealed-led.md)
+adds removable bolted strip carriers behind sculptural pieces, a bottom cable
+input, reusable retention ties, and routing/BOM exports. Set `lighting.enabled`
+to `true` in JSON or the desktop tree; `examples/*-led.json` cover all four styles.
+Geometry views do not simulate illumination.
+
 There are **four implemented generators** and **15 example configurations**, including geometry presets and supported inventory poses. The [complete matched gallery](docs/implementation/gallery.md) shows every example, its actual mounting hardware, and exact end-support evidence. All nominal-size designs use the **same physical backplate and hole grid**; 800/1400 mm presets require different board stock sizes.
 
 The same orthographic cameras, materials and framing apply below. Front looks onto XY from +Z; three-quarter shows relief. Blue-grey end-clamp hardware is real modeled geometry; [mounting details](docs/implementation/mounting.md) explain the load paths.
