@@ -194,6 +194,10 @@ def _export_into(build, out):
         from ..visuals.visibility import projection_visibility
 
         write_json(out / "projection-visibility.json", projection_visibility(build.assembly))
+    if build.assembly.lighting:
+        from .lighting import export_lighting
+
+        export_lighting(build.assembly, out)
     versions = {
         n: metadata.version(n)
         for n in ("parametric-deco", "build123d", "numpy", "shapely", "trimesh", "pillow")

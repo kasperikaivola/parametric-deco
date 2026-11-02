@@ -24,6 +24,7 @@ def request_signature(c):
 
     values = c.to_dict()
     values.pop("style")
+    values.pop("lighting", None)
     values["schema_version"] = 1
     values["creature"] = values.pop("parameters")
     values["creature"].pop("posture")

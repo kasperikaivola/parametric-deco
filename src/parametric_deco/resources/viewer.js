@@ -14,7 +14,7 @@
   const meshCache = new Map();
   for (const [id, mesh] of Object.entries(scene.meshes)) meshCache.set(id, mesh);
   const transform = (m,v) => [0,1,2].map(r=>m[r][0]*v[0]+m[r][1]*v[1]+m[r][2]*v[2]+m[r][3]);
-  const colors = {spine:[201,149,89],rib:[224,176,113],closure:[184,128,73],armour:[201,157,102],cap:[201,157,102],blade:[219,176,113],register:[151,108,64],retainer:[151,108,64],backplate:[89,69,48],hardware:[104,120,140]};
+  const colors = {'led-tie':[210,213,216],'led-cable':[70,80,90],'led-strip':[240,210,60],spine:[201,149,89],rib:[224,176,113],closure:[184,128,73],armour:[201,157,102],cap:[201,157,102],blade:[219,176,113],register:[151,108,64],retainer:[151,108,64],backplate:[89,69,48],hardware:[104,120,140]};
   for (const inst of scene.instances) {
     const label=document.createElement('label'), check=document.createElement('input');
     check.type='checkbox'; check.checked=true;
