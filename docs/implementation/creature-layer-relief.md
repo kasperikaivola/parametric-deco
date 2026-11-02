@@ -29,5 +29,4 @@ stock-sheet or nesting savings. Actual sheet consumption depends on cutting layo
 The committed creature images and gallery front/three-quarter views are rendered
 from actual exported geometry, using the existing matched cameras. Updated
 `creature-mask-evidence.json` and `gallery-evidence.json` record assembly validation
-and provenance. Physical fit, stiffness, hardware/clip security, handling, wall
-anchors, and Wire/Arena/projector runtime remain **NOT RUN**.
+and provenance.

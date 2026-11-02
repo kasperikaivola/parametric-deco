@@ -127,10 +127,8 @@ cuts and checks their bores against the unchanged board. The raised creature,
 source inventory. Unsupported off-grid, obstructed or unmachined placements fail
 validation. Changing mounting/grid/material/board settings requires new cuts.
 
-The software checks nominal geometry and sampled extraction only. Bolt preload,
-commercial fit, material stiffness, locking, load capacity, wear, handling and
-installation anchorage remain **physical NOT RUN**. Wire/Arena/projector checks
-remain **NOT RUN**. Support all affected layers in a cradle before releasing any
+The software checks nominal geometry and sampled extraction only.
+Support all affected layers in a cradle before releasing any
 root or end clamp. This is a prototype design, not a load-rated installation.
 
 The [v3 cached geometry/view audit](symmetry-grid-validation.json) binds all 15

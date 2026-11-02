@@ -11,5 +11,5 @@ Current supported styles, parameters and examples are in the [design guide](desi
 5. Use actual front/side/oblique views and physical trials to judge new style and
    parameter combinations. Digital validity alone is not an aesthetic verdict.
 
-These physical and host steps are NOT RUN. Broader topology, segmented backings,
+Broader topology, segmented backings,
 continuous-motion proofs and a custom renderer are future work, not promised output.

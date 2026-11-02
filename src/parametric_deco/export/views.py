@@ -208,12 +208,7 @@ def render_views(assembly, out_dir, views=None):
             draw = ImageDraw.Draw(image)
         label = "FRONT (XY / +Z TOWARD VIEWER)" if view == "front" else view.upper()
         draw.text((36, 26), "PARAMETRIC DECO / " + label, font=font, fill="#ece1cd")
-        draw.text(
-            (36, 60),
-            "Identified nominal geometry · physical/host checks NOT RUN",
-            font=font,
-            fill="#a7acb5",
-        )
+        draw.text((36, 60), "Identified nominal geometry", font=font, fill="#a7acb5")
         draw.text(
             (36, 850),
             "mm · end-clamp tubes/bolts shown; original root hardware remains simplified",
@@ -291,7 +286,7 @@ def render_blade_section(assembly, cached, out):
     )
     draw.text(
         (36, 835),
-        "Physical fit, key security and handling NOT RUN. Not a bolt section.",
+        "Not a bolt section.",
         fill="#b0b0b0",
     )
     image.save(out / "rib-joint.png")

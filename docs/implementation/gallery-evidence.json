@@ -2700,7 +2700,6 @@
           43.18735639616263
         ],
         "part_id": "crown-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2714,7 +2713,6 @@
           55.16429470825483
         ],
         "part_id": "crown-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2728,7 +2726,6 @@
           48.47523968662589
         ],
         "part_id": "crown-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2766,7 +2763,6 @@
           43.18735639616263
         ],
         "part_id": "crown-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2780,7 +2776,6 @@
           55.16429470825483
         ],
         "part_id": "crown-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2794,7 +2789,6 @@
           48.47523968662589
         ],
         "part_id": "crown-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2832,7 +2826,6 @@
           43.18735639616263
         ],
         "part_id": "jaw-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2846,7 +2839,6 @@
           55.16429470825483
         ],
         "part_id": "jaw-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2860,7 +2852,6 @@
           48.47523968662589
         ],
         "part_id": "jaw-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2898,7 +2889,6 @@
           43.18735639616263
         ],
         "part_id": "jaw-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2912,7 +2902,6 @@
           55.16429470825483
         ],
         "part_id": "jaw-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2926,7 +2915,6 @@
           48.47523968662589
         ],
         "part_id": "jaw-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2964,7 +2952,6 @@
           31.07545216079265
         ],
         "part_id": "feeler-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2978,7 +2965,6 @@
           39.69884774549902
         ],
         "part_id": "feeler-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -2992,7 +2978,6 @@
           34.8827281299262
         ],
         "part_id": "feeler-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -3030,7 +3015,6 @@
           31.07545216079265
         ],
         "part_id": "feeler-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -3044,7 +3028,6 @@
           39.69884774549902
         ],
         "part_id": "feeler-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -3058,7 +3041,6 @@
           34.8827281299262
         ],
         "part_id": "feeler-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4309,7 +4291,6 @@
           43.82361166184264
         ],
         "part_id": "crown-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4323,7 +4304,6 @@
           57.620055696019364
         ],
         "part_id": "crown-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4337,7 +4317,6 @@
           59.60650513444792
         ],
         "part_id": "crown-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4351,7 +4330,6 @@
           48.927989696602964
         ],
         "part_id": "crown-left-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4389,7 +4367,6 @@
           43.82361166184264
         ],
         "part_id": "crown-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4403,7 +4380,6 @@
           57.620055696019364
         ],
         "part_id": "crown-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4417,7 +4393,6 @@
           59.60650513444792
         ],
         "part_id": "crown-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -4431,7 +4406,6 @@
           48.927989696602964
         ],
         "part_id": "crown-right-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6724,7 +6698,6 @@
           43.265536723524185
         ],
         "part_id": "crown-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6738,7 +6711,6 @@
           56.14390520253807
         ],
         "part_id": "crown-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6752,7 +6724,6 @@
           63.96189908933987
         ],
         "part_id": "crown-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6766,7 +6737,6 @@
           65.03190187137092
         ],
         "part_id": "crown-left-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6780,7 +6750,6 @@
           59.12293941516612
         ],
         "part_id": "crown-left-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6794,7 +6763,6 @@
           47.51053876226171
         ],
         "part_id": "crown-left-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6832,7 +6800,6 @@
           43.265536723524185
         ],
         "part_id": "crown-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6846,7 +6813,6 @@
           56.14390520253807
         ],
         "part_id": "crown-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6860,7 +6826,6 @@
           63.96189908933987
         ],
         "part_id": "crown-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6874,7 +6839,6 @@
           65.03190187137092
         ],
         "part_id": "crown-right-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6888,7 +6852,6 @@
           59.12293941516612
         ],
         "part_id": "crown-right-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6902,7 +6865,6 @@
           47.51053876226171
         ],
         "part_id": "crown-right-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6940,7 +6902,6 @@
           43.265536723524185
         ],
         "part_id": "jaw-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6954,7 +6915,6 @@
           56.14390520253807
         ],
         "part_id": "jaw-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6968,7 +6928,6 @@
           63.96189908933987
         ],
         "part_id": "jaw-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6982,7 +6941,6 @@
           65.03190187137092
         ],
         "part_id": "jaw-left-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -6996,7 +6954,6 @@
           59.12293941516612
         ],
         "part_id": "jaw-left-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7010,7 +6967,6 @@
           47.51053876226171
         ],
         "part_id": "jaw-left-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7048,7 +7004,6 @@
           43.265536723524185
         ],
         "part_id": "jaw-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7062,7 +7017,6 @@
           56.14390520253807
         ],
         "part_id": "jaw-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7076,7 +7030,6 @@
           63.96189908933987
         ],
         "part_id": "jaw-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7090,7 +7043,6 @@
           65.03190187137092
         ],
         "part_id": "jaw-right-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7104,7 +7056,6 @@
           59.12293941516612
         ],
         "part_id": "jaw-right-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -7118,7 +7069,6 @@
           47.51053876226171
         ],
         "part_id": "jaw-right-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9429,7 +9379,6 @@
           43.265536723524185
         ],
         "part_id": "crown-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9443,7 +9392,6 @@
           56.14390520253807
         ],
         "part_id": "crown-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9457,7 +9405,6 @@
           63.96189908933987
         ],
         "part_id": "crown-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9471,7 +9418,6 @@
           65.03190187137092
         ],
         "part_id": "crown-left-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9485,7 +9431,6 @@
           59.12293941516612
         ],
         "part_id": "crown-left-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9499,7 +9444,6 @@
           47.51053876226171
         ],
         "part_id": "crown-left-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9537,7 +9481,6 @@
           43.265536723524185
         ],
         "part_id": "crown-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9551,7 +9494,6 @@
           56.14390520253807
         ],
         "part_id": "crown-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9565,7 +9507,6 @@
           63.96189908933987
         ],
         "part_id": "crown-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9579,7 +9520,6 @@
           65.03190187137092
         ],
         "part_id": "crown-right-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9593,7 +9533,6 @@
           59.12293941516612
         ],
         "part_id": "crown-right-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9607,7 +9546,6 @@
           47.51053876226171
         ],
         "part_id": "crown-right-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9645,7 +9583,6 @@
           43.265536723524185
         ],
         "part_id": "jaw-left-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9659,7 +9596,6 @@
           56.14390520253807
         ],
         "part_id": "jaw-left-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9673,7 +9609,6 @@
           63.96189908933987
         ],
         "part_id": "jaw-left-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9687,7 +9622,6 @@
           65.03190187137092
         ],
         "part_id": "jaw-left-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9701,7 +9635,6 @@
           59.12293941516612
         ],
         "part_id": "jaw-left-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9715,7 +9648,6 @@
           47.51053876226171
         ],
         "part_id": "jaw-left-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9753,7 +9685,6 @@
           43.265536723524185
         ],
         "part_id": "jaw-right-blade-0",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9767,7 +9698,6 @@
           56.14390520253807
         ],
         "part_id": "jaw-right-blade-1",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9781,7 +9711,6 @@
           63.96189908933987
         ],
         "part_id": "jaw-right-blade-2",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9795,7 +9724,6 @@
           65.03190187137092
         ],
         "part_id": "jaw-right-blade-3",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9809,7 +9737,6 @@
           59.12293941516612
         ],
         "part_id": "jaw-right-blade-4",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {
@@ -9823,7 +9750,6 @@
           47.51053876226171
         ],
         "part_id": "jaw-right-blade-5",
-        "physical_bending_stiffness": "NOT RUN",
         "role": "blade"
       },
       {

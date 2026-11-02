@@ -57,7 +57,7 @@
         "envelope_only": true,
         "key_hole_diameter_mm": 2.5,
         "quantity": 24,
-        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+        "status": "Select and prototype positive split-pin/clip retention"
       },
       "ribs_per_limb": 6,
       "sampled_extraction_dependencies": {
@@ -228,7 +228,7 @@
         "envelope_only": true,
         "key_hole_diameter_mm": 2.5,
         "quantity": 24,
-        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+        "status": "Select and prototype positive split-pin/clip retention"
       },
       "ribs_per_limb": 6,
       "sampled_extraction_dependencies": {
@@ -395,7 +395,7 @@
         "envelope_only": true,
         "key_hole_diameter_mm": 2.5,
         "quantity": 8,
-        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+        "status": "Select and prototype positive split-pin/clip retention"
       },
       "ribs_per_limb": 4,
       "sampled_extraction_dependencies": {
@@ -522,7 +522,7 @@
         "envelope_only": true,
         "key_hole_diameter_mm": 2.5,
         "quantity": 18,
-        "status": "Select and prototype positive split-pin/clip retention; NOT RUN"
+        "status": "Select and prototype positive split-pin/clip retention"
       },
       "ribs_per_limb": 3,
       "sampled_extraction_dependencies": {

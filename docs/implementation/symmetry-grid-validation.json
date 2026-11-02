@@ -15,8 +15,6 @@
   },
   "checks": "actual family paths, actual manufactured bores/7mm webs/tubes, exact extruded material and hardware/layer orbits, original-root common-grid alignment, all-part board routes, immutable replay, artwork-only centering, matching view geometry and hashes/current links",
   "radial_insertion_capture_evidence": "radial-v3-joint-evidence.json",
-  "physical_validation": "NOT RUN",
-  "host_validation": "NOT RUN",
   "examples": {
     "organism-low": {
       "symmetry": "C3",

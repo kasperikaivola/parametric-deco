@@ -1,12 +1,132 @@
 """Optional Python desktop editor; CAD work always runs in disposable processes."""
 import json
+import math
 from pathlib import Path
 import shutil
 import sys
 import tempfile
+import time
 
 from .config import STYLE_PARAMETERS, config_from_dict
-from .desktop_state import PreviewState, fingerprint, replace_value
+from .desktop_state import PreviewState, fingerprint
+from .parameter_edit import allowed_text, apply_parameter_edit
+
+
+# Same dark surfaces as the offline assembly viewer in resources/index.html.
+_DARK_STYLE = """
+QToolBar { background:#12151b; border:0; spacing:6px; padding:6px; }
+QToolBar QToolButton {
+    background:transparent; color:#e7dfd4; padding:6px 8px; border-radius:4px;
+}
+QToolBar QToolButton:hover { background:#242a33; }
+QPlainTextEdit, QTreeWidget, QComboBox, QLineEdit {
+    background:#181d26; color:#e7dfd4; border:1px solid #30343c;
+    selection-background-color:#3d4f66; selection-color:#f6f1e7;
+}
+QComboBox QAbstractItemView {
+    background:#181d26; color:#e7dfd4; selection-background-color:#3d4f66;
+    selection-color:#f6f1e7; border:1px solid #30343c;
+}
+QTreeWidget::item:selected { background:#3d4f66; color:#f6f1e7; }
+QHeaderView::section {
+    background:#1c222c; color:#a8acb5; border:0;
+    border-bottom:1px solid #30343c; padding:4px 6px;
+}
+QTabWidget::pane { border:1px solid #30343c; background:#12151b; }
+QTabBar::tab {
+    background:#1c222c; color:#a8acb5; border:1px solid #30343c; padding:6px 12px;
+}
+QTabBar::tab:selected { background:#242a33; color:#e7dfd4; }
+QPushButton {
+    background:#242a33; color:#e7dfd4; border:1px solid #555;
+    border-radius:4px; padding:8px 12px;
+}
+QPushButton:hover { background:#2e3642; }
+QPushButton:disabled { color:#6d7380; background:#1a1f28; }
+QSplitter::handle { background:#30343c; }
+QScrollBar:vertical, QScrollBar:horizontal { background:#12151b; }
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background:#3a4150; min-height:24px;
+}
+QToolTip, QMenu { background:#242a33; color:#e7dfd4; border:1px solid #30343c; }
+QMenu::item:selected { background:#3d4f66; }
+QProgressBar {
+    background:#1c222c; color:#e7dfd4; border:1px solid #30343c;
+    border-radius:4px; text-align:center; min-height:22px; max-height:22px;
+}
+QProgressBar::chunk { background:#c4924a; border-radius:3px; }
+"""
+
+# First-run expectations from measured desktop builds. Later runs use this session's times.
+_STYLE_ESTIMATE_S = {
+    'laminar': 10.0,
+    'layered-creature': 15.0,
+    'radial-weave': 25.0,
+    'rib-study': 5.0,
+}
+
+
+def progress_fraction(elapsed, estimate, floor=0.0, ceiling=0.9):
+    """Fill for a timed estimate. The bar reaches `ceiling` at the estimate, then creeps."""
+    estimate = max(float(estimate), 0.5)
+    elapsed = max(float(elapsed), 0.0)
+    if elapsed <= estimate:
+        fraction = ceiling * elapsed / estimate
+    else:
+        span = max(1.0 - ceiling, 0.02)
+        over = elapsed - estimate
+        fraction = min(0.98, ceiling + span * (1.0 - math.exp(-over / estimate)))
+    return min(0.98, max(float(floor), fraction))
+
+
+def apply_dark_theme(app=None):
+    """Paint the desktop chrome with the assembly viewer's dark palette."""
+    from PySide6.QtGui import QColor, QPalette
+    from PySide6.QtWidgets import QApplication
+
+    app = app or QApplication.instance()
+    if app is None:
+        return
+    app.setStyle('Fusion')
+    bg = QColor('#12151b')
+    panel = QColor('#181d26')
+    raised = QColor('#242a33')
+    text = QColor('#e7dfd4')
+    muted = QColor('#a8acb5')
+    highlight = QColor('#3d4f66')
+    highlight_text = QColor('#f6f1e7')
+    palette = QPalette()
+    for role, color in (
+        (QPalette.ColorRole.Window, bg),
+        (QPalette.ColorRole.WindowText, text),
+        (QPalette.ColorRole.Base, panel),
+        (QPalette.ColorRole.AlternateBase, raised),
+        (QPalette.ColorRole.ToolTipBase, raised),
+        (QPalette.ColorRole.ToolTipText, text),
+        (QPalette.ColorRole.Text, text),
+        (QPalette.ColorRole.Button, raised),
+        (QPalette.ColorRole.ButtonText, text),
+        (QPalette.ColorRole.BrightText, QColor('#ffffff')),
+        (QPalette.ColorRole.Highlight, highlight),
+        (QPalette.ColorRole.HighlightedText, highlight_text),
+        (QPalette.ColorRole.Link, QColor('#edbd74')),
+        (QPalette.ColorRole.PlaceholderText, muted),
+        (QPalette.ColorRole.Light, QColor('#30343c')),
+        (QPalette.ColorRole.Mid, QColor('#30343c')),
+        (QPalette.ColorRole.Dark, QColor('#0c0e13')),
+        (QPalette.ColorRole.Shadow, QColor('#0c0e13')),
+    ):
+        palette.setColor(role, color)
+    disabled = QPalette.ColorGroup.Disabled
+    for role in (
+        QPalette.ColorRole.WindowText,
+        QPalette.ColorRole.Text,
+        QPalette.ColorRole.ButtonText,
+        QPalette.ColorRole.HighlightedText,
+    ):
+        palette.setColor(disabled, role, muted)
+    app.setPalette(palette)
+    app.setStyleSheet(_DARK_STYLE)
 
 
 def main(argv=None):
@@ -32,13 +152,50 @@ def main(argv=None):
 def create_window():
     """Import Qt lazily so ordinary CLI installations stay light."""
     from PySide6.QtCore import QProcess, QTimer, Qt, QUrl
-    from PySide6.QtGui import QAction
+    from PySide6.QtGui import QAction, QColor
     from PySide6.QtWidgets import (
-        QComboBox, QFileDialog, QHBoxLayout, QInputDialog, QLabel, QMainWindow,
-        QMessageBox, QPlainTextEdit, QPushButton, QSplitter, QTabWidget,
-        QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget,
+        QAbstractItemView, QComboBox, QFileDialog, QHBoxLayout, QInputDialog, QLabel,
+        QLineEdit, QMainWindow, QMessageBox, QPlainTextEdit, QProgressBar, QPushButton,
+        QSplitter, QStyledItemDelegate, QTabWidget, QTreeWidget, QTreeWidgetItem,
+        QVBoxLayout, QWidget,
     )
     from PySide6.QtWebEngineWidgets import QWebEngineView
+
+    class ValueDelegate(QStyledItemDelegate):
+        """Edit the value column in the row. Lists and objects expand in that cell."""
+
+        def createEditor(self, parent, option, index):
+            if index.column() != 1:
+                return None
+            full = index.data(Qt.ItemDataRole.UserRole)
+            text = full if isinstance(full, str) else ''
+            if text[:1] in '{[':
+                editor = QPlainTextEdit(parent)
+                editor.setMinimumHeight(max(option.rect.height(), 96))
+                return editor
+            editor = QLineEdit(parent)
+            editor.setFrame(False)
+            return editor
+
+        def setEditorData(self, editor, index):
+            full = index.data(Qt.ItemDataRole.UserRole)
+            text = full if isinstance(full, str) else (index.data(Qt.ItemDataRole.DisplayRole) or '')
+            if isinstance(editor, QPlainTextEdit):
+                editor.setPlainText(text)
+            else:
+                editor.setText(text)
+
+        def setModelData(self, editor, model, index):
+            text = editor.toPlainText() if isinstance(editor, QPlainTextEdit) else editor.text()
+            model.setData(index, text, Qt.ItemDataRole.EditRole)
+
+        def updateEditorGeometry(self, editor, option, index):
+            if isinstance(editor, QPlainTextEdit):
+                rect = option.rect
+                rect.setHeight(max(rect.height(), 120))
+                editor.setGeometry(rect)
+            else:
+                super().updateEditorGeometry(editor, option, index)
 
     class Window(QMainWindow):
         def __init__(self):
@@ -79,9 +236,18 @@ def create_window():
             toolbar.addWidget(self.style)
 
             self.tree = QTreeWidget()
-            self.tree.setHeaderLabels(['Parameter', 'JSON value (double-click to edit)'])
-            self.tree.setColumnWidth(0, 230)
-            self.tree.itemDoubleClicked.connect(self.edit_item)
+            self.tree.setHeaderLabels(['Parameter', 'Value', 'Allowed'])
+            self.tree.setColumnWidth(0, 168)
+            self.tree.setColumnWidth(1, 120)
+            self.tree.header().setStretchLastSection(True)
+            self.tree.setItemDelegate(ValueDelegate(self.tree))
+            self.tree.setEditTriggers(
+                QAbstractItemView.EditTrigger.DoubleClicked
+                | QAbstractItemView.EditTrigger.SelectedClicked
+                | QAbstractItemView.EditTrigger.EditKeyPressed
+                | QAbstractItemView.EditTrigger.AnyKeyPressed)
+            self.tree.itemChanged.connect(self.commit_parameter)
+            self._filling_tree = False
             self.editor = QPlainTextEdit()
             self.editor.setPlaceholderText('Complete schema-v2 JSON, including lists and null values')
             self.editor.textChanged.connect(self.edited)
@@ -89,10 +255,12 @@ def create_window():
             self.tabs.addTab(self.tree, 'Parameters')
             self.tabs.addTab(self.editor, 'Advanced JSON')
             self.tabs.currentChanged.connect(self.refresh_tree)
-            tip = QLabel('Double-click any value, list or object to edit JSON. Strings need quotes. '
-                         'Use null for automatic overrides; cutting_bed may be null or an object. '
-                         'Full parameter ranges: docs/design.md. Changes regenerate CAD automatically.')
+            tip = QLabel('Edit a value in the table. Numbers round or clamp to the allowed range '
+                         'beside them. Text can be typed with or without quotes. Use null for '
+                         'automatic overrides; cutting_bed may be null or an object. Edit a list '
+                         'to add or remove entries. Changes regenerate CAD automatically.')
             tip.setWordWrap(True)
+            tip.setStyleSheet('color:#a8acb5; background:transparent')
             left = QWidget()
             layout = QVBoxLayout(left)
             layout.addWidget(tip)
@@ -102,12 +270,29 @@ def create_window():
             layout.addWidget(self.mode)
 
             self.view = QWebEngineView()
-            self.view.setHtml('<body style="background:#12151b;color:#eee;font:20px sans-serif;'
-                              'padding:40px">Edit a design to generate validated physical CAD.</body>')
+            self.view.setHtml(
+                '<body style="background:#12151b;color:#e7dfd4;font:20px sans-serif;'
+                'padding:40px">Edit a design to generate validated physical CAD.</body>')
+            self.view.page().setBackgroundColor(QColor('#12151b'))
             self.view.loadFinished.connect(self.view_loaded)
             self.status = QLabel()
             self.status.setWordWrap(True)
             self.status.setStyleSheet('font-weight:600;padding:10px;background:#292b32;color:#ffd58b')
+            self.progress = QProgressBar()
+            self.progress.setRange(0, 1000)
+            self.progress.setTextVisible(True)
+            self.progress.hide()
+            self.progress_timer = QTimer(self)
+            self.progress_timer.setInterval(200)
+            self.progress_timer.timeout.connect(self.tick_progress)
+            self.duration_by_style = {}
+            self.progress_started = None
+            self.progress_process = None
+            self.progress_floor = 0.0
+            self.progress_ceiling = 0.9
+            self.progress_estimate = 12.0
+            self.progress_label = 'Building CAD'
+            self.job_buffers = {}
             self.details = QPlainTextEdit()
             self.details.setReadOnly(True)
             self.details.setMaximumBlockCount(1000)
@@ -122,13 +307,14 @@ def create_window():
             right = QWidget()
             right_layout = QVBoxLayout(right)
             right_layout.addWidget(self.status)
+            right_layout.addWidget(self.progress)
             right_layout.addWidget(self.view, 1)
             right_layout.addLayout(buttons)
             right_layout.addWidget(self.details)
             splitter = QSplitter()
             splitter.addWidget(left)
             splitter.addWidget(right)
-            splitter.setSizes([470, 970])
+            splitter.setSizes([560, 880])
             self.setCentralWidget(splitter)
             self.set_config(config_from_dict({}).to_dict(), dirty=False)
 
@@ -142,6 +328,8 @@ def create_window():
             self.timer.stop()
             self.state.edit(self.editor.toPlainText())
             self.stop_preview_process()
+            if self.export_process is None:
+                self.hide_progress()
             self.update_export()
             if self.state.config is None:
                 self.show_status('INVALID CONFIG · previous preview is stale. ' + self.state.error)
@@ -153,48 +341,68 @@ def create_window():
             self.timer.start()
 
         def refresh_tree(self, *_):
-            self.tree.clear()
+            self._filling_tree = True
             try:
-                data = json.loads(self.editor.toPlainText())
+                self.tree.clear()
+                try:
+                    data = json.loads(self.editor.toPlainText())
+                except ValueError:
+                    return
                 if not isinstance(data, dict):
                     return
-            except ValueError:
+
+                def add(parent, key, value, path):
+                    encoded = json.dumps(value, ensure_ascii=False)
+                    if isinstance(value, (dict, list)) and len(encoded) >= 80:
+                        shown = encoded[:77] + '…'
+                    else:
+                        shown = encoded
+                    phrase = allowed_text(data, path)
+                    item = QTreeWidgetItem(parent, [str(key), shown, phrase])
+                    item.setData(0, Qt.ItemDataRole.UserRole, path)
+                    item.setData(1, Qt.ItemDataRole.UserRole, encoded)
+                    item.setToolTip(1, encoded)
+                    item.setToolTip(2, phrase)
+                    item.setForeground(2, QColor('#a8acb5'))
+                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
+                    if isinstance(value, dict):
+                        for name, child in value.items():
+                            add(item, name, child, (*path, name))
+                    elif isinstance(value, list):
+                        for index, child in enumerate(value):
+                            add(item, index, child, (*path, index))
+
+                for key, value in data.items():
+                    add(self.tree, key, value, (key,))
+                self.tree.expandToDepth(0)
+            finally:
+                self._filling_tree = False
+
+        def commit_parameter(self, item, column):
+            if self._filling_tree or column != 1:
                 return
+            path = tuple(item.data(0, Qt.ItemDataRole.UserRole) or ())
+            if not path:
+                return
+            text = item.text(1)
+            QTimer.singleShot(0, lambda path=path, text=text: self._apply_tree_edit(path, text))
 
-            def add(parent, key, value, path):
-                encoded = json.dumps(value, ensure_ascii=False)
-                item = QTreeWidgetItem(parent, [str(key), encoded if len(encoded) < 140
-                                                else encoded[:137] + '…'])
-                item.setData(0, Qt.ItemDataRole.UserRole, path)
-                item.setToolTip(1, encoded)
-                if isinstance(value, dict):
-                    for name, child in value.items():
-                        add(item, name, child, (*path, name))
-                elif isinstance(value, list):
-                    for index, child in enumerate(value):
-                        add(item, index, child, (*path, index))
-            for key, value in data.items():
-                add(self.tree, key, value, (key,))
-            self.tree.expandToDepth(0)
-
-        def edit_item(self, item, column):
-            path = tuple(item.data(0, Qt.ItemDataRole.UserRole))
-            data = json.loads(self.editor.toPlainText())
-            value = data
-            for key in path:
-                value = value[key]
-            text, ok = QInputDialog.getMultiLineText(
-                self, 'Edit ' + '.'.join(map(str, path)),
-                'JSON value: numbers, "strings", null, lists or objects.\n'
-                'Edit a parent list to add/remove placements or change its length.',
-                json.dumps(value, indent=2))
-            if ok:
-                try:
-                    replace_value(data, path, text)
-                except ValueError as error:
-                    QMessageBox.warning(self, 'Invalid JSON value', str(error))
-                    return
-                self.set_config(data)
+        def _apply_tree_edit(self, path, text):
+            try:
+                data = json.loads(self.editor.toPlainText())
+                updated = apply_parameter_edit(data, path, text)
+            except json.JSONDecodeError as error:
+                self.refresh_tree()
+                self.show_status('INVALID CONFIG · ' + str(error))
+                return
+            except (ValueError, TypeError, KeyError, OverflowError) as error:
+                self.refresh_tree()
+                self.show_status('VALUE UNCHANGED · ' + str(error))
+                return
+            if updated == data:
+                self.refresh_tree()
+                return
+            self.set_config(updated)
 
         def change_style(self, style):
             if self.updating:
@@ -279,6 +487,70 @@ def create_window():
         def show_status(self, text):
             self.status.setText(text)
 
+        def estimate_seconds(self, export=False):
+            style = self.state.config['style'] if self.state.config else ''
+            base = self.duration_by_style.get(style, _STYLE_ESTIMATE_S.get(style, 12.0))
+            return base + (4.0 if export else 0.0)
+
+        def begin_progress(self, label, estimate):
+            self.progress_started = time.monotonic()
+            self.progress_floor = 0.0
+            self.progress_ceiling = 0.9
+            self.progress_estimate = max(float(estimate), 0.5)
+            self.progress_label = label
+            self.progress.setValue(0)
+            self.progress.show()
+            self.progress_timer.start()
+            self.tick_progress()
+
+        def hide_progress(self):
+            self.progress_timer.stop()
+            self.progress.hide()
+            self.progress_started = None
+            self.progress_process = None
+
+        def tick_progress(self):
+            if self.progress_started is None:
+                return
+            elapsed = time.monotonic() - self.progress_started
+            fraction = progress_fraction(
+                elapsed, self.progress_estimate, self.progress_floor, self.progress_ceiling)
+            self.progress.setValue(int(round(fraction * 1000)))
+            remaining = self.progress_estimate - elapsed
+            if remaining >= 0.5:
+                detail = f'about {remaining:.0f}s left'
+            elif elapsed <= self.progress_estimate + 0.5:
+                detail = 'almost done'
+            else:
+                detail = 'past the estimate'
+            self.progress.setFormat(f'{self.progress_label} · {elapsed:.0f}s · {detail}')
+
+        def note_progress(self, line):
+            if self.progress_started is None:
+                return
+            phase = None
+            fraction = None
+            for part in line.split():
+                if part.startswith('phase='):
+                    phase = part.split('=', 1)[1]
+                elif part.startswith('fraction='):
+                    try:
+                        fraction = float(part.split('=', 1)[1])
+                    except ValueError:
+                        return
+            if fraction is not None:
+                self.progress_floor = max(self.progress_floor, min(fraction, 0.98))
+            elapsed = time.monotonic() - self.progress_started
+            if phase == 'mesh':
+                self.progress_label = 'Meshing preview'
+                self.progress_estimate = min(self.progress_estimate, elapsed + 2.0)
+            elif phase == 'export':
+                self.progress_label = 'Writing export'
+                self.progress_estimate = min(self.progress_estimate, elapsed + 3.0)
+            elif phase == 'construct':
+                self.progress_label = 'Building CAD'
+            self.tick_progress()
+
         def update_export(self):
             self.export_button.setEnabled(self.state.ready and self.export_process is None
                                           and self.preview_fingerprint == self.current_fingerprint())
@@ -299,6 +571,7 @@ def create_window():
             self.stop_preview_process()
             self.state.validated = False
             self.update_export()
+            self.hide_progress()
             self.show_status('CANCELLED · previous preview is stale. Edit any parameter to resume.')
 
         def start_preview(self):
@@ -306,8 +579,8 @@ def create_window():
                 return
             self.stop_preview_process()
             revision = self.state.revision
-            self.show_status('BUILDING CAD · previous preview is stale. This can take seconds or '
-                             'minutes; validating real geometry before display.')
+            self.show_status('BUILDING CAD')
+            self.begin_progress('Building CAD', self.estimate_seconds())
             self.launch('preview', revision, self.root / f'scene-{revision}')
 
         def launch(self, mode, revision, out, force=False):
@@ -331,24 +604,43 @@ def create_window():
             process.errorOccurred.connect(lambda error: self.process_error(process, error))
             process.start(sys.executable, ['-m', 'parametric_deco.desktop_worker',
                                           str(request_path), str(result_path)])
+            self.progress_process = process
             self.update_export()
 
         def process_error(self, process, error):
             if error == QProcess.ProcessError.FailedToStart:
                 self.finished(process, -1)
 
-        def job_output(self, process):
-            text = bytes(process.readAllStandardOutput()).decode(errors='replace').strip()
-            if text:
+        def job_output(self, process, flush=False):
+            chunk = bytes(process.readAllStandardOutput()).decode(errors='replace')
+            pending = self.job_buffers.get(process, '') + chunk
+            if flush:
+                lines = pending.split('\n') if pending else []
+                self.job_buffers.pop(process, None)
+            else:
+                lines = pending.split('\n')
+                self.job_buffers[process] = lines.pop() if lines else ''
+            shown = []
+            for line in lines:
+                line = line.strip()
+                if line.startswith('PROGRESS '):
+                    self.note_progress(line)
+                elif line:
+                    shown.append(line)
+            if shown:
                 mode, revision, *_ = self.jobs.get(process, ('job', '?'))
-                self.details.appendPlainText(f'{mode} #{revision}: {text}')
+                self.details.appendPlainText(f'{mode} #{revision}: ' + '\n'.join(shown))
 
         def finished(self, process, code):
             job = self.jobs.pop(process, None)
             if job is None:
                 return
             mode, revision, out, jobdir, job_fingerprint = job
-            self.job_output(process)
+            owns_bar = self.progress_process is process
+            elapsed = None
+            if owns_bar and self.progress_started is not None:
+                elapsed = time.monotonic() - self.progress_started
+            self.job_output(process, flush=True)
             try:
                 result = json.loads((jobdir / 'result.json').read_text())
             except (OSError, ValueError):
@@ -361,9 +653,17 @@ def create_window():
                 if accepted and success and not self.closed:
                     self.preview_fingerprint = job_fingerprint
                     self.install_preview(out, revision)
-                    self.show_status('CURRENT · digitally validated CAD · config '
-                                     + job_fingerprint[:12] + '. Physical/host checks NOT RUN.')
-                    self.details.appendPlainText(json.dumps(result.get('validation', {}), indent=2))
+                    if elapsed is not None and self.state.config is not None:
+                        style = self.state.config['style']
+                        previous = self.duration_by_style.get(style)
+                        self.duration_by_style[style] = (
+                            elapsed if previous is None else 0.65 * previous + 0.35 * elapsed)
+                    timing = f' · {elapsed:.0f}s' if elapsed is not None else ''
+                    self.show_status('CURRENT · config ' + job_fingerprint[:12] + timing)
+                    for issue in (result.get('validation') or {}).get('issues') or []:
+                        self.details.appendPlainText(
+                            f"{issue.get('severity', '')} {issue.get('code', '')}: "
+                            f"{issue.get('message', '')}")
                 else:
                     shutil.rmtree(out, ignore_errors=True)
                     if accepted:
@@ -374,8 +674,9 @@ def create_window():
                 if success:
                     self.details.appendPlainText(f'Exported config {job_fingerprint} to {out}')
                     if self.state.ready and job_fingerprint == self.current_fingerprint():
+                        timing = f' · {elapsed:.0f}s' if elapsed is not None else ''
                         self.show_status('CURRENT · exported config ' + job_fingerprint[:12]
-                                         + ' to ' + str(out) + '. Physical/host checks NOT RUN.')
+                                         + ' to ' + str(out) + timing)
                 else:
                     self.details.appendPlainText('Export failed: ' + result.get('error', 'Worker failed'))
                     if self.state.ready:
@@ -384,6 +685,8 @@ def create_window():
                     QMessageBox.warning(self, 'Export failed', result.get('error', 'Worker failed'))
             shutil.rmtree(jobdir, ignore_errors=True)
             process.deleteLater()
+            if owns_bar:
+                self.hide_progress()
             self.update_export()
 
         def install_preview(self, out, revision):
@@ -435,8 +738,8 @@ def create_window():
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                 QMessageBox.StandardButton.No) != QMessageBox.StandardButton.Yes:
                 return
-            self.show_status('EXPORTING snapshot ' + self.current_fingerprint()[:12]
-                             + ' · rebuilding and validating before transactional export.')
+            self.show_status('EXPORTING ' + self.current_fingerprint()[:12])
+            self.begin_progress('Exporting', self.estimate_seconds(export=True))
             self.launch('export', self.state.revision, out, force)
 
         def closeEvent(self, event):
@@ -459,6 +762,7 @@ def create_window():
             shutil.rmtree(self.root, ignore_errors=True)
             event.accept()
 
+    apply_dark_theme()
     return Window()
 
 

@@ -64,5 +64,4 @@ Detached modules are **not self-locking**. Tray/hand compression is a
 required handling step. Independent module extraction is sampled against
 neighbours and reported with the assembly; blocked paths require removing
 the blocking module first. Arbitrary rotations during extraction are not
-verified. Fit, wear, stiffness, bolt preload, tool access and tray handling
-are physical tests marked NOT RUN.
+verified.

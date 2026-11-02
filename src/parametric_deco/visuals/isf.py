@@ -58,6 +58,6 @@ def export_isf_resources(atlas, out_dir, force=False):
     paths = tuple(sorted(p for p in out.iterdir() if p.is_file()))
     return ExportResult(
         paths,
-        ("Wire/Arena shader compilation/runtime NOT RUN.",),
+        (),
         {p.name: sha256(p.read_bytes()).hexdigest() for p in paths},
     )

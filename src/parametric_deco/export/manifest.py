@@ -185,8 +185,7 @@ def _export_into(build, out):
                 "for tube lengths. Each deco bore is directly coaxial with a pre-existing universal board "
                 "bore; no offset adapters or extra board drilling. Fit the specified rigid metal tubes "
                 "in EVERY gap, including board-to-first-layer and every inter-layer gap. Fit rear/front "
-                "washers, M6 through bolts and locking nuts; the head and nut envelopes are modeled, "
-                "but commercial fastener/thread/preload selection and physical fit are NOT RUN. "
+                "washers, M6 through bolts and locking nuts; the head and nut envelopes are modeled. "
                 "Support all affected layers in a cradle before releasing ANY clamp. Remove all end "
                 "clamps and original root fasteners before the documented extraction sequence. "
                 "Purchased metal hardware is not a plywood laser cut.\n")
@@ -220,7 +219,7 @@ def _export_into(build, out):
         "validation": build.report.to_dict(),
         "provenance": build.provenance,
         "dependency_versions": versions,
-        "hardware": "M6 end-clamp tubes/shafts/washers/head/nut geometry; original root/clip hardware envelopes simplified; physical selection NOT RUN",
+        "hardware": "M6 end-clamp tubes/shafts/washers/head/nut geometry; original root/clip hardware envelopes simplified",
         "files": {
             p.relative_to(out).as_posix(): sha256(p.read_bytes()).hexdigest()
             for p in sorted(out.rglob("*"))

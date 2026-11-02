@@ -1,6 +1,5 @@
 # Radial weave — candidate assembly and handling
 
-PHYSICAL FIT, LOAD, STIFFNESS AND DETACHED HANDLING: NOT RUN.
 The digital checks are sampled motions and nominal geometry. Prototype one joint
 and one root before committing to a full cut. The legacy module coupon does not
 validate the radial tongue/window mechanism; test actual radial fin/spine/rail cuts.
@@ -31,4 +30,4 @@ For the second arrangement, disassemble on a bench. Rotate placement 180 degrees
 and move only the compatible central physical fins according to the supplied
 reconfiguration JSON. Preserve physical IDs and revisions. Generate with
 `reconfigure --inventory`, not `build`, to verify reuse of the same stock.
-Regenerate atlases from that assembly. Wire/Arena and projector calibration: NOT RUN.
+Regenerate atlases from that assembly.

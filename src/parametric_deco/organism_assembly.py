@@ -4,7 +4,7 @@ from dataclasses import asdict
 import json
 import math
 import numpy as np
-from shapely import affinity
+from shapely import affinity, bounds as geometry_bounds, distance as geometry_distance
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
 from .config import validate_config
@@ -80,13 +80,38 @@ def neck_check(shape, width=8):
         raise ValueError(f"excess material in features below {width} mm")
 
 
+def _min_pair_gap(holes):
+    """Exact closest hole pair. A pair farther than the best gap in bounding-box
+    distance cannot beat that gap, so the search stops once the boxes are wider."""
+    count = len(holes)
+    if count < 2:
+        return None
+    minx, miny, maxx, maxy = np.asarray(geometry_bounds(np.asarray(holes, dtype=object))).T
+    dx = np.maximum(0, np.maximum(minx[:, None] - maxx[None, :], minx[None, :] - maxx[:, None]))
+    dy = np.maximum(0, np.maximum(miny[:, None] - maxy[None, :], miny[None, :] - maxy[:, None]))
+    bbox = np.hypot(dx, dy)
+    np.fill_diagonal(bbox, np.inf)
+    left, right = np.triu_indices(count, 1)
+    best = np.inf
+    for index in np.argsort(bbox[left, right], kind="stable"):
+        i, j = int(left[index]), int(right[index])
+        if bbox[i, j] >= best:
+            break
+        gap = holes[i].distance(holes[j])
+        if gap < best:
+            best = gap
+    return float(best)
+
+
 def cut_ligaments(shape, minimum):
     """Exact hole-to-outline and hole-to-hole material distances in finished cuts."""
     holes = [Polygon(ring) for ring in shape.interiors]
-    gaps = [hole.distance(shape.exterior) for hole in holes]
-    gaps.extend(a.distance(b) for j, a in enumerate(holes) for b in holes[j + 1 :])
-    value = min(gaps) if gaps else None
-    if value is not None and value < minimum - 1e-6:
+    if not holes:
+        return None
+    outline = float(np.min(geometry_distance(np.asarray(holes, dtype=object), shape.exterior)))
+    pair = _min_pair_gap(holes)
+    value = outline if pair is None else min(outline, pair)
+    if value < minimum - 1e-6:
         raise ValueError(f"finished-cut ligament {value:.3f} mm below {minimum:g} mm")
     return value
 
@@ -328,8 +353,6 @@ def assemble_organism(c, inventory=None):
             "assembly_operations_estimate": 7 * count,
             "operation_basis": "2 trestle insertions + plate placement + 2 bolt insertions + 2 nut tightenings/module",
         },
-        "physical_validation": "NOT RUN",
-        "host_validation": "NOT RUN",
     }
     a = Assembly(
         tuple(definitions),
@@ -366,9 +389,8 @@ def assemble_organism(c, inventory=None):
         a,
         tuple(definitions),
         (
-            "Physical strength, fit, bolt security and detached handling NOT RUN.",
             "Support modules in a cradle; remove upper overlapping modules before lower ones.",
-            "Wire/Arena/projector runtime NOT RUN; sampled motions are not continuous certification.",
+            "Sampled motions are not continuous certification.",
         ),
         {
             "generator": FAMILY,

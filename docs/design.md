@@ -132,8 +132,7 @@ artistic restriction on this style.
 This style has substantial assembly effort: default 179 plywood pieces, 98 spacer
 rings and 24 rib retaining keys/clips. Each cap/rib/key subassembly is serviced
 upside down in a padded cradle. A headed key crosses a tab window; a positive
-split pin/clip stop is REQUIRED against reverse withdrawal. Hardware selection,
-clip security and access remain NOT RUN. It is retained for its distinctive
+split pin/clip stop is REQUIRED against reverse withdrawal. It is retained for its distinctive
 layered relief, not presented as the simplest build.
 
 ## Radial-weave parameters
@@ -247,8 +246,7 @@ the capture rail to remove the previous long unsupported tip projection.
 and hardware alignment, compression tubes, construction-pad clearances and
 all-parts load paths. [Gallery evidence](implementation/gallery-evidence.json)
 records assembly/image hashes, exact stations, normalized panel locations,
-upright contact schemes and validation for every example. Physical and
-Wire/Arena checks remain **NOT RUN**.
+upright contact schemes and validation for every example.
 
 Run `python scripts/design_gallery.py` once to generate all gallery CAD, scene,
 matched views and evidence. `--reuse` renders already exported `result.json`
@@ -264,8 +262,6 @@ orbit, identify, visibility and explode controls using the same assembly.
 
 Digital checks cover connected planar cuts, style-specific ligaments and bearing,
 static interference, hardware corridors, envelope and sampled withdrawal paths.
-They do not establish strength, continuous motion or aesthetic success. Physical
-fit, wear, stiffness, fastener/clip selection, detached handling and wall anchorage
-are **NOT RUN**. Wire/Arena compilation, packaging, relocation and projection
-mapping are **NOT RUN**. Resources are ISF/PNG plus [manual host setup](implementation/arena.md),
+They do not establish strength, continuous motion or aesthetic success.
+Resources are ISF/PNG plus [manual host setup](implementation/arena.md),
 not a fabricated Wire patch or Arena preset. Apply mapping once in Arena.

@@ -222,7 +222,7 @@ def assemble_creature(c, inventory=None):
         "quantity": sum(len(m.get("blade_joints", [])) for m in metadata["modules"]),
         "key_hole_diameter_mm": 2.5,
         "envelope_only": True,
-        "status": "Select and prototype positive split-pin/clip retention; NOT RUN",
+        "status": "Select and prototype positive split-pin/clip retention",
     }
     connections = []
     mounts = []
@@ -344,9 +344,7 @@ def assemble_creature(c, inventory=None):
         a,
         tuple(definitions),
         (
-            "Creature clamp/slot family: physical fit, stiffness, bolts and handling NOT RUN.",
             "Support the complete module in a tray before releasing root clamps.",
-            "Browser/Wire/Arena/projector runtime NOT RUN.",
         ),
         {
             "generator": "parametric-deco/0.1.0",

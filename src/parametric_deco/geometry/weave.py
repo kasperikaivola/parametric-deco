@@ -4,10 +4,12 @@ Ribs slide radially inward; closed tongue windows in the upper rail retain them.
 All wood is real connected planar geometry. No twisted extrusion or hidden lock.
 """
 
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from functools import lru_cache
 from itertools import combinations
 import math
+import os
 
 import numpy as np
 from shapely.geometry import MultiPoint, Point, Polygon, box
@@ -42,6 +44,109 @@ def radial_rectangle(r, theta, u0, u1, v0, v1):
     er = np.array((math.cos(theta), math.sin(theta)))
     et = np.array((-math.sin(theta), math.cos(theta)))
     return Polygon([r * er + u * er + v * et for u, v in ((u0, v0), (u1, v0), (u1, v1), (u0, v1))])
+
+
+def _weave_module(design, config, t, w, zbase, offsets, root_flips, strand, crossing):
+    """One radial module. Touches only geometry it creates, so modules can run together."""
+    name = f"{strand}{crossing}"
+    centre = crossing * math.pi / 3 + math.radians(design.rotation_deg)
+    level = "high" if (crossing % 2 == 0) == (strand == "a") else "low"
+    lid = 152 if level == "high" else 70
+    zlevels = (102, 126) if level == "high" else (20, 44)
+    start, end = centre - math.radians(29.25), centre + math.radians(29.25)
+    sector = Polygon([(0, 0), *[xy(2000, a) for a in np.linspace(start, end, 40)]])
+    end_sign = (1 if strand == "a" else -1) * (-1 if name in root_flips else 1)
+    root_theta = centre + end_sign * math.radians(20)
+    root_centre = Point(xy(radius(design, strand, root_theta), root_theta))
+    pads = []
+    for offset in (14, 18, 22, 25):
+        theta = centre + end_sign * math.radians(offset)
+        r = radius(design, strand, theta)
+        pads.append(
+            Point(xy(r + (25 if r > design.radius_mm else 20), theta)).buffer(
+                55, quad_segs=24
+            )
+        )
+    pad = (
+        unary_union(pads)
+        .intersection(sector)
+        .difference(Point(0, 0).buffer(design.opening_radius_mm + 2, quad_segs=96))
+    )
+    spine = unary_union([band(design, strand, start, end, -12, 12), pad])
+    rail = unary_union([band(design, strand, start, end, -42, -10), pad])
+    ribs = []
+    stations = []
+    rib_parts = []
+    footprints = []
+    for j, offset in enumerate(offsets):
+        theta = centre + offset
+        r = radius(design, strand, theta)
+        # Placement-template profile. Final support machining trims any
+        # low crest above its capture rail (supports._prepare_source).
+        crest = (
+            152
+            if level == "high"
+            else round(
+                70 + 82 * max(
+                    0.0,
+                    (abs(math.sin(3 * (theta - math.radians(design.rotation_deg)))) - 0.8) / 0.2,
+                ),
+                6,
+            )
+        )
+        outer = round(36 + 16 * math.sin(math.pi * j / 8), 6)
+        part = rib_definition(level, j, t, w, crest, outer)
+        rib_parts.append(part)
+        co, si = math.cos(theta), math.sin(theta)
+        transform = (
+            (co, 0, si, r * co - t * si / 2),
+            (si, 0, -co, r * si + t * co / 2),
+            (0, 1, 0, zbase),
+            (0, 0, 0, 1),
+        )
+        ribs.append(PartInstance(
+            f"{name}-fin-{j}", part.definition_id, part.revision, transform, name, "rib", f"s{j}",
+        ))
+        footprints.append((name, radial_rectangle(r, theta, -50, outer, -t / 2, t / 2)))
+        stations.append(InterfaceStation(
+            f"s{j}", math.degrees(theta), w, 0, "radial-slide-" + level + "-v1",
+        ))
+        spine = spine.difference(radial_rectangle(r, theta, -100, 0, -w / 2, w / 2))
+        rail = rail.difference(
+            radial_rectangle(r, theta, -32 - (w - t) / 2, -20 + (w - t) / 2, -w / 2, w / 2)
+        )
+        if crest > lid:
+            # Tall outer crests need an open clearance in the root pad, not
+            # a fictitious solid plate through the standing fin.
+            rail = rail.difference(radial_rectangle(r, theta, 0, 100, -w / 2, w / 2))
+    # Slotting a broad root region can cut off pad offcuts. Retain only the
+    # component joined to the continuous backbone; bolt selection below uses
+    # this actual contour, never a discarded root island.
+    for key, anchor_offset in (("spine", 8), ("rail", -38)):
+        shape = spine if key == "spine" else rail
+        if shape.geom_type != "Polygon":
+            anchor = Point(xy(radius(design, strand, centre) + anchor_offset, centre))
+            kept = [g for g in shape.geoms if g.covers(anchor)]
+            if len(kept) != 1:
+                raise ValueError(f"{name}: disconnected {key} backbone")
+            if key == "spine":
+                spine = kept[0]
+            else:
+                rail = kept[0]
+    module = {
+        "module_id": name,
+        "level": level,
+        "centre": centre,
+        "spine": spine,
+        "rail": rail,
+        "pad": pad,
+        "root_centre": root_centre,
+        "lid": lid,
+        "zlevels": zlevels,
+        "ribs": ribs,
+        "stations": stations,
+    }
+    return module, rib_parts, footprints
 
 
 def band(design, strand, start, end, inner, outer):
@@ -97,109 +202,18 @@ def generate_weave(config, root_flips=()):
         math.radians(25 * math.copysign(abs(v) ** 1.5, v)) if v else 0.0
         for v in np.linspace(-1, 1, 9)
     ]
-    for strand in ("a", "b"):
-        for crossing in range(6):
-            name = f"{strand}{crossing}"
-            centre = crossing * math.pi / 3 + math.radians(design.rotation_deg)
-            level = "high" if (crossing % 2 == 0) == (strand == "a") else "low"
-            lid = 152 if level == "high" else 70
-            zlevels = (102, 126) if level == "high" else (20, 44)
-            start, end = centre - math.radians(29.25), centre + math.radians(29.25)
-            sector = Polygon([(0, 0), *[xy(2000, a) for a in np.linspace(start, end, 40)]])
-            end_sign = (1 if strand == "a" else -1) * (-1 if name in root_flips else 1)
-            root_theta = centre + end_sign * math.radians(20)
-            root_centre = Point(xy(radius(design, strand, root_theta), root_theta))
-            pads = []
-            for offset in (14, 18, 22, 25):
-                theta = centre + end_sign * math.radians(offset)
-                r = radius(design, strand, theta)
-                pads.append(
-                    Point(xy(r + (25 if r > design.radius_mm else 20), theta)).buffer(
-                        55, quad_segs=24
-                    )
-                )
-            pad = (
-                unary_union(pads)
-                .intersection(sector)
-                .difference(Point(0, 0).buffer(design.opening_radius_mm + 2, quad_segs=96))
-            )
-            spine = unary_union([band(design, strand, start, end, -12, 12), pad])
-            rail = unary_union([band(design, strand, start, end, -42, -10), pad])
-            ribs = []
-            stations = []
-            for j, offset in enumerate(offsets):
-                theta = centre + offset
-                r = radius(design, strand, theta)
-                # Placement-template profile. Final support machining trims any
-                # low crest above its capture rail (supports._prepare_source).
-                crest = (
-                    152
-                    if level == "high"
-                    else round(70 + 82 * max(0.0, (abs(math.sin(3 * (theta - math.radians(design.rotation_deg)))) - 0.8) / 0.2), 6)
-                )
-                outer = round(36 + 16 * math.sin(math.pi * j / 8), 6)
-                part = rib_definition(level, j, t, w, crest, outer)
-                rib_defs[part.definition_id] = part
-                co, si = math.cos(theta), math.sin(theta)
-                transform = (
-                    (co, 0, si, r * co - t * si / 2),
-                    (si, 0, -co, r * si + t * co / 2),
-                    (0, 1, 0, zbase),
-                    (0, 0, 0, 1),
-                )
-                instance = PartInstance(
-                    f"{name}-fin-{j}",
-                    part.definition_id,
-                    part.revision,
-                    transform,
-                    name,
-                    "rib",
-                    f"s{j}",
-                )
-                ribs.append(instance)
-                rib_footprints.append((name, radial_rectangle(r, theta, -50, outer, -t / 2, t / 2)))
-                stations.append(
-                    InterfaceStation(
-                        f"s{j}", math.degrees(theta), w, 0, "radial-slide-" + level + "-v1"
-                    )
-                )
-                spine = spine.difference(radial_rectangle(r, theta, -100, 0, -w / 2, w / 2))
-                rail = rail.difference(
-                    radial_rectangle(r, theta, -32 - (w - t) / 2, -20 + (w - t) / 2, -w / 2, w / 2)
-                )
-                if crest > lid:
-                    # Tall outer crests need an open clearance in the root pad, not
-                    # a fictitious solid plate through the standing fin.
-                    rail = rail.difference(radial_rectangle(r, theta, 0, 100, -w / 2, w / 2))
-            # Slotting a broad root region can cut off pad offcuts. Retain only the
-            # component joined to the continuous backbone; bolt selection below uses
-            # this actual contour, never a discarded root island.
-            for key, offset in (("spine", 8), ("rail", -38)):
-                shape = spine if key == "spine" else rail
-                if shape.geom_type != "Polygon":
-                    anchor = Point(xy(radius(design, strand, centre) + offset, centre))
-                    kept = [g for g in shape.geoms if g.covers(anchor)]
-                    if len(kept) != 1:
-                        raise ValueError(f"{name}: disconnected {key} backbone")
-                    if key == "spine":
-                        spine = kept[0]
-                    else:
-                        rail = kept[0]
-            modules.append(
-                {
-                    "module_id": name,
-                    "level": level,
-                    "centre": centre,
-                    "spine": spine,
-                    "rail": rail,
-                    "pad": pad,
-                    "root_centre": root_centre,
-                    "lid": lid,
-                    "zlevels": zlevels,
-                    "ribs": ribs,
-                    "stations": stations,
-                }
-            )
+    jobs = [(strand, crossing) for strand in ("a", "b") for crossing in range(6)]
+
+    def build(job):
+        return _weave_module(design, config, t, w, zbase, offsets, root_flips, *job)
+
+    with ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
+        built = list(pool.map(build, jobs))
+    for module, rib_parts, footprints in built:
+        modules.append(module)
+        for part in rib_parts:
+            rib_defs[part.definition_id] = part
+        rib_footprints.extend(footprints)
     holes = mounting_holes(config)
     definitions = list(rib_defs.values())
     instances = []

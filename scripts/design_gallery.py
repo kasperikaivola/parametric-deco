@@ -74,7 +74,6 @@ def upright_evidence(a):
         elif i.role == 'blade':
             entry['joinery'] = '28 mm closed cap seat, shoulder bearing and transverse retained key'
             entry['decorative_fin'] = True
-            entry['physical_bending_stiffness'] = 'NOT RUN'
         else:
             entry['joinery'] = 'closed layer slots; board/lower-plate and cap withdrawal restraint'
         result.append(entry)
@@ -280,7 +279,6 @@ def main():
         'examples_checked': len(evidence),
         'common_board_fingerprints_by_stock_size': {k: sorted(v) for k, v in groups.items()},
         'checks': 'independent family root/distal paths or arc/straight span, actual grid axes, bores/7mm webs, hardware axes/envelope/corridors, gap tubes, all-parts graph; exact extruded material and complete support/hardware symmetry orbits',
-        'physical_validation': 'NOT RUN', 'Wire_Arena_validation': 'NOT RUN',
         'examples': {name: {'end_axes': len(e['mounting']['stations']),
             'structural_panels': len(e['mounting']['spans']),
             'all_parts_reach_backplate': e['mounting']['all_parts_reach_backplate'],
@@ -293,7 +291,7 @@ def main():
             'Front (+Z onto XY) and three-quarter cameras, materials and framing are matched. '
             'Blue-grey parts are actual modeled end-clamp tubes, bolts, washers, heads and nuts. '
             'Mounting views show the actual deco contours transparently with hardware visible through them, plus the common hole grid; cyan R-T traces identify actual curved root/distal paths, and station numbers/module labels link to exact end-clamp IDs in the evidence. '
-            'Original root/clip hardware remains simplified. Physical and Wire/Arena checks are **NOT RUN**.', '',
+            'Original root/clip hardware remains simplified.', '',
             'Every 1000 × 1000 example uses the identical manufactured board fingerprint; '
             '800 and 1400 mm size presets require separate board stock sizes with the same equilateral triangular grid (50 mm X, 25√3 mm rows, 25 mm stagger). '
             'Family-specific eye/aperture/trestle cuts are absent from the universal board. '

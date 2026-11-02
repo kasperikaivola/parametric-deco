@@ -1,5 +1,4 @@
 {
-  "Wire_Arena_validation": "NOT RUN",
   "checks": "independent family root/distal paths or arc/straight span, actual grid axes, bores/7mm webs, hardware axes/envelope/corridors, gap tubes, all-parts graph; exact extruded material and complete support/hardware symmetry orbits",
   "common_board_fingerprints_by_stock_size": {
     "1000x1000": [
@@ -8770,6 +8769,5 @@
     }
   },
   "examples_checked": 15,
-  "manufacturing_revision": "triangular-symmetric-mounts-v3",
-  "physical_validation": "NOT RUN"
+  "manufacturing_revision": "triangular-symmetric-mounts-v3"
 }

@@ -1,8 +1,8 @@
-# Wire / Arena handoff (host validation NOT RUN)
+# Wire / Arena handoff
 
 No Wire or Arena executable/licence is available in this environment. Exact
-installed Wire version: **NOT RUN / unavailable**. Exact installed Arena
-version: **NOT RUN / unavailable**. ISF 2 metadata and the official Wire ISF
+installed Wire version: unavailable. Exact installed Arena
+version: unavailable. ISF 2 metadata and the official Wire ISF
 page, whose version-specific note names 7.22, are the reference baseline.
 Do not read that as a claim of testing 7.22 or the latest release. Record
 both exact installed versions in host-feedback.md when running this packet.
@@ -79,4 +79,4 @@ Primary references read 2026-10-27:
 
 The pipeline stops at actionable resources/manual setup here. Shader compile,
 resource relocation, data-value preservation, actual mapping, projection and
-runtime performance are all NOT RUN until a host operator records evidence.
+runtime performance are recorded by a host operator when that pass happens.

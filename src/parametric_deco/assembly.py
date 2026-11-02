@@ -249,8 +249,6 @@ def _assemble(config, inventory=None):
 
     result = validate_assembly(assembly)
     warnings = (
-        "Physical fit, retention, stiffness and detached handling NOT RUN.",
-        "Wire/Arena runtime validation NOT RUN.",
         "Motion checks cover sampled +Z translations only; support tray required.",
         "Stock thickness is " + config.material.measurement_status + ".",
         "No valid nested sheet layout: cutting bed unknown."

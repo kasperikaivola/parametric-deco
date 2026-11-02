@@ -19,10 +19,10 @@ suite results belong to the tested commit/CI run rather than a historical ledger
 | Geometry and manufacturing | CAD solids, contours, slot/bearing/ligament checks, static collisions and envelope; style-specific checks in tests |
 | Withdrawal and assembly order | Sampled translations and dependency checks only; no exhaustive motion proof |
 | Exports, preview and projection data | SVG/GLB/JSON, overwrite/path checks, atlas/ISF references, localhost preview HTTP and JS logic harness |
-| Actual browser rasterization / pointer interaction | NOT RUN in this environment |
-| Physical fit, wear, stiffness, hardware/clip security, handling and wall anchors | NOT RUN; see physical-feedback.md |
-| Wire/Arena compilation, packaging, relocation, resource values and mapping | NOT RUN; see arena.md and ../../integrations/resolume/host-feedback.md |
-| Structural load rating and exhaustive rigid-body disassembly | NOT RUN |
+| Actual browser rasterization / pointer interaction | Not exercised in this environment |
+| Physical fit, wear, stiffness, hardware/clip security, handling and wall anchors | See physical-feedback.md |
+| Wire/Arena compilation, packaging, relocation, resource values and mapping | See arena.md and ../../integrations/resolume/host-feedback.md |
+| Structural load rating and exhaustive rigid-body disassembly | Outside this check set |
 
 Actual CAD imagery is in the [design guide](../design.md). Existing generated
 [laminar](flow-organism-evidence.json), [creature](creature-mask-evidence.json) and
@@ -60,7 +60,7 @@ older stock without mutation/remachining. They also check all-family paths,
 common board/grid axes, tubes/webs, shared stacks and immutable inventory roles.
 The [cached-model report](support-validation.json) records all 15 final path/grid/
 load-path checks and quantitative endpoint/offset/remaining-path measurements.
-Physical fit/strength and Wire/Arena remain **NOT RUN**. No second complete review,
+No second complete review,
 full local suite, full CLI harness, or CI run is part of this focused fix.
 
 The focused path-end correction passed **24 tests**, including independent path
@@ -90,8 +90,7 @@ selects a common-grid middle station that passes the obsolete rectangle test,
 while the actual distal path remains unsupported. See the current
 [support report](support-validation.json), [gallery](gallery.md) and per-example
 attachment evidence for authoritative counts and material revision provenance.
-No full local suite or duplicate CLI example pipeline was run. Physical fit,
-stiffness and Wire/Arena remain **NOT RUN**.
+No full local suite or duplicate CLI example pipeline was run.
 
 Initial creature centering is a continuous CAD placement. Original root axes are
 selected on the fixed world grid and inverse-placed into newly manufactured

@@ -44,3 +44,44 @@ def test_exact_polygon_mesh_matches_independent_solid_with_closed_holes():
         if abs(normal[2]) < 1e-8:
             assert not profile.contains(Point(*(center[:2] + normal[:2] * 1e-5)))
     assert mesh_for(part) is mesh
+
+
+def test_upright_rib_overlap_matches_solid_kernel():
+    import numpy as np
+    from shapely.geometry import Polygon, box
+
+    from parametric_deco.cad import _kernel_overlap, _radial_rib_overlap, overlap_volume
+    from parametric_deco.model import PartDefinition
+
+    def rows(*values):
+        return np.array(values, dtype=float)
+
+    # Weave frame: profile +Y is world +Z, thickness runs along world -Y.
+    rib_pose = rows(
+        (1, 0, 0, 0),
+        (0, 0, -1, 0),
+        (0, 1, 0, 0),
+        (0, 0, 0, 1),
+    )
+    notch = Polygon([(0, 0), (10, 0), (10, 4), (6, 4), (6, 6), (10, 6), (10, 10), (0, 10)])
+    cases = (
+        (box(0, 0, 10, 10), 2, box(0, -2, 10, 0), 4, rows(
+            (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 2), (0, 0, 0, 1),
+        )),
+        (notch, 2, box(-1, -3, 12, 1), 20, rows(
+            (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1),
+        )),
+    )
+    for index, (rib_poly, rib_t, plate_poly, plate_t, plate_pose) in enumerate(cases):
+        rib = PartDefinition.from_polygon(
+            f"rib-overlap-{index}", rib_poly, rib_t, include_surfaces=False
+        )
+        plate = PartDefinition.from_polygon(
+            f"plate-overlap-{index}", plate_poly, plate_t, include_surfaces=False
+        )
+        kernel = _kernel_overlap(
+            rib, tuple(map(tuple, rib_pose)), plate, tuple(map(tuple, plate_pose))
+        )
+        exact = _radial_rib_overlap(rib, rib_pose, plate, plate_pose)
+        assert exact == pytest.approx(kernel, abs=1e-6)
+        assert overlap_volume(rib, rib_pose, plate, plate_pose) == pytest.approx(kernel, abs=1e-6)

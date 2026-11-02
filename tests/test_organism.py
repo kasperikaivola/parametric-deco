@@ -205,11 +205,19 @@ def test_size_changes_geometry_but_not_joint_dimensions():
 
 
 def test_cut_ligaments_measure_actual_holes():
-    from shapely.geometry import box
+    from shapely.geometry import Point, box
+    from shapely.ops import unary_union
     from parametric_deco.organism_assembly import cut_ligaments
 
     with pytest.raises(ValueError, match="ligament"):
         cut_ligaments(box(-20, -20, 20, 20).difference(box(10, -10, 16, 10)), 7)
+    plate = box(0, 0, 80, 40).difference(unary_union([
+        Point(xy).buffer(2, quad_segs=8) for xy in ((10, 10), (24, 12), (50, 20), (70, 30))]))
+    rings = [type(plate)(ring) for ring in plate.interiors]
+    brute = min(
+        [hole.distance(plate.exterior) for hole in rings]
+        + [a.distance(b) for i, a in enumerate(rings) for b in rings[i + 1:]])
+    assert cut_ligaments(plate, 1) == brute
 
 
 @pytest.mark.parametrize("name", ["medium", "high", "bilateral"])

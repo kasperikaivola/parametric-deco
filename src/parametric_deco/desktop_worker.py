@@ -16,19 +16,19 @@ def run_request(request):
     config = config_from_dict(request['config'])
     inventory_data = request.get('inventory')
     inventory = Inventory.from_dict(inventory_data) if inventory_data is not None else None
-    print('Constructing and validating physical CAD…', flush=True)
+    print('PROGRESS phase=construct fraction=0.02', flush=True)
     build = assemble(config, inventory)
     if not build.report.digital_valid:
         raise ValueError('; '.join(i.message for i in build.report.issues if i.severity == 'error'))
     out = Path(request['out'])
     if request['mode'] == 'export':
         from .export.manifest import export_build
-        print('Writing transactional export…', flush=True)
+        print('PROGRESS phase=export fraction=0.88', flush=True)
         result = export_build(build, out, force=request.get('force', False))
         paths = len(result.paths)
     elif request['mode'] == 'preview':
         from .export.scene import write_scene
-        print('Meshing validated CAD for orbit preview…', flush=True)
+        print('PROGRESS phase=mesh fraction=0.93', flush=True)
         write_scene(build.assembly, out)
         preview = out / 'preview'
         preview.mkdir()

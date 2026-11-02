@@ -11,7 +11,10 @@ parametric-deco-gui examples/organism-low.json
 ```
 
 On Windows use `.venv\Scripts\activate`; on macOS/Linux use
-`. .venv/bin/activate`. The optional extra pins PySide6 (including QtWebEngine).
+`. .venv/bin/activate`. The same preparation is `scripts/setup-env.ps1` or
+`scripts/setup-env.sh`, then `scripts/run-gui.ps1` or `scripts/run-gui.sh`.
+Those scripts install the lockfile before the pinned GUI extra so the CAD stack
+stays on `requirements.lock`. The optional extra pins PySide6 (including QtWebEngine).
 CLI-only installation and commands do not require Qt. Linux needs Qt's usual
 platform libraries (including EGL/OpenGL, libXtst, libxkbfile, NSS, XComposite, XDamage, XRandR, GBM and
 ALSA); a normal desktop session is recommended. No browser, server or network
@@ -21,19 +24,23 @@ service is required. The viewer uses the same offline canvas renderer as exports
 
 Choose any of the four styles. Switching styles replaces its parameter object
 with that style's defaults and retains shared settings. Open/Save use schema-v2
-JSON; saving a configuration does not export cuts. Parameters shows every key:
-double-click a scalar, list or whole object to edit its JSON value. Strings use
-quotes; `null` enables automatic overrides. Edit parent lists to add/remove
-placements or change list lengths. For example, `cutting_bed` can become
+JSON; saving a configuration does not export cuts. Parameters shows every key in
+the main window. Edit a value in that table; numbers round or clamp to the
+nearest schema-valid value, and the allowed range is shown beside each
+parameter. Text can be typed with or without quotes; `null` enables automatic
+overrides. Edit a parent list to add or remove placements or change list
+lengths. For example, `cutting_bed` can become
 `{"width_mm":1200,"height_mm":800,"spacing_mm":5}` or `null`. The Advanced JSON
 tab supports the complete same schema, including optional fields and physical
 instance assignments. Return to Parameters to refresh the tree. See
 [the design guide](../design.md) for ranges, effects and style boundaries.
 
 Edits automatically debounce for 650 ms, then construct and validate the real
-physical geometry in a disposable Python process. CAD may take seconds or minutes.
+physical geometry in a disposable Python process. A progress bar estimates the
+remaining time from the style and from earlier builds in the same session, and
+moves ahead when construction finishes and meshing or export writing starts.
 Status distinguishes waiting/stale, building, invalid configuration, CAD failure,
-cancelled and current digitally validated geometry. The last good model remains
+cancelled and current geometry. The last good model remains
 visible with an explicit stale status while a new request runs or fails. Drag to
 orbit, scroll to zoom, click to identify; front/side/perspective, visibility,
 backplate, hardware envelopes and explode controls come from the existing viewer.
@@ -60,7 +67,7 @@ Cancel preview terminates the CAD child process. Closing cancels preview childre
 and removes session data; while an export commits files, closing waits for its
 completion to avoid interrupting replacement. Unsaved config edits prompt before
 New, Open or Close. Stock, holes, fit clearances and real hardware never scale with
-artwork size. Physical validation and Wire/Arena remain **NOT RUN**.
+artwork size.
 
 ## Verification
 

@@ -91,7 +91,8 @@ class PartDefinition:
         return Polygon(self.outer, self.holes)
 
     @classmethod
-    def from_polygon(cls, definition_id, polygon, thickness_mm, interfaces=(), kind="part"):
+    def from_polygon(cls, definition_id, polygon, thickness_mm, interfaces=(), kind="part",
+                     *, include_surfaces=True):
         safe_id(definition_id)
         polygon = normalize(polygon)
         if (
@@ -106,37 +107,37 @@ class PartDefinition:
         holes = tuple(
             tuple(tuple(float(v) for v in xy) for xy in r.coords[:-1]) for r in polygon.interiors
         )
-        surfaces = [
-            Surface(
-                "front",
-                (0.0, 0.0, float(thickness_mm)),
-                (1.0, 0.0, 0.0),
-                (0.0, 1.0, 0.0),
-                outer,
-                holes,
-            )
-        ]
-        # Explicit edge faces, including cut-hole walls. Back face is optional/excluded.
-        for ri, ring in enumerate(() if kind in ("backplate", "purchased-hardware") else (outer, *holes)):
-            for ei, (a, b) in enumerate(zip(ring, ring[1:] + ring[:1])):
-                dx, dy = b[0] - a[0], b[1] - a[1]
-                length = float(np.hypot(dx, dy))
-                surfaces.append(
-                    Surface(
-                        f"edge-{ri}-{ei}",
-                        (*a, 0.0),
-                        (dx / length, dy / length, 0.0),
-                        (0.0, 0.0, 1.0),
-                        (
-                            (0.0, 0.0),
-                            (length, 0.0),
-                            (length, float(thickness_mm)),
-                            (0.0, float(thickness_mm)),
-                        ),
-                    )
+        surfaces = []
+        # Trial fits only need the contour. Saved parts keep every cut-wall face.
+        if include_surfaces and kind not in ("backplate", "purchased-hardware"):
+            surfaces.append(
+                Surface(
+                    "front",
+                    (0.0, 0.0, float(thickness_mm)),
+                    (1.0, 0.0, 0.0),
+                    (0.0, 1.0, 0.0),
+                    outer,
+                    holes,
                 )
-        if kind in ("backplate", "purchased-hardware"):
-            surfaces = []
+            )
+            for ri, ring in enumerate((outer, *holes)):
+                for ei, (a, b) in enumerate(zip(ring, ring[1:] + ring[:1])):
+                    dx, dy = b[0] - a[0], b[1] - a[1]
+                    length = float(np.hypot(dx, dy))
+                    surfaces.append(
+                        Surface(
+                            f"edge-{ri}-{ei}",
+                            (*a, 0.0),
+                            (dx / length, dy / length, 0.0),
+                            (0.0, 0.0, 1.0),
+                            (
+                                (0.0, 0.0),
+                                (length, 0.0),
+                                (length, float(thickness_mm)),
+                                (0.0, float(thickness_mm)),
+                            ),
+                        )
+                    )
         payload = {
             "thickness_mm": float(thickness_mm),
             "outer": outer,

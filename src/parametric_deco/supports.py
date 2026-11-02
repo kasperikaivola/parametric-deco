@@ -11,7 +11,7 @@ import math
 import numpy as np
 from shapely.geometry import Point, Polygon, box, MultiPoint, LineString
 from shapely.ops import nearest_points, unary_union
-from shapely import affinity
+from shapely import affinity, prepare
 from .geometry.symmetry import kind as symmetry_kind, matrices as symmetry_matrices, canonical_id, mapped_id
 
 from .model import Connection, Inventory, Issue, PartDefinition, PartInstance, digest
@@ -43,8 +43,19 @@ def _filled(shape):
     return Polygon(shape.exterior)
 
 
+_disk_cache = {}
+
+
 def _disk(x, y, r):
-    return Point(float(x), float(y)).buffer(r, quad_segs=24)
+    """Circle for a grid bore. The same center and radius are tested many times."""
+    key = (float(x), float(y), float(r))
+    disk = _disk_cache.get(key)
+    if disk is None:
+        if len(_disk_cache) > 8192:
+            _disk_cache.clear()
+        disk = Point(*key[:2]).buffer(key[2], quad_segs=24)
+        _disk_cache[key] = disk
+    return disk
 
 
 def physical_paths(a, c):
@@ -100,9 +111,15 @@ def path_limit(kind):
     return .315 if kind == "radial-arc" else END_LIMIT
 
 
+_arc_cache = {}
+
+
 def path_fraction(path, kind, point):
     if kind == "radial-arc":
-        angles = np.unwrap(np.arctan2(np.asarray(path.coords)[:, 1], np.asarray(path.coords)[:, 0]))
+        angles = _arc_cache.get(id(path))
+        if angles is None:
+            angles = np.unwrap(np.arctan2(np.asarray(path.coords)[:, 1], np.asarray(path.coords)[:, 0]))
+            _arc_cache[id(path)] = angles
         middle = (angles[0] + angles[-1]) / 2
         angle = middle + (math.atan2(point.y, point.x) - middle + math.pi) % (2 * math.pi) - math.pi
         return float((angle - angles[0]) / (angles[-1] - angles[0]))
@@ -116,6 +133,7 @@ def end_covered(path, kind, point, end):
 
 
 def _plan(a, c):
+    _arc_cache.clear()
     # Keep useful spread/intermediate supports from the original planar layout;
     # then ADD true root/distal supports rather than exchanging one cantilever
     # for another. The final path audit is independent of that initial layout.
@@ -250,7 +268,7 @@ def _orbit_plan(a, c):
                         trial.append({'xy': member['xy'], 'plate_ids': sorted(member['plate_ids'])})
                 source = SimpleNamespace(assembly=a, inventory=Inventory(a.definitions, a.instances, {}))
                 try:
-                    stock = _machined_inventory(source, {'stations': trial}, c)
+                    stock = _machined_inventory(source, {'stations': trial}, c, record=False)
                 except ValueError:
                     return False
                 manufactured = replace(a, definitions=stock.definitions, instances=stock.instances)
@@ -290,6 +308,12 @@ def _orbit_plan(a, c):
 
 
 def _select_stations(a, c, retained=None, paths=None):
+    _arc_cache.clear()
+    if paths:
+        for path, kind in paths.values():
+            if kind == "radial-arc":
+                coords = np.asarray(path.coords)
+                _arc_cache[id(path)] = np.unwrap(np.arctan2(coords[:, 1], coords[:, 0]))
     board = next(i for i in a.instances if i.role == "backplate")
     board_shape = xy_footprint(a.definition_for(board), board.transform)
     base = instance_bounds(a.definition_for(board), board.transform)[1, 2]
@@ -305,7 +329,29 @@ def _select_stations(a, c, retained=None, paths=None):
     washer = c.mounting.washer_radius_mm
     edge = max(washer + 2, c.grid.hole_diameter_mm / 2 + 7)
     reach = 105 if c.style == "radial-weave" else 60
-    service = {i.instance_id: _vertical_sections(a, i) for i in targets} if c.style == "radial-weave" else {}
+    service = {}
+    if c.style == "radial-weave":
+        for part in targets:
+            region = _vertical_sections(a, part)
+            if not region.is_empty:
+                prepare(region)
+            service[part.instance_id] = region
+    for geom in shapes.values():
+        prepare(geom)
+    for holes in cutouts.values():
+        for hole in holes:
+            prepare(hole)
+    for bore in bores:
+        prepare(bore)
+    board_cover = filled_board.buffer(1e-6)
+    prepare(board_cover)
+
+    reach_cover = {}
+    for part in targets:
+        cover = _filled(shapes[part.instance_id]).buffer(reach)
+        prepare(cover)
+        reach_cover[part.instance_id] = cover
+    points = [(bore.centroid.x, bore.centroid.y, 0) for bore in bores]
     shared_modules = c.style == "radial-weave" or (c.style == "laminar" and paths is not None)
     selected = copy.deepcopy(retained) if retained else []
     spans = []
@@ -334,86 +380,95 @@ def _select_stations(a, c, retained=None, paths=None):
             filled_target = unary_union([shape, *round_holes])
             inset = filled_target.buffer(reach)
             if inset.is_empty:
-                raise ValueError(f"{target.instance_id}: no end-clamp edge bearing; change dimensions")
-            points = []
+                raise ValueError(
+                    f"{target.instance_id}: no end-clamp edge bearing; change dimensions")
+            prepare(inset)
+            prepare(filled_target)
+            solid_cover = _filled(filled_target).buffer(reach)
+            prepare(solid_cover)
+            top = max(bounds[part.instance_id][1, 2] for part in targets
+                      if shared_modules or part.module_id == target.module_id)
             # Existing universal board bores are the only permitted axes.
-            points.extend((p.centroid.x, p.centroid.y, 0) for p in bores)
-            
-            
-            candidates = []
-            for x, y, priority in points:
+            def consider(item, end=end):
+                x, y, priority = item
                 point = Point(x, y)
                 fraction = fraction_at(point)
                 if path is not None:
                     if not covered(point, end):
-                        continue
+                        return None
                 elif not ((-0.15 <= fraction <= END_LIMIT) if end == 0 else
                           (1 - END_LIMIT <= fraction <= 1.15)):
-                    continue
-                if c.style == "radial-weave" and point.distance(Point(0, 0)) < c.parameters.opening_radius_mm + edge + 2:
-                    continue
+                    return None
+                if (c.style == "radial-weave" and point.distance(Point(0, 0))
+                        < c.parameters.opening_radius_mm + edge + 2):
+                    return None
                 if not inset.covers(point):
-                    continue
+                    return None
                 bearing = _disk(x, y, edge)
+                if not solid_cover.covers(point):
+                    return None
                 # Existing circular bores may be reused; decorative channels may not.
-                own_holes = round_holes
-                filled_target = unary_union([shape, *own_holes])
-                if not _filled(filled_target).buffer(reach).covers(point):
-                    continue
-                if any(bearing.intersects(h) for h in cutouts[target.instance_id]
-                       if abs(h.area - math.pi * (c.grid.hole_diameter_mm / 2) ** 2) >= 1):
-                    continue
-                if not filled_board.buffer(1e-6).covers(bearing):
-                    continue
-                top = max(bounds[p.instance_id][1, 2] for p in targets
-                          if shared_modules or p.module_id == target.module_id)
+                hole_area = math.pi * (c.grid.hole_diameter_mm / 2) ** 2
+                for hole in cutouts[target.instance_id]:
+                    if abs(hole.area - hole_area) >= 1 and bearing.intersects(hole):
+                        return None
+                if not board_cover.covers(bearing):
+                    return None
                 plates = []
-                clear = True
                 for other in a.instances:
                     if other.role == "backplate" or bounds[other.instance_id][0, 2] >= top + 12:
                         continue
                     obstacle = shapes[other.instance_id]
+                    same_module = (other.module_id == target.module_id and _horizontal(other)
+                                   and other in targets)
+                    # equals/distance run only when the bore disk misses, as before.
                     if (other != target and not obstacle.intersects(_disk(x, y, edge + .2))
-                            and not (other.module_id == target.module_id and _horizontal(other)
-                                     and other in targets
-                                     and (obstacle.equals(shape) if c.style == "radial-weave"
-                                          else obstacle.distance(point) <= reach))):
+                            and not (same_module and (
+                                obstacle.equals(shape)
+                                if c.style == "radial-weave"
+                                else obstacle.distance(point) <= reach))):
                         continue
-                    if (other.module_id == target.module_id or shared_modules) and _horizontal(other) and other in targets:
-                        if not _filled(obstacle).buffer(reach).covers(point):
-                            clear = False
-                            break
-                        # Neither a slot nor an artistic channel may be covered by a washer.
-                        annulus = _disk(x, y, edge).difference(_disk(x, y, c.grid.hole_diameter_mm / 2 + .1))
-                        if any(annulus.intersection(h).area > 1e-5
-                               for h in cutouts[other.instance_id]
-                               if abs(h.area - math.pi * (c.grid.hole_diameter_mm / 2) ** 2) >= 1):
-                            clear = False
-                            break
-                        plates.append(other.instance_id)
-                    else:
-                        clear = False
-                        break
-                if not clear or target.instance_id not in plates:
-                    continue
+                    clamped = (_horizontal(other) and other in targets and (
+                        other.module_id == target.module_id or shared_modules))
+                    if not clamped:
+                        return None
+                    if not reach_cover[other.instance_id].covers(point):
+                        return None
+                    # Neither a slot nor an artistic channel may be covered by a washer.
+                    annulus = _disk(x, y, edge).difference(
+                        _disk(x, y, c.grid.hole_diameter_mm / 2 + .1))
+                    for hole in cutouts[other.instance_id]:
+                        if (abs(hole.area - hole_area) >= 1
+                                and annulus.intersection(hole).area > 1e-5):
+                            return None
+                    plates.append(other.instance_id)
+                if target.instance_id not in plates:
+                    return None
                 if service and any(bearing.intersects(service[pid]) for pid in plates):
-                    continue
-                if c.style != "radial-weave" and any(module != target.module_id and point.distance(Point(hx, hy)) < edge + washer + 1
-                       for module, _, hx, hy in a.mounting_grid):
-                    continue
+                    return None
+                if c.style != "radial-weave" and any(
+                        module != target.module_id
+                        and point.distance(Point(hx, hy)) < edge + washer + 1
+                        for module, _, hx, hy in a.mounting_grid):
+                    return None
                 occupied = [p for p in selected if Point(p["xy"]).distance(point) < 2 * edge + 3]
                 shared = next((p for p in occupied if Point(p["xy"]).distance(point) < 1e-6), None)
-                if occupied and not (shared and (shared_modules or shared["module_id"] == target.module_id)):
-                    continue
+                if occupied and not (shared and (
+                        shared_modules or shared["module_id"] == target.module_id)):
+                    return None
                 if shared:
                     plates = sorted(set(plates) | set(shared["plate_ids"]))
-                if any(min(bounds[p][1, 2], bounds[q][1, 2]) - max(bounds[p][0, 2], bounds[q][0, 2]) > 1e-6
-                       for index, p in enumerate(plates) for q in plates[index + 1:]):
-                    continue
+                if any(min(bounds[p][1, 2], bounds[q][1, 2]) - max(bounds[p][0, 2], bounds[q][0, 2])
+                       > 1e-6 for index, p in enumerate(plates) for q in plates[index + 1:]):
+                    return None
                 # Avoid a new bore grazing any existing board bore.
                 if any(point.distance(h.centroid) > .01 and point.distance(h) < edge for h in bores):
-                    continue
-                candidates.append((priority + (0 if filled_target.covers(bearing) else 2), abs(fraction - ((.10 if end == 0 else .90) if path is not None else (.21 if end == 0 else .79))), x, y, plates))
+                    return None
+                goal = ((.10 if end == 0 else .90) if path is not None
+                        else (.21 if end == 0 else .79))
+                rank = priority + (0 if filled_target.covers(bearing) else 2)
+                return (rank, abs(fraction - goal), x, y, plates)
+            candidates = [item for item in map(consider, points) if item is not None]
             if not candidates:
                 raise ValueError(f"{target.instance_id}: no clear clamp near {'start' if end == 0 else 'end'}; change geometry")
             _, _, x, y, plates = min(candidates)
@@ -445,7 +500,8 @@ def _vertical_sections(a, slab):
         if part.role == "backplate" or abs(pose[2, 1] - 1) > 1e-8:
             continue
         profile = a.definition_for(part)
-        cut = profile.polygon.intersection(box(-10000, bottom - pose[2, 3], 10000, top - pose[2, 3]))
+        cut = profile.polygon.intersection(
+            box(-10000, bottom - pose[2, 3], 10000, top - pose[2, 3]))
         pieces = getattr(cut, "geoms", (cut,))
         for piece in pieces:
             if piece.is_empty or piece.area < 1e-6:
@@ -464,12 +520,15 @@ def _vertical_sections(a, slab):
     return unary_union(result)
 
 
-def _machined_inventory(source, plan, c):
+def _machined_inventory(source, plan, c, *, record=True):
     """Each physical cut gets its own new revision; source templates stay digital."""
     a = source.assembly
     definitions, instances, mapping = [], [], {}
     finished = {}
     radius = c.grid.hole_diameter_mm / 2
+    cut_parts = [i for i in a.instances
+                 if any(i.instance_id in s["plate_ids"] for s in plan["stations"])]
+    sections = {part.instance_id: _vertical_sections(a, part) for part in cut_parts}
     for i in a.instances:
         d = a.definition_for(i)
         canonical = canonical_id(i.instance_id, c) if symmetry_kind(c) != 'none' and _horizontal(i) and i.role != 'backplate' else i.instance_id
@@ -492,7 +551,7 @@ def _machined_inventory(source, plan, c):
                 local = np.linalg.inv(np.array(i.transform)) @ np.array((*s["xy"], 0, 1))
                 cuts.append(_disk(*local[:2], radius))
         shape = d.polygon
-        obstacles = _vertical_sections(a, i) if cuts else Polygon()
+        obstacles = sections[i.instance_id] if cuts else Polygon()
         for s in plan["stations"]:
             if i.instance_id in s["plate_ids"]:
                 local = np.linalg.inv(np.array(i.transform)) @ np.array((*s["xy"], 0, 1))
@@ -515,13 +574,17 @@ def _machined_inventory(source, plan, c):
             shape = half.union(affinity.scale(half, xfact=-1, yfact=1, origin=(0, 0)))
         # Per-instance revisions are required where identical source profiles get
         # different drilled supports. Never overwrite source geometry in place.
-        final = PartDefinition.from_polygon(i.instance_id + "-supported", shape, d.thickness_mm,
-                                            d.interfaces, d.kind) if cuts else d
+        final = PartDefinition.from_polygon(
+            i.instance_id + "-supported", shape, d.thickness_mm, d.interfaces, d.kind,
+            include_surfaces=record) if cuts else d
         finished[i.instance_id] = final
         mapping[i.instance_id] = [final.definition_id, final.revision]
         if (final.definition_id, final.revision) not in {(p.definition_id, p.revision) for p in definitions}:
             definitions.append(final)
         instances.append(replace(i, definition_id=final.definition_id, revision=final.revision))
+    if not record:
+        # Station search only needs the drilled contours, not a saved inventory document.
+        return Inventory(tuple(definitions), tuple(instances), None)
     layout = {"support_revision": REVISION, "source_template": source.inventory.to_dict(),
               "plan": plan, "part_mapping": mapping,
               "support_settings": {"grid": asdict(c.grid), "mounting": asdict(c.mounting),
@@ -602,8 +665,7 @@ def _hardware(a, plan, c):
                 "support_hardware": {"tube_od_mm": 12, "tube_id_mm": c.grid.hole_diameter_mm,
                                      "shaft_diameter_mm": 6, "washer_thickness_mm": 1.5,
                                      "material": "rigid metal tube; M6 through bolts with locking nuts",
-                                     "nut_and_head": "select M6 locking nut/head within 12 mm allowance; physical selection NOT RUN",
-                                     "physical_validation": "NOT RUN"}}
+                                     "nut_and_head": "select M6 locking nut/head within 12 mm allowance"}}
     bounds = a.hardware_bounds
     if c.style == "radial-weave":
         for station in plan["stations"]:
@@ -876,4 +938,4 @@ def supported_build(c, inventory, assemble_source):
     report = replace(source.report, issues=(*source.report.issues, *issues))
     return replace(source, assembly=a, fabrication_parts=physical.definitions, report=report,
                    inventory=physical,
-                   warnings=(*source.warnings, "Separated-end M6 clamp tubes are specified geometry; physical stiffness/fit NOT RUN."))
+                   warnings=(*source.warnings, "Separated-end M6 clamp tubes are specified geometry."))

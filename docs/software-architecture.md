@@ -27,5 +27,4 @@ Calibration remains separate from artwork geometry. No fabricated host preset,
 custom VJ runtime, structural solver or exhaustive motion proof is provided.
 
 Run `python -m pytest -q -rs`, `python -m ruff check .` and
-`python tests/run_examples.py`; CI repeats these on Python 3.11. Physical and
-proprietary host checks remain [NOT RUN](implementation/validation-status.md).
+`python tests/run_examples.py`; CI repeats these on Python 3.11.

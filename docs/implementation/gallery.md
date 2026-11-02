@@ -2,7 +2,7 @@
 
 There are **four implemented generators**, with 15 style-bearing example configurations. `examples/inventory.json` is a saved inventory input, not another design family or preset.
 
-Front (+Z onto XY) and three-quarter cameras, materials and framing are matched. Blue-grey parts are actual modeled end-clamp tubes, bolts, washers, heads and nuts. Mounting views show the actual deco contours transparently with hardware visible through them, plus the common hole grid; cyan R-T traces identify actual curved root/distal paths, and station numbers/module labels link to exact end-clamp IDs in the evidence. Original root/clip hardware remains simplified. Physical and Wire/Arena checks are **NOT RUN**.
+Front (+Z onto XY) and three-quarter cameras, materials and framing are matched. Blue-grey parts are actual modeled end-clamp tubes, bolts, washers, heads and nuts. Mounting views show the actual deco contours transparently with hardware visible through them, plus the common hole grid; cyan R-T traces identify actual curved root/distal paths, and station numbers/module labels link to exact end-clamp IDs in the evidence. Original root/clip hardware remains simplified.
 
 Every 1000 × 1000 example uses the identical manufactured board fingerprint; 800 and 1400 mm size presets require separate board stock sizes with the same equilateral triangular grid (50 mm X, 25√3 mm rows, 25 mm stagger). Family-specific eye/aperture/trestle cuts are absent from the universal board. The common board stays behind the artwork voids. Standard laminar presets repeat exact120° sectors including mounts; organism-bilateral is explicitly mirrored instead. Creature geometry and every support stack are exact left/right reflections.
 

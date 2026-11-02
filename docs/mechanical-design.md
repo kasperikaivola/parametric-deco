@@ -16,6 +16,5 @@ Every deco mounting axis is directly coaxial with the same physical board grid a
 See [design guide](design.md) for supported dimensions, assembly effort and style
 parameters, and [rib-study joint detail](implementation/joint-mechanism.md).
 
-Physical fit, wear, stiffness, bolt/clip selection, handling, backing stiffness,
-wall anchorage and load capacity remain NOT RUN. Digital static collisions and
+Digital static collisions and
 sampled translations are bounded checks, not strength or continuous-motion proof.

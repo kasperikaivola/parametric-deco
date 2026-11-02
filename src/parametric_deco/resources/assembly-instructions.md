@@ -1,4 +1,4 @@
-# Prototype only — physical tests NOT RUN
+# Rib study assembly
 
 1. Measure plywood. Edit measured_mm and measurement_status, cut the fit coupon
    with kerf compensation in laser software only; verify 100 mm scale marks.

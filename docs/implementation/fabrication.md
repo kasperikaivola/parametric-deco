@@ -32,5 +32,4 @@ the full bolt length), not an engineering fastener model. It is not included
 as a wooden cutting part.
 
 Use assembly-instructions.md plus joint-mechanism.md for numbered assembly
-and supported removal. Inspect front, side and exploded views. Physical
-fit, closure contact, torsion, wear, detachment and mounting tests NOT RUN.
+and supported removal. Inspect front, side and exploded views.

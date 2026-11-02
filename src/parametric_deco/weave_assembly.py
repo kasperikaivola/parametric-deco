@@ -278,9 +278,8 @@ def assemble_weave(config, inventory=None):
         assembly,
         tuple(definitions),
         (
-            "Radial-slide joint family: physical fit/load/handling NOT RUN; support required.",
+            "Support the module before releasing the root clamps.",
             "Remove high modules first, then low; radial rib reconfiguration only on a bench.",
-            "Wire/Arena and actual browser rendering NOT RUN.",
         ),
         {
             "generator": "parametric-deco/0.1.0",

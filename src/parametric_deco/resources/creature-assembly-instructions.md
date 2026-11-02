@@ -1,7 +1,6 @@
 # Ambiguous organism — candidate assembly, family v3
 
-Physical fit, strength, cantilever stiffness, hardware, finishing and handling:
-NOT RUN. Prototype one complete rib/tab/key/clip joint and one root stack first.
+Prototype one complete rib/tab/key/clip joint and one root stack first.
 The generic fit coupon checks stock slot width only, not these whole joints.
 
 All wood uses one measured thickness t (6 mm initially). The central shell and configured limb modules use armour
@@ -24,8 +23,7 @@ for a REQUIRED positive split-pin/clip stop. Do not rely on key friction alone.
 
 Select and prototype one suitable positive clip/pin for EVERY retaining key.
 The exact quantity is composition.retainer_clip_requirement.quantity. Their supplied bounding envelopes
-are clearance proxies, NOT selected or fully modelled fasteners. Clip length,
-head/tail shape, installation, security and tool access are NOT RUN. Nominal
+are clearance proxies, not selected fasteners. Nominal
 proxy length is 2t with the clip positioned below the cap; confirm the real clip
 can be installed and removed in that gap and cannot pass through the tab window.
 The joint needs redesign if suitable hardware cannot meet that envelope.
@@ -76,4 +74,4 @@ NEW CUTS. Use existing-inventory reconfigure to verify a proposed arrangement.
 Projection-visibility.json samples broad shell faces from (0,0,2000) mm using
 actual extruded contours/holes. Thin rib edges can self-shadow and are not treated
 as broad frontal projection targets. Use --visible-only for recommended atlas IDs.
-Wire/Arena compilation, projector calibration and real illumination: NOT RUN.
+Wire/Arena compilation, projector calibration and real illumination still need a host pass.

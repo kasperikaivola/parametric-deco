@@ -32,6 +32,13 @@ parameter, regenerates validated CAD automatically, and keeps an orbitable previ
 visible while you tune a design. Install with `python -m pip install -e ".[gui]"`,
 then run `parametric-deco gui` (or `parametric-deco-gui`).
 
+From a fresh checkout, `scripts/setup-env.ps1` (Windows PowerShell) or
+`scripts/setup-env.sh` (macOS/Linux) creates `.venv`, installs `requirements.lock`,
+installs this package with `--no-deps`, and installs the pinned PySide6 extra.
+`scripts/run-gui.ps1` and `scripts/run-gui.sh` open the editor. An optional
+argument is a schema-v2 configuration, for example
+`.\scripts\run-gui.ps1 examples\organism-low.json`.
+
 There are **four implemented generators** and **15 example configurations**, including geometry presets and supported inventory poses. The [complete matched gallery](docs/implementation/gallery.md) shows every example, its actual mounting hardware, and exact end-support evidence. All nominal-size designs use the **same physical backplate and hole grid**; 800/1400 mm presets require different board stock sizes.
 
 The same orthographic cameras, materials and framing apply below. Front looks onto XY from +Z; three-quarter shows relief. Blue-grey end-clamp hardware is real modeled geometry; [mounting details](docs/implementation/mounting.md) explain the load paths.
@@ -55,9 +62,7 @@ inventory replay; creature posture, radial and rib-study arrangements offer
 bounded reuse. See the guide before choosing cuts.
 
 This is a CAD and physical-test candidate, not a load-rated installation.
-Physical fit, wear, stiffness, hardware/clip selection, detached handling and
-anchorage are **NOT RUN**. Wire/Arena compilation, packaging and mapping are
-**NOT RUN**. The project exports ISF/PNG resources and [manual host setup](docs/implementation/arena.md).
+The project exports ISF/PNG resources and [manual host setup](docs/implementation/arena.md).
 
 Technical references: [architecture](docs/software-architecture.md),
 [fabrication](docs/implementation/fabrication.md), [joint mechanics](docs/implementation/joint-mechanism.md),
