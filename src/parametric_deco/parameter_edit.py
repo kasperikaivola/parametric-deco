@@ -329,6 +329,8 @@ def _mounting_limit(data, name):
         return _closed(lo, hi, positive=True)
     if name == 'root_half_span_mm':
         return _closed(40, 55)
+    if name == 'bolt_edge_offset_mm':
+        return Limit('null, or -60 (inside) to 60 (outside)', 'float', -60, 60, nullable=True)
     if name in ('rear_clearance_mm', 'hardware_outward_mm'):
         return _closed(0, _allowance_upper(data, name), nonnegative=True)
     return None

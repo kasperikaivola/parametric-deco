@@ -69,7 +69,7 @@ once by laser software. Grade and finish are optional; no white paint is require
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
 | `grid` | Pitch X 50, row pitch 25√3 ≈43.301270, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Every style locates its deco mounting bores directly on this same predefined grid, including laminar. |
 | `backplate` | Identical physical polygon and full bore pattern for every style at matching stock size/settings; sides 8 and rotation 22.5° by default. No family-specific apertures, seats or extra drilling. |
-| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 25√3 (40–55) controls rib-study wings. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
+| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 25√3 (40–55) controls rib-study wings. Other styles derive root spacing. `bolt_edge_offset_mm` is null by default and keeps the present grid-hole choice. A number places the bolt centre that far from the piece edge: positive outside, negative inside, within −60 to 60 mm. The bore stays on the common grid and uses the nearest legal hole. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
 | `cutting_bed` | Optional width/height and spacing (default 5). Conservative rectangular shelf placement; oversized parts fail rather than shrink. Null gives individual cuts. |
 
 ## Laminar parameters

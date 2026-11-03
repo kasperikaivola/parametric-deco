@@ -60,6 +60,9 @@ class Mounting:
     hardware_outward_mm: float = 12
     washer_radius_mm: float = 9
     root_half_span_mm: float = 25 * math.sqrt(3)
+    # None keeps the historical grid-hole search. A number is the bolt centre's
+    # distance from the piece exterior: positive outside, negative inside.
+    bolt_edge_offset_mm: float | None = None
 
 
 @dataclass(frozen=True)
@@ -182,6 +185,18 @@ class DesignConfig:
 
     def to_dict(self):
         return asdict(self)
+
+
+def mounting_settings(mounting):
+    """Mounting record stored in manufactured inventories.
+
+    A null bolt-edge offset is omitted so inventories cut before that field
+    still match the same placement.
+    """
+    data = asdict(mounting) if not isinstance(mounting, dict) else dict(mounting)
+    if data.get("bolt_edge_offset_mm") is None:
+        data.pop("bolt_edge_offset_mm", None)
+    return data
 
 
 def validate_config(c):
@@ -345,6 +360,12 @@ def validate_config(c):
             v = getattr(obj, f.name)
             path = f"{name}.{f.name}"
             if f.name in ("grade", "finish", "measurement_status"):
+                continue
+            if f.name == "bolt_edge_offset_mm":
+                if v is None:
+                    continue
+                if numeric(path, v, False) and not -60 <= v <= 60:
+                    bad(path, "must be within 60 mm of the piece edge; negative is inside")
                 continue
             if isinstance(v, tuple):
                 for i, item in enumerate(v):

@@ -14,6 +14,7 @@ from shapely.ops import nearest_points, unary_union
 from shapely import affinity, prepare
 from .geometry.symmetry import kind as symmetry_kind, matrices as symmetry_matrices, canonical_id, mapped_id
 
+from .config import mounting_settings
 from .model import Connection, Inventory, Issue, PartDefinition, PartInstance, digest
 from .validation import instance_bounds, xy_footprint
 from .cad import overlap_volume
@@ -44,6 +45,31 @@ def _filled(shape):
 
 
 _disk_cache = {}
+
+
+def signed_edge_distance(shape, point):
+    """Distance from a piece exterior to a point, in millimetres.
+
+    Positive is outside the piece. Negative is inside it. A decorative bore
+    does not count as outside: the exterior ring is the edge.
+    """
+    if shape is None or shape.is_empty:
+        return 1e6
+    if shape.geom_type == "MultiPolygon":
+        shape = max(shape.geoms, key=lambda item: item.area)
+    elif shape.geom_type == "GeometryCollection":
+        polygons = [item for item in shape.geoms
+                    if item.geom_type == "Polygon" and not item.is_empty]
+        if not polygons:
+            return 1e6
+        shape = max(polygons, key=lambda item: item.area)
+    if shape.geom_type != "Polygon":
+        return float(shape.distance(point))
+    filled = Polygon(shape.exterior)
+    distance = float(shape.exterior.distance(point))
+    if filled.buffer(1e-7).covers(point):
+        return -distance
+    return distance
 
 
 def _disk(x, y, r):
@@ -251,7 +277,14 @@ def _orbit_plan(a, c):
                        for m in members.values()):
                     continue
                 goal = .10 if requirement == 'root' else .90 if requirement == 'distal' else .5
-                cost = (abs(path_fraction(path, pkind, point) - goal), shapes[target.instance_id].distance(point), p)
+                fraction_error = abs(path_fraction(path, pkind, point) - goal)
+                offset = c.mounting.bolt_edge_offset_mm
+                if offset is None:
+                    cost = (fraction_error, shapes[target.instance_id].distance(point), p)
+                else:
+                    edge_error = abs(
+                        signed_edge_distance(shapes[target.instance_id], point) - offset)
+                    cost = (edge_error, fraction_error, p)
                 candidates.append((cost, members))
             if not candidates:
                 raise ValueError(f'{target.instance_id}: no complete {symmetry_kind(c)} grid orbit for {requirement}')
@@ -467,11 +500,16 @@ def _select_stations(a, c, retained=None, paths=None):
                 goal = ((.10 if end == 0 else .90) if path is not None
                         else (.21 if end == 0 else .79))
                 rank = priority + (0 if filled_target.covers(bearing) else 2)
-                return (rank, abs(fraction - goal), x, y, plates)
+                fraction_error = abs(fraction - goal)
+                offset = c.mounting.bolt_edge_offset_mm
+                if offset is None:
+                    return (rank, fraction_error, x, y, plates)
+                edge_error = abs(signed_edge_distance(shape, Point(x, y)) - offset)
+                return (edge_error, rank, fraction_error, x, y, plates)
             candidates = [item for item in map(consider, points) if item is not None]
             if not candidates:
                 raise ValueError(f"{target.instance_id}: no clear clamp near {'start' if end == 0 else 'end'}; change geometry")
-            _, _, x, y, plates = min(candidates)
+            x, y, plates = min(candidates)[-3:]
             previous = next((p for p in selected if Point(p["xy"]).distance(Point(x, y)) < 1e-6), None)
             chosen = {"id": f"end-clamp-{len(selected)}", "module_id": target.module_id,
                       "reference_id": target.instance_id, "xy": [float(x), float(y)],
@@ -587,7 +625,7 @@ def _machined_inventory(source, plan, c, *, record=True):
         return Inventory(tuple(definitions), tuple(instances), None)
     layout = {"support_revision": REVISION, "source_template": source.inventory.to_dict(),
               "plan": plan, "part_mapping": mapping,
-              "support_settings": {"grid": asdict(c.grid), "mounting": asdict(c.mounting),
+              "support_settings": {"grid": asdict(c.grid), "mounting": mounting_settings(c.mounting),
                                    "backplate": asdict(c.backplate), "material": asdict(c.material)}}
     layout["fingerprint"] = digest(layout)
     return Inventory(tuple(definitions), tuple(instances), layout)
@@ -906,7 +944,7 @@ def supported_build(c, inventory, assemble_source):
         fingerprint = layout.pop("fingerprint", None)
         if digest(layout) != fingerprint:
             raise ValueError("stale support inventory layout fingerprint")
-        if layout["support_settings"] != {"grid": asdict(c.grid), "mounting": asdict(c.mounting),
+        if layout["support_settings"] != {"grid": asdict(c.grid), "mounting": mounting_settings(c.mounting),
                                            "backplate": asdict(c.backplate), "material": asdict(c.material)}:
             raise ValueError("manufactured support hardware/board settings differ; requires new cuts")
         expected = layout["part_mapping"]

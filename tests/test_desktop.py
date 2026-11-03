@@ -48,6 +48,16 @@ def test_parameter_edit_snaps_numbers_and_reports_ranges():
     assert config_from_dict(edited)
     edited = apply_parameter_edit(laminar, ('parameters', 'secondary_lobes'), 'null')
     assert edited['parameters']['secondary_lobes'] is None
+    assert allowed_text(laminar, ('mounting', 'bolt_edge_offset_mm')) == (
+        'null, or -60 (inside) to 60 (outside)')
+    assert laminar['mounting']['bolt_edge_offset_mm'] is None
+    edited = apply_parameter_edit(laminar, ('mounting', 'bolt_edge_offset_mm'), '-80')
+    assert edited['mounting']['bolt_edge_offset_mm'] == -60
+    edited = apply_parameter_edit(laminar, ('mounting', 'bolt_edge_offset_mm'), '80')
+    assert edited['mounting']['bolt_edge_offset_mm'] == 60
+    edited = apply_parameter_edit(edited, ('mounting', 'bolt_edge_offset_mm'), 'null')
+    assert edited['mounting']['bolt_edge_offset_mm'] is None
+    assert config_from_dict(edited)
     edited = apply_parameter_edit(laminar, ('material', 'grade'), 'birch')
     assert edited['material']['grade'] == 'birch'
     edited = apply_parameter_edit(laminar, ('schema_version',), '9')

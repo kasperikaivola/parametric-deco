@@ -319,3 +319,65 @@ def test_cold_example_replay_uses_source_inventory_once(monkeypatch, replay, sou
         assert len(calls) == 2  # Cached source and replay each built exactly once.
     finally:
         isolated.cache_clear()
+
+
+def test_bolt_edge_offset_moves_laminar_bolts_across_the_piece_edge():
+    import math
+    from dataclasses import replace
+    from shapely.geometry import Point
+
+    from parametric_deco.assembly import assemble
+    from parametric_deco.config import config_from_dict
+    from parametric_deco.geometry.organism import anatomy
+    from parametric_deco.geometry.symmetry import canonical_id, kind
+    from parametric_deco.model import PartDefinition
+    from parametric_deco.supports import signed_edge_distance
+    from parametric_deco.validation import xy_footprint
+
+    base = config_from_dict({"style": "laminar"})
+    pitch = 25 * math.sqrt(3)
+    legacy_holes = {
+        (25.0, pitch), (-50.0, 0.0), (25.0, -pitch),
+        (100.0, 0.0), (-50.0, 2 * pitch), (-50.0, -2 * pitch),
+        (-375.0, -5 * pitch), (375.0, -5 * pitch),
+        (375.0, 5 * pitch), (-375.0, 5 * pitch),
+        (0.0, -10 * pitch), (0.0, 10 * pitch),
+    }
+    lobes = {lobe.name: lobe.shape for lobe in anatomy(base)}
+
+    def shapes_for(assembly):
+        shapes = {}
+        for instance in assembly.instances:
+            if instance.role not in ("armour", "cap", "spine", "closure"):
+                continue
+            canonical = instance.instance_id
+            if kind(base) == "C3":
+                canonical = canonical_id(instance.instance_id, base)
+            part = PartDefinition.from_polygon("probe", lobes[canonical.removesuffix("-plate")], 6)
+            shapes[instance.instance_id] = xy_footprint(part, instance.transform)
+        return shapes
+
+    def distances(build):
+        shapes = shapes_for(build.assembly)
+        found = []
+        for station in build.assembly.composition["end_supports"]["stations"]:
+            point = Point(station["xy"])
+            found.append([signed_edge_distance(shapes[pid], point) for pid in station["plate_ids"]])
+        return found
+
+    def holes(build):
+        return [tuple(station["xy"]) for station in build.assembly.composition["end_supports"]["stations"]]
+
+    legacy = assemble(base)
+    inside = assemble(replace(base, mounting=replace(base.mounting, bolt_edge_offset_mm=-12)))
+    outside = assemble(replace(base, mounting=replace(base.mounting, bolt_edge_offset_mm=12)))
+    assert legacy.report.digital_valid and inside.report.digital_valid and outside.report.digital_valid
+    legacy_points = holes(legacy)
+    assert len(legacy_points) == len(legacy_holes)
+    for point in legacy_points:
+        assert any(math.dist(point, expected) < 1e-6 for expected in legacy_holes)
+    assert {tuple(round(v, 4) for v in point) for point in holes(inside)} != {
+        tuple(round(v, 4) for v in point) for point in legacy_points}
+    assert all(distance < -5 for row in distances(inside) for distance in row)
+    assert all(max(row) > 0 for row in distances(outside))
+    assert max(max(row) for row in distances(outside)) > 10

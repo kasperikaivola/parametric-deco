@@ -25,6 +25,9 @@ def request_signature(c):
     values = c.to_dict()
     values.pop("style")
     values.pop("lighting", None)
+    mounting = values.get("mounting")
+    if isinstance(mounting, dict) and mounting.get("bolt_edge_offset_mm") is None:
+        mounting.pop("bolt_edge_offset_mm", None)
     values["schema_version"] = 1
     values["creature"] = values.pop("parameters")
     values["creature"].pop("posture")

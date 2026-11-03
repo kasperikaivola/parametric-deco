@@ -7,7 +7,7 @@ import numpy as np
 from shapely import affinity, bounds as geometry_bounds, distance as geometry_distance
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
-from .config import validate_config
+from .config import mounting_settings, validate_config
 from .cad import overlap_volume
 from .geometry.organism import anatomy
 from .model import (
@@ -37,7 +37,7 @@ def signature(c):
             "stock_mm": c.material.measured_mm,
             "clearance_mm": c.material.clearance_mm,
             "bore_mm": c.grid.hole_diameter_mm,
-            "mounting": asdict(c.mounting),
+            "mounting": mounting_settings(c.mounting),
         }
     )
 

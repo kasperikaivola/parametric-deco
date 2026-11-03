@@ -15,6 +15,7 @@ import numpy as np
 from shapely.geometry import MultiPoint, Point, Polygon, box
 from shapely.ops import nearest_points, unary_union
 
+from ..config import mounting_settings
 from ..model import GeometryBundle, InterfaceStation, PartDefinition, PartInstance
 from .backplate import mounting_holes
 from .joints import slot_width
@@ -25,7 +26,7 @@ def manufacturing_request(config):
         "material": asdict(config.material),
         "grid": asdict(config.grid),
         "backplate": asdict(config.backplate),
-        "mounting": asdict(config.mounting),
+        "mounting": mounting_settings(config.mounting),
         "backing_size_mm": [config.envelope.width_mm, config.envelope.height_mm],
     }
 

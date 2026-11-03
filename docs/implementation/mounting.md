@@ -43,7 +43,11 @@ laminar plates, end regions follow each generated `Lobe.path`; for creature limb
 they follow the actual curled `limb_recipe`/`smooth` path including scale, centering
 and the assembly's real placement transform. A support must reach each outer 30%
 region along that path and lie within 60 mm of it, so a distant neighboring branch
-cannot supply a misleading projection. Existing intermediate supports are retained
+cannot supply a misleading projection. `mounting.bolt_edge_offset_mm` chooses
+which legal grid hole is used. Null keeps the present search. A positive value
+asks for a bolt centre that many millimetres outside the piece exterior, and a
+negative value asks for one inside the piece. The search still stays in the end
+region, on the common grid, and within the 60 mm reach. Existing intermediate supports are retained
 and actual root/distal columns are added where needed. Their connected integral
 material, 7 mm webs, washers, tubes and global clearances are checked normally.
 

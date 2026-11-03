@@ -44,6 +44,30 @@ def test_invalid_fields_rejected(section, field, value):
     assert any(f"{section}.{field}" in i.message for i in report.issues)
 
 
+def test_bolt_edge_offset_allows_inside_and_rejects_far_values():
+    from parametric_deco.config import config_from_dict, mounting_settings
+    from parametric_deco.geometry.creature import request_signature
+    from parametric_deco.organism_assembly import signature
+
+    inside = config_from_dict({"mounting": {"bolt_edge_offset_mm": -12}})
+    assert inside.mounting.bolt_edge_offset_mm == -12
+    outside = config_from_dict({"mounting": {"bolt_edge_offset_mm": 8}})
+    assert outside.mounting.bolt_edge_offset_mm == 8
+    current = config_from_dict({})
+    assert current.mounting.bolt_edge_offset_mm is None
+    assert "bolt_edge_offset_mm" not in mounting_settings(current.mounting)
+    assert mounting_settings(inside.mounting)["bolt_edge_offset_mm"] == -12
+    for value in (61, -61, float("nan")):
+        with pytest.raises(ValueError, match="bolt_edge_offset_mm"):
+            config_from_dict({"mounting": {"bolt_edge_offset_mm": value}})
+    creature = config_from_dict({"style": "layered-creature"})
+    moved = replace(creature, mounting=replace(creature.mounting, bolt_edge_offset_mm=-12))
+    assert request_signature(moved) != request_signature(creature)
+    laminar = config_from_dict({"style": "laminar"})
+    shifted = replace(laminar, mounting=replace(laminar.mounting, bolt_edge_offset_mm=-12))
+    assert signature(shifted) != signature(laminar)
+
+
 def test_load_roundtrip_and_unknown_fields(tmp_path):
     from parametric_deco.config import DesignConfig, load_config
 
