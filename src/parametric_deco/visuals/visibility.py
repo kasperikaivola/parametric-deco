@@ -8,6 +8,15 @@ import numpy as np
 from shapely import contains_xy, linestrings, intersects
 
 
+# Purchased hardware, lighting carriers/strips and small concealed joinery are never
+# projection targets; every other plywood part (any style, including the board) is.
+HIDDEN_ROLES = {"mounting-hardware", "spacer", "register", "retainer"}
+
+
+def projectable(instance):
+    return instance.role not in HIDDEN_ROLES and not instance.role.startswith("led-")
+
+
 def projection_visibility(assembly, projector_mm=(0, 0, 2000), samples=20):
     if type(samples) is not int or not 4 <= samples <= 100:
         raise ValueError("samples must be integer 4..100")
@@ -21,9 +30,9 @@ def projection_visibility(assembly, projector_mm=(0, 0, 2000), samples=20):
         obstacles.append((i.instance_id, part, pose))
     surfaces = []
     for i in assembly.instances:
-        if i.role not in ("armour", "cap"):
-            continue
         part = assembly.definition_for(i)
+        if not projectable(i) or not any(f.surface_id == "front" for f in part.surfaces):
+            continue
         p = part.polygon
         pose = np.array(i.transform)
         x0, y0, x1, y1 = p.bounds

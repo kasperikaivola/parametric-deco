@@ -69,7 +69,7 @@ once by laser software. Grade and finish are optional; no white paint is require
 | `material` | Nominal/measured thickness, measurement status (`assumed_unmeasured` or `measured`), fit clearance and optional grade/finish. Measured stock must remain within 1 mm of nominal. |
 | `grid` | Pitch X 50, row pitch 25√3 ≈43.301270, alternate row offset 25, origins 0, bore diameter 6.5 and edge margin 15 by default. Every style locates its deco mounting bores directly on this same predefined grid, including laminar. |
 | `backplate` | Identical physical polygon and full bore pattern for every style at matching stock size/settings; sides 8 and rotation 22.5° by default. No family-specific apertures, seats or extra drilling. |
-| `mounting` | Rear clearance 10, hardware outward allowance 12, washer radius 9; root half-span 25√3 (40–55) controls rib-study wings. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. |
+| `mounting` | Rear clearance 10 (≥5.5: rear M6 head + washer), hardware outward allowance 12 (≥7: washer, locking nut, thread), washer radius 9 (9–15, DIN 9021 M6); root half-span 25√3 (40–55) controls rib-study wings. Grid bores must be 6.2–7 mm for the M6 clamps. Other styles derive root spacing. End-clamp tubes/bolts/washers/head/nut geometry is modeled; original root/clip hardware remains simplified. Every build also plans the wall hanging (`wall-mount.json`, see [mounting](implementation/mounting.md)). |
 | `cutting_bed` | Optional width/height and spacing (default 5). Conservative rectangular shelf placement; oversized parts fail rather than shrink. Null gives individual cuts. |
 
 ## Laminar parameters
@@ -83,7 +83,7 @@ All rows below are inside `parameters` (except the explicit envelope rows).
 | Composition | `anatomy_phase_deg` | 0 / −180–180 | Shifts regional open/closed cavity and branch relationships |
 | Composition | `phase_deg` | 17 / −180–180 | Whorl orientation and relative phase of regional anatomy |
 | Composition | `spread` | 1 / 0.85–1.15 | Relative focal spacing before fitting the silhouette |
-| Composition | `symmetry` | `rotational`, `bilateral`, `none` | Exact repeated120° material/layer/mount orbits, exact reflected pairs, or individually tilted forms |
+| Composition | `symmetry` | `rotational`, `bilateral`, `none` | Exact repeated 120° material/layer/mount orbits (whorl, focal_count 3/6/9), exact reflected pairs (bilateral arrangement, focal_count 4/6/8), or individually tilted forms |
 | Complexity | `complexity` | 0 / integers 0–2 | Coordinated secondary lobes, segmentation and channels |
 | Override | `secondary_lobes` | null / integers 0–1 | Null follows complexity; 1 adds an inner lobe per primary region |
 | Override | `segmentation` | null / integers 0–5 | Integral curved divisions in each appendage, 1/2/3 by complexity |
@@ -97,7 +97,16 @@ All rows below are inside `parameters` (except the explicit envelope rows).
 | Style | `asymmetry` | 0.12 / 0–0.2 | Controlled differences within the canonical motif, repeated exactly in symmetry modes |
 
 Complexity 0/1/2 selects 1/2/3 internal divisions and channels, and optional inner
-lobes; explicit overrides replace those defaults. Subdivision accumulates material
+lobes; explicit overrides replace those defaults.
+
+Artwork is drawn in normalized units and fitted to the envelope, but the 10 mm
+neck and 7 mm ligament minimums are physical. Where a lamina would fall below them
+(strong curvature, low swelling, small envelopes or dense bilateral rows), that
+lamina's details adapt in steps: the open cleft shortens, septa thicken to 12 mm
+and finally channels are reduced. Silhouette, layout and layer heights never
+change, rotated/mirrored copies adapt together, and every adaptation is listed in
+the build warnings. Compact C3 motifs whose rotated copies would collide at a
+shared layer height are moved radially until they clear. Subdivision accumulates material
 without changing the primary paths/layout; channels intentionally remove material.
 Low uses 7 plywood pieces including the common board; medium/high use 13. Metal end-clamp hardware is counted separately. Complexity describes anatomical detail,
 not assembly effort. Whorl/bilateral and anatomy phase give different focal layouts.
@@ -121,6 +130,12 @@ All fields are inside `parameters`.
 | `curl` |1.0|0.8–1.2| Terminal fold position |
 | `posture` |`rest`|`rest`, `raised_crown`| Placement of an unchanged manufactured inventory |
 
+Rib slots and retaining keys are physical (keys are 30 mm along the limb), so short
+limbs limit `ribs_per_limb`: six limbs (with the short feelers) fit at most five
+ribs at default reach. Validation reports the largest count that fits. When
+crowded limbs or large cavities would push the head's compression columns through
+limb plates, the head roots move to the nearest clear grid bores.
+
 `scale` affects XY profiles and transverse rib height, with fixed roots and
 joinery. It is not independent Z sizing; `rib_height_mm` is the local relief
 control and envelope depth remains a budget. Layer counts also affect actual Z.
@@ -140,11 +155,11 @@ layered relief, not presented as the simplest build.
 | Parameter | Default / range | Effect |
 | --- | --- | --- |
 | `radius_mm` | 300 / 250–340 | Mean strand radius |
-| `amplitude_mm` | 65 / 40–80 | Alternating radial excursion; paths follow R ± A sin(3θ) |
+| `amplitude_mm` | 65 / 50–80 | Alternating radial excursion; paths follow R ± A sin(3θ). Below 50 mm the strands crowd each other's root pads off the grid |
 | `opening_radius_mm` | 180 / positive, ≤ radius − amplitude − 52 | Artwork opening clearing manufactured inner fins/root pads; universal board remains behind it |
 | `lobes` | 3 only | Fixed six-crossing topology; other counts fail |
 | `ribs_per_module` | 9 only | Fixed stations/joint topology; other counts fail |
-| `rotation_deg` | 90 / finite | New cuts choose roots at this orientation; saved arrangements require compatible grid holes |
+| `rotation_deg` | 90 / multiples of 30 | New cuts choose roots at this orientation; root pads and end clamps align with the triangular grid only at 30° steps (any finite value on non-equilateral grids). Saved arrangements require compatible grid holes |
 | `rib_permutation` | [0,1,2,3,4,5,6,7,8] | Integer permutation of central stations 2–6 only; 0,1,7,8 stay fixed |
 
 Twelve curved modules contain 108 fins, 24 spines and twelve capture rails. Default
@@ -163,6 +178,10 @@ stations are ascending and unique with root/end margins (55 mm from root,
 15 mm from end) and stock+clearance+10 mm between stations. Rib widths require
 one per station, at least separation+30 mm; paired slots require separation of
 at least four times stock+clearance. Actual CAD checks still apply.
+
+Changing the number of `stations_mm` without giving `rib_widths_mm` resamples the
+default rib profile to the new count, and placements without `rib_order` /
+`station_indices` use every station in order.
 
 `parameters.placements` is a list with `module_id`, `x_mm`, `y_mm`, `angle_deg`,
 `rib_order`, `station_indices`; see `intertwined.json` and `reconfigured.json`.

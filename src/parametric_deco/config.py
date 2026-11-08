@@ -1,6 +1,6 @@
 """Strict JSON configuration. Manufacturing dimensions never scale with envelope."""
 
-from dataclasses import asdict, dataclass, fields
+from dataclasses import asdict, dataclass, fields, replace
 import json
 import math
 from pathlib import Path
@@ -143,6 +143,15 @@ STYLE_PARAMETERS = {
 }
 
 
+# Separated-end clamp stack outside the plywood (see supports._hardware).
+REAR_HARDWARE_MM = 5.5
+FRONT_HARDWARE_MM = 7.0
+
+# Purchased reusable tie maxima shared by validation and lighting geometry.
+LED_TIE_THICKNESS_MM = 1.0
+LED_TIE_HEAD_MM = (5.0, 5.0, 3.0)
+
+
 @dataclass(frozen=True)
 class Lighting:
     enabled: bool = False
@@ -156,6 +165,18 @@ class Lighting:
     current_per_led_ma: float = 60
     injection_limit_a: float = 2
     wire_slack_mm: float = 50
+    # "backwash": emitters face -Z onto the board/lower artwork beneath the host, so no
+    # front observer can see an emitter and the host edge gains a reflected halo.
+    # "underside": legacy layout, emitters face +Z into the host underside.
+    # "auto": backwash wherever it fits, underside elsewhere (e.g. tight layer stacks).
+    emission: str = "auto"
+    # Shortest strip accepted where a full segment_leds strip cannot fit; null = fixed.
+    min_segment_leds: int | None = None
+    # Backwash only: clear space required beneath the strip before the first surface.
+    min_throw_mm: float = 10
+    # Per-conductor copper resistance (22 AWG ~ 53 mOhm/m); drops count V+ and GND.
+    wire_mohm_per_m: float = 53
+    max_voltage_drop_pct: float = 8
 
 
 @dataclass(frozen=True)
@@ -182,6 +203,22 @@ class DesignConfig:
 
     def to_dict(self):
         return asdict(self)
+
+
+def _sculptural_modules(c):
+    """Modules that host lighting carriers, known from parameters alone (or None)."""
+    p = c.parameters
+    try:
+        if c.style == "laminar":
+            secondary = min(p.complexity, 1) if p.secondary_lobes is None else p.secondary_lobes
+            return p.focal_count * (1 + secondary)
+        if c.style == "layered-creature":
+            return 1 + p.limb_count
+        if c.style == "radial-weave":
+            return 12
+        return len(p.placements)
+    except TypeError:
+        return None
 
 
 def validate_config(c):
@@ -213,18 +250,51 @@ def validate_config(c):
     if type(light.enabled) is not bool:
         bad("lighting.enabled", "must be boolean")
     for name in ("strip_width_mm", "strip_thickness_mm", "led_pitch_mm", "clearance_mm",
-                 "current_per_led_ma", "injection_limit_a", "wire_slack_mm"):
+                 "current_per_led_ma", "injection_limit_a", "wire_slack_mm", "min_throw_mm",
+                 "wire_mohm_per_m", "max_voltage_drop_pct"):
         numeric("lighting." + name, getattr(light, name))
     for name, lo, hi in (("segment_leds", 1, 20), ("max_segments", 2, 64)):
         value = getattr(light, name)
         if type(value) is not int or not lo <= value <= hi:
             bad("lighting." + name, f"integer {lo}..{hi} required")
+    if light.min_segment_leds is not None and (
+            type(light.min_segment_leds) is not int or type(light.segment_leds) is not int
+            or not 1 <= light.min_segment_leds <= light.segment_leds):
+        bad("lighting.min_segment_leds", "null or integer 1..segment_leds required")
+    if light.emission not in ("auto", "backwash", "underside"):
+        bad("lighting.emission", "use auto, backwash or underside")
     if type(light.voltage_v) not in (int, float) or light.voltage_v not in (5, 12, 24):
         bad("lighting.voltage_v", "select 5, 12 or 24 V to match purchased strip")
-    if (light.enabled is True and type(light.segment_leds) is int
+    shortest = (light.min_segment_leds if type(light.min_segment_leds) is int
+                else light.segment_leds)
+    if (light.enabled is True and type(shortest) is int
             and type(light.led_pitch_mm) in (int, float)
-            and light.segment_leds * light.led_pitch_mm < 12):
+            and shortest * light.led_pitch_mm < 12):
         bad("lighting", "segment length must be at least 12 mm for two retaining ties")
+    if (light.enabled is True and not issues and light.strip_width_mm > 40):
+        bad("lighting.strip_width_mm", "carrier clamps support strips up to 40 mm wide")
+    stock = c.material.measured_mm
+    if light.enabled is True and not issues and isinstance(stock, (int, float)) and stock > 0:
+        # Fail during validation, not deep inside carrier placement.
+        underside_ok = stock - light.strip_thickness_mm >= LED_TIE_THICKNESS_MM + light.clearance_mm
+        backwash_ok = stock >= LED_TIE_HEAD_MM[2] + light.clearance_mm
+        if light.emission == "underside" and not underside_ok:
+            bad("lighting.strip_thickness_mm", f"underside strips need strip thickness + "
+                f"{LED_TIE_THICKNESS_MM:g} mm tie + clearance <= stock {stock:g} mm")
+        if light.emission == "backwash" and not backwash_ok:
+            bad("material.measured_mm", f"backwash tie heads need stock >= "
+                f"{LED_TIE_HEAD_MM[2] + light.clearance_mm:g} mm between tray and host")
+        if light.emission == "auto" and not (underside_ok or backwash_ok):
+            bad("lighting.strip_thickness_mm", "neither backwash tie heads nor underside "
+                "strip + tie fit this stock thickness")
+        modules = _sculptural_modules(c)
+        if modules is not None and type(light.max_segments) is int and light.max_segments < modules:
+            bad("lighting.max_segments", f"must be >= {modules}: every sculptural module "
+                "receives at least one carrier")
+        per_segment = light.segment_leds * light.current_per_led_ma / 1000
+        if per_segment > light.injection_limit_a:
+            bad("lighting.injection_limit_a", f"one {light.segment_leds}-unit segment draws "
+                f"{per_segment:g} A; raise the limit or shorten segment_leds")
     if c.units != "mm":
         bad("units", "must be mm")
     if c.style == "laminar":
@@ -271,6 +341,11 @@ def validate_config(c):
                 or abs(c.grid.offset_mm - c.grid.pitch_x_mm / 2) > 1e-8
                 or abs(c.grid.origin_x_mm) > 1e-8 or abs(c.grid.origin_y_mm) > 1e-8):
             bad("grid", "exact C3 mounts require origin0 equilateral lattice: pitchY=pitchX*sqrt(3)/2, offset=pitchX/2")
+    if (c.style == "laminar" and c.parameters.symmetry == "bilateral"
+            and (c.parameters.arrangement != "bilateral"
+                 or (type(c.parameters.focal_count) is int and c.parameters.focal_count % 2))):
+        bad("parameters.symmetry", "bilateral symmetry requires bilateral arrangement and an "
+            "even focal_count (4, 6 or 8)")
     if c.style == "layered-creature" and type(c.parameters.limb_count) is int and c.parameters.limb_count % 2:
         bad("parameters.limb_count", "mirrored creature requires paired limb counts2,4,6")
     if c.style == "layered-creature" and all(isinstance(v, (int, float)) and math.isfinite(v) for v in (c.grid.origin_x_mm, c.grid.offset_mm, c.grid.pitch_x_mm)) and c.grid.pitch_x_mm > 0 and (abs(c.grid.origin_x_mm) > 1e-8 or min(abs(c.grid.offset_mm % c.grid.pitch_x_mm), abs(c.grid.offset_mm % c.grid.pitch_x_mm - c.grid.pitch_x_mm / 2)) > 1e-8):
@@ -306,6 +381,19 @@ def validate_config(c):
             bad("creature", "candidate scale .9..1 and curl .8..1.2 required")
         if creature.posture not in ("rest", "raised_crown"):
             bad("parameters.posture", "use rest or raised_crown")
+        if isinstance(c.material.measured_mm, (int, float)) and isinstance(
+                c.material.clearance_mm, (int, float)):
+            from .geometry.creature_profiles import rib_spacing_issues
+            spacing = rib_spacing_issues(creature, c.material.measured_mm,
+                                         c.material.clearance_mm)
+            if spacing:
+                fits = [n for n in range(3, creature.ribs_per_limb)
+                        if not rib_spacing_issues(replace(creature, ribs_per_limb=n),
+                                                  c.material.measured_mm,
+                                                  c.material.clearance_mm)]
+                hint = (f"; ribs_per_limb <= {max(fits)} fits these limbs" if fits
+                        else "; raise limb_reach/scale or reduce limb_count")
+                bad("parameters.ribs_per_limb", spacing[0] + hint)
         required = (
             c.mounting.rear_clearance_mm
             + (18 + 2 * (creature.shell_layers - 1)) * c.material.measured_mm
@@ -323,8 +411,19 @@ def validate_config(c):
             bad("parameters.lobes", "this candidate family requires 3 lobes / 6 crossings")
         if w.ribs_per_module != 9 or type(w.ribs_per_module) is not int:
             bad("parameters.ribs_per_module", "this candidate family requires 9 ribs per module")
-        if not 40 <= w.amplitude_mm <= 80 or not 250 <= w.radius_mm <= 340:
-            bad("parameters.radius_mm", "candidate range is radius 250..340, amplitude 40..80 mm")
+        if not 50 <= w.amplitude_mm <= 80 or not 250 <= w.radius_mm <= 340:
+            # Below 50 mm the two strands crowd each other's root pads off the grid.
+            bad("parameters.radius_mm", "candidate range is radius 250..340, amplitude 50..80 mm")
+        g = c.grid
+        equilateral = (all(isinstance(v, (int, float)) and math.isfinite(v)
+                           for v in (g.pitch_x_mm, g.pitch_y_mm, g.offset_mm))
+                       and abs(g.pitch_y_mm - g.pitch_x_mm * math.sqrt(3) / 2) < 1e-8
+                       and abs(g.offset_mm - g.pitch_x_mm / 2) < 1e-8)
+        steps = w.rotation_deg / 30
+        if equilateral and abs(steps - round(steps)) > 1e-9:
+            near = (math.floor(steps) * 30, math.ceil(steps) * 30)
+            bad("parameters.rotation_deg", "root pads and end clamps align with the triangular "
+                f"grid only at 30 degree steps; use {near[0]:g} or {near[1]:g}")
         if w.opening_radius_mm > w.radius_mm - w.amplitude_mm - 52:
             bad("parameters.opening_radius_mm", "must clear manufactured inner fins and root pads")
         if (
@@ -419,6 +518,19 @@ def validate_config(c):
         bad(
             "module.rib_widths_mm", "one compatible profile per station; preserve outside ligaments"
         )
+    # Separated-end clamps: M6 bolt head (4 mm) and rear washer (1.5 mm) sit in the
+    # rear clearance; washer (1.5), locking nut (5) and 0.5 mm thread protrude in front.
+    if not 6.2 <= g.hole_diameter_mm <= 7:
+        bad("grid.hole_diameter_mm", "separated-end M6 clamps require board bores 6.2..7 mm")
+    if c.mounting.rear_clearance_mm < REAR_HARDWARE_MM:
+        bad("mounting.rear_clearance_mm", f"rear M6 head and washer need >= {REAR_HARDWARE_MM:g} mm "
+            "between wall and board")
+    if c.mounting.hardware_outward_mm < FRONT_HARDWARE_MM:
+        bad("mounting.hardware_outward_mm", f"front washer, locking nut and thread need >= "
+            f"{FRONT_HARDWARE_MM:g} mm")
+    if c.mounting.washer_radius_mm < 9:
+        bad("mounting.washer_radius_mm", "M6 end clamps bear on 18 mm OD (DIN 9021) washers; "
+            "use 9..15 mm radius")
     if not 40 <= c.mounting.root_half_span_mm <= 55:
         bad("mounting.root_half_span_mm", "candidate root wings support half-span 40..55 mm")
     if c.mounting.washer_radius_mm >= 15:
@@ -475,6 +587,33 @@ def _construct(cls, values):
     return cls(**values)
 
 
+def _derived_recipe(recipe):
+    """Omitted rib widths follow a changed station count (default profile resampled)."""
+    if not isinstance(recipe, dict):
+        return recipe
+    recipe = dict(recipe)
+    stations = recipe.get("stations_mm")
+    if (isinstance(stations, (list, tuple)) and "rib_widths_mm" not in recipe
+            and len(stations) != len(ModuleRecipe.rib_widths_mm) and len(stations) >= 1):
+        base = ModuleRecipe.rib_widths_mm
+        n = len(stations)
+        recipe["rib_widths_mm"] = [
+            float(round(base[0] + (max(base) - base[0]) * math.sin(math.pi * (k + 0.5) / n), 6))
+            for k in range(n)]
+    return recipe
+
+
+def _derived_placement(placement, stations):
+    """Omitted rib_order/station_indices use every recipe station in order."""
+    if not isinstance(placement, dict):
+        return placement
+    placement = dict(placement)
+    if stations != 4:
+        for key in ("rib_order", "station_indices"):
+            placement.setdefault(key, list(range(stations)))
+    return placement
+
+
 def config_from_dict(data):
     if not isinstance(data, dict):
         raise ValueError("config must be a JSON object")
@@ -496,10 +635,17 @@ def config_from_dict(data):
                 raise ValueError("parameters must be a JSON object")
             values = dict(values)
             if "recipe" in values:
-                values["recipe"] = _construct(ModuleRecipe, values["recipe"])
+                values["recipe"] = _construct(ModuleRecipe, _derived_recipe(values["recipe"]))
+            stations = len(values["recipe"].stations_mm) if "recipe" in values else 4
             if "placements" in values:
-                values["placements"] = tuple(_construct(ModulePlacement, p)
-                                              for p in values["placements"])
+                if not isinstance(values["placements"], (list, tuple)):
+                    raise ValueError("parameters.placements must be a JSON list")
+                values["placements"] = tuple(
+                    _construct(ModulePlacement, _derived_placement(p, stations))
+                    for p in values["placements"])
+            elif stations != 4:
+                values["placements"] = (_construct(ModulePlacement,
+                                                   _derived_placement({}, stations)),)
         kwargs["parameters"] = _construct(STYLE_PARAMETERS[style], values)
         for key, cls in {"envelope": Envelope, "material": Material, "grid": Grid,
                          "backplate": Backplate, "mounting": Mounting,

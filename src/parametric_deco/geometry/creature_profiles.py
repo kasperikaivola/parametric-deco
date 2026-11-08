@@ -18,12 +18,14 @@ ROOTS = {
 }
 
 
-def module_roots(settings=None, grid=None):
+def module_roots(settings=None, grid=None, head_keepout=None):
+    """Grid roots per module. ``head_keepout`` is limb plate material at head-column
+    heights; head roots then skip candidates whose spacer rings would cross it."""
     from ..config import Grid
     p = settings or CreatureMask()
     g = grid or Grid()
     voids = unary_union((*cavity_voids(p, 1.06), affinity.scale(central_void(), xfact=p.scale, yfact=p.scale, origin=(0, 0))))
-    def nearest(x, y):
+    def nearest(x, y, keepout=None):
         candidates = []
         row0 = round((y - g.origin_y_mm) / g.pitch_y_mm)
         for row in range(row0 - 3, row0 + 4):
@@ -31,14 +33,17 @@ def module_roots(settings=None, grid=None):
             col0 = round((x - shift) / g.pitch_x_mm)
             for col in range(col0 - 3, col0 + 4):
                 xx, yy = shift + col * g.pitch_x_mm, g.origin_y_mm + row * g.pitch_y_mm
-                if xx < -10 and voids.distance(Point(xx, yy)) >= 18:
+                if (xx < -10 and voids.distance(Point(xx, yy)) >= 18
+                        and (keepout is None or keepout.distance(Point(xx, yy)) >= HEAD_RING_CLEARANCE)):
                     candidates.append(((xx - x) ** 2 + (yy - y) ** 2, xx, yy))
         if not candidates:
-            raise ValueError("no mirrored grid root clear of creature cavities")
+            raise ValueError("no mirrored grid root clear of creature cavities"
+                             + (" and limb plates; reduce limb_reach/limb_width or cavity_count"
+                                if keepout is not None else ""))
         _, xx, yy = min(candidates)
         return (xx, yy)
     roots = {}
-    left = nearest(*ROOTS['head'][0])
+    left = nearest(*ROOTS['head'][0], head_keepout)
     roots['head'] = (left, (-left[0], left[1]))
     for name in list(ROOTS)[1:1 + p.limb_count]:
         if 'left' in name:
@@ -46,6 +51,10 @@ def module_roots(settings=None, grid=None):
         else:
             roots[name] = tuple((-x, y) for x, y in roots[name.replace('right', 'left')])
     return roots
+
+
+# Head compression columns are 17 mm radius spacer rings; keep 1 mm air to limb plates.
+HEAD_RING_CLEARANCE = 18.0
 
 
 def cavity_voids(settings=None, factor=1):
@@ -370,3 +379,34 @@ def placement_offset(config):
               for shape in layers]
     center_y = (min(b[1] for b in bounds) + max(b[3] for b in bounds)) / 2
     return (0, -center_y)
+
+
+def rib_spacing_issues(settings, thickness=6.0, fit=0.2):
+    """Parameter-only checks for crowded transverse ribs on each active limb.
+
+    Mirrors generate_creature: closed cap tab slots need 7 mm between neighbours and
+    each rib's retaining key (30 mm along the limb tangent) must not touch the next.
+    """
+    from shapely.geometry import box
+    key = box(-5, -12, 5, 14).union(box(-9, -16, 9, -8))
+    issues = []
+    for name in list(ROOTS)[1:1 + settings.limb_count]:
+        if "right" in name:
+            continue
+        slots, keys = [], []
+        for center, normal, _width, _height in rib_stations(name, settings=settings):
+            nx, ny = normal
+            tangent = np.array((ny, -nx))
+            slots.append(Polygon([center + u * normal + v * tangent for u, v in (
+                (-14 - fit / 2, -(thickness + fit) / 2), (14 + fit / 2, -(thickness + fit) / 2),
+                (14 + fit / 2, (thickness + fit) / 2), (-14 - fit / 2, (thickness + fit) / 2))]))
+            keys.append(affinity.affine_transform(
+                key, [nx, tangent[0], ny, tangent[1], center[0], center[1]]))
+        for k in range(1, len(slots)):
+            if slots[k].distance(slots[k - 1]) < 7 - 1e-7:
+                issues.append(f"{name}: rib slots {k - 1}/{k} closer than 7 mm")
+                break
+            if keys[k].intersection(keys[k - 1]).area > 1e-6:
+                issues.append(f"{name}: retaining keys of ribs {k - 1}/{k} overlap")
+                break
+    return issues

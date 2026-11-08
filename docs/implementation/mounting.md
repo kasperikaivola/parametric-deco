@@ -90,6 +90,23 @@ near-root end clamp. Existing captured ribs, webs, small spacers and retainers
 have explicit connection paths through these board-clamped structural parts;
 they do not each need independent board bolts.
 
+## Hanging the board on a wall
+
+Clamp bolt heads and rear washers sit behind the board (5.5 mm), so validation
+requires `rear_clearance_mm` >= 5.5 and `hardware_outward_mm` >= 7 for the front
+washer, locking nut and thread. Decos are therefore assembled onto the board
+while it lies flat, and the finished assembly is hung afterwards.
+
+Every build adds `composition.wall_mount` and `wall-mount.json`: wall screws pass
+through **free** universal grid bores that stay reachable from the front (at least
+10 mm from any artwork, LED carrier or hardware footprint, and clear of the rear
+clamp heads), each on a rigid standoff tube filling the rear clearance. Two
+primary anchors are chosen as high as possible either side of centre, plus two
+anti-tilt anchors near the bottom. The plan also records the minimum screw length
+and an estimated assembled mass (plywood at 700 kg/m³ plus steel hardware) for
+choosing wall fixings. If artwork covers every free upper bore the build warns
+and suggests a rear cleat fixed before the decos are mounted. No bore is added.
+
 ## Upright parts and contour changes
 
 Radial low fins are trimmed at their 70 mm capture rail, retaining their captured

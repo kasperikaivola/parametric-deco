@@ -206,53 +206,64 @@ def _orbit_plan(a, c):
         # Only accept an existing actual board bore. Rounding an incompatible
         # 120-degree coordinate onto a nearby hole is explicitly forbidden.
         return next((p for p in nodes if np.linalg.norm(np.array(p) - raw) <= 1e-7), None)
+    def _orbit_candidates(meets, requirement, target, path, pkind):
+        candidates = []
+        for p in nodes:
+            point = Point(p)
+            if not meets(point):
+                continue
+            if symmetry_kind(c) == 'mirror-X' and target.module_id == 'head' and p[0] > 1e-7:
+                continue
+            members = {}
+            valid = True
+            for index, matrix in enumerate(matrices):
+                q = on_grid(matrix @ np.array(p))
+                partner_id = mapped_id(target.instance_id, c, index)
+                if q is None or partner_id not in by_id:
+                    valid = False
+                    break
+                plates = feasible(by_id[partner_id], Point(q))
+                if plates is None:
+                    valid = False
+                    break
+                key = tuple(round(v, 7) for v in q)
+                if key not in members:
+                    members[key] = {'xy': q, 'plate_ids': set(), 'reference_id': partner_id}
+                members[key]['plate_ids'].update(plates)
+            if not valid:
+                continue
+            # Every clamped partner and source interference is evaluated,
+            # not merely an assumed transform of a good canonical marker.
+            if any(any(min(bounds[x][1, 2], bounds[y][1, 2]) - max(bounds[x][0, 2], bounds[y][0, 2]) > 1e-6
+                       for k, x in enumerate(sorted(m['plate_ids'])) for y in sorted(m['plate_ids'])[k + 1:])
+                   for m in members.values()):
+                continue
+            goal = .10 if requirement == 'root' else .90 if requirement == 'distal' else .5
+            cost = (abs(path_fraction(path, pkind, point) - goal), shapes[target.instance_id].distance(point), p)
+            candidates.append((cost, members))
+        return candidates
     canonical = [i for i in targets if canonical_id(i.instance_id, c) == i.instance_id]
     canonical.sort(key=lambda i: (-shapes[i.instance_id].area, i.instance_id))
     for target in canonical:
         path, pkind = paths[target.instance_id]
         requirements = ('root', 'distal', 'bend') if c.style == 'layered-creature' and target.module_id != 'head' and path.length > 350 else ('root', 'distal')
         for requirement in requirements:
+            # An intermediate bend support prefers the middle of the limb, but may
+            # move outward when channels/cavities leave no mirrored bore there.
+            windows = ((.38, .62), (.30, .70), (.24, .76)) if requirement == 'bend' else (None,)
+            window = windows[0]
             def meets(point):
                 f = path_fraction(path, pkind, point)
                 if requirement == 'bend':
-                    return .38 <= f <= .62 and path.distance(point) <= 60
+                    return window[0] <= f <= window[1] and path.distance(point) <= 60
                 return end_covered(path, pkind, point, int(requirement == 'distal'))
             if any(target.instance_id in s['plate_ids'] and meets(Point(s['xy'])) for s in selected):
                 continue
             candidates = []
-            for p in nodes:
-                point = Point(p)
-                if not meets(point):
-                    continue
-                if symmetry_kind(c) == 'mirror-X' and target.module_id == 'head' and p[0] > 1e-7:
-                    continue
-                members = {}
-                valid = True
-                for index, matrix in enumerate(matrices):
-                    q = on_grid(matrix @ np.array(p))
-                    partner_id = mapped_id(target.instance_id, c, index)
-                    if q is None or partner_id not in by_id:
-                        valid = False
-                        break
-                    plates = feasible(by_id[partner_id], Point(q))
-                    if plates is None:
-                        valid = False
-                        break
-                    key = tuple(round(v, 7) for v in q)
-                    if key not in members:
-                        members[key] = {'xy': q, 'plate_ids': set(), 'reference_id': partner_id}
-                    members[key]['plate_ids'].update(plates)
-                if not valid:
-                    continue
-                # Every clamped partner and source interference is evaluated,
-                # not merely an assumed transform of a good canonical marker.
-                if any(any(min(bounds[x][1, 2], bounds[y][1, 2]) - max(bounds[x][0, 2], bounds[y][0, 2]) > 1e-6
-                           for k, x in enumerate(sorted(m['plate_ids'])) for y in sorted(m['plate_ids'])[k + 1:])
-                       for m in members.values()):
-                    continue
-                goal = .10 if requirement == 'root' else .90 if requirement == 'distal' else .5
-                cost = (abs(path_fraction(path, pkind, point) - goal), shapes[target.instance_id].distance(point), p)
-                candidates.append((cost, members))
+            for window in windows:
+                candidates = _orbit_candidates(meets, requirement, target, path, pkind)
+                if candidates:
+                    break
             if not candidates:
                 raise ValueError(f'{target.instance_id}: no complete {symmetry_kind(c)} grid orbit for {requirement}')
             # Simulate ALL accepted cuts plus the complete candidate orbit. A
@@ -470,7 +481,12 @@ def _select_stations(a, c, retained=None, paths=None):
                 return (rank, abs(fraction - goal), x, y, plates)
             candidates = [item for item in map(consider, points) if item is not None]
             if not candidates:
-                raise ValueError(f"{target.instance_id}: no clear clamp near {'start' if end == 0 else 'end'}; change geometry")
+                hint = {"laminar": "adjust spread, phase_deg or focal_count",
+                        "radial-weave": "adjust radius/amplitude or rotation",
+                        "layered-creature": "adjust limb_reach, limb_width or cavity_count",
+                        }.get(c.style, "move or rotate the module placement")
+                raise ValueError(f"{target.instance_id}: no clear clamp near "
+                                 f"{'start' if end == 0 else 'end'}; {hint}")
             _, _, x, y, plates = min(candidates)
             previous = next((p for p in selected if Point(p["xy"]).distance(Point(x, y)) < 1e-6), None)
             chosen = {"id": f"end-clamp-{len(selected)}", "module_id": target.module_id,
@@ -699,6 +715,7 @@ def verify_supports(a, config=None):
         values = (a.composition or {}).get("support_config")
         config = config_from_dict(values) if values else None
     paths = physical_paths(a, config) if config is not None else {}
+    washer = config.mounting.washer_radius_mm if config is not None else 9
     if not paths:
         issues.append(Issue("error", "end_support_path", "configuration required for independent physical path audit"))
     for pid, (path, kind) in paths.items():
@@ -722,7 +739,7 @@ def verify_supports(a, config=None):
                 continue
             shape = xy_footprint(a.definition_for(p), p.transform)
             bore = _disk(x, y, 3.01)
-            bearing = _disk(x, y, 9).difference(_disk(x, y, 3.35))
+            bearing = _disk(x, y, washer).difference(_disk(x, y, 3.35))
             if shape.intersection(bore).area > 1e-5 or bearing.difference(shape).area > 1e-4:
                 issues.append(Issue("error", "support_bore", "unaligned bore or missing washer bearing", (pid,)))
             point = Point(x, y)

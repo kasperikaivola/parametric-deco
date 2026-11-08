@@ -42,20 +42,32 @@ def render_section(assembly, path):
         draw.rectangle((ox+y0*scale, oy-z1*scale, ox+y1*scale, oy-z0*scale), fill=color,
                        outline='white')
 
+    backwash = s.get('emission') == 'backwash'
     rect(0, 0, width+22, host.thickness_mm, '#c99d66')
     # Section through a real end tie: the vertical legs use actual tray slots.
     for y0,y1 in ((-12,4),(6,10+width),(12+width,15+width)):
         rect(y0,-2*stock,y1,-stock,'#508fa0')
-    rect(8, -stock, 8+width, -stock+thick, '#f0d23c')
+    if backwash:
+        rect(8, -2*stock-thick, 8+width, -2*stock, '#f0d23c')
+    else:
+        rect(8, -stock, 8+width, -stock+thick, '#f0d23c')
     for record in s['retention']['envelopes'][:5]:
         _,y0,z0,_,y1,z1 = record['local_bounds_mm']
         rect(y0,z0,y1,z1,'#d2d5d8')
-    draw.text((35, 150), 'Strip-end tie section: adjacent LED faces +Z into plywood',
-              font=font, fill='white')
+    if backwash:
+        draw.text((35, 150), 'Strip-end tie section: LEDs face -Z, away from viewers, '
+                  'onto the surface below', font=font, fill='white')
+    else:
+        draw.text((35, 150), 'Strip-end tie section: adjacent LED faces +Z into plywood',
+                  font=font, fill='white')
     draw.text((35, 190), f'Host {host.thickness_mm:g} mm; carrier stock {stock:g} mm',
               font=font, fill='white')
-    draw.text((35, 225), f'Strip {width:g} x {thick:g} mm; unobstructed gap '
-              f'{s["emitter_to_host_mm"]:g} mm', font=font, fill='white')
+    if backwash:
+        draw.text((35, 225), f'Strip {width:g} x {thick:g} mm; clear throw '
+                  f'{s.get("throw_mm") or 0:.0f} mm to the next surface', font=font, fill='white')
+    else:
+        draw.text((35, 225), f'Strip {width:g} x {thick:g} mm; unobstructed gap '
+                  f'{s["emitter_to_host_mm"]:g} mm', font=font, fill='white')
     draw.text((35, 480), 'End section: bolt outside host; pads bear on host underside',
               font=font, fill='white')
     oy = 680
@@ -81,8 +93,12 @@ def render_section(assembly, path):
     draw.text((750, 620), f'Bolt length >= {s["bolt_length_min_mm"]:g} mm;',
               font=font, fill='white')
     draw.text((750, 655), '2 x M3 bolts/nuts; 4 washers. Round UP.', font=font, fill='white')
-    draw.text((35, 810), 'Host blocks direct front view. Underside illumination may leave front '
-              'faces dark.', font=font, fill='white')
+    if backwash:
+        draw.text((35, 810), 'Tray and host hide the strip; reflected light leaves as a halo '
+                  'around the host edge.', font=font, fill='white')
+    else:
+        draw.text((35, 810), 'Host blocks direct front view. Underside illumination may leave '
+                  'front faces dark.', font=font, fill='white')
     draw.text((35, 850), 'Open ends permit oblique LED visibility. Optical/electrical/thermal '
               'and Wire/Arena: NOT RUN.', font=font, fill='#f1bf65')
     image.save(path)

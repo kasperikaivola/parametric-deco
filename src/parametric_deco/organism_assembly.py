@@ -9,7 +9,7 @@ from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
 from .config import validate_config
 from .cad import overlap_volume
-from .geometry.organism import anatomy
+from .geometry.organism import anatomy, anatomy_adjustments
 from .model import (
     Assembly,
     BuildResult,
@@ -391,6 +391,8 @@ def assemble_organism(c, inventory=None):
         (
             "Support modules in a cradle; remove upper overlapping modules before lower ones.",
             "Sampled motions are not continuous certification.",
+            *(f"Laminar detail adapted to 10 mm necks / 7 mm ligaments at this size: {note}"
+              for note in anatomy_adjustments(c)),
         ),
         {
             "generator": FAMILY,
