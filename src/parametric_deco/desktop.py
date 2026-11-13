@@ -8,8 +8,8 @@ import tempfile
 import time
 
 from .config import STYLE_PARAMETERS, config_from_dict
-from .desktop_state import PreviewState, editable_config, fingerprint
-from .parameter_edit import allowed_text, apply_parameter_edit
+from .desktop_state import PreviewState, editable_config, fingerprint, cad_fingerprint, cad_config
+from .parameter_edit import allowed_text, apply_parameter_edit, choices_for
 
 
 # Same dark surfaces as the offline assembly viewer in resources/index.html.
@@ -154,7 +154,8 @@ def create_window():
     from PySide6.QtCore import QProcess, QTimer, Qt, QUrl
     from PySide6.QtGui import QAction, QColor
     from PySide6.QtWidgets import (
-        QAbstractItemView, QComboBox, QFileDialog, QHBoxLayout, QInputDialog, QLabel,
+        QAbstractItemView, QCheckBox, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout,
+        QHBoxLayout, QInputDialog, QLabel,
         QLineEdit, QMainWindow, QMessageBox, QPlainTextEdit, QProgressBar, QPushButton,
         QSplitter, QStyledItemDelegate, QTabWidget, QTreeWidget, QTreeWidgetItem,
         QVBoxLayout, QWidget,
@@ -167,6 +168,16 @@ def create_window():
         def createEditor(self, parent, option, index):
             if index.column() != 1:
                 return None
+            options = index.data(Qt.ItemDataRole.UserRole + 1)
+            if options:
+                editor = QComboBox(parent)
+                for value in options:
+                    label = 'Automatic (null)' if value is None else (
+                        str(value).lower() if isinstance(value, bool) else str(value))
+                    editor.addItem(label, value)
+                editor.activated.connect(lambda: (self.commitData.emit(editor),
+                                                  self.closeEditor.emit(editor)))
+                return editor
             full = index.data(Qt.ItemDataRole.UserRole)
             text = full if isinstance(full, str) else ''
             if text[:1] in '{[':
@@ -180,13 +191,22 @@ def create_window():
         def setEditorData(self, editor, index):
             full = index.data(Qt.ItemDataRole.UserRole)
             text = full if isinstance(full, str) else (index.data(Qt.ItemDataRole.DisplayRole) or '')
-            if isinstance(editor, QPlainTextEdit):
+            if isinstance(editor, QComboBox):
+                value = json.loads(text)
+                for i in range(editor.count()):
+                    if type(editor.itemData(i)) is type(value) and editor.itemData(i) == value:
+                        editor.setCurrentIndex(i)
+                        break
+            elif isinstance(editor, QPlainTextEdit):
                 editor.setPlainText(text)
             else:
                 editor.setText(text)
 
         def setModelData(self, editor, model, index):
-            text = editor.toPlainText() if isinstance(editor, QPlainTextEdit) else editor.text()
+            if isinstance(editor, QComboBox):
+                text = json.dumps(editor.currentData())
+            else:
+                text = editor.toPlainText() if isinstance(editor, QPlainTextEdit) else editor.text()
             model.setData(index, text, Qt.ItemDataRole.EditRole)
 
         def updateEditorGeometry(self, editor, option, index):
@@ -211,6 +231,7 @@ def create_window():
             self.export_process = None
             self.preview_directory = None
             self.preview_fingerprint = None
+            self.preview_projection_settings = None
             self.camera = None
             self.closed = False
             self.updating = False
@@ -254,11 +275,42 @@ def create_window():
             self.tabs = QTabWidget()
             self.tabs.addTab(self.tree, 'Parameters')
             self.tabs.addTab(self.editor, 'Advanced JSON')
+            projection_panel = QWidget()
+            projection_layout = QFormLayout(projection_panel)
+            self.projection_controls = {}
+            from dataclasses import asdict
+            from .visuals.settings import Projection, EFFECTS, COORDINATES, RANGES
+            for name, value in asdict(Projection()).items():
+                options = {'effect': EFFECTS, 'coordinate': COORDINATES,
+                           'surfaces': ('broad', 'exterior', 'all')}.get(name)
+                if type(value) is bool:
+                    control = QCheckBox()
+                    control.toggled.connect(lambda v, key=name: self.set_projection_value(key, v))
+                elif options:
+                    control = QComboBox()
+                    control.addItems(options)
+                    control.currentTextChanged.connect(
+                        lambda v, key=name: self.set_projection_value(key, v))
+                elif name in RANGES:
+                    control = QDoubleSpinBox()
+                    control.setDecimals(0 if name.startswith('atlas_') else 3)
+                    control.setRange(*RANGES[name])
+                    control.setSingleStep(128 if name.startswith('atlas_') else 0.01)
+                    control.setKeyboardTracking(False)
+                    control.valueChanged.connect(lambda v, key=name: self.set_projection_value(
+                        key, int(v) if key.startswith('atlas_') else v))
+                else:
+                    control = QLineEdit()
+                    control.editingFinished.connect(lambda key=name, widget=control:
+                        self.set_projection_text(key, widget.text()))
+                self.projection_controls[name] = control
+                projection_layout.addRow(name.replace('_', ' ').capitalize(), control)
+            self.tabs.addTab(projection_panel, 'Projection')
             self.tabs.currentChanged.connect(self.refresh_tree)
             tip = QLabel('Edit a value in the table. Numbers round or clamp to the allowed range '
                          'beside them. Text can be typed with or without quotes. Use null for '
                          'automatic overrides; cutting_bed may be null or an object. Edit a list '
-                         'to add or remove entries. Changes regenerate CAD automatically.')
+                         'to add or remove entries. Projection controls update the animation live.')
             tip.setWordWrap(True)
             tip.setStyleSheet('color:#a8acb5; background:transparent')
             left = QWidget()
@@ -326,7 +378,31 @@ def create_window():
         def edited(self):
             self.dirty = True
             self.timer.stop()
+            previous = self.state.config
             self.state.edit(self.editor.toPlainText())
+            self.sync_projection_controls()
+            same_cad = (previous is not None and self.state.config is not None
+                        and cad_config(previous) == cad_config(self.state.config))
+            current_cad = self.current_cad_fingerprint()
+            active_job = self.jobs.get(self.preview_process)
+            reusable = ((self.state.ready and self.preview_fingerprint == current_cad)
+                        or (active_job is not None and active_job[-1] == current_cad))
+            if same_cad and reusable:
+                old = previous['projection']
+                new = self.state.config['projection']
+                if any(old[k] != new[k] for k in ('atlas_width', 'atlas_height', 'surfaces')):
+                    self.stop_preview_process()
+                    self.timer.start()
+                else:
+                    self.sync_projection_preview()
+                    if self.preview_directory and not self.atlas_matches_preview():
+                        self.timer.start()
+                self.update_export()
+                return
+            if same_cad:
+                # Retrying cancellation/failure or replacing inventory needs a job.
+                self.state.revision += 1
+                self.state.validated = False
             self.stop_preview_process()
             if self.export_process is None:
                 self.hide_progress()
@@ -339,6 +415,44 @@ def create_window():
             self.updating = False
             self.show_status('STALE · waiting for edits to settle; CAD has not been validated yet.')
             self.timer.start()
+
+        def set_projection_text(self, key, text):
+            try:
+                value = json.loads(text)
+            except ValueError:
+                self.show_status('VALUE UNCHANGED · color requires an RGBA array in 0..1')
+                self.sync_projection_controls()
+                return
+            self.set_projection_value(key, value)
+
+        def set_projection_value(self, key, value):
+            if self.updating:
+                return
+            self._apply_tree_edit(('projection', key), json.dumps(value))
+
+        def sync_projection_controls(self):
+            if self.state.config is None:
+                return
+            self.updating = True
+            for key, value in self.state.config['projection'].items():
+                control = self.projection_controls[key]
+                control.blockSignals(True)
+                if isinstance(control, QCheckBox):
+                    control.setChecked(value)
+                elif isinstance(control, QComboBox):
+                    control.setCurrentText(value)
+                elif isinstance(control, QDoubleSpinBox):
+                    control.setValue(value)
+                else:
+                    control.setText(json.dumps(value))
+                control.blockSignals(False)
+            self.updating = False
+
+        def sync_projection_preview(self):
+            if self.state.config is None:
+                return
+            self.view.page().runJavaScript('window.decoSetProjection && window.decoSetProjection('
+                + json.dumps(self.state.config['projection']) + ')')
 
         def refresh_tree(self, *_):
             self._filling_tree = True
@@ -361,6 +475,7 @@ def create_window():
                     item = QTreeWidgetItem(parent, [str(key), shown, phrase])
                     item.setData(0, Qt.ItemDataRole.UserRole, path)
                     item.setData(1, Qt.ItemDataRole.UserRole, encoded)
+                    item.setData(1, Qt.ItemDataRole.UserRole + 1, choices_for(data, path))
                     item.setToolTip(1, encoded)
                     item.setToolTip(2, phrase)
                     item.setForeground(2, QColor('#a8acb5'))
@@ -553,12 +668,17 @@ def create_window():
 
         def update_export(self):
             self.export_button.setEnabled(self.state.ready and self.export_process is None
-                                          and self.preview_fingerprint == self.current_fingerprint())
+                                          and self.preview_fingerprint == self.current_cad_fingerprint())
 
         def current_fingerprint(self):
             if self.state.config is None:
                 return None
             return fingerprint(self.state.config, self.inventory)
+
+        def current_cad_fingerprint(self):
+            if self.state.config is None:
+                return None
+            return cad_fingerprint(self.state.config, self.inventory)
 
         def stop_preview_process(self):
             if self.preview_process is not None:
@@ -566,7 +686,7 @@ def create_window():
                 self.preview_process = None
 
         def cancel_preview(self):
-            self.state.edit(self.editor.toPlainText())
+            self.state.revision += 1
             self.timer.stop()
             self.stop_preview_process()
             self.state.validated = False
@@ -574,27 +694,40 @@ def create_window():
             self.hide_progress()
             self.show_status('CANCELLED · previous preview is stale. Edit any parameter to resume.')
 
+        def atlas_matches_preview(self):
+            if not self.preview_directory or self.state.config is None:
+                return False
+            settings = self.preview_projection_settings
+            if settings is None:
+                return False
+            return all(settings[k] == self.state.config['projection'][k]
+                       for k in ('atlas_width', 'atlas_height', 'surfaces'))
+
         def start_preview(self):
             if self.closed or self.state.config is None:
                 return
             self.stop_preview_process()
             revision = self.state.revision
-            self.show_status('BUILDING CAD')
-            self.begin_progress('Building CAD', self.estimate_seconds())
-            self.launch('preview', revision, self.root / f'scene-{revision}')
+            mode = 'projection' if self.state.ready and self.preview_directory else 'preview'
+            label = 'Updating projection atlas' if mode == 'projection' else 'Building CAD'
+            self.show_status(label.upper())
+            self.begin_progress(label, 4 if mode == 'projection' else self.estimate_seconds())
+            self.launch(mode, revision, self.root / f'scene-{revision}-{time.monotonic_ns()}')
 
         def launch(self, mode, revision, out, force=False):
-            jobdir = self.root / f'job-{mode}-{revision}'
+            jobdir = self.root / f'job-{mode}-{revision}-{time.monotonic_ns()}'
             jobdir.mkdir(exist_ok=True)
             request = {'config': self.state.config, 'inventory': self.inventory,
-                       'mode': mode, 'out': str(out), 'force': force}
-            job_fingerprint = fingerprint(request['config'], request['inventory'])
+                       'mode': mode, 'out': str(out), 'force': force,
+                       'source': str(self.preview_directory) if self.preview_directory else None}
+            job_fingerprint = (cad_fingerprint if mode in ('preview', 'projection') else fingerprint)(
+                request['config'], request['inventory'])
             request_path, result_path = jobdir / 'request.json', jobdir / 'result.json'
             request_path.write_text(json.dumps(request))
             process = QProcess(self)
             process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
             self.jobs[process] = (mode, revision, out, jobdir, job_fingerprint)
-            if mode == 'preview':
+            if mode in ('preview', 'projection'):
                 self.preview_process = process
             else:
                 self.export_process = process
@@ -646,20 +779,28 @@ def create_window():
             except (OSError, ValueError):
                 result = {'error': 'CAD worker stopped or could not start. See job log.'}
             success = code == 0 and result.get('fingerprint') == job_fingerprint
-            if mode == 'preview':
-                if self.preview_process is process:
+            if mode in ('preview', 'projection'):
+                current = self.preview_process is process
+                if current:
                     self.preview_process = None
-                accepted = self.state.complete(revision, success, result.get('error'))
+                accepted = current and self.state.complete(revision, success, result.get('error'))
                 if accepted and success and not self.closed:
                     self.preview_fingerprint = job_fingerprint
+                    self.preview_projection_settings = result.get('projection_settings')
                     self.install_preview(out, revision)
-                    if elapsed is not None and self.state.config is not None:
+                    if not self.atlas_matches_preview():
+                        self.timer.start()
+                    if mode == 'preview' and elapsed is not None and self.state.config is not None:
                         style = self.state.config['style']
                         previous = self.duration_by_style.get(style)
                         self.duration_by_style[style] = (
                             elapsed if previous is None else 0.65 * previous + 0.35 * elapsed)
                     timing = f' · {elapsed:.0f}s' if elapsed is not None else ''
-                    self.show_status('CURRENT · config ' + job_fingerprint[:12] + timing)
+                    projection_error = result.get('projection_error')
+                    self.show_status('CURRENT · CAD ' + job_fingerprint[:12] + timing
+                                     + (' · projection atlas unavailable' if projection_error else ''))
+                    if projection_error:
+                        self.details.appendPlainText('Projection: ' + projection_error)
                     for issue in (result.get('validation') or {}).get('issues') or []:
                         self.details.appendPlainText(
                             f"{issue.get('severity', '')} {issue.get('code', '')}: "
@@ -712,13 +853,15 @@ def create_window():
                 'JSON.stringify(window.decoGetView ? window.decoGetView() : null)', load)
 
         def view_loaded(self, ok):
+            if ok:
+                self.sync_projection_preview()
             if ok and self.camera:
                 self.view.page().runJavaScript('window.decoSetView && window.decoSetView('
                                                + json.dumps(self.camera) + ')')
 
         def export_current(self):
             if (self.export_process is not None or not self.state.ready
-                    or self.preview_fingerprint != self.current_fingerprint()):
+                    or self.preview_fingerprint != self.current_cad_fingerprint()):
                 return
             directory = QFileDialog.getExistingDirectory(self, 'Select export parent directory')
             if not directory:

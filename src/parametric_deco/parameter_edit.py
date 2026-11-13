@@ -25,6 +25,22 @@ class Limit:
         self.nonnegative = nonnegative
 
 
+def choices_for(data, path):
+    """Typed choices for finite controls; None denotes an automatic override."""
+    value = _lookup(data, tuple(path))
+    if type(value) is bool:
+        return (False, True)
+    try:
+        limit = limit_for(data, path)
+    except (TypeError, KeyError, ValueError, IndexError, OverflowError):
+        return ()
+    options = limit.options
+    if (not options and limit.kind == 'int' and limit.lo is not None
+            and limit.hi is not None and 0 <= limit.hi - limit.lo <= 20):
+        options = tuple(range(math.ceil(limit.lo), math.floor(limit.hi) + 1))
+    return ((None,) if limit.nullable else ()) + options if options else ()
+
+
 def allowed_text(data, path):
     """Short range shown beside a parameter. Blank when the row has no single range."""
     try:
@@ -99,6 +115,18 @@ def limit_for(data, path):
 
 def _field_limit(data, path):
     name = path[-1] if path else ''
+    if path[:1] == ('projection',):
+        from .visuals.settings import EFFECTS, COORDINATES, RANGES
+        if name == 'effect':
+            return _enum(*EFFECTS)
+        if name == 'coordinate':
+            return _enum(*COORDINATES)
+        if name == 'surfaces':
+            return _enum('broad', 'exterior', 'all')
+        if name in RANGES:
+            return _closed(*RANGES[name], integer=name.startswith('atlas_'))
+    if path == ('lighting', 'voltage_v'):
+        return _int_choices(5, 12, 24)
     style = data.get('style')
     params = data.get('parameters') if isinstance(data.get('parameters'), dict) else {}
     if path == ('schema_version',):

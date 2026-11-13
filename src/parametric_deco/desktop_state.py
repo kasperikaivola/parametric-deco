@@ -11,6 +11,14 @@ def fingerprint(config, inventory=None):
                              sort_keys=True, allow_nan=False).encode()).hexdigest()
 
 
+def cad_config(config):
+    return {key: value for key, value in config.items() if key != 'projection'}
+
+
+def cad_fingerprint(config, inventory=None):
+    return fingerprint(cad_config(config), inventory)
+
+
 def editable_config(raw):
     """JSON-compatible defaults overlaid by raw edits, including invalid values.
 
@@ -60,14 +68,19 @@ class PreviewState:
         return self.validated and self.good_revision == self.revision and not self.error
 
     def edit(self, text):
-        self.revision += 1
-        self.validated = False
+        previous = self.config
         try:
-            self.config = config_from_dict(json.loads(text)).to_dict()
+            config = config_from_dict(json.loads(text)).to_dict()
+            if previous is not None and cad_config(previous) == cad_config(config):
+                self.config = config
+                return self.revision
+            self.config = config
             self.error = None
         except (ValueError, TypeError, KeyError, OverflowError) as error:
             self.config = None
             self.error = str(error)
+        self.revision += 1
+        self.validated = False
         return self.revision
 
     def complete(self, revision, success, error=None):

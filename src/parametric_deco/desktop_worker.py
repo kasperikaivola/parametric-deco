@@ -1,11 +1,12 @@
 """One disposable CAD subprocess. Never imports Qt or changes saved inventory."""
+from dataclasses import asdict
 from importlib import resources
 import json
 from pathlib import Path
 import sys
 import traceback
 
-from .desktop_state import fingerprint
+from .desktop_state import fingerprint, cad_fingerprint
 
 
 def run_request(request):
@@ -16,6 +17,20 @@ def run_request(request):
     config = config_from_dict(request['config'])
     inventory_data = request.get('inventory')
     inventory = Inventory.from_dict(inventory_data) if inventory_data is not None else None
+    if request['mode'] == 'projection':
+        from .model import Assembly
+        from .visuals.preview import write_projection
+        source, out = Path(request['source']), Path(request['out'])
+        out.mkdir(parents=True, exist_ok=True)
+        assembly = Assembly.from_dict(json.loads((source / 'assembly.json').read_text()))
+        scene = json.loads((source / 'scene.json').read_text())
+        scene['projection'] = write_projection(assembly, out, config.projection)
+        (out / 'scene.json').write_text(json.dumps(scene))
+        (out / 'assembly.json').write_text((source / 'assembly.json').read_text())
+        _write_preview(out)
+        return {'digital_valid': True, 'fingerprint': cad_fingerprint(config.to_dict(), inventory_data),
+                'files': 0, 'projection_settings': asdict(config.projection),
+                'projection_error': scene['projection'].get('error')}
     print('PROGRESS phase=construct fraction=0.02', flush=True)
     build = assemble(config, inventory)
     if not build.report.digital_valid:
@@ -29,27 +44,35 @@ def run_request(request):
     elif request['mode'] == 'preview':
         from .export.scene import write_scene
         print('PROGRESS phase=mesh fraction=0.93', flush=True)
-        write_scene(build.assembly, out)
-        preview = out / 'preview'
-        preview.mkdir()
-        package = resources.files('parametric_deco.resources')
-        html = package.joinpath('index.html').read_text()
-        # Local script avoids file:// fetch restrictions without a server or remote access.
-        html = html.replace('<script src="viewer.js">',
-                            '<script src="scene-data.js"></script><script src="viewer.js">')
-        html = html.replace('<p><a href="../manifest.json">Manifest</a> · '
-                            '<a href="../assembly.glb">GLB</a> · '
-                            '<a href="../assembly-instructions.md">Assembly sequence</a></p>', '')
-        (preview / 'index.html').write_text(html)
-        (preview / 'viewer.js').write_text(package.joinpath('viewer.js').read_text())
-        (preview / 'scene-data.js').write_text('window.decoScene=' +
-                                             (out / 'scene.json').read_text() + ';')
+        write_scene(build.assembly, out, config.projection)
+        (out / 'assembly.json').write_text(json.dumps(build.assembly.to_dict()))
+        _write_preview(out)
         paths = 0
     else:
         raise ValueError('unknown desktop worker mode')
-    return {'digital_valid': True, 'fingerprint': fingerprint(config.to_dict(), inventory_data),
-            'files': paths, 'warnings': list(build.warnings),
-            'validation': build.report.to_dict()}
+    identity = fingerprint if request['mode'] == 'export' else cad_fingerprint
+    return {'digital_valid': True, 'fingerprint': identity(config.to_dict(), inventory_data),
+            'files': paths, 'projection_settings': asdict(config.projection),
+            'warnings': list(build.warnings), 'validation': build.report.to_dict(),
+            'projection_error': (json.loads((out/'scene.json').read_text()).get(
+                'projection', {}).get('error'))}
+
+
+def _write_preview(out):
+    preview = out / 'preview'
+    preview.mkdir(exist_ok=True)
+    package = resources.files('parametric_deco.resources')
+    html = package.joinpath('index.html').read_text()
+    html = html.replace('<script src="viewer.js">',
+                        '<script src="scene-data.js"></script><script src="viewer.js">')
+    html = html.replace('<p><a href="../manifest.json">Manifest</a> · '
+                        '<a href="../assembly.glb">GLB</a> · '
+                        '<a href="../assembly-instructions.md">Assembly sequence</a></p>', '')
+    (preview / 'index.html').write_text(html)
+    for name in ('viewer.js', 'projection.js'):
+        (preview / name).write_text(package.joinpath(name).read_text())
+    (preview / 'scene-data.js').write_text('window.decoScene=' +
+                                         (out / 'scene.json').read_text() + ';')
 
 
 def main():

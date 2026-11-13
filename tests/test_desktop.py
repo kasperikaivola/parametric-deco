@@ -257,3 +257,23 @@ def test_f3_editable_tree_keeps_lists_defaults_and_invalid_values():
     replace_value(radial,('parameters','rib_permutation',0),'0')
     assert radial['parameters']['rib_permutation'][0] == 0
     assert editable_config({'style':'invalid','lighting':{'strip_width_mm':0}})['style'] == 'invalid'
+
+
+def test_choice_editors_have_typed_options_and_nullable_overrides():
+    from parametric_deco.parameter_edit import choices_for, apply_parameter_edit
+    from parametric_deco.desktop_state import editable_config
+    data = editable_config({})
+    assert choices_for(data,('parameters','arrangement')) == ('whorl','bilateral')
+    assert choices_for(data,('parameters','focal_count')) == (3,6,9)
+    assert choices_for(data,('parameters','channels')) == (None,0,1,2,3)
+    assert choices_for(data,('lighting','enabled')) == (False,True)
+    assert choices_for(data,('lighting','voltage_v')) == (5,12,24)
+    assert apply_parameter_edit(data,('lighting','enabled'),'true')['lighting']['enabled'] is True
+    assert choices_for(data,('parameters','curvature')) == ()
+
+
+def test_choice_metadata_tolerates_invalid_dependent_json_values():
+    from parametric_deco.desktop_state import editable_config
+    from parametric_deco.parameter_edit import choices_for
+    data = editable_config({'style':'radial-weave','parameters':{'radius_mm':'unfinished'}})
+    assert choices_for(data,('parameters','opening_radius_mm')) == ()

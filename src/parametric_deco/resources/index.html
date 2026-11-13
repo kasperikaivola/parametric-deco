@@ -9,7 +9,9 @@
 <label><input id="backing" type="checkbox" checked> Backplate</label>
 <label><input id="hardware" type="checkbox" checked> Hardware envelopes</label>
 <p>Hardware envelopes are simplified clearance bounds.</p>
+<label><input id="projection" type="checkbox"> Projection content</label>
+<button id="playProjection">Pause projection</button><p id="projectionStatus"></p>
 <details><summary>Part visibility</summary><div id="parts"></div></details>
 <p><a href="../manifest.json">Manifest</a> · <a href="../assembly.glb">GLB</a> · <a href="../assembly-instructions.md">Assembly sequence</a></p></aside>
 <main><canvas id="view"></canvas><div id="pick">Select a surface to see its physical instance and revision.</div></main>
-<script src="viewer.js"></script></html>
+<script src="projection.js"></script><script src="viewer.js"></script></html>

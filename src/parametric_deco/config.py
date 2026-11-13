@@ -5,6 +5,8 @@ import json
 import math
 from pathlib import Path
 
+from .visuals.settings import Projection, projection_errors
+
 from .model import Issue, ValidationReport, canonical, safe_id
 
 
@@ -192,6 +194,7 @@ class DesignConfig:
     mounting: Mounting = Mounting()
     cutting_bed: CuttingBed | None = None
     lighting: Lighting = Lighting()
+    projection: Projection = Projection()
 
     @property
     def module(self):
@@ -246,6 +249,8 @@ def validate_config(c):
         bad("parameters", "must match selected style " + c.style)
     if issues:
         return ValidationReport(tuple(issues))
+    for message in projection_errors(c.projection):
+        issues.append(Issue("error", "config", message))
     light = c.lighting
     if type(light.enabled) is not bool:
         bad("lighting.enabled", "must be boolean")
@@ -649,7 +654,8 @@ def config_from_dict(data):
         kwargs["parameters"] = _construct(STYLE_PARAMETERS[style], values)
         for key, cls in {"envelope": Envelope, "material": Material, "grid": Grid,
                          "backplate": Backplate, "mounting": Mounting,
-                         "cutting_bed": CuttingBed, "lighting": Lighting}.items():
+                         "cutting_bed": CuttingBed, "lighting": Lighting,
+                         "projection": Projection}.items():
             if key in kwargs and not (key == "cutting_bed" and kwargs[key] is None):
                 kwargs[key] = _construct(cls, kwargs[key])
         c = DesignConfig(**kwargs)
