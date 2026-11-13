@@ -84,3 +84,65 @@ A normal desktop should omit `QT_QPA_PLATFORM=offscreen`. Headless root containe
 may require `QTWEBENGINE_DISABLE_SANDBOX=1` and `QTWEBENGINE_CHROMIUM_FLAGS=--disable-gpu`
 for testing only; these settings are not enabled by the application. Real screen,
 platform integration and physical manufacturing remain separate checks.
+
+## Typed controls and live projection content
+
+Finite parameter choices use dropdowns: styles, arrangements, symmetry, posture,
+booleans, supported voltages and small integer ranges. Optional integer overrides
+include **Automatic (null)**. Compound lists and objects retain JSON editing.
+
+The **Projection** tab controls pulse, radial rings, checker and solid content.
+Coordinates are cross-part path, local U/V, normalized world X/Y/Z and radial
+distance. Settings include signed speed, phase, repeats, pulse width, softness,
+edge masking/width, RGBA foreground/background and brightness. Colors are four
+numbers in 0..1. Enable projection to show the content on actual selected faces;
+orbit, zoom and picking remain available. The viewer's show and play/pause buttons
+change the preview. Saved content settings are edited in the Projection tab.
+
+The WebGL renderer and exported ISF use the same GLSL function. Meshes and data
+textures upload once per scene; animation updates GPU uniforms. Content edits do
+not rebuild CAD, reload the page or reset the camera. Atlas dimensions and face
+selection repack in a worker from the last validated assembly, without CAD
+construction. Static assembly viewing remains available without WebGL.
+
+Settings live in the optional schema-v2 `projection` object. Older requests use
+defaults. They do not change manufactured part identity or saved inventory.
+Full exports include `projection/projection.json`, `projection/projection.fs`,
+data images, `projection-selection.json` and the configured viewer. Existing
+calibration and edge pulse shaders are retained. `broad` selects broad faces;
+`exterior` adds outer cut walls; `all` adds inner cut walls. Atlas dimensions
+support the same integer 16..8192 range as the visuals command.
+
+If the atlas cannot hold the selected faces plus gutters, the GUI reports this
+separately. Valid CAD and cutting exports remain usable. The export includes the
+requested settings and `projection/error.json`; increase the atlas dimensions or
+reduce the selected faces to generate projection assets. Atlas retries reuse the
+validated assembly. Projection errors do not change CAD validation results.
+
+```json
+{
+  "style": "laminar",
+  "projection": {
+    "enabled": true,
+    "effect": "rings",
+    "speed": -0.15,
+    "repeats": 8,
+    "width": 0.3,
+    "color": [0.2, 0.7, 1.0, 1.0]
+  }
+}
+```
+
+The integration tests check real Qt controls, live content edits, framebuffer
+colors, no CAD rebuild for projection edits, and recovery from atlas failures.
+For a Linux headless OpenGL check, install Xvfb, Mesa and Qt xcb libraries, then:
+
+```sh
+DECO_GUI_TESTS=1 DECO_REQUIRE_WEBGL=1 QT_QPA_PLATFORM=xcb LIBGL_ALWAYS_SOFTWARE=1 \
+  QTWEBENGINE_CHROMIUM_FLAGS="--use-gl=angle --use-angle=gl --ignore-gpu-blocklist --disable-gpu-compositing" \
+  xvfb-run -a python -m pytest tests/test_desktop_gui.py -q
+```
+
+Offscreen static GUI checks can run without WebGL; the animation check skips
+unless an OpenGL context is available. `DECO_REQUIRE_WEBGL=1` makes missing WebGL
+an error, as in CI.
