@@ -119,6 +119,12 @@ def _field_limit(data, path):
         return _enum('rotational', 'bilateral', 'none')
     if style == 'layered-creature' and name == 'posture':
         return _enum('rest', 'raised_crown')
+    if path == ('lighting', 'emission'):
+        return _enum('auto', 'backwash', 'underside')
+    if path == ('lighting', 'min_segment_leds'):
+        hi = int(_num(data, ('lighting', 'segment_leds'), 1))
+        return Limit('null or ' + _closed(1, hi, integer=True).phrase, 'int', 1, hi,
+                     nullable=True)
     if style == 'laminar' and name == 'focal_count' and params.get('symmetry') == 'rotational':
         return _int_choices(3, 6, 9)
     numeric = _numeric_limit(data, path, name, style, params)
@@ -178,6 +184,8 @@ def _numeric_limit(data, path, name, style, params):
         return _amplitude_limit(params)
     if style == 'radial-weave' and name == 'opening_radius_mm':
         return _opening_limit(params)
+    if style == 'radial-weave' and name == 'rotation_deg':
+        return Limit('multiple of 30', 'float')
     if name in ('x_mm', 'y_mm', 'angle_deg', 'rotation_deg', 'origin_x_mm', 'origin_y_mm'):
         return _free_number(data, path, name, style)
     if path[:1] == ('envelope',):
@@ -305,12 +313,10 @@ def _grid_limit(data, name, style):
         hi_values = []
         if nearest is not None:
             hi_values.append(nearest - 2 * edge)
-        hi_values.append(2 * (washer - 1e-4))
+        hi_values.extend((2 * (washer - 1e-4), 7))
         hi = min(hi_values)
-        lo = 2 * (washer - edge) if washer > edge else None
-        if lo is not None and lo > 0:
-            return _closed(lo, hi, positive=True)
-        return _closed(None, hi, positive=True)
+        lo = max(6.2, 2 * (washer - edge)) if washer > edge else 6.2
+        return _closed(lo, hi, positive=True)
     if name == 'edge_margin_mm':
         lo = max(0, washer - hole / 2)
         hi = None if nearest is None else (nearest - hole) / 2
@@ -324,13 +330,15 @@ def _mounting_limit(data, name):
     hole = _num(data, ('grid', 'hole_diameter_mm'), 6.5)
     edge = _num(data, ('grid', 'edge_margin_mm'), 15)
     if name == 'washer_radius_mm':
-        lo = hole / 2 + _OPEN
+        lo = max(9, hole / 2 + _OPEN)
         hi = min(15 - _OPEN, edge + hole / 2)
         return _closed(lo, hi, positive=True)
     if name == 'root_half_span_mm':
         return _closed(40, 55)
     if name in ('rear_clearance_mm', 'hardware_outward_mm'):
-        return _closed(0, _allowance_upper(data, name), nonnegative=True)
+        from .config import FRONT_HARDWARE_MM, REAR_HARDWARE_MM
+        lo = REAR_HARDWARE_MM if name == 'rear_clearance_mm' else FRONT_HARDWARE_MM
+        return _closed(lo, _allowance_upper(data, name), nonnegative=True)
     return None
 
 
@@ -386,7 +394,7 @@ def _amplitude_limit(params):
     radius = params.get('radius_mm', 300)
     opening = params.get('opening_radius_mm', 180)
     hi = min(80, radius - opening - 52)
-    return _closed(40, hi, positive=True)
+    return _closed(50, hi, positive=True)
 
 
 def _opening_limit(params):
@@ -749,8 +757,42 @@ def _repair(data, path):
             params['focal_count'] = _nearest_option(current, (3, 6, 9), _as_previous(current))
         if _covers(path, ('grid',)) or path == ('parameters', 'symmetry'):
             _repair_c3(data)
+    if style == 'laminar' and path == ('parameters', 'symmetry'):
+        if params.get('symmetry') == 'bilateral':
+            params['arrangement'] = 'bilateral'
+    if style == 'laminar' and params.get('symmetry') == 'bilateral':
+        current = params.get('focal_count', 6)
+        if isinstance(current, int) and not isinstance(current, bool) and current % 2:
+            params['focal_count'] = min(8, current + 1)
     if style == 'layered-creature' and _covers(path, ('grid',)):
         _repair_creature_grid(data)
+    if style == 'layered-creature' and path[:1] == ('parameters',) and path[-1] != 'ribs_per_limb':
+        _repair_creature_ribs(data)
+    if style == 'radial-weave' and path == ('parameters', 'rotation_deg'):
+        value = params.get('rotation_deg')
+        if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value):
+            params['rotation_deg'] = round(value / 30) * 30
+
+
+def _repair_creature_ribs(data):
+    """More/shorter limbs keep the densest rib count that still fits every limb."""
+    from dataclasses import replace
+    from .geometry.creature_profiles import rib_spacing_issues
+    try:
+        creature = config_from_dict({'style': 'layered-creature',
+                                     'parameters': {**data['parameters'],
+                                                    'ribs_per_limb': 3}}).parameters
+    except (ValueError, TypeError, KeyError):
+        return
+    wanted = data['parameters'].get('ribs_per_limb', 6)
+    if not isinstance(wanted, int) or isinstance(wanted, bool):
+        return
+    material = data.get('material') if isinstance(data.get('material'), dict) else {}
+    t, fit = material.get('measured_mm', 6), material.get('clearance_mm', 0.2)
+    for count in range(min(wanted, 7), 2, -1):
+        if not rib_spacing_issues(replace(creature, ribs_per_limb=count), t, fit):
+            data['parameters']['ribs_per_limb'] = count
+            return
 
 
 def _repair_c3(data):

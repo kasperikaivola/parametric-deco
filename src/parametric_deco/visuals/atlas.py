@@ -63,6 +63,8 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
         raise ValueError("atlas dimensions must be integers in 16..8192")
     if surfaces not in ("broad", "exterior", "all"):
         raise ValueError("surfaces must be broad, exterior or all")
+    from .visibility import projectable
+
     available = []
     for inst in sorted(assembly.instances, key=lambda i: i.instance_id):
         for surface in assembly.definition_for(inst).surfaces:
@@ -76,7 +78,7 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
         include = (
             inst.instance_id + "--" + face.surface_id in selected
             if selected is not None
-            else (
+            else projectable(inst) and (
                 face.surface_id == "front"
                 or surfaces == "all"
                 or (surfaces == "exterior" and face.surface_id.startswith("edge-0-"))
@@ -90,7 +92,7 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
     packed, density = _pack_faces(records, width, height, gutter)
     arrays = {
         name: np.zeros((height, width, 4), dtype=np.uint8)
-        for name in ("localData", "worldData", "idData", "edgeData")
+        for name in ("localData", "worldData", "worldFineData", "idData", "edgeData")
     }
     instance_ids = {
         i.instance_id: index + 1
@@ -98,7 +100,13 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
     }
     if len(instance_ids) > 0xFFFFFF:
         raise ValueError("atlas instance IDs exceed RGB24 capacity")
+    # Normalize world coordinates over projectable plywood only, so hardware nuts and
+    # hidden lighting carriers do not stretch the coordinate range.
     bounds = [
+        instance_bounds(assembly.definition_for(i), i.transform)
+        for i in assembly.instances
+        if assembly.definition_for(i).surfaces and projectable(i)
+    ] or [
         instance_bounds(assembly.definition_for(i), i.transform)
         for i in assembly.instances
         if assembly.definition_for(i).surfaces
@@ -107,7 +115,7 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
     maximum = np.max([b[1] for b in bounds], axis=0)
     span = np.maximum(maximum - minimum, 1e-9)
     paths = {p[0]: p[1:3] for p in assembly.effect_paths}
-    tiles, mapping = [], {}
+    tiles, mapping, placements = [], {}, {}
     calibration = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     for index, (inst, definition, surface) in enumerate(records):
         x, y, tw, th = packed[index]
@@ -143,6 +151,12 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
             encoded = np.rint(np.clip(data, 0, 1) * 255).astype(np.uint8)
             encoded[~valid] = 0
             arrays[name][y : y + th, x : x + tw] = encoded
+        # Sub-step residual of the 8-bit world code: v = (coarse + fine/255 - 0.5)/255.
+        scaled = np.clip(coords[..., :3], 0, 1) * 255
+        fine = np.rint((scaled - np.rint(scaled) + 0.5) * 255).astype(np.uint8)
+        fine = np.concatenate((fine, (valid * 255).astype(np.uint8)[..., None]), axis=-1)
+        fine[~valid] = 0
+        arrays["worldFineData"][y : y + th, x : x + tw] = fine
         ids[~valid] = 0
         arrays["idData"][y : y + th, x : x + tw] = ids
         # Labelled asymmetric visual resource, distinct from numeric textures.
@@ -177,6 +191,8 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
         }
         tiles.append(tile)
         mapping[tile_id] = index
+        placements[tile_id] = (x, y, tw, th, min_u, min_v, du, dv, surface, transform)
+    lighting_targets = _lighting_targets(assembly, placements, width, height, minimum, span)
     textures = {name: Image.fromarray(array) for name, array in arrays.items()}
     textures["calibrationImage"] = calibration
     manifest = {
@@ -198,6 +214,7 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
         "world_quantization_mm": {
             "step": (span / 255).tolist(),
             "maximum_rounding_error": (span / 510).tolist(),
+            "with_fine_step": (span / 65025).tolist(),
         },
         "sampling": {
             "categorical_ids": "nearest, no mipmaps, no sRGB",
@@ -206,19 +223,50 @@ def generate_atlas(assembly, width, height, *, surfaces="broad", surface_ids=Non
         "encoding": {
             "localData": "RGBA8 local U,V,global path phase,validity",
             "worldData": "RGBA8 normalized assembly X,Y,Z,validity",
+            "worldFineData": "RGBA8 residual of worldData, validity; with both sampled 0..1, "
+                             "normalized xyz = (255*world + fine - 0.5)/255",
             "idData": "RGBA8 big-endian instance ID RGB24,validity; zero is background",
             "edgeData": "RGBA8 distance to actual face boundary / min face extent,phase,0,validity",
         },
         "inputs": {
             "localData": "local.png",
             "worldData": "world.png",
+            "worldFineData": "world-fine.png",
             "idData": "ids.png",
             "edgeData": "edges.png",
             "calibrationImage": "calibration.png",
         },
         "paths": sorted(assembly.effect_paths, key=lambda p: p[1]),
         "tiles": tiles,
-        "excluded_surfaces": "unselected faces, back faces and backing; projector occlusion not computed",
+        "lighting_targets": lighting_targets,
+        "excluded_surfaces": "unselected faces, back faces, purchased hardware, lighting "
+                             "carriers and concealed joinery; projector occlusion not computed",
         "host_validation": "not_run",
     }
     return AtlasResult(manifest, textures, mapping)
+
+
+def _lighting_targets(assembly, placements, width, height, minimum, span):
+    """Where each LED segment's host face sits in the atlas, for synchronised content."""
+    light = assembly.lighting
+    if not light:
+        return []
+    result = []
+    for segment in light["segments"]:
+        record = {"segment_id": segment["segment_id"], "host_instance": segment["host_instance"],
+                  "emission": segment.get("emission"),
+                  "world_normalized": np.clip((np.asarray(segment["target_position_mm"])
+                                               - minimum) / span, 0, 1).tolist(),
+                  "tile_id": None, "atlas_uv": None}
+        tile_id = segment["host_instance"] + "--front"
+        if tile_id in placements:
+            x, y, tw, th, min_u, min_v, du, dv, surface, transform = placements[tile_id]
+            local = np.linalg.inv(transform) @ np.array((*segment["target_position_mm"], 1))
+            offset = local[:3] - np.asarray(surface.origin)
+            u = float(np.dot(offset, surface.u_axis))
+            v = float(np.dot(offset, surface.v_axis))
+            px = x + (u - min_u) / du * tw
+            py = y + (1 - (v - min_v) / dv) * th
+            record.update(tile_id=tile_id, atlas_uv=[px / width, 1 - py / height])
+        result.append(record)
+    return result

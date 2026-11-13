@@ -43,6 +43,31 @@ def key_positions(roots):
     return [tuple((a + b) / 2 + sign * 12 * normal) for sign in (-1, 1)]
 
 
+def _module_voids(c, name):
+    from shapely import affinity
+    voids = [
+        *cavity_voids(c.parameters, 1.06),
+        affinity.scale(central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale,
+                       origin=(0, 0)),
+    ]
+    if name.startswith("crown"):
+        dx = -c.grid.offset_mm if "left" in name else c.grid.offset_mm
+        voids += [affinity.translate(p, xoff=-dx, yoff=-c.grid.pitch_y_mm) for p in list(voids)]
+    return unary_union(voids)
+
+
+def _limb_keepout(c, plate_profiles, roots_by_module):
+    """Finished limb plate material (all layers sit below the head's first plate)."""
+    shapes = []
+    for name, layers in plate_profiles.items():
+        if name == "head":
+            continue
+        root_shape = MultiPoint(roots_by_module[name]).convex_hull.buffer(40, quad_segs=12)
+        voids = _module_voids(c, name)
+        shapes.extend(unary_union([shape, root_shape]).difference(voids) for shape in layers)
+    return unary_union(shapes) if shapes else None
+
+
 def generate_creature(c):
     t = c.material.measured_mm
     fit = c.material.clearance_mm
@@ -88,7 +113,14 @@ def generate_creature(c):
     local_grid = replace(c.grid, origin_x_mm=c.grid.origin_x_mm - offset_x,
                          origin_y_mm=c.grid.origin_y_mm - offset_y)
     roots_by_module = module_roots(c.parameters, local_grid)
-    for name, layers in profiles(settings=c.parameters).items():
+    plate_profiles = profiles(settings=c.parameters)
+    keepout = _limb_keepout(c, plate_profiles, roots_by_module)
+    head = roots_by_module["head"]
+    if keepout is not None and min(keepout.distance(Point(x, y)) for x, y in head) < 18:
+        # Default nearest roots would drive head spacer columns through limb plates
+        # (crowded limbs, large cavities or a shifted centering offset).
+        roots_by_module = module_roots(c.parameters, local_grid, keepout)
+    for name, layers in plate_profiles.items():
         roots = roots_by_module[name]
         match_root_pattern(c, [(x + offset_x, y + offset_y) for x, y in roots])
         keys = key_positions(roots)
@@ -113,16 +145,7 @@ def generate_creature(c):
             shape = unary_union([shape, root_shape])
             from shapely import affinity
 
-            voids = [
-                *cavity_voids(c.parameters, 1.06),
-                affinity.scale(
-                    central_void(), xfact=c.parameters.scale, yfact=c.parameters.scale, origin=(0, 0)
-                ),
-            ]
-            if name.startswith("crown"):
-                dx = -c.grid.offset_mm if "left" in name else c.grid.offset_mm
-                voids += [affinity.translate(p, xoff=-dx, yoff=-c.grid.pitch_y_mm) for p in list(voids)]
-            shape = shape.difference(unary_union(voids))
+            shape = shape.difference(_module_voids(c, name))
             for x, y in roots:
                 shape = shape.difference(
                     Point(x, y).buffer(c.grid.hole_diameter_mm / 2, quad_segs=16)

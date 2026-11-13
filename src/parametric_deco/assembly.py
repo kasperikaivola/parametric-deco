@@ -25,9 +25,18 @@ def assemble(config, inventory=None):
     from .lighting import prepare_inventory, add_lighting
     from .supports import supported_build
 
+    from dataclasses import replace
+    from .wall_mount import plan_wall_mount, wall_mount_warnings
+
     base_inventory, saved = prepare_inventory(config, inventory)
     build = supported_build(config, base_inventory, _assemble)
-    return add_lighting(config, build, inventory, saved)
+    build = add_lighting(config, build, inventory, saved)
+    # Derived hanging plan only: no cut or inventory change.
+    plan = plan_wall_mount(build.assembly, config)
+    assembly = replace(build.assembly,
+                       composition={**(build.assembly.composition or {}), "wall_mount": plan})
+    return replace(build, assembly=assembly,
+                   warnings=(*build.warnings, *wall_mount_warnings(plan)))
 
 
 def _assemble(config, inventory=None):

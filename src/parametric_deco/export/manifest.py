@@ -189,10 +189,27 @@ def _export_into(build, out):
                 "Support all affected layers in a cradle before releasing ANY clamp. Remove all end "
                 "clamps and original root fasteners before the documented extraction sequence. "
                 "Purchased metal hardware is not a plywood laser cut.\n")
-    if config.style in ("layered-creature", "laminar"):
-        from ..visuals.visibility import projection_visibility
+    wall = (build.assembly.composition or {}).get("wall_mount")
+    if wall:
+        write_json(out / "wall-mount.json", wall)
+        with (out / "assembly-instructions.md").open("a") as instructions:
+            instructions.write(
+                "\n\n## Hanging the board\n\n"
+                "Assemble every deco and clamp with the board lying flat: clamp bolt heads sit "
+                "behind the board. Then hang it with wall screws through the free bores listed in "
+                "wall-mount.json (primary first, then anti-tilt). Each screw carries a rigid "
+                f"standoff tube {wall['standoff']['length_mm']:g} mm long and "
+                f"{wall['standoff']['outer_diameter_mm']:g} mm OD, filling the rear clearance so "
+                "clamp heads and lighting cables never bear on the wall. Estimated assembled "
+                f"mass is {wall['estimated_mass_kg']:g} kg; choose wall fixings for that load "
+                "and the wall material.\n")
+            if wall["status"] != "ok":
+                instructions.write(
+                    "\nNo free upper bore stays reachable from the front on this design: fix a "
+                    "rear cleat through free bores before mounting the decos.\n")
+    from ..visuals.visibility import projection_visibility
 
-        write_json(out / "projection-visibility.json", projection_visibility(build.assembly))
+    write_json(out / "projection-visibility.json", projection_visibility(build.assembly))
     if build.assembly.lighting:
         from .lighting import export_lighting
 

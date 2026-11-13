@@ -41,7 +41,10 @@ argument is a schema-v2 configuration, for example
 
 Optional [concealed addressable lighting](docs/implementation/concealed-led.md)
 adds removable bolted strip carriers behind sculptural pieces, a bottom cable
-input, reusable retention ties, and routing/BOM exports. Set `lighting.enabled`
+input, reusable retention ties, and routing/BOM exports. By default strips face
+away from the viewer onto the board or lower artwork (backwash halo), falling back
+to the host underside where layers are stacked too tightly; WS2812B-style strips,
+variable segment lengths and voltage-drop estimates are covered in the guide. Set `lighting.enabled`
 to `true` in JSON or the desktop tree; `examples/*-led.json` cover all four styles.
 Geometry views do not simulate illumination.
 

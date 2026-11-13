@@ -31,6 +31,31 @@ PYTHONPATH=src python -m parametric_deco.cli build examples/rib-study-led.json -
 | current_per_led_ma | 60 | User supplied worst-case current per cut unit |
 | injection_limit_a | 2 | Estimated maximum per internal power group |
 | wire_slack_mm | 50 | Added to straight-line jumper/feed distance |
+| emission | auto | `backwash`, `underside`, or `auto` (backwash where it fits, else underside) |
+| min_segment_leds | null | Shortest accepted strip where `segment_leds` will not fit; null keeps one length |
+| min_throw_mm | 10 | Backwash: clear space beneath the strip before the lit surface |
+| wire_mohm_per_m | 53 | Round-trip copper estimate for feeds/jumpers (22 AWG) |
+| max_voltage_drop_pct | 8 | Warn when an estimated feed drop exceeds this |
+
+### Emission layouts
+
+`backwash` hangs the strip on the rear face of the carrier tray with the LEDs
+facing the board or the artwork below (-Z). No observer in front of the
+sculpture can see an emitter; the tray overhangs the strip 20 mm on the edge
+side, so even the strip body is hidden below ~84° from the normal. Light leaves
+only by reflection, as a halo around the host edge, and `throw_mm` records the
+clear distance to the lit surface. It needs `2 x stock + strip + min_throw_mm` of
+free space under the host, so tightly stacked layers (creature armour, low
+radial rails) cannot always take it.
+
+`underside` is the original layout: LEDs face the host underside (+Z) through a
+`stock - strip` gap. Light escapes only around the host edge, and LEDs can be
+seen obliquely through the open carrier ends.
+
+`auto` (default) tries backwash first at every candidate and falls back to
+underside there, so a design can mix both; `emission.per_segment` and each
+segment's `concealment` record the result. Saved lit inventories from before
+these settings replay with `"emission": "underside"`.
 
 All numeric settings must be finite and positive. Enabled segments must be at
 least 12 mm long to accommodate both retaining ties. For 12/24 V grouped strips,
@@ -66,16 +91,19 @@ Conservative 7 mm diameter hardware envelopes are checked and exported; they
 are not detailed fastener CAD. Prototype tightening/engagement before use.
 
 The carrier tray is two stock thicknesses behind the host; rear pads occupy one
-stock thickness. The strip sits on the tray face one stock thickness behind the
-host, with emission +Z onto its underside. Entire strip footprint plus configured
+stock thickness. Underside strips sit on the tray front face one stock thickness
+behind the host, with emission +Z onto its underside; backwash strips hang from
+the tray rear face with emission -Z, and their tie heads use the empty pad gap. Entire strip footprint plus configured
 margin must lie inside intact plywood, including avoiding cut holes. The empty
 strip/emission corridor and real clamp solids must clear other artwork and root
 hardware proxies. Clamp bearing on both ends is checked. Carrier/bolt envelope
 bounds must fit the total envelope; normal sheet packing enforces cutting bed.
 
 Only actual horizontal sculptural faces are supported: laminar lobe plates,
-creature armour/caps, radial capture rails/spines, and rib-study closures. One
-feasible clamp is required on every sculptural module. Additional separated carriers are selected in repeated module passes until
+creature armour/caps, radial capture rails/spines, and rib-study closures. A
+carrier is attempted on every sculptural module first; a module with no feasible
+edge (very small or tightly stacked) is listed in `density.uncovered_modules` with a
+build warning instead of failing the design. Additional separated carriers are selected in repeated module passes until
 `max_segments` is reached or all feasible candidates are exhausted. At least two
 carriers are required, including for the single-module rib study. This
 spreads placement through the artwork instead of putting light on the backplate.
@@ -95,6 +123,11 @@ front sightlines, but open ends can expose emitters to oblique observers. This
 lights plywood UNDERSIDES. Front faces may receive little/no direct illumination.
 The CAD images are not simulated illumination and promise no brightness/uniformity.
 
+With `min_segment_leds` set, each carrier takes the longest strip (from
+`segment_leds` down to `min_segment_leds`) that clears its edge, so broad plates
+get long runs and tight edges short ones. Power grouping and the BOM use each
+segment's actual LED count.
+
 ## Single input, connections and BOM
 
 A three-piece removable cable clamp grips the bottom backplate edge. Its four
@@ -109,8 +142,10 @@ next DIN. This data input is not a firmware programming port. Separate fused
 power groups have explicit feed routes; V+ is omitted across group boundaries.
 
 `lighting-routing.json` exports ordered segments, data pin semantics, jumpers,
-input, branch feeds, estimated current/power, minimum wire lengths and validation
-limits. Lines are manual harness guides with configured slack, not collision-free
+input, branch feeds, estimated current/power, minimum wire lengths, per-feed
+voltage-drop estimates (`wire_mohm_per_m` round trip along the feed and V+
+jumpers), the longest data jumper and validation limits. Builds warn when a feed
+drop exceeds `max_voltage_drop_pct` or a data jumper exceeds 1 m. Lines are manual harness guides with configured slack, not collision-free
 wire solids. Dress and tie wires around joints and extraction paths; disconnect
 modules before removal. `lighting-bom.json` lists purchased strip, bolts, nuts,
 washers, reusable ties and external electrical requirements. `lighting-instructions.md`
@@ -158,12 +193,15 @@ lighting, not a measured even-lighting design. Longer requested segments also
 work where geometry permits. Candidates maintain at least 30 mm XY spacing
 (or strip width plus twice clearance, whichever is greater).
 
-| Example style | Segments / addressable units | Spatial coverage |
-| --- | ---: | --- |
-| laminar | 18 / 18 | Three carriers per each of six lobe plates |
-| layered-creature | 16 / 16 | Head six, crown limbs three each, jaw limbs two each |
-| radial-weave | 24 / 24 | Two short strips per each of twelve modules on both strands |
-| rib-study | 5 / 5 (requested ceiling 8) | Five separated carriers on available broad closure material; capacity limited |
+| Example style | Segments / addressable units | Backwash / underside (auto) | Spatial coverage |
+| --- | ---: | ---: | --- |
+| laminar | 18 / 18 | 18 / 0 | Three carriers per each of six lobe plates |
+| layered-creature | 16 / 16 | 6 / 10 | Head six, crown limbs three each, jaw limbs two each; stacked armour leaves no throw under most limb edges |
+| radial-weave | 24 / 24 | 12 / 12 | Two short strips per each of twelve modules on both strands |
+| rib-study | 5 / 5 (requested ceiling 8) | 5 / 0 | Five separated carriers on available broad closure material; capacity limited |
+
+The committed images and `concealed-led-evidence.json` below predate the emission
+setting and show the underside layout; set `"emission": "underside"` to reproduce them.
 
 Actual positions and XYZ spans are recorded in `concealed-led-evidence.json`.
 Coverage refers to mechanical placement, not measured light spread. Individual
@@ -171,7 +209,7 @@ positions may sit near module roots where other edges cannot clear joints/fins.
 Front-face light is not guaranteed. `density` records requested/achieved counts,
 per-module counts, XY separation and `capacity_limited`. If geometry or complete
 symmetry orbits prevent spending the full budget, the exported warning says so.
-The per-module minimum remains mandatory; an unsupported module rejects the build.
+Uncovered modules are reported; fewer than two carriers overall rejects the build.
 
 | Geometry view | Laminar | Layered creature | Radial weave | Rib study |
 | --- | --- | --- | --- | --- |
