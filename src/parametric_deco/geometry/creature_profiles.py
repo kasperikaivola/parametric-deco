@@ -18,14 +18,14 @@ ROOTS = {
 }
 
 
-def module_roots(settings=None, grid=None, head_keepout=None):
+def module_roots(settings=None, grid=None, head_keepout=None, *, thickness=6, fit=0.2):
     """Grid roots per module. ``head_keepout`` is limb plate material at head-column
     heights; head roots then skip candidates whose spacer rings would cross it."""
     from ..config import Grid
     p = settings or CreatureMask()
     g = grid or Grid()
     voids = unary_union((*cavity_voids(p, 1.06), affinity.scale(central_void(), xfact=p.scale, yfact=p.scale, origin=(0, 0))))
-    def nearest(x, y, keepout=None):
+    def nearest(x, y, keepout=None, bore_keepout=None, occupied=()):
         candidates = []
         row0 = round((y - g.origin_y_mm) / g.pitch_y_mm)
         for row in range(row0 - 3, row0 + 4):
@@ -33,7 +33,10 @@ def module_roots(settings=None, grid=None, head_keepout=None):
             col0 = round((x - shift) / g.pitch_x_mm)
             for col in range(col0 - 3, col0 + 4):
                 xx, yy = shift + col * g.pitch_x_mm, g.origin_y_mm + row * g.pitch_y_mm
-                if (xx < -10 and voids.distance(Point(xx, yy)) >= 18
+                if (xx < -10 and (xx, yy) not in occupied
+                        and voids.distance(Point(xx, yy)) >= 18
+                        and (bore_keepout is None or bore_keepout.distance(Point(xx, yy))
+                             >= 7 + g.hole_diameter_mm / 2 + 1e-6)
                         and (keepout is None or keepout.distance(Point(xx, yy)) >= HEAD_RING_CLEARANCE)):
                     candidates.append(((xx - x) ** 2 + (yy - y) ** 2, xx, yy))
         if not candidates:
@@ -47,7 +50,20 @@ def module_roots(settings=None, grid=None, head_keepout=None):
     roots['head'] = (left, (-left[0], left[1]))
     for name in list(ROOTS)[1:1 + p.limb_count]:
         if 'left' in name:
-            roots[name] = tuple(nearest(x, y) for x, y in ROOTS[name])
+            # Preserve 7 mm bearing between mounting bores and cap blade slots.
+            # Short/scaled limbs can move a seat over the nearest lattice bore.
+            slots = []
+            for center, normal, *_ in rib_stations(name, settings=p):
+                tangent = np.array((normal[1], -normal[0]))
+                slots.append(Polygon([center + u * normal + v * tangent for u, v in (
+                    (-14 - fit / 2, -(thickness + fit) / 2),
+                    (14 + fit / 2, -(thickness + fit) / 2),
+                    (14 + fit / 2, (thickness + fit) / 2),
+                    (-14 - fit / 2, (thickness + fit) / 2))]))
+            occupied = []
+            for x, y in ROOTS[name]:
+                occupied.append(nearest(x, y, bore_keepout=unary_union(slots), occupied=occupied))
+            roots[name] = tuple(occupied)
         else:
             roots[name] = tuple((-x, y) for x, y in roots[name.replace('right', 'left')])
     return roots

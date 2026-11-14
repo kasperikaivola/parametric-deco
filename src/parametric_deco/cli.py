@@ -34,9 +34,9 @@ def main(argv=None):
     p = commands.add_parser("visuals")
     p.add_argument("directory", type=Path)
     p.add_argument("--out", type=Path, required=True)
-    p.add_argument("--width", type=int, default=2048)
-    p.add_argument("--height", type=int, default=2048)
-    p.add_argument("--surfaces", choices=("broad", "exterior", "all"), default="broad")
+    p.add_argument("--width", type=int)
+    p.add_argument("--height", type=int)
+    p.add_argument("--surfaces", choices=("broad", "exterior", "all"))
     p.add_argument(
         "--surface",
         action="append",
@@ -48,6 +48,8 @@ def main(argv=None):
         action="store_true",
         help="select sampled visible broad faces from frontal projector at (0,0,2000) mm",
     )
+    p.add_argument('--projection-config', type=Path,
+                   help='schema-v2 config whose projection settings configure ISF output')
     p.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     try:
@@ -92,14 +94,22 @@ def main(argv=None):
                 from .visuals.visibility import projection_visibility
 
                 selected = projection_visibility(assembly)["recommended_surface_ids"]
+            settings = load_config(args.projection_config).projection if args.projection_config else None
+            if settings is None and (args.directory / 'projection/projection.json').exists():
+                from .visuals.settings import Projection
+                settings = Projection(**json.loads(
+                    (args.directory / 'projection/projection.json').read_text()))
             atlas = generate_atlas(
                 assembly,
-                args.width,
-                args.height,
-                surfaces=args.surfaces,
+                args.width if args.width is not None else (settings.atlas_width if settings else 2048),
+                args.height if args.height is not None else (settings.atlas_height if settings else 2048),
+                surfaces=args.surfaces or (settings.surfaces if settings else 'broad'),
                 surface_ids=selected,
             )
-            result = export_isf_resources(atlas, args.out, force=args.force)
+            if settings is None:
+                from .visuals.settings import Projection
+                settings = Projection()
+            result = export_isf_resources(atlas, args.out, force=args.force, projection=settings)
             print(json.dumps({"files": len(result.paths), "out": str(args.out)}))
             return 0
         from .assembly import assemble

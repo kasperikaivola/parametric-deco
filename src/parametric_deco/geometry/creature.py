@@ -25,6 +25,7 @@ def request_signature(c):
     values = c.to_dict()
     values.pop("style")
     values.pop("lighting", None)
+    values.pop("projection", None)
     values["schema_version"] = 1
     values["creature"] = values.pop("parameters")
     values["creature"].pop("posture")
@@ -112,14 +113,14 @@ def generate_creature(c):
     from dataclasses import replace
     local_grid = replace(c.grid, origin_x_mm=c.grid.origin_x_mm - offset_x,
                          origin_y_mm=c.grid.origin_y_mm - offset_y)
-    roots_by_module = module_roots(c.parameters, local_grid)
+    roots_by_module = module_roots(c.parameters, local_grid, thickness=t, fit=fit)
     plate_profiles = profiles(settings=c.parameters)
     keepout = _limb_keepout(c, plate_profiles, roots_by_module)
     head = roots_by_module["head"]
     if keepout is not None and min(keepout.distance(Point(x, y)) for x, y in head) < 18:
         # Default nearest roots would drive head spacer columns through limb plates
         # (crowded limbs, large cavities or a shifted centering offset).
-        roots_by_module = module_roots(c.parameters, local_grid, keepout)
+        roots_by_module = module_roots(c.parameters, local_grid, keepout, thickness=t, fit=fit)
     for name, layers in plate_profiles.items():
         roots = roots_by_module[name]
         match_root_pattern(c, [(x + offset_x, y + offset_y) for x, y in roots])

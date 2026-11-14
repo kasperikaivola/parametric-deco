@@ -145,13 +145,13 @@ def _export_into(build, out):
         ).to_dict(),
     )
     write_json(out / "validation.json", build.report.to_dict())
-    write_scene(build.assembly, out)
+    write_scene(build.assembly, out, config.projection)
     from .views import render_views
 
     render_views(build.assembly, out / "views")
     viewer = out / "preview"
     viewer.mkdir()
-    for filename in ("index.html", "viewer.js", "NOTICE.txt"):
+    for filename in ("index.html", "viewer.js", "projection.js", "NOTICE.txt"):
         (viewer / filename).write_text(
             resources.files("parametric_deco.resources").joinpath(filename).read_text()
         )
