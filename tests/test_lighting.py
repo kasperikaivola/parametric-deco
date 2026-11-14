@@ -53,7 +53,13 @@ def test_all_styles_physical_lighting(lit, lit_build):
         assert s['led_count'] >= 1
         assert s['shield_margin_mm'] > 0
         assert s['target_instance'] == s['host_instance']
-        assert np.dot(s['emission_direction'], (0, 0, 1)) > .99
+        if s['emission'] == 'backwash':
+            assert np.dot(s['emission_direction'], (0, 0, 1)) < -.99
+            assert s['throw_mm'] >= lit.lighting.min_throw_mm
+            assert not s['concealment']['direct_emitter_view_from_front']
+        else:
+            assert s['emission'] == 'underside'
+            assert np.dot(s['emission_direction'], (0, 0, 1)) > .99
         for name in s['part_instances']:
             p = b.assembly.definition_for(instances[name])
             assert p.polygon.is_valid
@@ -208,7 +214,7 @@ def test_density_preserves_actual_rotational_carrier_material():
     assert b.assembly.lighting['density']['capacity_limited']
 
 
-def _retention_fixture(strip_thickness=2):
+def _retention_fixture(strip_thickness=2, emission='underside'):
     from shapely.geometry import box
     from parametric_deco.model import Assembly, PartDefinition, PartInstance
     from parametric_deco.lighting import _candidate
@@ -217,7 +223,8 @@ def _retention_fixture(strip_thickness=2):
                        ((1,0,0,0),(0,1,0,0),(0,0,1,60),(0,0,0,1)),role='armour')
     a = Assembly((part,),(host,),envelope_mm=(400,400,100))
     c = config_from_dict({'style':'rib-study','lighting':{'enabled':True,
-                          'strip_thickness_mm':strip_thickness,'max_segments':2}})
+                          'strip_thickness_mm':strip_thickness,'max_segments':2,
+                          'emission':emission}})
     from shapely.geometry import Point
     distance = part.polygon.exterior.project(Point(0,-80))
     return a,host,c,distance,_candidate
@@ -253,9 +260,34 @@ def test_f1_input_slots_and_full_ties_clear_intact_board(board_z):
 
 
 def test_f2_strip_thickness_reserves_tie_and_clearance():
-    a,host,c,distance,candidate = _retention_fixture(5.5)
     with pytest.raises(ValueError,match='tie'):
-        candidate(a,host,c,distance,0)
+        _retention_fixture(5.5)
+    # Backwash strips hang below the tray, so the pad gap no longer limits thickness.
+    a,host,c,distance,candidate = _retention_fixture(5.5, 'backwash')
+    assert candidate(a,host,c,distance,0) is not None
+
+
+def test_backwash_emitters_face_away_and_need_throw():
+    from shapely.geometry import box
+    from parametric_deco.lighting import _emission_clear, retention_geometry
+    from parametric_deco.model import PartDefinition, PartInstance
+    a,host,c,distance,candidate = _retention_fixture(2, 'backwash')
+    ds,ins,s = candidate(a,host,c,distance,0)
+    assert s['emission'] == 'backwash'
+    assert np.dot(s['emission_direction'], (0,0,1)) < -.99
+    assert s['concealment']['direct_emitter_view_from_front'] is False
+    assert s['concealment']['strip_body_hidden_below_deg'] > 70
+    # Emitting face hangs below the tray: host underside 60, tray 2 stock lower.
+    assert s['emitter_position_mm'][2] == pytest.approx(60-12-2)
+    heads = [p for i,p in retention_geometry(s) if p.kind == 'tie-head']
+    assert heads and all(i.transform[2][3] >= 60-6-1e-9 for i,p in retention_geometry(s)
+                         if p.kind == 'tie-head')
+    assert _emission_clear(a,s,c,[(host,a.definition_for(host))])
+    # A part just below the strip removes the required throw.
+    blocker = PartDefinition.from_polygon('blocker',box(-30,-90,30,-50),6)
+    pose = ((1,0,0,0),(0,1,0,0),(0,0,1,60-12-2-8-6),(0,0,0,1))
+    other = PartInstance('blocker','blocker',blocker.revision,pose)
+    assert not _emission_clear(a,s,c,[(other,blocker)])
 
 
 @pytest.mark.parametrize('depth,y0,y1',[(12.5,5,21),(14.5,2.5,7.5)])

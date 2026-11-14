@@ -1,5 +1,6 @@
 """ISF sources and PNG data, without an invented proprietary Wire patch schema."""
 
+from dataclasses import asdict, replace
 from hashlib import sha256
 from importlib import resources
 import json
@@ -34,7 +35,39 @@ def pulse_reference(coordinate, edge, time, speed, phase, width):
     return result
 
 
-def export_isf_resources(atlas, out_dir, force=False):
+def projection_shader(projection):
+    from .settings import EFFECTS, COORDINATES, RANGES
+    values = asdict(projection)
+    entries = [{"NAME": name, "TYPE": "image"} for name in
+               ("localData", "worldData", "worldFineData", "edgeData")]
+    for key in ('effect', 'coordinate'):
+        options = EFFECTS if key == 'effect' else COORDINATES
+        entries.append({"NAME": key, "TYPE": "long", "VALUES": list(range(len(options))),
+                        "LABELS": list(options), "DEFAULT": options.index(values[key])})
+    for key in ('speed', 'phase', 'repeats', 'width', 'softness', 'edge_width', 'brightness'):
+        name = 'edgeWidth' if key == 'edge_width' else key
+        lo, hi = RANGES[key]
+        entries.append({"NAME": name, "TYPE": "float", "MIN": lo, "MAX": hi,
+                        "DEFAULT": values[key]})
+    entries.append({"NAME": "edgeOnly", "TYPE": "bool", "DEFAULT": projection.edge_only})
+    for key in ('color', 'background'):
+        entries.append({"NAME": key, "TYPE": "color", "DEFAULT": values[key]})
+    header = {"ISFVSN": "2", "DESCRIPTION": "Parametric Deco configurable surface content",
+              "CATEGORIES": ["Generator"], "INPUTS": entries}
+    shared = resources.files('parametric_deco.resources').joinpath('projection.glsl').read_text()
+    return '/*' + json.dumps(header, indent=2) + '*/\n' + shared + """
+void main() {
+    vec4 local = IMG_NORM_PIXEL(localData, isf_FragNormCoord);
+    vec4 world = IMG_NORM_PIXEL(worldData, isf_FragNormCoord);
+    vec4 fine = IMG_NORM_PIXEL(worldFineData, isf_FragNormCoord);
+    world.rgb = (255.0 * world.rgb + fine.rgb - 0.5) / 255.0;
+    vec4 edge = IMG_NORM_PIXEL(edgeData, isf_FragNormCoord);
+    gl_FragColor = decoEffect(local, world, edge, TIME);
+}
+"""
+
+
+def export_isf_resources(atlas, out_dir, force=False, *, projection=None):
     out = Path(out_dir)
     if out.exists() and any(out.iterdir()) and not force:
         raise FileExistsError(f"{out}: output exists; use --force")
@@ -43,6 +76,20 @@ def export_isf_resources(atlas, out_dir, force=False):
         stage = Path(tmp)
         for name, image in atlas.textures.items():
             image.save(stage / atlas.manifest["inputs"][name], compress_level=0)
+        if projection is not None:
+            mode = atlas.manifest['surface_selection']['mode']
+            projection = replace(projection, atlas_width=atlas.manifest['dimensions'][0],
+                                 atlas_height=atlas.manifest['dimensions'][1],
+                                 surfaces=mode if mode != 'explicit' else projection.surfaces)
+            selection = {**atlas.manifest['surface_selection'],
+                         'surface_ids':[tile['tile_id'] for tile in atlas.manifest['tiles']]}
+            (stage / 'projection-selection.json').write_text(json.dumps(selection, indent=2)+'\n')
+            from .settings import projection_errors
+            errors = list(projection_errors(projection))
+            if errors:
+                raise ValueError('; '.join(errors))
+            (stage / 'projection.fs').write_text(projection_shader(projection))
+            (stage / 'projection.json').write_text(json.dumps(asdict(projection), indent=2) + '\n')
         for name in ("calibration.fs", "edge-pulse.fs"):
             source = resources.files("parametric_deco.resources").joinpath(name).read_text()
             for entry in shader_metadata(source)["INPUTS"]:

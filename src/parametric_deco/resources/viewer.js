@@ -70,6 +70,32 @@
     return null;
   }
   const gl = obtainGL();
+  let projection = null;
+  if (scene.projection && !scene.projection.error && gl && window.decoCreateProjection) {
+    try { projection = window.decoCreateProjection(gl, scene.projection, center, requestDraw); }
+    catch (error) { $('projectionStatus').textContent = error.message; }
+  }
+  let projectionSettings = {...(scene.projection ? scene.projection.settings : {enabled: false})};
+  window.decoSetProjection = settings => {
+    projectionSettings = {...projectionSettings, ...settings};
+    $('projection').checked = projectionSettings.enabled;
+    if (projection) projection.set(projectionSettings);
+    else if (projectionSettings.enabled) $('projectionStatus').textContent =
+      scene.projection?.error || 'Animated projections require WebGL and generated projection assets.';
+    requestDraw();
+  };
+  window.decoGetProjectionState = () => projection ? projection.state() :
+    {settings: projectionSettings, frames: 0, paused: true, renderer: 'unavailable'};
+  window.decoPauseProjection = paused => {
+    if (projection) projection.pause(paused);
+    $('playProjection').textContent = paused ? 'Play projection' : 'Pause projection';
+  };
+  if (scene.projection?.error) $('projectionStatus').textContent = scene.projection.error;
+  $('projection').checked = projectionSettings.enabled;
+  $('projection').onchange = () => window.decoSetProjection({enabled: $('projection').checked});
+  $('playProjection').onclick = () => {
+    if (projection) window.decoPauseProjection(!projection.state().paused);
+  };
   const ctx = gl ? null : canvas.getContext('2d');
 
   let program = null, meshBuffer = null, fullData = null, ranges = [], pickList = [null];
@@ -176,8 +202,18 @@
     fullData = data;
     meshBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, meshBuffer);
-    const stride = 40;
     gl.bufferData(gl.ARRAY_BUFFER, fullData, gl.DYNAMIC_DRAW);
+    bindMesh();
+    gl.enable(gl.DEPTH_TEST);
+    gl.disable(gl.CULL_FACE);
+    uploadedCount = fullData.length / 10;
+    fullKey = visibleKey();
+    uploadedKey = fullKey;
+    pickTarget = gl.createFramebuffer();
+  }
+  function bindMesh() {
+    const stride = 40;
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshBuffer);
     gl.enableVertexAttribArray(loc.pos);
     gl.vertexAttribPointer(loc.pos, 3, gl.FLOAT, false, stride, 0);
     gl.enableVertexAttribArray(loc.color);
@@ -186,12 +222,6 @@
     gl.vertexAttribPointer(loc.shift, 3, gl.FLOAT, false, stride, 24);
     gl.enableVertexAttribArray(loc.id);
     gl.vertexAttribPointer(loc.id, 1, gl.FLOAT, false, stride, 36);
-    gl.enable(gl.DEPTH_TEST);
-    gl.disable(gl.CULL_FACE);
-    uploadedCount = fullData.length / 10;
-    fullKey = visibleKey();
-    uploadedKey = fullKey;
-    pickTarget = gl.createFramebuffer();
   }
   function visibleKey() {
     let key = ($('backing').checked ? 'b' : '') + ($('hardware').checked ? 'h' : '') + ':';
@@ -271,8 +301,15 @@
     gl.clearColor(18 / 255, 21 / 255, 27 / 255, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
+    bindMesh();
     cameraUniforms(false);
     if (uploadedCount) gl.drawArrays(gl.TRIANGLES, 0, uploadedCount);
+    if (projection) {
+      const pixel = Math.min(canvas.width, canvas.height) * .82 * zoom / span;
+      projection.draw({uYaw: yaw, uPitch: pitch, uScaleX: pixel * 2 / canvas.width,
+        uScaleY: pixel * 2 / canvas.height, uDepth: .9 / (span * .9 + 360),
+        uExplode: +$('explode').value || 0}, hidden, performance.now());
+    }
   }
   function pickGL(px, py) {
     if (!program) return;
@@ -287,6 +324,7 @@
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
+    bindMesh();
     cameraUniforms(true);
     if (uploadedCount) gl.drawArrays(gl.TRIANGLES, 0, uploadedCount);
     const pixel = new Uint8Array(4);
@@ -372,6 +410,7 @@
       else paint2D();
     } finally {
       drawing = false;
+      if (projection && projection.active() && !document.hidden) requestDraw();
     }
   }
   let scheduled = 0;
@@ -424,6 +463,9 @@
   $('orbit').onclick = () => { yaw = -.4; pitch = .35; draw(); };
   for (const id of ['explode', 'backing', 'hardware']) $(id).oninput = draw;
   window.addEventListener('resize', draw);
+  document.addEventListener?.('visibilitychange', () => {
+    if (!document.hidden) requestDraw();
+  });
   window.decoGetView = () => ({yaw, pitch, zoom, explode: $('explode').value,
     backing: $('backing').checked, hardware: $('hardware').checked});
   window.decoSetView = view => {

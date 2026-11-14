@@ -98,7 +98,7 @@ def field(o, i):
     return center, rotation, morph, variation, phase
 
 
-def primary_anatomy(o, i):
+def primary_anatomy(o, i, max_cleft=1.0, septum_radius=0.0, channel_cap=None):
     center, rotation, morph, variation, phase = field(o, i)
     main = curve(
         (-0.28, -0.06 * math.sin(phase)),
@@ -127,15 +127,24 @@ def primary_anatomy(o, i):
     outline = Polygon(body.exterior)
     # The focal lens is longitudinal, oblique and eccentric, never a pupil disk.
     lens_path = main[26:74]
-    lens = spindle(lens_path, 0.047 * (0.85 + 0.3 * morph), o, tip=0.012)
-    void = lens
+    # The lens follows lamina slimming so a low swelling keeps a proportional rim
+    # instead of eating the material between cavity and outline (>=1 unchanged).
+    lens_width = 0.047 * (0.85 + 0.3 * morph) * min(1.0, o.swelling)
+    lens = spindle(lens_path, lens_width, o, tip=0.012)
+    shape = body.difference(lens)
     if math.sin(2 * phase + 0.6) > 0.25:
         # An open cleft relates the cavity to the daughter branch, rather than
-        # imposing the same closed-rim relationship on every region.
+        # imposing the same closed-rim relationship on every region. Strong
+        # curvature can carry the cleft through a daughter branch; shorten it until
+        # the lamina stays one connected cut instead of shedding a loose fragment.
         anchor = lens_path[int(0.63 * (len(lens_path) - 1))]
-        notch = curve(anchor, anchor + np.array((0.04, 0.19 * o.curvature)), 0.015)
-        void = void.union(ribbon(notch, np.linspace(0.018, 0.032, len(notch))))
-    shape = body.difference(void)
+        for reach in (r for r in (1.0, 0.85, 0.7, 0.55, 0.4) if r <= max_cleft):
+            notch = curve(anchor, anchor + np.array((0.04, 0.19 * o.curvature * reach)), 0.015)
+            cleft = body.difference(lens.union(ribbon(notch, np.linspace(0.018, 0.032,
+                                                                         len(notch)))))
+            if cleft.geom_type == "Polygon":
+                shape = cleft
+                break
     segments = 1 + o.complexity if o.segmentation is None else o.segmentation
     for fraction in division_positions(segments):
         k = int(fraction * (len(lens_path) - 1))
@@ -145,17 +154,19 @@ def primary_anatomy(o, i):
         septum = curve(
             p - 0.085 * normal, p + 0.085 * normal, 0.025 * math.sin(phase + fraction * 3)
         )
-        material = ribbon(septum, np.full(len(septum), 0.012 * o.swelling))
+        material = ribbon(septum, np.full(len(septum), max(0.012 * o.swelling, septum_radius)))
         # Septa are internal to a fixed lamina outline: growing this nested set
         # cannot move/rescale the silhouette or remove an earlier division.
         shape = shape.union(material.intersection(outline))
     channels = 1 + o.complexity if o.channels is None else o.channels
+    if channel_cap is not None:
+        channels = min(channels, channel_cap)
     tangent = np.gradient(main, axis=0)
     normals = np.column_stack((-tangent[:, 1], tangent[:, 0]))
     normals /= np.linalg.norm(normals, axis=1)[:, None]
     lens_radii = np.zeros(len(main))
     lu = np.linspace(0, 1, len(lens_path))
-    lens_radii[26:74] = 0.012 + 0.047 * (0.85 + 0.3 * morph) * np.sin(math.pi * lu) ** (
+    lens_radii[26:74] = 0.012 + lens_width * np.sin(math.pi * lu) ** (
         0.7 * o.taper
     )
     bank_offset = (widths + lens_radii) / 2
@@ -168,7 +179,10 @@ def primary_anatomy(o, i):
             - normals[start : start + 10] * bank_offset[start : start + 10, None]
         )
         groove = ribbon(segment, np.full(len(segment), 0.004))
-        shape = shape.difference(groove)
+        grooved = shape.difference(groove)
+        # A channel decorates the lamina; it may never sever it into loose pieces.
+        if grooved.geom_type == "Polygon" or shape.geom_type != "Polygon":
+            shape = grooved
     transform = [rotation[0, 0], rotation[0, 1], rotation[1, 0], rotation[1, 1], *center]
     shape = affinity.affine_transform(shape, transform)
     outline = affinity.affine_transform(outline, transform)
@@ -183,9 +197,11 @@ def finished_profile(polygon, affine):
     return remove_repeated_points(affinity.affine_transform(polygon, affine), tolerance=0)
 
 
-def _unreplicated_anatomy(c, normalized=False):
+def _unreplicated_anatomy(c, normalized=False, details=None):
     o = c.parameters
-    primaries = [primary_anatomy(o, i) for i in range(o.focal_count)]
+    details = details or {}
+    primaries = [primary_anatomy(o, i, *details.get(i, DETAIL_LEVELS[0]))
+                 for i in range(o.focal_count)]
     # Size is fitted once from complexity-independent outer anatomy.
     bounds = unary_union([p[1] for p in primaries]).bounds
     sx = (c.envelope.width_mm - 4) / (bounds[2] - bounds[0])
@@ -231,7 +247,15 @@ def _unreplicated_anatomy(c, normalized=False):
                 anchor = sub[(a + b) // 2]
                 outlet = curve(anchor, anchor + np.array((0, side * 0.14)), 0)
                 clefts.append(window.union(ribbon(outlet, np.full(len(outlet), 0.012))))
-            poly = poly.difference(unary_union(clefts))
+            opened = poly.difference(unary_union(clefts))
+            if opened.geom_type != "Polygon":
+                # Keep each side-open recess only where it leaves one connected wall.
+                for cleft in clefts:
+                    trial = poly.difference(cleft)
+                    if trial.geom_type == "Polygon":
+                        poly = trial
+                opened = poly
+            poly = opened
             poly = affinity.affine_transform(
                 poly, [rotation[0, 0], rotation[0, 1], rotation[1, 0], rotation[1, 1], *focal]
             )
@@ -245,23 +269,162 @@ def _unreplicated_anatomy(c, normalized=False):
                     1,
                 )
             )
+    _unreplicated_anatomy.last_scale = min(sx, sy)
     return result
 
 
+def _separate_sectors(canonical, step=0.01, limit=40):
+    """Move a C3 motif radially until its rotated copies stop overlapping.
+
+    Rotated copies of one lobe share a layer height, so a compact motif (small
+    spread, strong curvature) can cross into its neighbouring 120° sector and
+    collide with itself. Unaffected motifs are returned unchanged.
+    """
+    from dataclasses import replace
+
+    def collides(lobes):
+        for lobe in lobes:
+            for sector in (1, 2):
+                rotated = affinity.rotate(lobe.shape, sector * 120, origin=(0, 0))
+                # Only copies of the same lobe share a layer height.
+                if rotated.intersection(lobe.shape).area > 1e-9:
+                    return True
+        return False
+
+    if not collides(canonical):
+        return canonical
+    for n in range(1, limit + 1):
+        moved = []
+        for lobe in canonical:
+            c = np.asarray(lobe.shape.centroid.coords[0])
+            offset = c / max(np.linalg.norm(c), 1e-9) * step * n
+            moved.append(replace(
+                lobe, shape=affinity.translate(lobe.shape, *offset),
+                major_outline=(affinity.translate(lobe.major_outline, *offset)
+                               if lobe.major_outline is not None else None),
+                path=lobe.path + offset,
+                backing_path=(lobe.backing_path + offset
+                              if lobe.backing_path is not None else None)))
+        if not collides(moved):
+            return moved
+    raise ValueError("laminar C3 motif overlaps its rotated copies; increase spread or "
+                     "reduce curvature/swelling")
+
+
+# Per-lamina detail levels: (max cleft reach, septum radius in mm, channel cap).
+# Level 0 is the requested artwork; later levels keep the silhouette and layout but
+# grow fragile details to the 10 mm neck / 7 mm ligament manufacturing minimums.
+DETAIL_LEVELS = ((1.0, 0.0, None), (0.7, 0.0, None), (0.55, 6.0, None),
+                 (0.4, 6.0, 1), (0.0, 6.0, 0))
+MIN_NECK_MM, MIN_LIGAMENT_MM = 10, 7
+
+
+def _cuttable(shape):
+    from ..organism_assembly import cut_ligaments, neck_check
+    try:
+        neck_check(shape, MIN_NECK_MM)
+        cut_ligaments(shape, MIN_LIGAMENT_MM)
+    except ValueError:
+        return False
+    return True
+
+
+def _canonical_index(name, o):
+    k = int(name.rsplit("-", 1)[1])
+    if o.symmetry == "rotational":
+        return k % (o.focal_count // 3)
+    if o.symmetry == "bilateral":
+        return k - k % 2
+    return k
+
+
+def _fit_details(c):
+    """Raise the detail level of each failing lamina until its finished cut passes."""
+    o = c.parameters
+    levels = {}
+    for _ in range(len(DETAIL_LEVELS) * 2):
+        lobes, scale = _anatomy(c, levels)
+        failing = {_canonical_index(lobe.name, o) for lobe in lobes
+                   if not _cuttable(lobe.shape)}
+        if not failing:
+            break
+        raised = False
+        for index in failing:
+            if levels.get(index, 0) < len(DETAIL_LEVELS) - 1:
+                levels[index] = levels.get(index, 0) + 1
+                raised = True
+        if not raised:
+            # Nothing left to adapt; manufacturing reports the actual deficiency.
+            return _anatomy(c, {})[0], ()
+    else:
+        return _anatomy(c, {})[0], ()
+    notes = []
+    for index, level in sorted(levels.items()):
+        cleft, septum, cap = DETAIL_LEVELS[level]
+        change = [f"cleft {cleft:.0%}" if cleft < 1 else None,
+                  f"septa {2 * septum:g} mm" if septum else None,
+                  f"channels <= {cap}" if cap is not None else None]
+        notes.append(f"primary-{index}: " + ", ".join(x for x in change if x))
+    return lobes, tuple(notes)
+
+
+_FIT_CACHE = {}
+
+
+def anatomy_adjustments(c):
+    """Human-readable record of manufacturability adaptations made by anatomy(c)."""
+    return _fitted(c)[1]
+
+
+def _fitted(c):
+    key = repr(c)
+    if key not in _FIT_CACHE:
+        if len(_FIT_CACHE) > 16:
+            _FIT_CACHE.clear()
+        _FIT_CACHE[key] = _fit_details(c)
+    return _FIT_CACHE[key]
+
+
 def anatomy(c):
+    """Fitted anatomy. Thin necks from strong curvature, low swelling or a small
+    fitted scale adapt clefts/septa/channels per lamina (silhouette unchanged)."""
+    return list(_fitted(c)[0])
+
+
+def _anatomy(c, levels):
     """Author one motif, then copy it exactly; fit uniformly about the grid origin."""
+    o = c.parameters
+
+    def details(scale):
+        return {i: (cleft, septum / scale if septum else 0.0, cap)
+                for i, (cleft, septum, cap) in
+                ((i, DETAIL_LEVELS[level]) for i, level in levels.items())}
+
+    if o.symmetry not in ("rotational", "bilateral"):
+        # Scale is independent of details: it is fitted to unmodified outlines.
+        lobes = _unreplicated_anatomy(c)
+        scale = _unreplicated_anatomy.last_scale
+        if levels:
+            lobes = _unreplicated_anatomy(c, details=details(scale))
+        return lobes, scale
+    lobes, scale = _symmetric_anatomy(c, {})
+    if levels:
+        lobes, scale = _symmetric_anatomy(c, details(scale))
+    return lobes, scale
+
+
+def _symmetric_anatomy(c, details):
     from dataclasses import replace
     from .backplate import backplate_polygon
     o = c.parameters
-    if o.symmetry not in ("rotational", "bilateral"):
-        return _unreplicated_anatomy(c)
-    source = _unreplicated_anatomy(c, normalized=True)
+    source = _unreplicated_anatomy(c, normalized=True, details=details)
     count = o.focal_count
     if o.symmetry == "rotational":
         if o.arrangement != "whorl" or count % 3:
             raise ValueError("exact C3 laminar requires whorl and focal_count divisible by3")
         motif = count // 3
-        canonical = [lobe for lobe in source if int(lobe.name.rsplit('-', 1)[1]) < motif]
+        canonical = _separate_sectors(
+            [lobe for lobe in source if int(lobe.name.rsplit('-', 1)[1]) < motif])
         copies = []
         for sector in range(3):
             angle = sector * 2 * math.pi / 3
@@ -309,4 +472,4 @@ def anatomy(c):
                       major_outline=affinity.scale(lobe.major_outline, xfact=scale, yfact=scale, origin=(0, 0)) if lobe.major_outline is not None else None,
                       path=lobe.path * scale, backing_path=lobe.backing_path * scale if lobe.backing_path is not None else None,
                       z=base + usable * level))
-    return sorted(result, key=lambda lobe: (lobe.tier, int(lobe.name.rsplit('-', 1)[1])))
+    return sorted(result, key=lambda lobe: (lobe.tier, int(lobe.name.rsplit('-', 1)[1]))), scale

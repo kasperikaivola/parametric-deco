@@ -9,7 +9,7 @@ import trimesh
 from ..cad import mesh_for
 
 
-def write_scene(assembly, out_dir):
+def write_scene(assembly, out_dir, projection=None):
     from ..lighting import preview_assembly
 
     assembly = preview_assembly(assembly)
@@ -78,6 +78,8 @@ def write_scene(assembly, out_dir):
     (out / "scene.json").write_text(
         json.dumps(
             {
+                **({'projection': _projection(assembly, out, projection)}
+                   if projection is not None else {}),
                 "schema_version": 1,
                 "units": "mm",
                 "meshes": meshes,
@@ -88,3 +90,8 @@ def write_scene(assembly, out_dir):
             separators=(",", ":"),
         )
     )
+
+
+def _projection(assembly, out, settings):
+    from ..visuals.preview import write_projection
+    return write_projection(assembly, out, settings)

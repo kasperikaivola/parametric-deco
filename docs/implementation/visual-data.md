@@ -2,7 +2,14 @@
 
 Each selected face has its own tile with two-pixel
 black gutters, identity, local face basis/contour and mapping in atlas.json.
-Backing and reverse faces are excluded. Projector visibility/occlusion is
+Reverse faces are excluded, and so are purchased clamp hardware, lighting
+carriers/strips and concealed joinery (spacers, register webs, retainers) unless
+named explicitly with --surface. `--visible-only` samples every remaining part in
+all four styles, including the board between the artwork.
+
+When lighting is enabled, `lighting_targets` lists each LED segment with its host
+tile and the atlas UV / normalized world position of the lit edge, so projected
+content can be timed or masked against the addressable segments. Projector visibility/occlusion is
 not solved: map only faces which can actually receive the light.
 
 PNG origin is top-left; local U points right and V up. Shader UV origin is
@@ -24,9 +31,11 @@ mechanical modules. Different ribs' path intervals meet at endpoints; this
 is content adjacency, not a claim of physical surface continuity everywhere.
 
 An 8-bit 1,000 mm world span has 3.922 mm steps and up to 1.961 mm rounding
-error. This does not support submillimetre world edges. Use local per-face
-coordinates/edge distance for fine patterns; local steps and actual world
-steps are quantified in atlas.json. Tile raster resolution imposes another
+error. `world-fine.png` (`worldFineData`) stores the residual of each channel, so
+`xyz = (255*world + fine - 0.5)/255` (both sampled 0..1) resolves ~0.015 mm per
+1,000 mm. World bounds cover projectable plywood only, not hardware or lighting
+carriers. Local per-face coordinates/edge distance remain best for fine patterns;
+local and world steps are quantified in atlas.json. Tile raster resolution imposes another
 limit independent of encoding. Faces are selected before packing. Broad sheet faces are the default; outer
 perimeter edges are opt-in with --surfaces exterior and hole walls with --surfaces
 all. Repeated --surface INSTANCE--FACE selects only named faces. The allocator

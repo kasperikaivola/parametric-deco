@@ -10,17 +10,20 @@ import numpy as np
 from shapely import affinity
 from shapely.geometry import Point, box
 
+from .config import LED_TIE_HEAD_MM, LED_TIE_THICKNESS_MM
 from .model import Inventory, PartDefinition, PartInstance, digest
 from .validation import instance_bounds, xy_footprint, boxes_overlap
 from .cad import overlap_volume
 from .geometry.symmetry import kind as symmetry_kind, matrices, mapped_id, canonical_id
 
 KEY = 'lighting_supplement'
+LEGACY_LIGHTING = {'emission': 'underside', 'min_segment_leds': None, 'min_throw_mm': 10,
+                   'wire_mohm_per_m': 53, 'max_voltage_drop_pct': 8}
 ROLES = {'led-tray', 'led-pad', 'led-jaw', 'led-input'}
 RETENTION_REVISION = 'checked-tie-path-v2'
 TIE_WIDTH = 2.5
-TIE_THICKNESS = 1.0
-TIE_HEAD = (5.0, 5.0, 3.0)
+TIE_THICKNESS = LED_TIE_THICKNESS_MM
+TIE_HEAD = LED_TIE_HEAD_MM
 INPUT_CABLE_DIAMETER = 5.0
 
 
@@ -94,7 +97,8 @@ def _clear(assembly, definitions, instances, existing):
     return True
 
 
-def _retention_spec(stock, length, width, strip_thickness, input_anchor):
+def _retention_spec(stock, length, width, strip_thickness, input_anchor,
+                    emission='underside'):
     envelopes = []
 
     def add(kind, bounds):
@@ -113,6 +117,20 @@ def _retention_spec(stock, length, width, strip_thickness, input_anchor):
                                 x+TIE_THICKNESS/2, y+TIE_WIDTH/2, upper+TIE_THICKNESS))
             add('tie-head', (-5-TIE_HEAD[0]/2, y-TIE_HEAD[1]/2, rear-TIE_HEAD[2],
                              -5+TIE_HEAD[0]/2, y+TIE_HEAD[1]/2, rear))
+    elif emission == 'backwash':
+        # Strip hangs beneath the tray; ties wrap tray+strip, heads hide between
+        # tray and host where the pad gap is otherwise empty.
+        rear, upper = -2*stock-strip_thickness, -stock
+        for x in (-length/2+3, length/2-3):
+            add('tie-upper', (x-TIE_WIDTH/2, 4.5, upper,
+                              x+TIE_WIDTH/2, 11.5+width, upper+TIE_THICKNESS))
+            add('tie-rear', (x-TIE_WIDTH/2, 4.5, rear-TIE_THICKNESS,
+                             x+TIE_WIDTH/2, 11.5+width, rear))
+            for y in (5, 11+width):
+                add('tie-leg', (x-TIE_WIDTH/2, y-TIE_THICKNESS/2, rear-TIE_THICKNESS,
+                                x+TIE_WIDTH/2, y+TIE_THICKNESS/2, upper+TIE_THICKNESS))
+            add('tie-head', (x-TIE_HEAD[0]/2, 5-TIE_HEAD[1]/2, upper,
+                             x+TIE_HEAD[0]/2, 5+TIE_HEAD[1]/2, upper+TIE_HEAD[2]))
     else:
         rear, upper = -2*stock, -stock+strip_thickness
         for x in (-length/2+3, length/2-3):
@@ -126,6 +144,7 @@ def _retention_spec(stock, length, width, strip_thickness, input_anchor):
             add('tie-head', (x-TIE_HEAD[0]/2, 5-TIE_HEAD[1]/2, rear-TIE_HEAD[2],
                              x+TIE_HEAD[0]/2, 5+TIE_HEAD[1]/2, rear))
     return {'revision': RETENTION_REVISION, 'input_anchor': input_anchor,
+            'emission': None if input_anchor else emission,
             'tie_width_mm': TIE_WIDTH, 'tie_thickness_mm': TIE_THICKNESS,
             'tie_head_max_mm': list(TIE_HEAD),
             'cable_diameter_max_mm': INPUT_CABLE_DIAMETER if input_anchor else None,
@@ -155,11 +174,40 @@ def _retention_clear(assembly, segment, existing):
                    [i for i,_ in geometry], existing)
 
 
-def _candidate(assembly, host, config, distance, index, input_anchor=False):
+def _concealment(emission, stock, width, strip_thickness):
+    """Geometric sightline limits for the purchased strip in its carrier frame.
+
+    Angles are measured from the artwork normal (+Z). Below the angle, the host or
+    tray blocks every straight line from a front observer to the strip body.
+    """
+    if emission == 'backwash':
+        # Tray overhangs the strip by 20 mm (edge side) and 7 mm (inner side); the
+        # strip hangs strip_thickness below the tray's rear face.
+        edge, inner = math.atan2(20, strip_thickness), math.atan2(7, strip_thickness)
+        return {'emitter_facing': 'away from observers (-Z, onto surface below)',
+                'direct_emitter_view_from_front': False,
+                'strip_body_hidden_below_deg': math.degrees(min(edge, inner))}
+    # Underside: host edge 8 mm outboard of the strip, emitter face stock-strip below.
+    drop = max(stock - strip_thickness, 1e-6)
+    return {'emitter_facing': 'towards host underside (+Z)',
+            'direct_emitter_view_from_front': True,
+            'strip_body_hidden_below_deg': math.degrees(math.atan2(8, drop))}
+
+
+def _modes(config):
+    """Emission layouts to try, most concealed first."""
+    return {'auto': ('backwash', 'underside')}.get(config.lighting.emission,
+                                                   (config.lighting.emission,))
+
+
+def _candidate(assembly, host, config, distance, index, input_anchor=False, leds=None,
+               emission=None):
     part = assembly.definition_for(host)
     polygon = part.polygon
     ring = polygon.exterior
-    length = config.lighting.segment_leds * config.lighting.led_pitch_mm
+    leds = config.lighting.segment_leds if leds is None else leds
+    emission = emission or _modes(config)[0]
+    length = leds * config.lighting.led_pitch_mm
     if input_anchor:
         length = 24
     a = ring.interpolate(distance - 1)
@@ -175,7 +223,10 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
     stock = config.material.measured_mm
     width = config.lighting.strip_width_mm
     gap = stock - config.lighting.strip_thickness_mm
-    if not input_anchor and gap < TIE_THICKNESS + config.lighting.clearance_mm:
+    if (not input_anchor and emission == 'underside'
+            and gap < TIE_THICKNESS + config.lighting.clearance_mm):
+        if config.lighting.emission == 'auto':
+            return None
         raise ValueError('lighting strip thickness + 1 mm tie body + clearance must fit '
                          'one stock thickness; reduce strip_thickness_mm')
     depth = width + 15 if not input_anchor else 16
@@ -234,8 +285,12 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
             return None
         if not add(f'jaw-{j}', shape, part.thickness_mm, 'led-jaw'):
             return None
-    emitter = _point(pose, (0, 8+width/2, -gap))
+    strip_thickness = config.lighting.strip_thickness_mm
+    # Emitting face height in the carrier frame (host underside is z=0).
+    face_z = -2*stock-strip_thickness if emission == 'backwash' else -gap
+    emitter = _point(pose, (0, 8+width/2, face_z))
     target = _point(pose, (0, 8+width/2, 0))
+    normal = np.asarray(host.transform)[:3, 2]
     if input_anchor:
         emitter = _point(pose, (0, -6, INPUT_CABLE_DIAMETER/2))
     min_bolt = part.thickness_mm + (2 if input_anchor else 3)*stock + 7
@@ -248,19 +303,24 @@ def _candidate(assembly, host, config, distance, index, input_anchor=False):
     segment = {
         'segment_id': name, 'host_instance': host.instance_id,
         'target_instance': host.instance_id, 'part_instances': [i.instance_id for i in instances],
-        'strip_length_mm': length, 'led_count': config.lighting.segment_leds,
+        'strip_length_mm': length, 'led_count': leds,
+        'emission': None if input_anchor else emission,
         'emitter_position_mm': emitter, 'target_position_mm': target,
-        'emission_direction': np.asarray(host.transform)[:3, 2].tolist(),
-        'emitter_to_host_mm': gap, 'shield_margin_mm': config.lighting.clearance_mm,
+        'emission_direction': (-normal if emission == 'backwash' else normal).tolist(),
+        'emitter_to_host_mm': gap if emission == 'underside' else None,
+        'shield_margin_mm': config.lighting.clearance_mm,
         'strip_local_bounds_mm': [-half, 8, half, 8+width],
         'carrier_frame': np.asarray(pose).tolist(),
-        'strip_start_mm': _point(pose, (-half, 8+width/2, -gap)),
-        'strip_end_mm': _point(pose, (half, 8+width/2, -gap)),
+        'strip_start_mm': _point(pose, (-half, 8+width/2, face_z)),
+        'strip_end_mm': _point(pose, (half, 8+width/2, face_z)),
+        'concealment': None if input_anchor else _concealment(emission, stock, width,
+                                                             strip_thickness),
         'bolt_length_min_mm': min_bolt, 'bolt_envelopes': bolt_envelopes,
         'retention': _retention_spec(stock, length, width,
-                                    config.lighting.strip_thickness_mm, input_anchor),
+                                    config.lighting.strip_thickness_mm, input_anchor, emission),
         'checks': {'full_emitter_footprint_hits_host': not input_anchor,
                    'front_occluded_by_host': not input_anchor,
+                   'emitter_faces_away_from_front': emission == 'backwash' and not input_anchor,
                    'solid_clearance': True},
     }
     if not _retention_clear(assembly, segment, [(host, part), *zip(instances, definitions)]):
@@ -287,13 +347,42 @@ def _hardware_clear(assembly, segment, existing):
 def _emission_clear(assembly, segment, config, existing):
     x0, y0, x1, y1 = segment['strip_local_bounds_mm']
     stock = config.material.measured_mm
-    prism = PartDefinition.from_polygon('led-clearance', box(x0, y0, x1, y1), stock)
     pose = np.asarray(segment['carrier_frame']).copy()
+    if segment.get('emission') == 'backwash':
+        # Hanging strip body plus its throw corridor down to min_throw_mm.
+        height = config.lighting.strip_thickness_mm + config.lighting.min_throw_mm
+        below = 2*stock + height
+        pose[:3, 3] -= pose[:3, 2]*below
+        prism = PartDefinition.from_polygon('led-clearance', box(x0, y0, x1, y1), height)
+        inst = PartInstance('led-clearance', prism.definition_id, prism.revision,
+                            tuple(map(tuple, pose)))
+        return _clear(assembly, {prism.definition_id: prism}, [inst], existing)
+    prism = PartDefinition.from_polygon('led-clearance', box(x0, y0, x1, y1), stock)
     pose[:3, 3] -= pose[:3, 2]*stock
     inst = PartInstance('led-clearance', prism.definition_id, prism.revision,
                         tuple(map(tuple, pose)))
     obstacles = [(i, p) for i, p in existing if i.instance_id != segment['host_instance']]
     return _clear(assembly, {prism.definition_id: prism}, [inst], obstacles)
+
+
+def _throw(assembly, segment, existing):
+    """Clear distance from a backwash emitter face to the first surface beneath it."""
+    if segment.get('emission') != 'backwash':
+        return None
+    x0, y0, x1, y1 = segment['strip_local_bounds_mm']
+    footprint = _polygon_world(box(x0, y0, x1, y1), segment['carrier_frame'])
+    face = segment['emitter_position_mm'][2]
+    own = set(segment['part_instances'])
+    tops = [0.0]
+    for inst, part in existing:
+        if inst.instance_id in own:
+            continue
+        bounds = instance_bounds(part, inst.transform)
+        if (bounds[1][2] <= face + 1e-6 and boxes_overlap(
+                np.array(((*footprint.bounds[:2], -1e9), (*footprint.bounds[2:], 1e9))), bounds)
+                and footprint.intersection(xy_footprint(part, inst.transform)).area > 1):
+            tops.append(float(bounds[1][2]))
+    return face - max(tops)
 
 
 def _generate(config, assembly):
@@ -305,12 +394,66 @@ def _generate(config, assembly):
              and i.transform[2][2] > .999]
     modules = sorted({i.module_id for i in hosts})
     if len(modules) > light.max_segments:
-        raise ValueError('lighting.max_segments must cover every sculptural module')
+        raise ValueError(f'lighting.max_segments must be >= {len(modules)} to cover every '
+                         'sculptural module')
     rejected = {host.instance_id: set() for host in hosts}
     separation = max(30.0, light.strip_width_mm + 2*light.clearance_mm)
     counts = {module: 0 for module in modules}
     symmetry_attempts = 0
     by_id = {i.instance_id: i for i in hosts}
+
+    shortest = light.min_segment_leds or light.segment_leds
+    # Longest first; a few intermediate lengths keep the search bounded.
+    lengths = sorted({light.segment_leds, shortest,
+                      (light.segment_leds+shortest)//2}, reverse=True)
+
+    def try_orbit(host, distance, leds, previous, emission):
+        candidate = _candidate(assembly, host, config, distance, len(segments), leds=leds,
+                               emission=emission)
+        if candidate is None:
+            return None
+        ds, ins, segment = candidate
+        centre = np.array(segment['emitter_position_mm'][:2])
+        if any(np.linalg.norm(centre-p) < separation for p in previous):
+            return None
+        orbit = [(ds, ins, segment)]
+        for group_index, matrix in enumerate(matrices(config)[1:], 1):
+            partner = by_id.get(mapped_id(host.instance_id, config, group_index))
+            if partner is None:
+                return None
+            origin = np.array(segment['carrier_frame'])[:2, 3]
+            target = matrix @ origin
+            local = np.linalg.inv(np.array(partner.transform)) @ np.array(
+                (*target, partner.transform[2][3], 1))
+            partner_ring = assembly.definition_for(partner).polygon.exterior
+            projected = partner_ring.interpolate(partner_ring.project(Point(local[:2])))
+            if projected.distance(Point(local[:2])) > 1e-6:
+                return None
+            if any(row[2]['host_instance'] == partner.instance_id and np.linalg.norm(
+                    np.array(row[2]['carrier_frame'])[:2,3]-target) < 1e-6 for row in orbit):
+                continue
+            candidate = _candidate(assembly, partner, config,
+                partner_ring.project(Point(local[:2])), len(segments)+len(orbit), leds=leds,
+                emission=emission)
+            if candidate is None:
+                return None
+            orbit.append(candidate)
+        if len(segments)+len(orbit) > light.max_segments:
+            return None
+        trial = list(existing)
+        centres = list(previous)
+        for od, oi, os in orbit:
+            centre = np.array(os['emitter_position_mm'][:2])
+            if (any(np.linalg.norm(centre-p) < separation for p in centres) or
+                    not _clear(assembly, {d.definition_id:d for d in od}, oi, trial) or
+                    not _hardware_clear(assembly, os, trial) or
+                    not _emission_clear(assembly, os, config, trial)):
+                return None
+            trial.extend(zip(oi, od))
+            centres.append(centre)
+        if any(not _emission_clear(assembly, os, config, trial) for _, _, os in orbit):
+            return None
+        return orbit
 
     def place_one(module):
         nonlocal symmetry_attempts
@@ -334,75 +477,30 @@ def _generate(config, assembly):
                 if sample_id in rejected[host.instance_id]:
                     continue
                 rejected[host.instance_id].add(sample_id)
-                candidate = _candidate(assembly, host, config, distance, len(segments))
-                if candidate is None:
-                    continue
-                ds, ins, segment = candidate
-                centre = np.array(segment['emitter_position_mm'][:2])
-                if any(np.linalg.norm(centre-p) < separation for p in previous):
-                    continue
-                orbit = [(ds, ins, segment)]
-                for group_index, matrix in enumerate(matrices(config)[1:], 1):
-                    partner = by_id.get(mapped_id(host.instance_id, config, group_index))
-                    if partner is None:
-                        orbit = []
-                        break
-                    origin = np.array(segment['carrier_frame'])[:2, 3]
-                    target = matrix @ origin
-                    local = np.linalg.inv(np.array(partner.transform)) @ np.array(
-                        (*target, partner.transform[2][3], 1))
-                    partner_ring = assembly.definition_for(partner).polygon.exterior
-                    projected = partner_ring.interpolate(partner_ring.project(Point(local[:2])))
-                    if projected.distance(Point(local[:2])) > 1e-6:
-                        orbit = []
-                        break
-                    if any(row[2]['host_instance'] == partner.instance_id and np.linalg.norm(
-                            np.array(row[2]['carrier_frame'])[:2,3]-target) < 1e-6 for row in orbit):
+                for emission, leds in ((e, n) for e in _modes(config) for n in lengths):
+                    orbit = try_orbit(host, distance, leds, previous, emission)
+                    if orbit is None:
                         continue
-                    candidate = _candidate(assembly, partner, config,
-                        partner_ring.project(Point(local[:2])), len(segments)+len(orbit))
-                    if candidate is None:
-                        orbit = []
-                        break
-                    orbit.append(candidate)
-                if not orbit or len(segments)+len(orbit) > light.max_segments:
-                    continue
-                trial = list(existing)
-                centres = list(previous)
-                valid = True
-                for od, oi, os in orbit:
-                    centre = np.array(os['emitter_position_mm'][:2])
-                    if (any(np.linalg.norm(centre-p) < separation for p in centres) or
-                            not _clear(assembly, {d.definition_id:d for d in od}, oi, trial) or
-                            not _hardware_clear(assembly, os, trial) or
-                            not _emission_clear(assembly, os, config, trial)):
-                        valid = False
-                        break
-                    trial.extend(zip(oi, od))
-                    centres.append(centre)
-                if not valid:
-                    continue
-                if any(not _emission_clear(assembly, os, config, trial) for _, _, os in orbit):
-                    continue
-                symmetry_attempts += int(len(orbit) > 1)
-                for od, oi, os in orbit:
-                    owner = by_id[os['host_instance']].module_id
-                    os['checks']['emitter_corridor_clear'] = True
-                    os['module_id'] = owner
-                    definitions.extend(od)
-                    instances.extend(oi)
-                    existing.extend(zip(oi, od))
-                    segments.append(os)
-                    counts[owner] += 1
-                return True
+                    symmetry_attempts += int(len(orbit) > 1)
+                    for od, oi, os in orbit:
+                        owner = by_id[os['host_instance']].module_id
+                        os['checks']['emitter_corridor_clear'] = True
+                        os['module_id'] = owner
+                        definitions.extend(od)
+                        instances.extend(oi)
+                        existing.extend(zip(oi, od))
+                        segments.append(os)
+                        counts[owner] += 1
+                    return True
         return False
 
-    # First guarantee module coverage; subsequent passes spend the density budget
+    # First give every module a carrier; subsequent passes spend the density budget
     # fairly. Rejected samples never become feasible as only obstacles are added.
+    # A module with no feasible edge (tiny or tightly stacked) is reported, not fatal.
     for module in modules:
-        if counts[module] == 0 and not place_one(module):
-            raise ValueError(f'lighting: no collision-free concealed clamp fits module {module}; '
-                             'reduce strip dimensions/segment_leds or change geometry')
+        if counts[module] == 0:
+            place_one(module)
+    uncovered = sorted(m for m in modules if counts[m] == 0)
     while len(segments) < light.max_segments:
         added = False
         for module in modules:
@@ -412,7 +510,13 @@ def _generate(config, assembly):
         if not added:
             break
     if len(segments) < 2:
-        raise ValueError('lighting: fewer than two distributed carriers fit; change geometry')
+        hint = ('set lighting.min_segment_leds so tight edges can take shorter strips'
+                if (light.min_segment_leds or light.segment_leds) > 1 else
+                'reduce strip dimensions or change geometry')
+        if light.emission == 'backwash':
+            hint += ', or use emission "auto" where layers are stacked closely'
+        raise ValueError('lighting: fewer than two collision-free concealed carriers fit; '
+                         + hint)
     # Bottom edge of the existing backplate; two ties anchor the incoming cable.
     backing = next(i for i in assembly.instances if i.role == 'backplate')
     ring = assembly.definition_for(backing).polygon.exterior
@@ -459,15 +563,19 @@ def _generate(config, assembly):
         previous, source = s['strip_end_mm'], s['segment_id']
         ordered.append(s)
     current = sum(s['led_count'] for s in ordered)*light.current_per_led_ma/1000
-    per_segment = light.segment_leds*light.current_per_led_ma/1000
-    if per_segment > light.injection_limit_a:
+
+    def amps(segment):
+        return segment['led_count']*light.current_per_led_ma/1000
+
+    if any(amps(s) > light.injection_limit_a for s in ordered):
         raise ValueError('lighting: one segment exceeds injection_limit_a; shorten segment')
-    branches, group = [], []
+    branches, group, load = [], [], 0.0
     for s in ordered:
-        if group and (len(group)+1)*per_segment > light.injection_limit_a:
+        if group and load + amps(s) > light.injection_limit_a + 1e-12:
             branches.append(group)
-            group = []
+            group, load = [], 0.0
         group.append(s['segment_id'])
+        load += amps(s)
     if group:
         branches.append(group)
     starts = {group[0] for group in branches}
@@ -475,23 +583,41 @@ def _generate(config, assembly):
         if jumper['to'] in starts:
             jumper['signals'] = ['DATA', 'GND']
     segment_lookup = {s['segment_id']: s for s in ordered}
+    jumper_to = {j['to']: j for j in jumpers}
+    ohm_per_mm = light.wire_mohm_per_m/1e6
     feeds = []
     for group in branches:
         destination = segment_lookup[group[0]]['strip_start_mm']
+        group_current = sum(amps(segment_lookup[g]) for g in group)
+        feed_mm = math.ceil(math.dist(anchor['emitter_position_mm'], destination)
+                            + light.wire_slack_mm)
+        # Round trip (V+ and GND) along the feed, then along each V+ jumper carrying
+        # the remaining group load; strip copper itself is ignored for short segments.
+        drop, remaining = 2*feed_mm*ohm_per_mm*group_current, group_current
+        for g in group[1:]:
+            remaining -= amps(segment_lookup[jumper_to[g]['from']])
+            drop += 2*jumper_to[g]['minimum_cut_length_mm']*ohm_per_mm*remaining
         feeds.append({'from': 'input', 'to': group[0], 'signals': ['V+', 'GND'],
-                      'segment_ids': group, 'estimated_current_a': len(group)*per_segment,
-                      'required_wire_continuous_a': len(group)*per_segment*1.25,
+                      'segment_ids': group, 'estimated_current_a': group_current,
+                      'required_wire_continuous_a': group_current*1.25,
                       'waypoints_mm': [anchor['emitter_position_mm'], destination],
-                      'minimum_cut_length_mm': math.ceil(math.dist(
-                          anchor['emitter_position_mm'], destination)+light.wire_slack_mm),
+                      'minimum_cut_length_mm': feed_mm,
+                      'estimated_voltage_drop_v': drop,
+                      'estimated_voltage_drop_pct': 100*drop/light.voltage_v,
                       'fuse': 'select below wire/connector rating and above normal load'})
+    for segment in ordered:
+        segment['throw_mm'] = _throw(assembly, segment, existing)
     metadata = {
         'schema_version': 1, 'units': 'mm', 'config': asdict(light), 'segments': ordered,
         'retention_revision': RETENTION_REVISION,
         'density': {'requested_max_segments': light.max_segments,
                     'achieved_segments': len(ordered), 'per_module': counts,
+                    'uncovered_modules': uncovered,
                     'minimum_xy_separation_mm': separation,
                     'capacity_limited': len(ordered) < light.max_segments},
+        'emission': {'requested': light.emission,
+                     'per_segment': {s['segment_id']: s['emission'] for s in ordered},
+                     'backwash_segments': sum(s['emission'] == 'backwash' for s in ordered)},
         'symmetry': {'policy': 'complete physical symmetry orbits; single bottom input exempt',
                      'group': symmetry_kind(config),
                      'pair_attempts': symmetry_attempts,
@@ -508,6 +634,9 @@ def _generate(config, assembly):
                   'estimated_max_power_w': current*light.voltage_v,
                   'input_connector_required_continuous_a': current*1.25,
                   'injection_groups': branches, 'feeds': feeds,
+                  'wire_mohm_per_m': light.wire_mohm_per_m,
+                  'worst_voltage_drop_pct': max(f['estimated_voltage_drop_pct'] for f in feeds),
+                  'longest_data_jumper_mm': max(j['minimum_cut_length_mm'] for j in jumpers),
                   'branch_limit_a': light.injection_limit_a,
                   'topology': 'fused internal branches from the ONE bottom input; common ground'},
         'bom': [
@@ -562,9 +691,15 @@ def add_lighting(config, build, original_inventory=None, saved=None):
         return replace(build, inventory=original_inventory) if saved else build
     identity = placement_fingerprint(build.assembly)
     if saved:
-        if saved['config'] != asdict(config.lighting) or saved['base_assembly_hash'] != identity:
-            raise ValueError('lighting inventory placement/config changed; detach carriers and '
-                             'generate new supplemental cuts explicitly')
+        # Supplements saved before the emission/length/wiring controls existed were
+        # all built with the underside layout and fixed segment lengths.
+        stored = {**LEGACY_LIGHTING, **saved['config']}
+        if stored != asdict(config.lighting) or saved['base_assembly_hash'] != identity:
+            hint = ''
+            if stored.get('emission') != config.lighting.emission:
+                hint = f" (saved carriers use emission={stored.get('emission')!r})"
+            raise ValueError('lighting inventory placement/config changed' + hint +
+                             '; detach carriers and generate new supplemental cuts explicitly')
         supplemental = Inventory.from_dict(saved['inventory'])
         definitions, instances = supplemental.definitions, supplemental.instances
         metadata = saved['metadata']
@@ -593,7 +728,28 @@ def add_lighting(config, build, original_inventory=None, saved=None):
                    'LED physical fit, optical, electrical/thermal and Wire/Arena checks NOT RUN.',
                    'Lighting jumper lines are routing guides; manually dress and secure cables.',
                    f"Lighting density: {len(metadata['segments'])}/{config.lighting.max_segments} "
-                   'requested maximum segments; see capacity_limited and per_module counts.'))
+                   'requested maximum segments; see capacity_limited and per_module counts.',
+                   *_electrical_warnings(config, metadata)))
+
+
+def _electrical_warnings(config, metadata):
+    power = metadata['power']
+    warnings = []
+    uncovered = metadata['density'].get('uncovered_modules')
+    if uncovered:
+        hint = ('; set min_segment_leds for shorter strips'
+                if (config.lighting.min_segment_leds or config.lighting.segment_leds) > 1 else '')
+        warnings.append('Lighting: no carrier fits module(s) ' + ', '.join(uncovered) + hint + '.')
+    worst = power.get('worst_voltage_drop_pct')
+    if worst is not None and worst > config.lighting.max_voltage_drop_pct:
+        warnings.append(f'Lighting: estimated feed voltage drop {worst:.1f}% exceeds '
+                        f'{config.lighting.max_voltage_drop_pct:g}%; use heavier wire, lower '
+                        'injection_limit_a or brightness limits.')
+    longest = power.get('longest_data_jumper_mm')
+    if longest is not None and longest > 1000:
+        warnings.append(f'Lighting: longest data jumper is {longest} mm; keep pixel data runs '
+                        'short or add a buffer/series resistor at that DIN.')
+    return warnings
 
 
 def preview_assembly(assembly):
@@ -610,7 +766,10 @@ def preview_assembly(assembly):
         pose = np.array(segment['carrier_frame'])
         stock = assembly.definition_for(next(i for i in assembly.instances
                     if i.instance_id == segment['part_instances'][0])).thickness_mm
-        pose[:3, 3] -= pose[:3, 2]*stock
+        drop = stock
+        if segment.get('emission') == 'backwash':
+            drop = 2*stock + config['strip_thickness_mm']
+        pose[:3, 3] -= pose[:3, 2]*drop
         definitions.append(part)
         instances.append(PartInstance(part.definition_id, part.definition_id, part.revision,
                                        tuple(map(tuple, pose)), next(i.module_id for i in assembly.instances
