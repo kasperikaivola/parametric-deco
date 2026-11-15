@@ -123,7 +123,8 @@ def verify_creature(a):
                     .buffer(radius, quad_segs=24)
                     .difference(Point(x, y).buffer(hole_radius + 0.05, quad_segs=24))
                 )
-                for pid in m["plate_ids"]:
+                # Hollow rings sit outside the spacer column; only the cap carries the washer.
+                for pid in m["plate_ids"][-1:] if m.get("hollow") else m["plate_ids"]:
                     plate = by_id[pid]
                     shape = xy_footprint(a.definition_for(plate), plate.transform)
                     if bearing.difference(shape).area > 1e-4:

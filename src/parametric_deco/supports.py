@@ -98,8 +98,11 @@ def physical_paths(a, c):
         local = {i.instance_id: (lobes[canonical_id(i.instance_id, c) if symmetry_kind(c) == "C3" else i.instance_id].path, "laminar-medial") for i in targets}
     elif c.style == "layered-creature":
         from .geometry.creature_profiles import limb_recipe, smooth
-        local = {i.instance_id: (smooth(limb_recipe(i.module_id, c.parameters)[0]) * c.parameters.scale,
-                                 "creature-limb") for i in targets if i.module_id != "head"}
+        # Hollow rings sit on the silhouette margin, away from the limb centreline.
+        # The span axis accepts a bolt anywhere across that shell.
+        if not getattr(c.parameters, "hollow", False):
+            local = {i.instance_id: (smooth(limb_recipe(i.module_id, c.parameters)[0]) * c.parameters.scale,
+                                     "creature-limb") for i in targets if i.module_id != "head"}
     elif c.style == "radial-weave":
         from .geometry.weave import radius, xy
         from dataclasses import replace as changed
@@ -142,10 +145,13 @@ _arc_cache = {}
 
 def path_fraction(path, kind, point):
     if kind == "radial-arc":
-        angles = _arc_cache.get(id(path))
-        if angles is None:
-            angles = np.unwrap(np.arctan2(np.asarray(path.coords)[:, 1], np.asarray(path.coords)[:, 0]))
-            _arc_cache[id(path)] = angles
+        # The entry owns the path, so its id cannot be recycled for another path.
+        entry = _arc_cache.get(id(path))
+        if entry is None or entry[0] is not path:
+            coords = np.asarray(path.coords)
+            entry = (path, np.unwrap(np.arctan2(coords[:, 1], coords[:, 0])))
+            _arc_cache[id(path)] = entry
+        angles = entry[1]
         middle = (angles[0] + angles[-1]) / 2
         angle = middle + (math.atan2(point.y, point.x) - middle + math.pi) % (2 * math.pi) - math.pi
         return float((angle - angles[0]) / (angles[-1] - angles[0]))
@@ -199,15 +205,25 @@ def _orbit_plan(a, c):
         top = max(bounds[i.instance_id][1, 2] for i in targets
                   if c.style == 'laminar' or i.module_id == target.module_id)
         plates = []
+        # A hollow shaft clamps only the shell that already contains its bearing
+        # disk. Ganging nested rings would put several shells on one bore.
+        hollow = c.style == 'layered-creature' and getattr(c.parameters, 'hollow', False)
+        if hollow and not shapes[pid].buffer(0.6).covers(point.buffer(max(edge - 0.6, 1))):
+            return None
         for other in a.instances:
             oid = other.instance_id
             if other.role == 'backplate' or bounds[oid][0, 2] >= top + 12:
                 continue
             shape = shapes[oid]
-            if (other != target and not shape.intersects(disk.buffer(.2))
-                    and not (other.module_id == target.module_id and other in targets and shape.distance(point) <= 60)):
+            share_stack = (not hollow and other.module_id == target.module_id and other in targets
+                           and shape.distance(point) <= 60)
+            if other != target and not shape.intersects(disk.buffer(.2)) and not share_stack:
                 continue
             if other in targets and (other.module_id == target.module_id or c.style == 'laminar'):
+                if hollow and other is not target:
+                    if shape.intersects(disk.buffer(0.2)):
+                        return None
+                    continue
                 if shape.distance(point) > 60 or any(disk.intersects(h) for h in holes[oid]
                     if abs(h.area - math.pi * (c.grid.hole_diameter_mm / 2) ** 2) >= 1):
                     return None
@@ -286,8 +302,9 @@ def _orbit_plan(a, c):
             window = windows[0]
             def meets(point):
                 f = path_fraction(path, pkind, point)
+                close = pkind not in ('laminar-medial', 'creature-limb') or path.distance(point) <= 60
                 if requirement == 'bend':
-                    return window[0] <= f <= window[1] and path.distance(point) <= 60
+                    return window[0] <= f <= window[1] and close
                 return end_covered(path, pkind, point, int(requirement == 'distal'))
             if any(target.instance_id in s['plate_ids'] and meets(Point(s['xy'])) for s in selected):
                 continue
@@ -356,7 +373,7 @@ def _select_stations(a, c, retained=None, paths=None):
         for path, kind in paths.values():
             if kind == "radial-arc":
                 coords = np.asarray(path.coords)
-                _arc_cache[id(path)] = np.unwrap(np.arctan2(coords[:, 1], coords[:, 0]))
+                _arc_cache[id(path)] = (path, np.unwrap(np.arctan2(coords[:, 1], coords[:, 0])))
     board = next(i for i in a.instances if i.role == "backplate")
     board_shape = xy_footprint(a.definition_for(board), board.transform)
     base = instance_bounds(a.definition_for(board), board.transform)[1, 2]

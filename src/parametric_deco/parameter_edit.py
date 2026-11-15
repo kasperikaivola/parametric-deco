@@ -153,6 +153,8 @@ def _field_limit(data, path):
         hi = int(_num(data, ('lighting', 'segment_leds'), 1))
         return Limit('null or ' + _closed(1, hi, integer=True).phrase, 'int', 1, hi,
                      nullable=True)
+    if style == 'layered-creature' and name == 'hollow':
+        return Limit('true or false', 'enum', options=(False, True))
     if style == 'laminar' and name == 'focal_count' and params.get('symmetry') == 'rotational':
         return _int_choices(3, 6, 9)
     numeric = _numeric_limit(data, path, name, style, params)

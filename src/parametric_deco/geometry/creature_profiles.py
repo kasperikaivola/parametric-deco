@@ -2,7 +2,7 @@
 
 import numpy as np
 from shapely import affinity
-from shapely.geometry import Polygon, Point, MultiPoint
+from shapely.geometry import Polygon, Point, MultiPoint, box
 from shapely.ops import unary_union
 from dataclasses import replace
 from ..config import CreatureMask
@@ -16,6 +16,11 @@ ROOTS = {
     "feeler-left": ((-75, -250), (-125, -250)),
     "feeler-right": ((75, -250), (125, -250)),
 }
+
+
+def retainer_blank():
+    """Outer key plate. The clip hole is cut from this outline at manufacture."""
+    return box(-5, -12, 5, 14).union(box(-9, -16, 9, -8))
 
 
 def module_roots(settings=None, grid=None, head_keepout=None, *, thickness=6, fit=0.2):
@@ -223,6 +228,27 @@ def limb_recipe(name, settings):
     return points, widths
 
 
+def module_levels(name, count):
+    """Plate heights in plate thicknesses. The head sits above every limb stack."""
+    if name == "head":
+        return [16 + 2 * j for j in range(count)]
+    return [3 * j if j < count - 1 else 3 * j + 1 for j in range(count)]
+
+
+def blade_slot(center, normal, thickness, fit):
+    """Closed cap slot a rib tab crosses; the tab is 28 mm across, one plate thick."""
+    tangent = np.array((normal[1], -normal[0]))
+    return Polygon([
+        center + u * normal + v * tangent
+        for u, v in (
+            (-14 - fit / 2, -(thickness + fit) / 2),
+            (14 + fit / 2, -(thickness + fit) / 2),
+            (14 + fit / 2, (thickness + fit) / 2),
+            (-14 - fit / 2, (thickness + fit) / 2),
+        )
+    ])
+
+
 def rib_stations(name, scale=1, curl=1, *, settings=None):
     """Centre XY, transverse unit vector, physical blade width and height (mm)."""
     p = settings or CreatureMask(scale=scale, curl=curl)
@@ -403,8 +429,7 @@ def rib_spacing_issues(settings, thickness=6.0, fit=0.2):
     Mirrors generate_creature: closed cap tab slots need 7 mm between neighbours and
     each rib's retaining key (30 mm along the limb tangent) must not touch the next.
     """
-    from shapely.geometry import box
-    key = box(-5, -12, 5, 14).union(box(-9, -16, 9, -8))
+    key = retainer_blank()
     issues = []
     for name in list(ROOTS)[1:1 + settings.limb_count]:
         if "right" in name:
@@ -426,3 +451,64 @@ def rib_spacing_issues(settings, thickness=6.0, fit=0.2):
                 issues.append(f"{name}: retaining keys of ribs {k - 1}/{k} overlap")
                 break
     return issues
+
+
+def _pieces(shape):
+    if shape.is_empty:
+        return []
+    if shape.geom_type == "Polygon":
+        return [shape] if shape.area > 1 else []
+    if shape.geom_type == "MultiPolygon":
+        return [g for g in shape.geoms if g.area > 1]
+    return [
+        g for g in getattr(shape, "geoms", ())
+        if getattr(g, "geom_type", "") == "Polygon" and g.area > 1
+    ]
+
+
+def _exterior(shape):
+    poly = shape if shape.geom_type == "Polygon" else max(_pieces(shape), key=lambda g: g.area)
+    return Polygon(poly.exterior)
+
+
+def hollow_shells(layers):
+    """Partition one module's silhouettes into disjoint shells on the rear plate.
+
+    A ring that breaks into islands absorbs those islands into the next inner
+    plate, so every shell stays one polygon. The cap keeps its openings and
+    rib seats; lower shells occupy the margin around it.
+    """
+    if len(layers) < 2:
+        raise ValueError("hollow shells need at least two layers")
+    outers = [_exterior(layer) for layer in layers]
+    plate = outers[0]
+    shells = []
+    for inner in outers[1:]:
+        parts = _pieces(plate.difference(inner))
+        if not parts:
+            raise ValueError("hollow ring is empty")
+        main = max(parts, key=lambda g: g.area)
+        islands = [g for g in parts if g is not main]
+        if islands:
+            grown = unary_union([inner, *islands]).buffer(0)
+            inner = grown if grown.geom_type == "Polygon" else max(_pieces(grown), key=lambda g: g.area)
+            parts = _pieces(plate.difference(inner))
+            if not parts:
+                raise ValueError("hollow ring is empty")
+            main = max(parts, key=lambda g: g.area)
+        shells.append(main)
+        plate = inner if inner.geom_type == "Polygon" else max(_pieces(inner), key=lambda g: g.area)
+    cap = layers[-1] if layers[-1].geom_type == "Polygon" else max(_pieces(layers[-1]), key=lambda g: g.area)
+    opened = _exterior(layers[-1]).difference(layers[-1])
+    cap = cap.union(plate).buffer(0).difference(opened).buffer(0)
+    cap_parts = _pieces(cap)
+    if len(cap_parts) != 1:
+        raise ValueError("hollow cap is not a single piece")
+    shells.append(cap_parts[0])
+    for j in range(len(shells) - 2, -1, -1):
+        shells[j] = shells[j].difference(unary_union(shells[j + 1 :]))
+        parts = _pieces(shells[j])
+        if len(parts) != 1:
+            raise ValueError(f"hollow layer {j} has {len(parts)} pieces")
+        shells[j] = parts[0]
+    return shells

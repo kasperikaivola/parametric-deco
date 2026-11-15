@@ -1,4 +1,5 @@
 """Independent failures for clustered supports, missing stock interfaces and floating parts."""
+import math
 from copy import deepcopy
 from functools import lru_cache
 from dataclasses import replace
@@ -381,3 +382,18 @@ def test_bolt_edge_offset_moves_laminar_bolts_across_the_piece_edge():
     assert all(distance < -5 for row in distances(inside) for distance in row)
     assert all(max(row) > 0 for row in distances(outside))
     assert max(max(row) for row in distances(outside)) > 10
+
+
+def test_arc_fraction_cache_ignores_a_recycled_object_id():
+    from shapely.geometry import LineString
+    from parametric_deco import supports
+
+    arc = LineString([(100 * math.cos(t / 10), 100 * math.sin(t / 10)) for t in range(0, 11)])
+    stale = LineString([(0, 0), (1, 1)])
+    supports._arc_cache.clear()
+    supports._arc_cache[id(arc)] = (stale, np.array([0.0, 50.0]))
+    try:
+        end = Point(100 * math.cos(1.0), 100 * math.sin(1.0))
+        assert supports.path_fraction(arc, "radial-arc", end) == pytest.approx(1.0)
+    finally:
+        supports._arc_cache.clear()

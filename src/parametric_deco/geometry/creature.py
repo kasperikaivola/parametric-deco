@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 import numpy as np
+from shapely import affinity
 from shapely.geometry import Point, MultiPoint, box, Polygon
 from shapely.ops import unary_union
 from ..model import PartDefinition, PartInstance, GeometryBundle, InterfaceStation, digest
@@ -10,10 +11,14 @@ from .creature_profiles import (
     profiles,
     cavity_voids,
     central_void,
+    blade_slot,
+    module_levels,
     rib_stations,
     smooth,
     placement_offset,
+    retainer_blank,
 )
+from .creature_hollow import hollow_layouts
 from .backplate import generate_backplate, match_root_pattern
 
 
@@ -32,6 +37,9 @@ def request_signature(c):
     values["schema_version"] = 1
     values["creature"] = values.pop("parameters")
     values["creature"].pop("posture")
+    # Absent when false so inventories cut before this option keep their request.
+    if values["creature"].get("hollow") is False:
+        values["creature"].pop("hollow")
     values["composition"] = None
     values["module"] = asdict(ModuleRecipe())
     values["placements"] = [asdict(ModulePlacement())]
@@ -104,9 +112,7 @@ def generate_creature(c):
     definitions.append(ring)
     retainer = PartDefinition.from_polygon(
         "organism-blade-retainer",
-        box(-5, -12, 5, 14)
-        .union(box(-9, -16, 9, -8))
-        .difference(Point(0, 10).buffer(1.25, quad_segs=12)),
+        retainer_blank().difference(Point(0, 10).buffer(1.25, quad_segs=12)),
         t,
         kind="retainer",
     )
@@ -124,15 +130,26 @@ def generate_creature(c):
         # Default nearest roots would drive head spacer columns through limb plates
         # (crowded limbs, large cavities or a shifted centering offset).
         roots_by_module = module_roots(c.parameters, local_grid, keepout, thickness=t, fit=fit)
+    hollow = c.parameters.hollow is True
+    nested = (
+        hollow_layouts(
+            c,
+            plate_profiles,
+            roots_by_module,
+            {name: key_positions(roots) for name, roots in roots_by_module.items()},
+            {name: _module_voids(c, name) for name in plate_profiles},
+            (offset_x, offset_y),
+        )
+        if hollow
+        else None
+    )
     for name, layers in plate_profiles.items():
+        if hollow:
+            layers = nested[name]
         roots = roots_by_module[name]
         match_root_pattern(c, [(x + offset_x, y + offset_y) for x, y in roots])
         keys = key_positions(roots)
-        levels = (
-            [16 + 2 * j for j in range(len(layers))]
-            if name == "head"
-            else [3 * j if j < len(layers) - 1 else 3 * j + 1 for j in range(len(layers))]
-        )
+        levels = module_levels(name, len(layers))
         cap_level = levels[-1]
         root_shape = MultiPoint(roots).convex_hull.buffer(40, quad_segs=12)
         slots = [
@@ -146,9 +163,9 @@ def generate_creature(c):
         plate_ids = []
         for j, (shape, level) in enumerate(zip(layers, levels)):
             # Fixed-size, substantial roots are construction regions, hidden under the head.
-            shape = unary_union([shape, root_shape])
-            from shapely import affinity
-
+            # Hollow shells already tile the silhouette; a root pad would overlap the rings.
+            if not hollow:
+                shape = unary_union([shape, root_shape])
             shape = shape.difference(_module_voids(c, name))
             for x, y in roots:
                 shape = shape.difference(
@@ -166,16 +183,7 @@ def generate_creature(c):
                     nx, ny = normal
                     tangent = np.array((ny, -nx))
                     # A substantial tab crosses a closed cap slot. A separate key bears below.
-                    corners = [
-                        center + u * normal + v * tangent
-                        for u, v in [
-                            (-14 - fit / 2, -(t + fit) / 2),
-                            (14 + fit / 2, -(t + fit) / 2),
-                            (14 + fit / 2, (t + fit) / 2),
-                            (-14 - fit / 2, (t + fit) / 2),
-                        ]
-                    ]
-                    slot = Polygon(corners)
+                    slot = blade_slot(center, normal, t, fit)
                     if any(slot.distance(other) < 7 - 1e-7 for other in blade_slots):
                         raise ValueError(f"{name} rib {k}: neighboring rib slots need 7 mm margin")
                     blade_slots.append(slot)
@@ -261,10 +269,11 @@ def generate_creature(c):
             definitions.append(blade)
             place(bid, blade, 0, name, "blade", pose)
             place(rid, retainer, 0, name, "retainer", key_pose)
-        # Compression columns fill only the gaps between manufactured plates.
+        # Compression columns fill only the gaps between manufactured plates. Hollow
+        # rings do not reach the roots, so only the cap interrupts that column.
         for column, (x, y) in enumerate(roots):
             for level in range(cap_level):
-                if level in levels:
+                if level in levels and not hollow:
                     continue
                 identifier = f"{name}-column-{column}-{level}"
                 transform = ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, base + level * t), (0, 0, 0, 1))
@@ -279,19 +288,20 @@ def generate_creature(c):
             key_ids.append(identifier)
             transform = ((1, 0, 0, x), (0, 0, -1, y + t / 2), (0, 1, 0, base), (0, 0, 0, 1))
             place(identifier, key, 0, name, "register", transform)
-        modules.append(
-            {
-                "module_id": name,
-                "plate_ids": plate_ids,
-                "cap_id": plate_ids[-1],
-                "key_ids": key_ids,
-                "roots": roots,
-                "keys": keys,
-                "levels": levels,
-                "cap_z_mm": base + cap_level * t,
-                "blade_joints": blade_joints,
-            }
-        )
+        record = {
+            "module_id": name,
+            "plate_ids": plate_ids,
+            "cap_id": plate_ids[-1],
+            "key_ids": key_ids,
+            "roots": roots,
+            "keys": keys,
+            "levels": levels,
+            "cap_z_mm": base + cap_level * t,
+            "blade_joints": blade_joints,
+        }
+        if hollow:
+            record["hollow"] = True
+        modules.append(record)
     layout = {
         "family": "creature-organism-v3",
         "manufacturing_request": request_signature(c),

@@ -129,6 +129,12 @@ All fields are inside `parameters`.
 | `scale` |1.0|0.9–1.0| XY profile AND transverse rib-height scale; roots/stock/joinery retain physical sizes |
 | `curl` |1.0|0.8–1.2| Terminal fold position |
 | `posture` |`rest`|`rest`, `raised_crown`| Placement of an unchanged manufactured inventory |
+| `hollow` | false | true or false | Nest each module's layers into its rear silhouette and clamp them at the existing heights with separate bolt lengths |
+
+`hollow` false is the solid stack, and the manufacturing request omits the field.
+`hollow` true keeps the cap, ribs and front terraces, and cuts every lower shell
+from the margin of that module's rear plate. End-clamp tubes set the height.
+A combination that cannot seat those bolts fails instead of dropping a layer.
 
 Rib slots and retaining keys are physical (keys are 30 mm along the limb), so short
 limbs limit `ribs_per_limb`: six limbs (with the short feelers) fit at most five

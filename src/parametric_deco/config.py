@@ -112,6 +112,7 @@ class CreatureMask:
     scale: float = 1.0
     curl: float = 1.0
     posture: str = "rest"
+    hollow: bool = False
 
 
 @dataclass(frozen=True)
@@ -399,6 +400,8 @@ def validate_config(c):
             return ValidationReport(tuple(issues))
         if not 0.9 <= creature.scale <= 1 or not 0.8 <= creature.curl <= 1.2:
             bad("creature", "candidate scale .9..1 and curl .8..1.2 required")
+        if type(creature.hollow) is not bool:
+            bad("parameters.hollow", "must be true or false")
         if creature.posture not in ("rest", "raised_crown"):
             bad("parameters.posture", "use rest or raised_crown")
         if isinstance(c.material.measured_mm, (int, float)) and isinstance(
